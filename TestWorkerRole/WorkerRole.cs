@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -67,7 +66,7 @@ namespace TestWorkerRole
             var count = 0;
             while (!cancellationToken.IsCancellationRequested && count++ < 5)
             {
-                Trace.TraceInformation("Working: " + _container.Resolve<IAzureEnvironmentSource>().CurrentEnvironment);
+                Trace.TraceInformation("Working: " + _container.Resolve<IAzureSettings>()["RandomSetting"]);
                 
                 await Task.Delay(1000);
             }

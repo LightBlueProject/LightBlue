@@ -15,10 +15,15 @@ namespace LightBlue.Host
     {
         public static void Main(string[] args)
         {
-            ModuleSource.ClearModules();
-            ModuleSource.AddModule(new LightBlueStandaloneModule());
-
             var hostArgs = HostArgs.ParseArgs(args);
+
+            ModuleSource.ClearModules();
+            ModuleSource.AddModule(new LightBlueStandaloneModule(new StandaloneConfiguration
+            {
+                ConfigurationPath = hostArgs.ConfigurationPath,
+                RoleName = hostArgs.RoleName
+            }));
+
 
             var workerRoleType = LoadWorkerRoleType(hostArgs);
 

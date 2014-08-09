@@ -1,0 +1,8 @@
+﻿namespace LightBlue.Standalone
+{
+    public class StandaloneConfiguration
+    {
+        public string ConfigurationPath { get; set; }
+        public string RoleName { get; set; }
+    }
+}

@@ -4,5 +4,8 @@
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <ConfigurationSettings>
+      <Setting name="RandomSetting" />
+    </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

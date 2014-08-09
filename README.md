@@ -6,10 +6,10 @@ Features
 --------
 * Can start a worker role in a console host
 * IAzureEnvironmentSource to indicate where the role is running
+* Settings API
 
 Planned Features
 ----------------
-* Settings API
 * Blob storage abstraction (initially restricted to key portions of the block blob API)
 * Queue storage abstraction
 * Web Role support
