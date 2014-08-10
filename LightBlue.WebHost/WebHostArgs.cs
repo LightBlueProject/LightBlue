@@ -1,30 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 using LightBlue.Infrastructure;
 
 using NDesk.Options;
 
-namespace LightBlue.Host
+namespace LightBlue.WebHost
 {
-    public class HostArgs
+    public class WebHostArgs
     {
-        public string Assembly { get; private set; }
+        public string SiteDirectory { get; private set; }
+        public int Port { get; private set; }
         public string RoleName { get; private set; }
         public string ConfigurationPath { get; private set; }
         public RetryMode RetryMode { get; private set; }
 
-        public static HostArgs ParseArgs(IEnumerable<string> args)
+        public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
-            string assembly = null;
+            string siteDirectory = null;
+            int port = 0;
             string roleName = null;
             string configurationPath = null;
             var retryMode = RetryMode.Infinite;
 
             var options = new OptionSet
             {
-                {"a|assembly=", "", v => assembly = v},
+                {"d|siteDirectory=", "", v => siteDirectory = v},
+                {"p|port=", "", v => Int32.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out port)},
                 {"n|roleName=", "", v => roleName = v},
                 {"c|configurationPath=", "", v => configurationPath = v},
                 {"r|retryMode=", "", v => { retryMode = (RetryMode) Enum.Parse(typeof(RetryMode), v, true); }},
@@ -32,9 +36,13 @@ namespace LightBlue.Host
 
             options.Parse(args);
 
-            if (string.IsNullOrWhiteSpace(assembly))
+            if (string.IsNullOrWhiteSpace(siteDirectory))
             {
-                throw new ArgumentException("Host requires an assembly to run.");
+                throw new ArgumentException("Host requires a site directory to run.");
+            }
+            if (port == 0)
+            {
+                throw new ArgumentException("Host requires a port to run the site on");
             }
             if (string.IsNullOrWhiteSpace(roleName))
             {
@@ -45,20 +53,18 @@ namespace LightBlue.Host
                 throw new ArgumentException("Configuration path must be specified.");
             }
 
-            var roleAssemblyAbsolutePath = Path.IsPathRooted(assembly)
-                ? assembly
-                : Path.Combine(Environment.CurrentDirectory, assembly);
 
-            if (!File.Exists(roleAssemblyAbsolutePath))
+            if (!Directory.Exists(siteDirectory))
             {
-                throw new FileNotFoundException("The specified assembly cannot be found. The assembly must be in the host directory or be specified as an absolute path.");
+                throw new FileNotFoundException("The specified site directory does not exist.");
             }
 
             var configurationFile = LocateConfigurationFile(configurationPath);
 
-            return new HostArgs
+            return new WebHostArgs
             {
-                Assembly = assembly,
+                SiteDirectory = siteDirectory,
+                Port = port,
                 RoleName = roleName,
                 ConfigurationPath = configurationFile,
                 RetryMode = retryMode

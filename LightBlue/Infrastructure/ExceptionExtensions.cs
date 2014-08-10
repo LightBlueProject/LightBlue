@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace LightBlue.Host
+namespace LightBlue.Infrastructure
 {
     public static class ExceptionExtensions
     {

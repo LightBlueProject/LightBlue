@@ -1,28 +1,28 @@
 using System;
 using System.Threading.Tasks;
 
-namespace LightBlue.Host
+namespace LightBlue.Infrastructure
 {
     public static class RunStateExtensions
     {
-        public static bool ShouldRunHost(this RunState runState, HostArgs hostArgs)
+        public static bool ShouldRunHost(this RunState runState, RetryMode retryMode)
         {
-            if (runState == RunState.NotRun || hostArgs.RetryMode == RetryMode.Infinite)
+            if (runState == RunState.NotRun || retryMode == RetryMode.Infinite)
             {
                 return true;
             }
 
-            if (hostArgs.RetryMode == RetryMode.NoReload)
+            if (retryMode == RetryMode.NoReload)
             {
                 return false;
             }
 
-            if (hostArgs.RetryMode == RetryMode.SingleThenFreeze)
+            if (retryMode == RetryMode.SingleThenFreeze)
             {
                 Task.Delay(-1).Wait();
             }
 
-            if (hostArgs.RetryMode == RetryMode.FreezeOnError)
+            if (retryMode == RetryMode.FreezeOnError)
             {
                 if (runState == RunState.ExitedCleanly)
                 {

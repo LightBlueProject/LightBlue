@@ -1,4 +1,4 @@
-﻿namespace LightBlue.Host
+﻿namespace LightBlue.Infrastructure
 {
     public enum RetryMode
     {

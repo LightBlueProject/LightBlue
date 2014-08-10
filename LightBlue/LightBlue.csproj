@@ -54,8 +54,12 @@
     <Compile Include="Hosted\LightBlueHostedModule.cs" />
     <Compile Include="IAzureEnvironmentSource.cs" />
     <Compile Include="IAzureSettings.cs" />
+    <Compile Include="Infrastructure\ExceptionExtensions.cs" />
     <Compile Include="Infrastructure\ModuleSource.cs" />
+    <Compile Include="Infrastructure\RetryMode.cs" />
     <Compile Include="Infrastructure\RoleEnvironmentExceptionCreatorFactory.cs" />
+    <Compile Include="Infrastructure\RunState.cs" />
+    <Compile Include="Infrastructure\RunStateExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup\ContainerBuilderExtensions.cs" />
     <Compile Include="Standalone\LightBlueStandaloneModule.cs" />

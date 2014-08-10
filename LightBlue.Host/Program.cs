@@ -28,7 +28,7 @@ namespace LightBlue.Host
             var workerRoleType = LoadWorkerRoleType(hostArgs);
 
             var runState = RunState.NotRun;
-            while (runState.ShouldRunHost(hostArgs))
+            while (runState.ShouldRunHost(hostArgs.RetryMode))
             {
                 runState = RunWorkerRole(workerRoleType);
             }
@@ -57,7 +57,7 @@ namespace LightBlue.Host
             catch (Exception ex)
             {
                 Trace.TraceError(ex.ToTraceMessage());
-                return RunState.ThrewException;
+                return RunState.Failed;
             }
             return RunState.ExitedCleanly;
         }
