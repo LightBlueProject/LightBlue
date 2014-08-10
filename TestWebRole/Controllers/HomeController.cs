@@ -1,11 +1,22 @@
 ﻿using System.Web.Mvc;
 
+using LightBlue;
+
 namespace TestWebRole.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IAzureEnvironmentSource _azureEnvironmentSource;
+
+        public HomeController(IAzureEnvironmentSource azureEnvironmentSource)
+        {
+            _azureEnvironmentSource = azureEnvironmentSource;
+        }
+
         public ActionResult Index()
         {
+            ViewBag.Message = _azureEnvironmentSource.CurrentEnvironment;
+
             return View();
         }
 

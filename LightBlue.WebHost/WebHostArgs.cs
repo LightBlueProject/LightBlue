@@ -20,7 +20,7 @@ namespace LightBlue.WebHost
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
             string siteDirectory = null;
-            int port = 0;
+            var port = 0;
             string roleName = null;
             string configurationPath = null;
             var retryMode = RetryMode.Infinite;

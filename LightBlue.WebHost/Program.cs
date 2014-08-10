@@ -50,7 +50,7 @@ namespace LightBlue.WebHost
 
         private static ProcessStartInfo BuildProcessStartInfo(WebHostArgs webHostArgs)
         {
-            return new ProcessStartInfo
+            var processStartInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"IIS Express\iisexpress.exe"),
                 Arguments = string.Format(
@@ -60,10 +60,15 @@ namespace LightBlue.WebHost
                     webHostArgs.Port),
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
+
+            processStartInfo.EnvironmentVariables.Add("LightBlueHost", "true");
+            processStartInfo.EnvironmentVariables.Add("LightBlueConfigurationPath", webHostArgs.ConfigurationPath);
+            processStartInfo.EnvironmentVariables.Add("LightBlueRoleName", webHostArgs.RoleName);
+
+            return processStartInfo;
         }
     }
 }
