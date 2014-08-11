@@ -12,39 +12,29 @@ namespace LightBlue.WebHost
     {
         public static void Main(string[] args)
         {
-            var webHostArgs = WebHostArgs.ParseArgs(args);
-
-            var runState = RunState.NotRun;
-            while (runState.ShouldRunHost(webHostArgs.RetryMode))
-            {
-                runState = RunWebRole(webHostArgs);
-            }
-        }
-
-        private static RunState RunWebRole(WebHostArgs webHostArgs)
-        {
             try
             {
-                using (var process = Process.Start(BuildProcessStartInfo(webHostArgs)))
-                {
-                    if (process == null)
-                    {
-                        Trace.TraceInformation("Existing process used.");
-                        Task.Delay(-1).Wait();
-                        return RunState.FailedToStart;
-                    }
+                var webHostArgs = WebHostArgs.ParseArgs(args);
 
-                    process.WaitForExit();
-
-                    return process.StandardError.ReadToEnd().Trim().Length == 0
-                        ? RunState.ExitedCleanly
-                        : RunState.Failed;
-                }
+                RunWebRole(webHostArgs);
             }
             catch (Exception ex)
             {
-                Trace.TraceError(ex.ToTraceMessage());
-                return RunState.FailedToStart;
+                Console.WriteLine(ex.ToTraceMessage());
+            }
+        }
+
+        private static void RunWebRole(WebHostArgs webHostArgs)
+        {
+            using (var process = Process.Start(BuildProcessStartInfo(webHostArgs)))
+            {
+                if (process != null)
+                {
+                    return;
+                }
+
+                Console.WriteLine("Existing process used.");
+                Task.Delay(-1).Wait();
             }
         }
 
