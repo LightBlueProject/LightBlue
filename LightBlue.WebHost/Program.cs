@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Threading.Tasks;
 
 using LightBlue.Infrastructure;
 
@@ -28,13 +27,18 @@ namespace LightBlue.WebHost
         {
             using (var process = Process.Start(BuildProcessStartInfo(webHostArgs)))
             {
-                if (process != null)
+                if (process == null)
                 {
+                    Console.WriteLine("Existing process used.");
                     return;
                 }
 
-                Console.WriteLine("Existing process used.");
-                Task.Delay(-1).Wait();
+                process.WaitForExit(3000);
+
+                if (process.HasExited)
+                {
+                    Console.WriteLine(process.StandardError.ReadToEnd());
+                }
             }
         }
 
