@@ -13,6 +13,8 @@ namespace LightBlue
         IAzureCopyState CopyState { get; }
         IDictionary<string, string> Metadata { get; }
 
+        bool Exists();
+        Task<bool> ExistsAsync();
         void FetchAttributes();
         void SetMetadata();
         string GetSharedAccessSignature(SharedAccessBlobPolicy policy);

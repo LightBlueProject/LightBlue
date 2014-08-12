@@ -47,6 +47,16 @@ namespace LightBlue.Hosted
             get { return _cloudBlockBlob.Metadata; }
         }
 
+        public bool Exists()
+        {
+            return _cloudBlockBlob.Exists();
+        }
+
+        public Task<bool> ExistsAsync()
+        {
+            return _cloudBlockBlob.ExistsAsync();
+        }
+
         public void FetchAttributes()
         {
             _cloudBlockBlob.FetchAttributes();

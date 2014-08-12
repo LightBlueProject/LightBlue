@@ -37,6 +37,10 @@ namespace LightBlue.Standalone
                 .WithParameter("roleName", _configuration.RoleName)
                 .SingleInstance()
                 .As<IAzureSettings>();
+
+            builder.RegisterType<StandaloneAzureRoleInformation>()
+                .WithParameter("roleName", _configuration.RoleName)
+                .As<IAzureRoleInformation>();
         }
     }
 }
