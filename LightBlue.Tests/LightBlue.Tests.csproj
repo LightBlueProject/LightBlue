@@ -64,6 +64,7 @@
       <Link>ServiceConfiguration.Local.cscfg</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

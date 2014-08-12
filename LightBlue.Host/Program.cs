@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 
 using LightBlue.Infrastructure;
+using LightBlue.Setup;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -17,13 +18,7 @@ namespace LightBlue.Host
         {
             var hostArgs = HostArgs.ParseArgs(args);
 
-            ModuleSource.ClearModules();
-            ModuleSource.AddModule(new LightBlueStandaloneModule(new StandaloneConfiguration
-            {
-                ConfigurationPath = hostArgs.ConfigurationPath,
-                RoleName = hostArgs.RoleName
-            }));
-
+            SetupConfiguration.SetAsHosted(hostArgs.ConfigurationPath, hostArgs.RoleName);
 
             var workerRoleType = LoadWorkerRoleType(hostArgs);
 

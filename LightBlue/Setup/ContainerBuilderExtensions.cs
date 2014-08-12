@@ -1,9 +1,6 @@
-﻿using System;
-
-using Autofac;
+﻿using Autofac;
 
 using LightBlue.Infrastructure;
-using LightBlue.Standalone;
 
 namespace LightBlue.Setup
 {
@@ -15,28 +12,6 @@ namespace LightBlue.Setup
             {
                 builder.RegisterModule(module);
             }
-        }
-
-        public static void RegisterLightBlueWebModules(this ContainerBuilder builder)
-        {
-            bool isHosted;
-
-            if (!Boolean.TryParse(Environment.GetEnvironmentVariable("LightBlueHost"), out isHosted))
-            {
-                isHosted = false;
-            }
-
-            if (isHosted)
-            {
-                ModuleSource.ClearModules();
-                ModuleSource.AddModule(new LightBlueStandaloneModule(new StandaloneConfiguration
-                {
-                    ConfigurationPath = Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
-                    RoleName = Environment.GetEnvironmentVariable("LightBlueRoleName"),
-                }));                
-            }
-
-            builder.RegisterLightBlueModules();
         }
     }
 }

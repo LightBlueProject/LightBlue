@@ -3,8 +3,6 @@ using System.Reflection;
 
 using Autofac;
 
-using LightBlue.Infrastructure;
-
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Standalone
@@ -12,10 +10,12 @@ namespace LightBlue.Standalone
     public class LightBlueStandaloneModule : Autofac.Module
     {
         private readonly StandaloneConfiguration _configuration;
+        private readonly Func<string, RoleEnvironmentException> _roleEnvironmentExceptionCreator;
 
-        public LightBlueStandaloneModule(StandaloneConfiguration configuration)
+        public LightBlueStandaloneModule(StandaloneConfiguration configuration, Func<string, RoleEnvironmentException> roleEnvironmentExceptionCreator)
         {
             _configuration = configuration;
+            _roleEnvironmentExceptionCreator = roleEnvironmentExceptionCreator;
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -28,7 +28,7 @@ namespace LightBlue.Standalone
                 .SingleInstance()
                 .As<IAzureEnvironmentSource>();
 
-            builder.RegisterInstance(RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator())
+            builder.RegisterInstance(_roleEnvironmentExceptionCreator)
                 .SingleInstance()
                 .As<Func<string, RoleEnvironmentException>>();
 
@@ -41,6 +41,12 @@ namespace LightBlue.Standalone
             builder.RegisterType<StandaloneAzureRoleInformation>()
                 .WithParameter("roleName", _configuration.RoleName)
                 .As<IAzureRoleInformation>();
+
+            builder.RegisterInstance((Func<string, IAzureStorage>)(connectionString => new StandaloneAzureStorage(connectionString)))
+                .As<Func<string, IAzureStorage>>();
+
+            builder.RegisterInstance((Func<Uri, IAzureBlockBlob>)(blobUri => new StandaloneAzureBlockBlob(blobUri)))
+                .As<Func<Uri, IAzureBlockBlob>>();
         }
     }
 }

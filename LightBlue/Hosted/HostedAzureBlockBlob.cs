@@ -16,6 +16,11 @@ namespace LightBlue.Hosted
             _cloudBlockBlob = cloudBlockBlob;
         }
 
+        public HostedAzureBlockBlob(Uri blobUri)
+        {
+            _cloudBlockBlob = new CloudBlockBlob(blobUri);
+        }
+
         public Uri Uri
         {
             get { return _cloudBlockBlob.Uri; }

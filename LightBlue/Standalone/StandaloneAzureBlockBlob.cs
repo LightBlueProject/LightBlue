@@ -20,6 +20,12 @@ namespace LightBlue.Standalone
             _blobPath = Path.Combine(containerDirectory, blobName);
         }
 
+        public StandaloneAzureBlockBlob(Uri blobUri)
+        {
+            _blobName = new FileInfo(blobUri.LocalPath).Name;
+            _blobPath = blobUri.LocalPath;
+        }
+
         public Uri Uri
         {
             get { return new Uri(_blobPath); }

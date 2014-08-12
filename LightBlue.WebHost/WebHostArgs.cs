@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
-using LightBlue.Infrastructure;
-
 using NDesk.Options;
 
 namespace LightBlue.WebHost
@@ -15,7 +13,6 @@ namespace LightBlue.WebHost
         public int Port { get; private set; }
         public string RoleName { get; private set; }
         public string ConfigurationPath { get; private set; }
-        public RetryMode RetryMode { get; private set; }
 
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
@@ -23,7 +20,6 @@ namespace LightBlue.WebHost
             var port = 0;
             string roleName = null;
             string configurationPath = null;
-            var retryMode = RetryMode.Infinite;
 
             var options = new OptionSet
             {
@@ -31,7 +27,6 @@ namespace LightBlue.WebHost
                 {"p|port=", "", v => Int32.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out port)},
                 {"n|roleName=", "", v => roleName = v},
                 {"c|configurationPath=", "", v => configurationPath = v},
-                {"r|retryMode=", "", v => { retryMode = (RetryMode) Enum.Parse(typeof(RetryMode), v, true); }},
             };
 
             options.Parse(args);
@@ -67,7 +62,6 @@ namespace LightBlue.WebHost
                 Port = port,
                 RoleName = roleName,
                 ConfigurationPath = configurationFile,
-                RetryMode = retryMode
             };
         }
 

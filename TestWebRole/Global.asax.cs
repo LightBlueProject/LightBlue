@@ -16,6 +16,8 @@ namespace TestWebRole
     {
         protected void Application_Start()
         {
+            SetupConfiguration.SetupForWeb();
+
             ConfigureAutofac();
 
             AreaRegistration.RegisterAllAreas();
@@ -24,10 +26,10 @@ namespace TestWebRole
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
-        private void ConfigureAutofac()
+        private static void ConfigureAutofac()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterLightBlueWebModules();
+            builder.RegisterLightBlueModules();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
             var container = builder.Build();
