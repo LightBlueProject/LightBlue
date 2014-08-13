@@ -72,6 +72,11 @@ namespace LightBlue.Hosted
             _cloudBlockBlob.SetMetadata();
         }
 
+        public Task SetMetadataAsync()
+        {
+            return _cloudBlockBlob.SetMetadataAsync();
+        }
+
         public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
         {
             return _cloudBlockBlob.GetSharedAccessSignature(policy);

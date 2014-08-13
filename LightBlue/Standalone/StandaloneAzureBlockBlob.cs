@@ -60,6 +60,11 @@ namespace LightBlue.Standalone
         public void SetMetadata()
         {}
 
+        public Task SetMetadataAsync()
+        {
+            return Task.FromResult(new object());
+        }
+
         public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
         {
             return "";
@@ -73,9 +78,9 @@ namespace LightBlue.Standalone
                 int bytesRead;
                 do
                 {
-                    bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length);
+                    bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
 
-                    await target.WriteAsync(buffer, 0, bytesRead);
+                    await target.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
                 } while (bytesRead == BufferSize);
             }
         }
@@ -90,7 +95,7 @@ namespace LightBlue.Standalone
                 {
                     bytesRead = await source.ReadAsync(buffer, 0, buffer.Length);
 
-                    await fileStream.WriteAsync(buffer, 0, bytesRead);
+                    await fileStream.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
                 } while (bytesRead == BufferSize);
             }
         }
@@ -99,7 +104,7 @@ namespace LightBlue.Standalone
         {
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
-                await fileStream.WriteAsync(buffer, index, count);
+                await fileStream.WriteAsync(buffer, index, count).ConfigureAwait(false);
             }
         }
     }

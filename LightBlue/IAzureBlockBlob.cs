@@ -17,6 +17,7 @@ namespace LightBlue
         Task<bool> ExistsAsync();
         void FetchAttributes();
         void SetMetadata();
+        Task SetMetadataAsync();
         string GetSharedAccessSignature(SharedAccessBlobPolicy policy);
         Task DownloadToStreamAsync(Stream target);
         Task UploadFromStreamAsync(Stream source);
