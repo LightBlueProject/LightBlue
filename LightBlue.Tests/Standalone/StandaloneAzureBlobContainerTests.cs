@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+
+using ExpectedObjects;
 
 using LightBlue.Standalone;
 
@@ -10,13 +13,88 @@ using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
-    public class StandaloneAzureBlobContainerTests : IDisposable
+    public class StandaloneAzureBlobContainerTests : StandaloneAzureTestsBase, IDisposable
     {
-        private readonly string _containerPath;
-
-        public StandaloneAzureBlobContainerTests()
+        [Fact]
+        public void DoesNotCreateContainerDirectoryOnConstruction()
         {
-            _containerPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            new StandaloneAzureBlobContainer(BasePath);
+
+        }
+
+        [Fact]
+        public void WillCreateContainerPathOnCreateIfNotExists()
+        {
+            new StandaloneAzureBlobContainer(BasePath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+
+            Assert.True(Directory.Exists(BasePath));
+        }
+
+        [Fact]
+        public void WillCreateMetadataPathOnCreateIfNotExists()
+        {
+            new StandaloneAzureBlobContainer(BasePath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+
+            Assert.True(Directory.Exists(Path.Combine(BasePath, ".meta")));
+        }
+
+        [Fact]
+        public void WillUseCorrectContainerPathWhenGivenBasePathAndContainerName()
+        {
+            new StandaloneAzureBlobContainer(BasePath, "test").CreateIfNotExists(BlobContainerPublicAccessType.Off);
+
+            Assert.True(Directory.Exists(Path.Combine(BasePath, "test")));
+        }
+
+        [Fact]
+        public void CanDetermineContainerDoesNotExist()
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath);
+
+            Assert.False(container.Exists());
+        }
+
+        [Fact]
+        public void CanDetermineContainerExists()
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath);
+
+            container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
+
+            Assert.True(container.Exists());
+        }
+
+        [Fact]
+        public async Task CanDetermineContainerDoesNotExistAsync()
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath);
+
+            Assert.False(await container.ExistsAsynx());
+        }
+
+        [Fact]
+        public async Task CanDetermineContainerExistsAsync()
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath);
+
+            container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
+
+            Assert.True(await container.ExistsAsynx());
+        }
+
+        [Fact]
+        public void CanGetBlobInstance()
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath);
+            container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
+
+            var blob = container.GetBlockBlobReference("testblob");
+
+            new
+            {
+                Name = "testblob",
+                Uri = new Uri(Path.Combine(BasePath, "testblob"))
+            }.ToExpectedObject().ShouldMatch(blob);
         }
 
         [Theory]
@@ -24,21 +102,13 @@ namespace LightBlue.Tests.Standalone
         [InlineData(BlobListingDetails.All)]
         public void AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
         {
-            var container = new StandaloneAzureBlobContainer(_containerPath);
+            var container = new StandaloneAzureBlobContainer(BasePath);
             Assert.Throws<ArgumentException>(() => container.ListBlobsSegmentedAsync(
                 "",
                 BlobListing.Hierarchical,
                 blobListingDetails,
                 500,
                 null));
-        }
-
-        public void Dispose()
-        {
-            if (!string.IsNullOrWhiteSpace(_containerPath) && Directory.Exists(_containerPath))
-            {
-                Directory.Delete(_containerPath, true);
-            }
         }
     }
 }
