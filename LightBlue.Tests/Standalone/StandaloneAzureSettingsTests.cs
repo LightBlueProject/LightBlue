@@ -5,7 +5,7 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 
 using Xunit;
 
-namespace LightBlue.Tests
+namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureSettingsTests
     {

@@ -82,6 +82,7 @@
     <Compile Include="AzureEnvironment.cs" />
     <Compile Include="BlobListing.cs" />
     <Compile Include="Hosted\HostedAzureBlobContainer.cs" />
+    <Compile Include="Hosted\HostedAzureBlobDirectory.cs" />
     <Compile Include="Hosted\HostedAzureBlobResultSegment.cs" />
     <Compile Include="Hosted\HostedAzureBlobStorage.cs" />
     <Compile Include="Hosted\HostedAzureBlockBlob.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Hosted\HostedAzureStorage.cs" />
     <Compile Include="Hosted\LightBlueHostedModule.cs" />
     <Compile Include="IAzureBlobContainer.cs" />
+    <Compile Include="IAzureBlobDirectory.cs" />
     <Compile Include="IAzureBlobResultSegment.cs" />
     <Compile Include="IAzureBlobStorage.cs" />
     <Compile Include="IAzureBlockBlob.cs" />
@@ -113,6 +115,8 @@
     <Compile Include="Setup\SetupConfiguration.cs" />
     <Compile Include="Standalone\LightBlueStandaloneModule.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobContainer.cs" />
+    <Compile Include="Standalone\StandaloneAzureBlobDirectory.cs" />
+    <Compile Include="Standalone\StandaloneAzureBlobResultSegment.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlob.cs" />
     <Compile Include="Standalone\StandaloneAzureEnvironmentSource.cs" />
     <Compile Include="Standalone\StandaloneAzureRoleInformation.cs" />
