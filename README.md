@@ -8,11 +8,12 @@ Features
 * IAzureEnvironmentSource to indicate where the role is running
 * Settings API
 * Web Role support
+* Blob storage abstraction (restricted to key portions of the block blob API)
 
 Planned Features
 ----------------
-* Blob storage abstraction (initially restricted to key portions of the block blob API)
 * Queue storage abstraction
+* HTTPS support for web roles
 
 LightBlue doesn't aim to abstract every API that Azure provides. PRs adding missing features welcome.
 
