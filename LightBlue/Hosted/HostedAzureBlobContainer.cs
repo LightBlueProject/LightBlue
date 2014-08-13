@@ -13,16 +13,9 @@ namespace LightBlue.Hosted
             _cloudBlobContainer = cloudBlobContainer;
         }
 
-        public bool CreateIfNotExists(BlobContainerPermissions blobContainerPermissions)
+        public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
         {
-            if (!_cloudBlobContainer.CreateIfNotExists())
-            {
-                return false;
-            }
-
-            _cloudBlobContainer.SetPermissions(blobContainerPermissions);
-
-            return true;
+            return _cloudBlobContainer.CreateIfNotExists(accessType);
         }
 
         public bool Exists()
@@ -30,7 +23,12 @@ namespace LightBlue.Hosted
             return _cloudBlobContainer.Exists();
         }
 
-        public IAzureBlockBlob GetBlockBlob(string blobName)
+        public Task ExistsAsynx()
+        {
+            return _cloudBlobContainer.ExistsAsync();
+        }
+
+        public IAzureBlockBlob GetBlockBlobReference(string blobName)
         {
             return new HostedAzureBlockBlob(_cloudBlobContainer.GetBlockBlobReference(blobName));
         }

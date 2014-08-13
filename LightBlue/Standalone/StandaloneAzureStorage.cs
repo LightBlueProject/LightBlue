@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 
+using LightBlue.Infrastructure;
+
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureStorage : IAzureStorage
@@ -25,7 +27,7 @@ namespace LightBlue.Standalone
 
         private static string ExtractAccountName(string connectionString)
         {
-            var valuePairs = connectionString.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries)
+            var valuePairs = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(component => component.Split(new[] {'='}, StringSplitOptions.RemoveEmptyEntries))
                 .ToDictionary(c => c[0].ToLowerInvariant(), c => c[1]);
 

@@ -14,7 +14,7 @@ namespace LightBlue.Standalone
             _containerDirectory = Path.Combine(blobStorageDirectory, containerName);
         }
 
-        public bool CreateIfNotExists(BlobContainerPermissions blobContainerPermissions)
+        public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
         {
             Directory.CreateDirectory(_containerDirectory);
             return true;
@@ -25,7 +25,12 @@ namespace LightBlue.Standalone
             return Directory.Exists(_containerDirectory);
         }
 
-        public IAzureBlockBlob GetBlockBlob(string blobName)
+        public Task ExistsAsynx()
+        {
+            return Task.FromResult(Directory.Exists(_containerDirectory));
+        }
+
+        public IAzureBlockBlob GetBlockBlobReference(string blobName)
         {
             return new StandaloneAzureBlockBlob(_containerDirectory, blobName);
         }

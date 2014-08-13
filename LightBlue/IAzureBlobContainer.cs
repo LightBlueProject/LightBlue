@@ -6,9 +6,10 @@ namespace LightBlue
 {
     public interface IAzureBlobContainer
     {
-        bool CreateIfNotExists(BlobContainerPermissions blobContainerPermissions);
+        bool CreateIfNotExists(BlobContainerPublicAccessType accessType);
         bool Exists();
-        IAzureBlockBlob GetBlockBlob(string blobName);
+        Task ExistsAsynx();
+        IAzureBlockBlob GetBlockBlobReference(string blobName);
         Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(
             string prefix,
             BlobListing blobListing,

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Standalone
@@ -67,26 +69,51 @@ namespace LightBlue.Standalone
 
         public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
         {
+            if (policy == null)
+            {
+                throw new ArgumentNullException("policy");
+            }
             return "";
         }
 
         public async Task DownloadToStreamAsync(Stream target)
         {
-            using (var fileStream = new FileStream(_blobPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, BufferSize, true))
+            if (target == null)
             {
-                var buffer = new byte[BufferSize];
-                int bytesRead;
-                do
-                {
-                    bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+                throw new ArgumentNullException("target");
+            }
 
-                    await target.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
-                } while (bytesRead == BufferSize);
+            try
+            {
+                using (var fileStream = new FileStream(_blobPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, BufferSize, true))
+                {
+                    var buffer = new byte[BufferSize];
+                    int bytesRead;
+                    do
+                    {
+                        bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+
+                        await target.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
+                    } while (bytesRead == BufferSize);
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw new StorageException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "The blob file was not found. Expected location '{0}'.",
+                        _blobPath),
+                    ex);
             }
         }
 
         public async Task UploadFromStreamAsync(Stream source)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 var buffer = new byte[BufferSize];
@@ -102,6 +129,10 @@ namespace LightBlue.Standalone
 
         public async Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
         {
+            if (buffer == null)
+            {
+                throw new ArgumentNullException("buffer");
+            }
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 await fileStream.WriteAsync(buffer, index, count).ConfigureAwait(false);

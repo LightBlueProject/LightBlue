@@ -1,4 +1,6 @@
-﻿using Microsoft.WindowsAzure.Storage.Blob;
+﻿using LightBlue.Infrastructure;
+
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Hosted
 {
@@ -13,6 +15,8 @@ namespace LightBlue.Hosted
 
         public IAzureBlobContainer GetAzureBlobContainer(string containerName)
         {
+            NameValidation.Container(containerName, "containerName");
+
             return new HostedAzureBlobContainer(_cloudBlobClient.GetContainerReference(containerName));
         }
     }

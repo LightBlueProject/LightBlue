@@ -1,5 +1,7 @@
 ﻿using System.IO;
 
+using LightBlue.Infrastructure;
+
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureBlobStorage : IAzureBlobStorage
@@ -14,6 +16,8 @@ namespace LightBlue.Standalone
 
         public IAzureBlobContainer GetAzureBlobContainer(string containerName)
         {
+            NameValidation.Container(containerName, "containerName");
+
             return new StandaloneAzureBlobContainer(_blobStorageDirectory, containerName);
         }
     }

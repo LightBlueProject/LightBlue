@@ -103,6 +103,7 @@
     <Compile Include="IAzureStorage.cs" />
     <Compile Include="Infrastructure\ExceptionExtensions.cs" />
     <Compile Include="Infrastructure\ModuleSource.cs" />
+    <Compile Include="Infrastructure\NameValidation.cs" />
     <Compile Include="Infrastructure\RetryMode.cs" />
     <Compile Include="Infrastructure\RoleEnvironmentExceptionCreatorFactory.cs" />
     <Compile Include="Infrastructure\RunState.cs" />
