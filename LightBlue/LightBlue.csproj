@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AzureBlockBlobFactory.cs" />
     <Compile Include="AzureEnvironment.cs" />
     <Compile Include="BlobListing.cs" />
     <Compile Include="Hosted\HostedAzureBlobContainer.cs" />
