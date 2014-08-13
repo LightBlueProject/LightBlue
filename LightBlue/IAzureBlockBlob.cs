@@ -9,7 +9,7 @@ namespace LightBlue
     public interface IAzureBlockBlob : IAzureListBlobItem
     {
         string Name { get; }
-        BlobProperties Properties { get; }
+        IAzureBlobProperties Properties { get; }
         IAzureCopyState CopyState { get; }
         IDictionary<string, string> Metadata { get; }
 
@@ -18,6 +18,8 @@ namespace LightBlue
         void FetchAttributes();
         void SetMetadata();
         Task SetMetadataAsync();
+        void SetProperties();
+        Task SetPropertiesAsync();
         string GetSharedAccessSignature(SharedAccessBlobPolicy policy);
         Task DownloadToStreamAsync(Stream target);
         Task UploadFromStreamAsync(Stream source);

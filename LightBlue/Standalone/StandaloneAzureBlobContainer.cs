@@ -22,9 +22,15 @@ namespace LightBlue.Standalone
             _containerDirectory = containerDirectory;
         }
 
+        private string MetadataDirectory
+        {
+            get { return Path.Combine(_containerDirectory, ".meta"); }
+        }
+
         public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
         {
             Directory.CreateDirectory(_containerDirectory);
+            Directory.CreateDirectory(MetadataDirectory);
             return true;
         }
 
@@ -62,6 +68,7 @@ namespace LightBlue.Standalone
         private StandaloneAzureBlobResultSegment FindFilesFlattened(string prefix, int? maxResults, int numberToSkip)
         {
             var files = new DirectoryInfo(_containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.AllDirectories)
+                .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
                 .Skip(numberToSkip)
                 .Take(maxResults.HasValue ? maxResults.Value : Int32.MaxValue)
                 .Select(f => new StandaloneAzureBlockBlob(new Uri(f.FullName)))
@@ -79,9 +86,11 @@ namespace LightBlue.Standalone
         private StandaloneAzureBlobResultSegment FindFilesHierarchical(string prefix, int? maxResults, int numberToSkip)
         {
             var directories = new DirectoryInfo(_containerDirectory).EnumerateDirectories((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
-                .Select(f => (IAzureListBlobItem)  new StandaloneAzureBlobDirectory(f.FullName));
+                .Where(f => !f.Name.EndsWith(".meta"))
+                .Select(f => (IAzureListBlobItem)new StandaloneAzureBlobDirectory(f.FullName));
             var files = new DirectoryInfo(_containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
-                .Select(f => (IAzureListBlobItem)  new StandaloneAzureBlockBlob(new Uri(f.FullName)));
+                .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
+                     .Select(f => (IAzureListBlobItem)new StandaloneAzureBlockBlob(new Uri(f.FullName)));
 
             var combined = directories.Concat(files)
                 .Skip(numberToSkip)

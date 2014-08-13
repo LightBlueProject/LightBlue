@@ -31,9 +31,12 @@ namespace LightBlue.Hosted
             get { return _cloudBlockBlob.Name; }
         }
 
-        public BlobProperties Properties
+        public IAzureBlobProperties Properties
         {
-            get { return _cloudBlockBlob.Properties; }
+            get
+            {
+                return new HostedAzureBlobProperties(_cloudBlockBlob.Properties);
+            }
         }
 
         public IAzureCopyState CopyState
@@ -75,6 +78,16 @@ namespace LightBlue.Hosted
         public Task SetMetadataAsync()
         {
             return _cloudBlockBlob.SetMetadataAsync();
+        }
+
+        public void SetProperties()
+        {
+            _cloudBlockBlob.SetProperties();
+        }
+
+        public Task SetPropertiesAsync()
+        {
+            return _cloudBlockBlob.SetPropertiesAsync();
         }
 
         public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)

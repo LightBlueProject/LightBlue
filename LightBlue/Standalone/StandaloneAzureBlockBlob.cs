@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
+using Newtonsoft.Json;
+
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureBlockBlob : IAzureBlockBlob
@@ -15,17 +17,31 @@ namespace LightBlue.Standalone
 
         private readonly string _blobName;
         private readonly string _blobPath;
+        private readonly string _metadataPath;
+        private readonly StandaloneAzureBlobProperties _properties;
+        private Dictionary<string, string> _metadata; 
 
         public StandaloneAzureBlockBlob(string containerDirectory, string blobName)
+            : this()
         {
             _blobName = blobName;
             _blobPath = Path.Combine(containerDirectory, blobName);
+            _metadataPath = Path.Combine(containerDirectory, ".meta", blobName);
+            _metadata = new Dictionary<string, string>();
         }
 
         public StandaloneAzureBlockBlob(Uri blobUri)
+            : this()
         {
             _blobName = new FileInfo(blobUri.LocalPath).Name;
             _blobPath = blobUri.LocalPath;
+            _metadataPath = Path.Combine(Path.GetDirectoryName(_blobPath) ?? "", ".meta", _blobName);
+            _metadata = new Dictionary<string, string>();
+        }
+
+        private StandaloneAzureBlockBlob()
+        {
+            _properties = new StandaloneAzureBlobProperties {Length = -1, ContentType = null};
         }
 
         public Uri Uri
@@ -38,12 +54,16 @@ namespace LightBlue.Standalone
             get { return _blobName; }
         }
 
-        public BlobProperties Properties { get; private set; }
+        public IAzureBlobProperties Properties
+        {
+            get { return _properties; }
+        }
+
         public IAzureCopyState CopyState { get; private set; }
 
         public IDictionary<string, string> Metadata
         {
-            get {  return new Dictionary<string, string>(); }
+            get { return _metadata; }
         }
 
         public bool Exists()
@@ -57,12 +77,36 @@ namespace LightBlue.Standalone
         }
 
         public void FetchAttributes()
-        {}
+        {
+            var fileInfo = new FileInfo(_blobPath);
+            if (!fileInfo.Exists)
+            {
+                return;
+            }
+            var metadataStore = LoadMetadataStore();
+
+            _properties.ContentType = metadataStore.ContentType;
+            _properties.Length = fileInfo.Length;
+            _metadata = metadataStore.Metadata;
+        }
 
         public void SetMetadata()
-        {}
+        {
+            UpdateMetadata();
+        }
 
         public Task SetMetadataAsync()
+        {
+            UpdateMetadata();
+            return Task.FromResult(new object());
+        }
+
+        public void SetProperties()
+        {
+            UpdateContentType();
+        }
+
+        public Task SetPropertiesAsync()
         {
             return Task.FromResult(new object());
         }
@@ -138,5 +182,59 @@ namespace LightBlue.Standalone
                 await fileStream.WriteAsync(buffer, index, count).ConfigureAwait(false);
             }
         }
+
+        private StandaloneMetadataStore LoadMetadataStore()
+        {
+            if (!File.Exists(_metadataPath))
+            {
+                return new StandaloneMetadataStore
+                {
+                    ContentType = File.Exists(_blobPath) ? "application/octet-stream" : null,
+                    Metadata = new Dictionary<string, string>()
+                };
+            }
+
+            using (var file = File.OpenText(_metadataPath))
+            {
+                var serializer = new JsonSerializer();
+                return (StandaloneMetadataStore) serializer.Deserialize(file, typeof(StandaloneMetadataStore));
+            }
+        }
+
+        private void UpdateMetadata()
+        {
+            var metadataStore = LoadMetadataStore();
+
+            foreach (var key in _metadata.Keys)
+            {
+                metadataStore.Metadata[key] = _metadata[key];
+            }
+
+            WriteMetadataStore(metadataStore);
+        }
+
+        private void UpdateContentType()
+        {
+            var metadataStore = LoadMetadataStore();
+
+            metadataStore.ContentType = _properties.ContentType;
+
+            WriteMetadataStore(metadataStore);
+        }
+
+        private void WriteMetadataStore(StandaloneMetadataStore metadataStore)
+        {
+            using (var file = File.CreateText(_metadataPath))
+            {
+                var serializer = new JsonSerializer();
+                serializer.Serialize(file, metadataStore);
+            }
+        }
+    }
+
+    public class StandaloneMetadataStore
+    {
+        public string ContentType { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
     }
 }

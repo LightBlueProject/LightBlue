@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 
-using LightBlue.Infrastructure;
-
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureStorage : IAzureStorage
