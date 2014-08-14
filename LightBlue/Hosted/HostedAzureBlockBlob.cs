@@ -55,6 +55,16 @@ namespace LightBlue.Hosted
             get { return _cloudBlockBlob.Metadata; }
         }
 
+        public void Delete()
+        {
+            _cloudBlockBlob.Delete();
+        }
+
+        public Task DeleteAsync()
+        {
+            return _cloudBlockBlob.DeleteAsync();
+        }
+
         public bool Exists()
         {
             return _cloudBlockBlob.Exists();
@@ -93,6 +103,11 @@ namespace LightBlue.Hosted
         public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
         {
             return _cloudBlockBlob.GetSharedAccessSignature(policy);
+        }
+
+        public void DownloadToStream(Stream target)
+        {
+            _cloudBlockBlob.DownloadToStream(target);
         }
 
         public Task DownloadToStreamAsync(Stream target)

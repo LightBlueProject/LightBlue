@@ -66,6 +66,18 @@ namespace LightBlue.Standalone
             get { return _metadata; }
         }
 
+        public void Delete()
+        {
+            File.Delete(_blobPath);
+            File.Delete(_metadataPath);
+        }
+
+        public Task DeleteAsync()
+        {
+            Delete();
+            return Task.FromResult(new object());
+        }
+
         public bool Exists()
         {
             return File.Exists(_blobPath);
@@ -118,6 +130,38 @@ namespace LightBlue.Standalone
                 throw new ArgumentNullException("policy");
             }
             return "";
+        }
+
+        public void DownloadToStream(Stream target)
+        {
+            if (target == null)
+            {
+                throw new ArgumentNullException("target");
+            }
+
+            try
+            {
+                using (var fileStream = new FileStream(_blobPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, BufferSize, true))
+                {
+                    var buffer = new byte[BufferSize];
+                    int bytesRead;
+                    do
+                    {
+                        bytesRead = fileStream.Read(buffer, 0, buffer.Length);
+
+                        target.Write(buffer, 0, bytesRead);
+                    } while (bytesRead == BufferSize);
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw new StorageException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "The blob file was not found. Expected location '{0}'.",
+                        _blobPath),
+                    ex);
+            }
         }
 
         public async Task DownloadToStreamAsync(Stream target)

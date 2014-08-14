@@ -12,7 +12,9 @@ namespace LightBlue
         IAzureBlobProperties Properties { get; }
         IAzureCopyState CopyState { get; }
         IDictionary<string, string> Metadata { get; }
-
+        
+        void Delete();
+        Task DeleteAsync();
         bool Exists();
         Task<bool> ExistsAsync();
         void FetchAttributes();
@@ -21,6 +23,7 @@ namespace LightBlue
         void SetProperties();
         Task SetPropertiesAsync();
         string GetSharedAccessSignature(SharedAccessBlobPolicy policy);
+        void DownloadToStream(Stream target);
         Task DownloadToStreamAsync(Stream target);
         Task UploadFromStreamAsync(Stream source);
         Task UploadFromByteArrayAsync(byte[] buffer, int index, int count);
