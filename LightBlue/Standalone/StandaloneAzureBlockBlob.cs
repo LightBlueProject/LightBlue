@@ -217,9 +217,9 @@ namespace LightBlue.Standalone
 
         public Task UploadFromFileAsync(string path, FileMode mode)
         {
-            File.Delete(_metadataPath);
-
             File.Copy(path, _blobPath, true);
+
+            File.Delete(_metadataPath);
 
             return Task.FromResult(new object());
         }
