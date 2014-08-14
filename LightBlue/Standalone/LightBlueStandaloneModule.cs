@@ -47,6 +47,9 @@ namespace LightBlue.Standalone
 
             builder.RegisterInstance((Func<Uri, IAzureBlockBlob>)(blobUri => new StandaloneAzureBlockBlob(blobUri)))
                 .As<Func<Uri, IAzureBlockBlob>>();
+
+            builder.RegisterInstance((Func<Uri, IAzureBlobContainer>)(containerUri => new StandaloneAzureBlobContainer(containerUri)))
+                .As<Func<Uri, IAzureBlobContainer>>();
         }
     }
 }

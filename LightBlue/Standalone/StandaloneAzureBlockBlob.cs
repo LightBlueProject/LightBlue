@@ -215,6 +215,15 @@ namespace LightBlue.Standalone
             }
         }
 
+        public Task UploadFromFileAsync(string path, FileMode mode)
+        {
+            File.Delete(_metadataPath);
+
+            File.Copy(path, _blobPath, true);
+
+            return Task.FromResult(new object());
+        }
+
         public async Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
         {
             if (buffer == null)

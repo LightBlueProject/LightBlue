@@ -22,10 +22,12 @@ namespace LightBlue.Setup
         {
             AzureSettings = new HostedAzureSettings();
             AzureLocalResources = new HostedAzureLocalResourceSource();
+            AzureBlobContainerFactory = uri => new HostedAzureBlobContainer(uri);
         }
 
         public static IAzureSettings AzureSettings { get; private set; }
         public static IAzureLocalResourceSource AzureLocalResources { get; private set; }
+        public static Func<Uri, IAzureBlobContainer> AzureBlobContainerFactory { get; private set; }
 
         public static AzureEnvironment AzureEnvironment
         {
@@ -91,6 +93,8 @@ namespace LightBlue.Setup
                 roleName,
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "LightBlue"),
                 roleEnvironmentExceptionCreator);
+
+            AzureBlobContainerFactory = uri => new StandaloneAzureBlobContainer(uri);
         }
 
         public static void SetupForExternalEnvironment(Func<AzureEnvironment> azureEnvironmentFunc)

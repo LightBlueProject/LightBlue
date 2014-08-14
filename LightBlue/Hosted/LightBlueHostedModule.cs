@@ -22,6 +22,9 @@ namespace LightBlue.Hosted
 
             builder.RegisterInstance((Func<Uri, IAzureBlockBlob>) (blobUri => new HostedAzureBlockBlob(blobUri)))
                 .As<Func<Uri, IAzureBlockBlob>>();
+
+            builder.RegisterInstance((Func<Uri, IAzureBlobContainer>) (containerUri => new HostedAzureBlobContainer(containerUri)))
+                .As<Func<Uri, IAzureBlobContainer>>();
         }
     }
 }

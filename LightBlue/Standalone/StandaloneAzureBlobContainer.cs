@@ -22,6 +22,11 @@ namespace LightBlue.Standalone
             _containerDirectory = containerDirectory;
         }
 
+        public StandaloneAzureBlobContainer(Uri containerUri)
+        {
+            _containerDirectory = containerUri.LocalPath;
+        }
+
         private string MetadataDirectory
         {
             get { return Path.Combine(_containerDirectory, ".meta"); }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Hosted
@@ -19,6 +20,11 @@ namespace LightBlue.Hosted
         public HostedAzureBlockBlob(Uri blobUri)
         {
             _cloudBlockBlob = new CloudBlockBlob(blobUri);
+        }
+
+        public HostedAzureBlockBlob(Uri blobUri, StorageCredentials storageCredentials)
+        {
+            _cloudBlockBlob = new CloudBlockBlob(blobUri, storageCredentials);
         }
 
         public Uri Uri
@@ -118,6 +124,11 @@ namespace LightBlue.Hosted
         public Task UploadFromStreamAsync(Stream source)
         {
             return _cloudBlockBlob.UploadFromStreamAsync(source);
+        }
+
+        public Task UploadFromFileAsync(string path, FileMode mode)
+        {
+            return _cloudBlockBlob.UploadFromFileAsync(path, mode);
         }
 
         public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
