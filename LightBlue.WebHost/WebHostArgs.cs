@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
+using LightBlue.Infrastructure;
+
 using NDesk.Options;
 
 namespace LightBlue.WebHost
@@ -13,6 +15,7 @@ namespace LightBlue.WebHost
         public int Port { get; private set; }
         public string RoleName { get; private set; }
         public string ConfigurationPath { get; private set; }
+        public string ServiceDefinitionPath { get; private set; }
 
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
@@ -54,36 +57,14 @@ namespace LightBlue.WebHost
                 throw new FileNotFoundException("The specified site directory does not exist.");
             }
 
-            var configurationFile = LocateConfigurationFile(configurationPath);
-
             return new WebHostArgs
             {
                 SiteDirectory = siteDirectory,
                 Port = port,
                 RoleName = roleName,
-                ConfigurationPath = configurationFile,
+                ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
+                ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
             };
-        }
-
-        private static string LocateConfigurationFile(string configurationPath)
-        {
-            if (File.Exists(configurationPath))
-            {
-                return configurationPath;
-            }
-
-            if (!Directory.Exists(configurationPath))
-            {
-                throw new ArgumentException("The configuration path does not exist. Specify the specific configuration file or the directory in which ServiceConfiguration.Local.cscfg is located.");
-            }
-
-            var configurationFile = Path.Combine(configurationPath, "ServiceConfiguration.Local.cscfg");
-            if (!File.Exists(configurationFile))
-            {
-                throw new ArgumentException("ServiceConfiguration.Local.cscfg cannot be located in the configuration path.");
-            }
-
-            return configurationFile;
         }
     }
 }

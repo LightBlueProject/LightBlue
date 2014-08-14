@@ -91,12 +91,17 @@
     <Compile Include="RoleEnvironmentExceptionCreatorFactoryTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobContainerListTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobContainerTests.cs" />
+    <Compile Include="Standalone\StandaloneAzureLocalResourceSourceTests.cs" />
     <Compile Include="Standalone\StandaloneAzureSettingsTests.cs" />
     <Compile Include="Standalone\StandaloneAzureTestsBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\TestCloudService\ServiceConfiguration.Local.cscfg">
       <Link>ServiceConfiguration.Local.cscfg</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\TestCloudService\ServiceDefinition.csdef">
+      <Link>ServiceDefinition.csdef</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="app.config" />

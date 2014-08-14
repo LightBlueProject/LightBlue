@@ -22,17 +22,17 @@ namespace LightBlue.Standalone
 
             var xDocument = XDocument.Load(configurationPath);
 
-            XNamespace serviceConfigurationNNamespace = xDocument.Root
+            XNamespace serviceConfigurationNamespace = xDocument.Root
                 .Attributes()
                 .Where(a => a.IsNamespaceDeclaration)
                 .First(a => a.Value.Contains("ServiceConfiguration"))
                 .Value;
 
-            var roleElement = xDocument.Descendants(serviceConfigurationNNamespace + "Role")
+            var roleElement = xDocument.Descendants(serviceConfigurationNamespace + "Role")
                 .First(r => r.Attribute("name").Value == roleName);
 
-            _settings = roleElement.Descendants(serviceConfigurationNNamespace + "ConfigurationSettings")
-                .Descendants(serviceConfigurationNNamespace + "Setting")
+            _settings = roleElement.Descendants(serviceConfigurationNamespace + "ConfigurationSettings")
+                .Descendants(serviceConfigurationNamespace + "Setting")
                 .ToDictionary(s => s.Attribute("name").Value, s => s.Attribute("value").Value);
         }
 

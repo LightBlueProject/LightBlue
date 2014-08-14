@@ -89,6 +89,8 @@
     <Compile Include="Hosted\HostedAzureBlockBlob.cs" />
     <Compile Include="Hosted\HostedAzureCopyState.cs" />
     <Compile Include="Hosted\HostedAzureEnvironmentSource.cs" />
+    <Compile Include="Hosted\HostedAzureLocalResource.cs" />
+    <Compile Include="Hosted\HostedAzureLocalResourceSource.cs" />
     <Compile Include="Hosted\HostedAzureRoleInformation.cs" />
     <Compile Include="Hosted\HostedAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureStorage.cs" />
@@ -102,9 +104,12 @@
     <Compile Include="IAzureCopyState.cs" />
     <Compile Include="IAzureEnvironmentSource.cs" />
     <Compile Include="IAzureListBlobItem.cs" />
+    <Compile Include="IAzureLocalResource.cs" />
+    <Compile Include="IAzureLocalResourceSource.cs" />
     <Compile Include="IAzureRoleInformation.cs" />
     <Compile Include="IAzureSettings.cs" />
     <Compile Include="IAzureStorage.cs" />
+    <Compile Include="Infrastructure\ConfigurationLocator.cs" />
     <Compile Include="Infrastructure\ExceptionExtensions.cs" />
     <Compile Include="Infrastructure\ModuleSource.cs" />
     <Compile Include="Infrastructure\NameValidation.cs" />
@@ -116,12 +121,14 @@
     <Compile Include="Setup\ContainerBuilderExtensions.cs" />
     <Compile Include="Setup\SetupConfiguration.cs" />
     <Compile Include="Standalone\LightBlueStandaloneModule.cs" />
+    <Compile Include="Standalone\StandaloneAzureLocalResource.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobContainer.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobDirectory.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobProperties.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobResultSegment.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlob.cs" />
     <Compile Include="Standalone\StandaloneAzureEnvironmentSource.cs" />
+    <Compile Include="Standalone\StandaloneAzureLocalResourceSource.cs" />
     <Compile Include="Standalone\StandaloneAzureRoleInformation.cs" />
     <Compile Include="Standalone\StandaloneAzureSettings.cs" />
     <Compile Include="Standalone\StandaloneAzureStorage.cs" />

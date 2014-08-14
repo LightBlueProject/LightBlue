@@ -54,11 +54,15 @@ namespace LightBlue.Setup
             _alreadyConfigured = true;
 
             SetAsHosted(
-                Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
-                Environment.GetEnvironmentVariable("LightBlueRoleName"));
+                configurationPath: Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
+                serviceDefinitionPath: Environment.GetEnvironmentVariable("LightBlueServiceDefinitionPath"),
+                roleName: Environment.GetEnvironmentVariable("LightBlueRoleName"));
         }
 
-        public static void SetAsHosted(string configurationPath, string roleName)
+        public static void SetAsHosted(
+            string configurationPath,
+            string serviceDefinitionPath,
+            string roleName)
         {
             _azureEnvironmentFunc = () => AzureEnvironment.LightBlue;
 
@@ -69,9 +73,10 @@ namespace LightBlue.Setup
                 new LightBlueStandaloneModule(new StandaloneConfiguration
                 {
                     ConfigurationPath = configurationPath,
+                    ServiceDefinitionPath = serviceDefinitionPath,
                     RoleName = roleName
                 },
-                    roleEnvironmentExceptionCreator));
+                roleEnvironmentExceptionCreator));
 
             AzureSettings = new StandaloneAzureSettings(
                 configurationPath,

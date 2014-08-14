@@ -22,5 +22,8 @@
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <LocalResources>
+      <LocalStorage name="TestStorage" cleanOnRoleRecycle="false" sizeInMB="512" />
+    </LocalResources>
   </WebRole>
 </ServiceDefinition>
