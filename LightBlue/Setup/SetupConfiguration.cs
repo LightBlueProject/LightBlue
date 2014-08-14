@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 using LightBlue.Hosted;
 using LightBlue.Infrastructure;
@@ -20,9 +21,11 @@ namespace LightBlue.Setup
         static SetupConfiguration()
         {
             AzureSettings = new HostedAzureSettings();
+            AzureLocalResources = new HostedAzureLocalResourceSource();
         }
 
         public static IAzureSettings AzureSettings { get; private set; }
+        public static IAzureLocalResourceSource AzureLocalResources { get; private set; }
 
         public static AzureEnvironment AzureEnvironment
         {
@@ -82,6 +85,17 @@ namespace LightBlue.Setup
                 configurationPath,
                 roleName,
                 roleEnvironmentExceptionCreator);
+
+            AzureLocalResources = new StandaloneAzureLocalResourceSource(
+                serviceDefinitionPath,
+                roleName,
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "LightBlue"),
+                roleEnvironmentExceptionCreator);
+        }
+
+        public static void SetupForExternalEnvironment(Func<AzureEnvironment> azureEnvironmentFunc)
+        {
+            _azureEnvironmentFunc = azureEnvironmentFunc;
         }
     }
 }
