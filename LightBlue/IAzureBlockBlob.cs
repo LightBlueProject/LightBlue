@@ -24,5 +24,6 @@ namespace LightBlue
         Task DownloadToStreamAsync(Stream target);
         Task UploadFromStreamAsync(Stream source);
         Task UploadFromByteArrayAsync(byte[] buffer, int index, int count);
+        string StartCopyFromBlob(IAzureBlockBlob source);
     }
 }

@@ -183,6 +183,27 @@ namespace LightBlue.Standalone
             }
         }
 
+        public string StartCopyFromBlob(IAzureBlockBlob source)
+        {
+            var standaloneAzureBlockBlob = source as StandaloneAzureBlockBlob;
+            if (standaloneAzureBlockBlob == null)
+            {
+                throw new ArgumentException("Can only copy between blobs in the same hosting environment");
+            }
+
+            File.Delete(_blobPath);
+            File.Copy(standaloneAzureBlockBlob._blobPath, _blobPath);
+            File.Delete(_metadataPath);
+            if ( File.Exists(standaloneAzureBlockBlob._metadataPath))
+            {
+                File.Copy(standaloneAzureBlockBlob._metadataPath, _metadataPath);
+            }
+
+            CopyState = new StandaloneAzureCopyState(CopyStatus.Success);
+
+            return Guid.NewGuid().ToString();
+        }
+
         private StandaloneMetadataStore LoadMetadataStore()
         {
             if (!File.Exists(_metadataPath))
@@ -230,11 +251,5 @@ namespace LightBlue.Standalone
                 serializer.Serialize(file, metadataStore);
             }
         }
-    }
-
-    public class StandaloneMetadataStore
-    {
-        public string ContentType { get; set; }
-        public Dictionary<string, string> Metadata { get; set; }
     }
 }

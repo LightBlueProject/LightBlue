@@ -121,6 +121,7 @@
     <Compile Include="Setup\ContainerBuilderExtensions.cs" />
     <Compile Include="Setup\SetupConfiguration.cs" />
     <Compile Include="Standalone\LightBlueStandaloneModule.cs" />
+    <Compile Include="Standalone\StandaloneAzureCopyState.cs" />
     <Compile Include="Standalone\StandaloneAzureLocalResource.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobContainer.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobDirectory.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Standalone\StandaloneAzureStorage.cs" />
     <Compile Include="Standalone\StandaloneConfiguration.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobStorage.cs" />
+    <Compile Include="Standalone\StandaloneMetadataStore.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

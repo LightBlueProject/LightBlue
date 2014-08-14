@@ -109,5 +109,16 @@ namespace LightBlue.Hosted
         {
             return _cloudBlockBlob.UploadFromByteArrayAsync(buffer, index, count);
         }
+
+        public string StartCopyFromBlob(IAzureBlockBlob source)
+        {
+            var hostedAzureBlockBlob = source as HostedAzureBlockBlob;
+            if (hostedAzureBlockBlob == null)
+            {
+                throw new ArgumentException("Can only copy between blobs in the same hosting environment");
+            }
+
+            return _cloudBlockBlob.StartCopyFromBlob(hostedAzureBlockBlob._cloudBlockBlob);
+        }
     }
 }
