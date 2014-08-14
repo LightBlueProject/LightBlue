@@ -27,6 +27,11 @@ namespace LightBlue.Standalone
             get { return Path.Combine(_containerDirectory, ".meta"); }
         }
 
+        public Uri Uri
+        {
+            get { return new Uri(_containerDirectory); }
+        }
+
         public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
         {
             Directory.CreateDirectory(_containerDirectory);
@@ -47,6 +52,11 @@ namespace LightBlue.Standalone
         public IAzureBlockBlob GetBlockBlobReference(string blobName)
         {
             return new StandaloneAzureBlockBlob(_containerDirectory, blobName);
+        }
+
+        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
+        {
+            return "";
         }
 
         public Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(string prefix, BlobListing blobListing, BlobListingDetails blobListingDetails, int? maxResults, BlobContinuationToken currentToken)
@@ -87,10 +97,10 @@ namespace LightBlue.Standalone
         {
             var directories = new DirectoryInfo(_containerDirectory).EnumerateDirectories((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
                 .Where(f => !f.Name.EndsWith(".meta"))
-                .Select(f => (IAzureListBlobItem)new StandaloneAzureBlobDirectory(f.FullName));
+                .Select(f => (IAzureListBlobItem) new StandaloneAzureBlobDirectory(f.FullName));
             var files = new DirectoryInfo(_containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
                 .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
-                     .Select(f => (IAzureListBlobItem)new StandaloneAzureBlockBlob(new Uri(f.FullName)));
+                .Select(f => (IAzureListBlobItem) new StandaloneAzureBlockBlob(new Uri(f.FullName)));
 
             var combined = directories.Concat(files)
                 .Skip(numberToSkip)
@@ -117,7 +127,7 @@ namespace LightBlue.Standalone
             {
                 return 0;
             }
-            
+
             int numberToSkip;
             return Int32.TryParse(currentToken.NextMarker, out numberToSkip) ? numberToSkip : 0;
         }

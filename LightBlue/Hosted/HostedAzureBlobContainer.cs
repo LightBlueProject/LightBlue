@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -11,6 +12,11 @@ namespace LightBlue.Hosted
         public HostedAzureBlobContainer(CloudBlobContainer cloudBlobContainer)
         {
             _cloudBlobContainer = cloudBlobContainer;
+        }
+
+        public Uri Uri
+        {
+            get { return _cloudBlobContainer.Uri; }
         }
 
         public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
@@ -31,6 +37,11 @@ namespace LightBlue.Hosted
         public IAzureBlockBlob GetBlockBlobReference(string blobName)
         {
             return new HostedAzureBlockBlob(_cloudBlobContainer.GetBlockBlobReference(blobName));
+        }
+
+        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
+        {
+            return _cloudBlobContainer.GetSharedAccessSignature(policy);
         }
 
         public async Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(string prefix, BlobListing blobListing, BlobListingDetails blobListingDetails, int? maxResults, BlobContinuationToken currentToken)
