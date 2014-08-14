@@ -29,7 +29,17 @@ namespace LightBlue.Standalone
                 .Value;
 
             var roleElement = xDocument.Descendants(serviceConfigurationNamespace + "Role")
-                .First(r => r.Attribute("name").Value == roleName);
+                .FirstOrDefault(r => r.Attribute("name").Value == roleName);
+
+            if (roleElement == null)
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Cannot find configuration for the role '{0}' in '{1}'",
+                        roleName,
+                        configurationPath));
+            }
 
             _settings = roleElement.Descendants(serviceConfigurationNamespace + "ConfigurationSettings")
                 .Descendants(serviceConfigurationNamespace + "Setting")

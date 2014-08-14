@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 
 using LightBlue.Infrastructure;
 
@@ -25,7 +26,10 @@ namespace LightBlue.WebHost
 
         private static void RunWebRole(WebHostArgs webHostArgs)
         {
-            using (var process = Process.Start(BuildProcessStartInfo(webHostArgs)))
+            var configurationFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".config");
+            GenerateConfigurationFile(webHostArgs, configurationFilePath);
+
+            using (var process = Process.Start(BuildProcessStartInfo(webHostArgs, configurationFilePath)))
             {
                 if (process == null)
                 {
@@ -42,16 +46,33 @@ namespace LightBlue.WebHost
             }
         }
 
-        private static ProcessStartInfo BuildProcessStartInfo(WebHostArgs webHostArgs)
+        private static void GenerateConfigurationFile(WebHostArgs webHostArgs, string configurationFilePath)
+        {
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var manifestResourceStream = executingAssembly.GetManifestResourceStream("LightBlue.WebHost.IISExpressConfiguration.template");
+            if (manifestResourceStream == null)
+            {
+                throw new InvalidOperationException("Unable to retreive IIS Express configuration template.");
+            }
+
+            var template = new StreamReader(manifestResourceStream).ReadToEnd();
+            template = template.Replace("__SITEPATH__", webHostArgs.SiteDirectory);
+            template = template.Replace("__PROTOCOL__", webHostArgs.UseSsl ? "https" : "http");
+            template = template.Replace("__PORT__", webHostArgs.Port.ToString(CultureInfo.InvariantCulture));
+            template = template.Replace("__HOSTNAME__", webHostArgs.Hostname);
+
+            File.WriteAllText(configurationFilePath, template);
+        }
+
+        private static ProcessStartInfo BuildProcessStartInfo(WebHostArgs webHostArgs, string configurationFilePath)
         {
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"IIS Express\iisexpress.exe"),
                 Arguments = string.Format(
                     CultureInfo.InvariantCulture,
-                    "/path:\"{0}\" /port:{1}",
-                    webHostArgs.SiteDirectory,
-                    webHostArgs.Port),
+                    "/config:\"{0}\" /site:LightBlue",
+                    configurationFilePath),
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,

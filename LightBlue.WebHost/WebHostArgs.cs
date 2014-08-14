@@ -16,6 +16,8 @@ namespace LightBlue.WebHost
         public string RoleName { get; private set; }
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
+        public bool UseSsl { get; private set; }
+        public string Hostname { get; private set; }
 
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
@@ -23,6 +25,8 @@ namespace LightBlue.WebHost
             var port = 0;
             string roleName = null;
             string configurationPath = null;
+            bool useSsl = false;
+            string hostname = "localhost";
 
             var options = new OptionSet
             {
@@ -30,6 +34,8 @@ namespace LightBlue.WebHost
                 {"p|port=", "", v => Int32.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out port)},
                 {"n|roleName=", "", v => roleName = v},
                 {"c|configurationPath=", "", v => configurationPath = v},
+                {"s|useSsl=", "", v => Boolean.TryParse(v, out useSsl)},
+                {"h|hostname=", "", v => hostname = v},
             };
 
             options.Parse(args);
@@ -50,7 +56,10 @@ namespace LightBlue.WebHost
             {
                 throw new ArgumentException("Configuration path must be specified.");
             }
-
+            if (string.IsNullOrWhiteSpace(hostname))
+            {
+                throw new ArgumentException("Hostname must be specified.");
+            }
 
             if (!Directory.Exists(siteDirectory))
             {
@@ -64,6 +73,8 @@ namespace LightBlue.WebHost
                 RoleName = roleName,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
+                UseSsl = useSsl,
+                Hostname = hostname
             };
         }
     }
