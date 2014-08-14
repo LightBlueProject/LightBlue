@@ -9,11 +9,11 @@ Features
 * Settings API
 * Web Role support
 * Blob storage abstraction (restricted to key portions of the block blob API)
+* HTTPS support for web roles
 
 Planned Features
 ----------------
 * Queue storage abstraction
-* HTTPS support for web roles
 
 LightBlue doesn't aim to abstract every API that Azure provides. PRs adding missing features welcome.
 
