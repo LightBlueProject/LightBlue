@@ -2,12 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Xml.Linq;
 
 using LightBlue.Infrastructure;
-using LightBlue.Setup;
-
-using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Host
 {
@@ -17,58 +14,64 @@ namespace LightBlue.Host
         {
             var hostArgs = HostArgs.ParseArgs(args);
 
-            SetupConfiguration.SetAsHosted(
+            var appDomainSetup = new AppDomainSetup
+            {
+                ApplicationBase = Path.GetDirectoryName(hostArgs.Assembly),
+            };
+            var configurationFile = hostArgs.Assembly + ".config";
+            if (File.Exists(configurationFile))
+            {
+                RemoveAzureTraceListenerFromConfiguration(configurationFile);
+                appDomainSetup.ConfigurationFile = configurationFile;
+            }
+
+            var appDomain = AppDomain.CreateDomain(
+                "LightBlue",
+                null,
+                appDomainSetup);
+
+            Trace.Listeners.Add(new ConsoleTraceListener());
+
+            var runner = (HostRunner) appDomain.CreateInstanceAndUnwrap(
+                typeof(HostRunner).Assembly.FullName,
+                typeof(HostRunner).FullName);
+
+            runner.ConfigureTracing(new TraceShipper());
+            runner.Run(workerRoleAssembly: hostArgs.Assembly,
                 configurationPath: hostArgs.ConfigurationPath,
                 serviceDefinitionPath: hostArgs.ServiceDefinitionPath,
                 roleName: hostArgs.RoleName);
-
-            var workerRoleType = LoadWorkerRoleType(hostArgs);
-
-            var runState = RunState.NotRun;
-            while (runState.ShouldRunHost(hostArgs.RetryMode))
-            {
-                runState = RunWorkerRole(workerRoleType);
-            }
         }
 
-        private static RunState RunWorkerRole(Type workerRoleType)
+        private static void RemoveAzureTraceListenerFromConfiguration(string configurationFile)
         {
-            try
+            var xdocument = XDocument.Load(configurationFile);
+            if (xdocument.Root == null)
             {
-                var workerRole = (RoleEntryPoint) Activator.CreateInstance(workerRoleType);
-                if (!workerRole.OnStart())
-                {
-                    Trace.TraceError("Role failed to start for '{0}'", workerRoleType);
-                    return RunState.FailedToStart;
-                }
-
-                try
-                {
-                    workerRole.Run();
-                }
-                finally
-                {
-                    workerRole.OnStop();
-                }
+                return;
             }
-            catch (Exception ex)
+
+            var diagnosticsElement = xdocument.Root.Element("system.diagnostics");
+            if (diagnosticsElement == null)
             {
-                Trace.TraceError(ex.ToTraceMessage());
-                return RunState.Failed;
+                return;
             }
-            return RunState.ExitedCleanly;
-        }
 
-        private static Type LoadWorkerRoleType(HostArgs hostArgs)
-        {
-            var roleAssemblyAbsolutePath = Path.IsPathRooted(hostArgs.Assembly)
-                ? hostArgs.Assembly
-                : Path.Combine(Environment.CurrentDirectory, hostArgs.Assembly);
+            var listenersElement = diagnosticsElement.Descendants("listeners")
+                .FirstOrDefault(l => l.Parent != null && l.Parent.Name == "trace");
+            if (listenersElement == null)
+            {
+                return;
+            }
 
-            var roleAssembly = Assembly.LoadFile(roleAssemblyAbsolutePath);
-            var workerRoleType = roleAssembly.GetTypes()
-                .Single(t => typeof(RoleEntryPoint).IsAssignableFrom(t));
-            return workerRoleType;
+            foreach (var addElement in listenersElement.Descendants("add")
+                .Where(a => a.Attribute("type").Value.StartsWith("Microsoft.WindowsAzure"))
+                .ToList())
+            {
+                addElement.Remove();
+            }
+
+            xdocument.Save(configurationFile);
         }
     }
 }

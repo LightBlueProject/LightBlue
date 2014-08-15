@@ -63,8 +63,7 @@ namespace TestWorkerRole
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
-            var count = 0;
-            while (!cancellationToken.IsCancellationRequested && count++ < 5)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 Trace.TraceInformation("Working: " + _container.Resolve<IAzureSettings>()["RandomSetting"]);
                 

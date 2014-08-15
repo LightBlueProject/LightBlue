@@ -14,21 +14,18 @@ namespace LightBlue.Host
         public string RoleName { get; private set; }
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
-        public RetryMode RetryMode { get; private set; }
 
         public static HostArgs ParseArgs(IEnumerable<string> args)
         {
             string assembly = null;
             string roleName = null;
             string configurationPath = null;
-            var retryMode = RetryMode.Infinite;
 
             var options = new OptionSet
             {
                 {"a|assembly=", "", v => assembly = v},
                 {"n|roleName=", "", v => roleName = v},
                 {"c|configurationPath=", "", v => configurationPath = v},
-                {"r|retryMode=", "", v => { retryMode = (RetryMode) Enum.Parse(typeof(RetryMode), v, true); }},
             };
 
             options.Parse(args);
@@ -61,7 +58,6 @@ namespace LightBlue.Host
                 RoleName = roleName,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
-                RetryMode = retryMode
             };
         }
     }

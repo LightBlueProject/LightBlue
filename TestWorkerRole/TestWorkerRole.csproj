@@ -86,17 +86,12 @@
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LightBlue.Host.exe.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
     </None>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LightBlue.Host\LightBlue.Host.csproj">
-      <Project>{d6110338-d945-4e32-8a72-840c44eda2b9}</Project>
-      <Name>LightBlue.Host</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LightBlue\LightBlue.csproj">
       <Project>{28f5b274-4b25-4295-98ae-3e5a60c34d8d}</Project>
       <Name>LightBlue</Name>
