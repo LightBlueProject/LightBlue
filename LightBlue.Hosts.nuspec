@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>LightBlue.Hosts</id>
+    <version>0.1.0-alpha</version>
+	<title>LightBlue.Hosts</title>
+    <authors>Colin David Scott</authors>
+    <owners>Colin David Scott</owners>
+    <licenseUrl>hhttps://github.com/ColinScott/LightBlue/blob/master/LICENCE</licenseUrl>
+    <projectUrl>https://github.com/ColinScott/LightBlue</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Host executables for the LightBlue lightweight Azure development platform</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>azure</tags>
+  </metadata>
+</package>
