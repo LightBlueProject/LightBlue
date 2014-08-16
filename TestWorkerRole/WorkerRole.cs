@@ -7,6 +7,7 @@ using Autofac;
 
 using LightBlue;
 using LightBlue.Setup;
+using LightBlue.WorkerRoleDependency;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
 
@@ -63,9 +64,11 @@ namespace TestWorkerRole
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
+            var randomDependency = new RandomDependency();
+
             while (!cancellationToken.IsCancellationRequested)
             {
-                Trace.TraceInformation("Working: " + _container.Resolve<IAzureSettings>()["RandomSetting"]);
+                Trace.TraceInformation("Working: " + _container.Resolve<IAzureSettings>()["RandomSetting"] + " " + randomDependency.RandomNumber());
                 
                 await Task.Delay(1000);
             }

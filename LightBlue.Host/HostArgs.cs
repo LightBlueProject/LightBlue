@@ -14,6 +14,7 @@ namespace LightBlue.Host
         public string RoleName { get; private set; }
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
+        public string ApplicationBase { get { return Path.GetDirectoryName(Assembly); } }
 
         public static HostArgs ParseArgs(IEnumerable<string> args)
         {

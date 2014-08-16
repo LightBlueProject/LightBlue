@@ -110,13 +110,11 @@
     <Compile Include="IAzureSettings.cs" />
     <Compile Include="IAzureStorage.cs" />
     <Compile Include="Infrastructure\ConfigurationLocator.cs" />
-    <Compile Include="Infrastructure\CrossDomainTraceListener.cs" />
     <Compile Include="Infrastructure\ExceptionExtensions.cs" />
     <Compile Include="Infrastructure\HostRunner.cs" />
     <Compile Include="Infrastructure\ModuleSource.cs" />
     <Compile Include="Infrastructure\NameValidation.cs" />
     <Compile Include="Infrastructure\RoleEnvironmentExceptionCreatorFactory.cs" />
-    <Compile Include="Infrastructure\TraceShipper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup\ContainerBuilderExtensions.cs" />
     <Compile Include="Setup\SetupConfiguration.cs" />

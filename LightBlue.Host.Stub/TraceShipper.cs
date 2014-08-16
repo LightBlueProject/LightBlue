@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LightBlue.Infrastructure
+namespace LightBlue.Host.Stub
 {
     public class TraceShipper : MarshalByRefObject
     {

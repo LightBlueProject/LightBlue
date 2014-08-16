@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace LightBlue.Infrastructure
+namespace LightBlue.Host.Stub
 {
     internal class CrossDomainTraceListener : TraceListener
     {

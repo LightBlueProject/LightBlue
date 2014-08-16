@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-using LightBlue.Infrastructure;
+using LightBlue.Host.Stub;
 
 namespace LightBlue.Host
 {
@@ -16,14 +16,20 @@ namespace LightBlue.Host
 
             var appDomainSetup = new AppDomainSetup
             {
-                ApplicationBase = Path.GetDirectoryName(hostArgs.Assembly),
+                ApplicationBase = hostArgs.ApplicationBase
             };
+
             var configurationFile = hostArgs.Assembly + ".config";
             if (File.Exists(configurationFile))
             {
                 RemoveAzureTraceListenerFromConfiguration(configurationFile);
                 appDomainSetup.ConfigurationFile = configurationFile;
             }
+
+            File.Copy(
+                typeof(HostStub).Assembly.Location,
+                Path.Combine(hostArgs.ApplicationBase, Path.GetFileName(typeof(HostStub).Assembly.Location)),
+                true);
 
             var appDomain = AppDomain.CreateDomain(
                 "LightBlue",
@@ -32,12 +38,13 @@ namespace LightBlue.Host
 
             Trace.Listeners.Add(new ConsoleTraceListener());
 
-            var runner = (HostRunner) appDomain.CreateInstanceAndUnwrap(
-                typeof(HostRunner).Assembly.FullName,
-                typeof(HostRunner).FullName);
+            var stub = (HostStub) appDomain.CreateInstanceAndUnwrap(
+                typeof(HostStub).Assembly.FullName,
+                typeof(HostStub).FullName);
 
-            runner.ConfigureTracing(new TraceShipper());
-            runner.Run(workerRoleAssembly: hostArgs.Assembly,
+            stub.ConfigureTracing(new TraceShipper());
+
+            stub.Run(workerRoleAssembly: hostArgs.Assembly,
                 configurationPath: hostArgs.ConfigurationPath,
                 serviceDefinitionPath: hostArgs.ServiceDefinitionPath,
                 roleName: hostArgs.RoleName);

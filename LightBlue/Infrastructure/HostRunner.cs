@@ -10,13 +10,8 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Infrastructure
 {
-    public class HostRunner : MarshalByRefObject
+    public class HostRunner
     {
-        public void ConfigureTracing(TraceShipper traceShipper)
-        {
-            Trace.Listeners.Add(new CrossDomainTraceListener(traceShipper));
-        }
-
         public void Run(string workerRoleAssembly, string configurationPath, string serviceDefinitionPath, string roleName)
         {
             SetupConfiguration.SetAsHosted(
