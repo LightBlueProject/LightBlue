@@ -4,16 +4,16 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Hosted
 {
-    public class HostedAzureBlobStorage : IAzureBlobStorage
+    public class HostedAzureBlobStorageClient : IAzureBlobStorageClient
     {
         private readonly CloudBlobClient _cloudBlobClient;
 
-        public HostedAzureBlobStorage(CloudBlobClient cloudBlobClient)
+        public HostedAzureBlobStorageClient(CloudBlobClient cloudBlobClient)
         {
             _cloudBlobClient = cloudBlobClient;
         }
 
-        public IAzureBlobContainer GetAzureBlobContainer(string containerName)
+        public IAzureBlobContainer GetBlockBlobReference(string containerName)
         {
             NameValidation.Container(containerName, "containerName");
 

@@ -2,6 +2,6 @@
 {
     public interface IAzureStorage
     {
-        IAzureBlobStorage CreateAzureBlobStorageClient();
+        IAzureBlobStorageClient CreateAzureBlobStorageClient();
     }
 }

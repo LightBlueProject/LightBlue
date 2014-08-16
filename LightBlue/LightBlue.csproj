@@ -85,7 +85,7 @@
     <Compile Include="Hosted\HostedAzureBlobDirectory.cs" />
     <Compile Include="Hosted\HostedAzureBlobProperties.cs" />
     <Compile Include="Hosted\HostedAzureBlobResultSegment.cs" />
-    <Compile Include="Hosted\HostedAzureBlobStorage.cs" />
+    <Compile Include="Hosted\HostedAzureBlobStorageClient.cs" />
     <Compile Include="Hosted\HostedAzureBlockBlob.cs" />
     <Compile Include="Hosted\HostedAzureCopyState.cs" />
     <Compile Include="Hosted\HostedAzureEnvironmentSource.cs" />
@@ -99,7 +99,7 @@
     <Compile Include="IAzureBlobDirectory.cs" />
     <Compile Include="IAzureBlobProperties.cs" />
     <Compile Include="IAzureBlobResultSegment.cs" />
-    <Compile Include="IAzureBlobStorage.cs" />
+    <Compile Include="IAzureBlobStorageClient.cs" />
     <Compile Include="IAzureBlockBlob.cs" />
     <Compile Include="IAzureCopyState.cs" />
     <Compile Include="IAzureEnvironmentSource.cs" />
@@ -134,7 +134,7 @@
     <Compile Include="Standalone\StandaloneAzureSettings.cs" />
     <Compile Include="Standalone\StandaloneAzureStorage.cs" />
     <Compile Include="Standalone\StandaloneConfiguration.cs" />
-    <Compile Include="Standalone\StandaloneAzureBlobStorage.cs" />
+    <Compile Include="Standalone\StandaloneAzureBlobStorageClient.cs" />
     <Compile Include="Standalone\StandaloneMetadataStore.cs" />
   </ItemGroup>
   <ItemGroup />

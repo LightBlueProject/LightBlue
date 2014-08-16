@@ -4,17 +4,17 @@ using LightBlue.Infrastructure;
 
 namespace LightBlue.Standalone
 {
-    public class StandaloneAzureBlobStorage : IAzureBlobStorage
+    public class StandaloneAzureBlobStorageClient : IAzureBlobStorageClient
     {
         private readonly string _blobStorageDirectory;
 
-        public StandaloneAzureBlobStorage(string storageAccountDirectory)
+        public StandaloneAzureBlobStorageClient(string storageAccountDirectory)
         {
             _blobStorageDirectory = Path.Combine(storageAccountDirectory, "blob");
             Directory.CreateDirectory(_blobStorageDirectory);
         }
 
-        public IAzureBlobContainer GetAzureBlobContainer(string containerName)
+        public IAzureBlobContainer GetBlockBlobReference(string containerName)
         {
             NameValidation.Container(containerName, "containerName");
 

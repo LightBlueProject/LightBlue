@@ -11,9 +11,9 @@ namespace LightBlue.Hosted
             _cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
         }
 
-        public IAzureBlobStorage CreateAzureBlobStorageClient()
+        public IAzureBlobStorageClient CreateAzureBlobStorageClient()
         {
-            return new HostedAzureBlobStorage(_cloudStorageAccount.CreateCloudBlobClient()      );
+            return new HostedAzureBlobStorageClient(_cloudStorageAccount.CreateCloudBlobClient()      );
         }
     }
 }

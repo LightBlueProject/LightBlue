@@ -18,9 +18,9 @@ namespace LightBlue.Standalone
             Directory.CreateDirectory(_storageAccountDirectory);
         }
 
-        public IAzureBlobStorage CreateAzureBlobStorageClient()
+        public IAzureBlobStorageClient CreateAzureBlobStorageClient()
         {
-            return new StandaloneAzureBlobStorage(_storageAccountDirectory);
+            return new StandaloneAzureBlobStorageClient(_storageAccountDirectory);
         }
 
         private static string ExtractAccountName(string connectionString)
