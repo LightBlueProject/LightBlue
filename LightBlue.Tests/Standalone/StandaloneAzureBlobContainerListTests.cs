@@ -45,6 +45,20 @@ namespace LightBlue.Tests.Standalone
             File.WriteAllText(Path.Combine(BasePath, "1a", "5"), "Test File");
         }
 
+        [Theory]
+        [InlineData(BlobListingDetails.Snapshots)]
+        [InlineData(BlobListingDetails.All)]
+        public void AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath);
+            Assert.Throws<ArgumentException>(() => container.ListBlobsSegmentedAsync(
+                "",
+                BlobListing.Hierarchical,
+                blobListingDetails,
+                500,
+                null));
+        }
+
         [Fact]
         public async Task WillGetExpectedNumberOfResultsForFlatListing()
         {

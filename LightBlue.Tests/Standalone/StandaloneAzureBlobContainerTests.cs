@@ -13,13 +13,12 @@ using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
-    public class StandaloneAzureBlobContainerTests : StandaloneAzureTestsBase, IDisposable
+    public class StandaloneAzureBlobContainerTests : StandaloneAzureTestsBase
     {
         [Fact]
         public void DoesNotCreateContainerDirectoryOnConstruction()
         {
             new StandaloneAzureBlobContainer(BasePath);
-
         }
 
         [Fact]
@@ -41,9 +40,42 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void WillUseCorrectContainerPathWhenGivenBasePathAndContainerName()
         {
-            new StandaloneAzureBlobContainer(BasePath, "test").CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            new StandaloneAzureBlobContainer(BasePath, SubPathElement).CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
-            Assert.True(Directory.Exists(Path.Combine(BasePath, "test")));
+            Assert.True(Directory.Exists(SubPath));
+        }
+
+        [Fact]
+        public void WillUseCorrectContainerPathWhenGiveUri()
+        {
+            new StandaloneAzureBlobContainer(SubPathUri)
+                .CreateIfNotExists(BlobContainerPublicAccessType.Off);
+
+            Assert.True(Directory.Exists(SubPath));
+        }
+
+        [Fact]
+        public void WillHaveCorrectUriWhenGivenContainerDirectory()
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath);
+
+            Assert.Equal(new Uri(BasePath), container.Uri);
+        }
+
+        [Fact]
+        public void WillHaveCorrectUriWhenGivenBasePathAndContainerName()
+        {
+            var container = new StandaloneAzureBlobContainer(BasePath, SubPathElement);
+
+            Assert.Equal(SubPathUri, container.Uri);
+        }
+
+        [Fact]
+        public void WillHaveCorrectUriWhenGivenUri()
+        {
+            var container = new StandaloneAzureBlobContainer(SubPathUri);
+
+            Assert.Equal(SubPathUri, container.Uri);
         }
 
         [Fact]
@@ -98,17 +130,18 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [InlineData(BlobListingDetails.Snapshots)]
-        [InlineData(BlobListingDetails.All)]
-        public void AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
+        [InlineData(SharedAccessBlobPermissions.Delete)]
+        [InlineData(SharedAccessBlobPermissions.List)]
+        [InlineData(SharedAccessBlobPermissions.Read)]
+        [InlineData(SharedAccessBlobPermissions.Write)]
+        public void WillReturnEmptyStringForSharedAccessKeySignature(SharedAccessBlobPermissions permissions)
         {
             var container = new StandaloneAzureBlobContainer(BasePath);
-            Assert.Throws<ArgumentException>(() => container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Hierarchical,
-                blobListingDetails,
-                500,
-                null));
+
+            Assert.Equal("", container.GetSharedAccessSignature(new SharedAccessBlobPolicy
+            {
+                Permissions = permissions
+            }));
         }
     }
 }

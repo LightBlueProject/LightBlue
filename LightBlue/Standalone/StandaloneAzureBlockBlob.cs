@@ -93,7 +93,7 @@ namespace LightBlue.Standalone
             var fileInfo = new FileInfo(_blobPath);
             if (!fileInfo.Exists)
             {
-                return;
+                throw new StorageException("The specified blob does not exist");
             }
             var metadataStore = LoadMetadataStore();
 
@@ -104,22 +104,45 @@ namespace LightBlue.Standalone
 
         public void SetMetadata()
         {
-            UpdateMetadata();
+            var fileInfo = new FileInfo(_blobPath);
+            if (!fileInfo.Exists)
+            {
+                throw new StorageException("The specified blob does not exist");
+            }
+
+            var metadataStore = LoadMetadataStore();
+
+            foreach (var key in _metadata.Keys)
+            {
+                metadataStore.Metadata[key] = _metadata[key];
+            }
+
+            WriteMetadataStore(metadataStore);
         }
 
         public Task SetMetadataAsync()
         {
-            UpdateMetadata();
+            SetMetadata();
             return Task.FromResult(new object());
         }
 
         public void SetProperties()
         {
-            UpdateContentType();
+            var fileInfo = new FileInfo(_blobPath);
+            if (!fileInfo.Exists)
+            {
+                throw new StorageException("The specified blob does not exist");
+            }
+            var metadataStore = LoadMetadataStore();
+
+            metadataStore.ContentType = _properties.ContentType;
+
+            WriteMetadataStore(metadataStore);
         }
 
         public Task SetPropertiesAsync()
         {
+            SetProperties();
             return Task.FromResult(new object());
         }
 
@@ -215,11 +238,9 @@ namespace LightBlue.Standalone
             }
         }
 
-        public Task UploadFromFileAsync(string path, FileMode mode)
+        public Task UploadFromFileAsync(string path)
         {
             File.Copy(path, _blobPath, true);
-
-            File.Delete(_metadataPath);
 
             return Task.FromResult(new object());
         }
@@ -273,27 +294,6 @@ namespace LightBlue.Standalone
                 var serializer = new JsonSerializer();
                 return (StandaloneMetadataStore) serializer.Deserialize(file, typeof(StandaloneMetadataStore));
             }
-        }
-
-        private void UpdateMetadata()
-        {
-            var metadataStore = LoadMetadataStore();
-
-            foreach (var key in _metadata.Keys)
-            {
-                metadataStore.Metadata[key] = _metadata[key];
-            }
-
-            WriteMetadataStore(metadataStore);
-        }
-
-        private void UpdateContentType()
-        {
-            var metadataStore = LoadMetadataStore();
-
-            metadataStore.ContentType = _properties.ContentType;
-
-            WriteMetadataStore(metadataStore);
         }
 
         private void WriteMetadataStore(StandaloneMetadataStore metadataStore)
