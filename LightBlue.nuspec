@@ -6,7 +6,7 @@
 	<title>LightBlue</title>
     <authors>Colin David Scott</authors>
     <owners>Colin David Scott</owners>
-    <licenseUrl>hhttps://github.com/ColinScott/LightBlue/blob/master/LICENCE</licenseUrl>
+    <licenseUrl>https://github.com/ColinScott/LightBlue/blob/master/LICENCE</licenseUrl>
     <projectUrl>https://github.com/ColinScott/LightBlue</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>LightBlue is a lightweight Azure development platform designed to replace a subset of the Azure emulator functionality</description>
