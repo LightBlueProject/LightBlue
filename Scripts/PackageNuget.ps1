@@ -4,6 +4,8 @@ $parentDirectory = split-path $PSScriptRoot -parent
 $coreNuspecPath = join-path $parentDirectory "LightBlue.nuspec"
 $hostsNuspecPath = join-path $parentDirectory "LightBlue.Hosts.nuspec"
 
+$thirdPartyLicencePath = join-path $parentDirectory "THIRDPARTY"
+
 $lightBlueDllPath = join-path $parentDirectory "LightBlue\bin\Release\LightBlue.dll"
 $workerHostExePath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.exe"
 $workerHostStubDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.dll"
@@ -35,6 +37,7 @@ Copy-Item $workerHostExePath $toolsPath
 Copy-Item $workerHostStubDllPath $toolsPath
 Copy-Item $ndeskDllPath $toolsPath
 Copy-Item $webHostExePath $toolsPath
+Copy-Item $thirdPartyLicencePath $toolsPath
 
 Push-Location -Path $corePackagePath
 
