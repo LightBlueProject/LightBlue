@@ -13,7 +13,7 @@ namespace LightBlue.Hosted
             _cloudBlobClient = cloudBlobClient;
         }
 
-        public IAzureBlobContainer GetBlockBlobReference(string containerName)
+        public IAzureBlobContainer GetContainerReference(string containerName)
         {
             NameValidation.Container(containerName, "containerName");
 

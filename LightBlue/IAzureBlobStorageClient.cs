@@ -2,6 +2,6 @@
 {
     public interface IAzureBlobStorageClient
     {
-        IAzureBlobContainer GetBlockBlobReference(string containerName);
+        IAzureBlobContainer GetContainerReference(string containerName);
     }
 }

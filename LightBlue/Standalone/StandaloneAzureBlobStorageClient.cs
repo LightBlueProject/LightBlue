@@ -14,7 +14,7 @@ namespace LightBlue.Standalone
             Directory.CreateDirectory(_blobStorageDirectory);
         }
 
-        public IAzureBlobContainer GetBlockBlobReference(string containerName)
+        public IAzureBlobContainer GetContainerReference(string containerName)
         {
             NameValidation.Container(containerName, "containerName");
 
