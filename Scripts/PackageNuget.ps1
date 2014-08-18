@@ -13,6 +13,7 @@ $ndeskDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\NDesk.Opt
 $webHostExePath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.exe"
 
 $packagePath = join-path $parentDirectory -childpath "createpackage"
+$outputDirectory = join-path $packagePath "output"
 
 $corePackagePath = join-path $packagePath -childpath "core"
 $net45LibPath = join-path $corePackagePath -childpath "lib\net45"
@@ -26,6 +27,7 @@ if (Test-Path -Path $packagePath){
 }
 
 New-Item -ItemType directory -Path $packagePath | Out-Null
+New-Item -ItemType directory -Path $outputDirectory | Out-Null
 
 New-Item -ItemType directory -Path $net45LibPath | Out-Null
 Copy-Item $coreNuspecPath $corePackagePath
@@ -42,11 +44,13 @@ Copy-Item $thirdPartyLicencePath $toolsPath
 Push-Location -Path $corePackagePath
 
 & '..\..\.nuget\nuget.exe' Pack "LightBlue.nuspec"
+Copy-Item "*.nupkg" $outputDirectory
 
 Pop-Location
 
 Push-Location -Path $hostsPackagePath
 
 & '..\..\.nuget\nuget.exe' Pack "LightBlue.Hosts.nuspec"
+Copy-Item "*.nupkg" $outputDirectory
 
 Pop-Location
