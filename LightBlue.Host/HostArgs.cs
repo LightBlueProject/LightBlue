@@ -12,6 +12,7 @@ namespace LightBlue.Host
     {
         public string Assembly { get; private set; }
         public string RoleName { get; private set; }
+        public string Title { get; private set; }
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
         public string ApplicationBase { get { return Path.GetDirectoryName(Assembly); } }
@@ -20,12 +21,14 @@ namespace LightBlue.Host
         {
             string assembly = null;
             string roleName = null;
+            string title = null;
             string configurationPath = null;
 
             var options = new OptionSet
             {
                 {"a|assembly=", "", v => assembly = v},
                 {"n|roleName=", "", v => roleName = v},
+                {"t|serviceTitle=", "", v => title = v},
                 {"c|configurationPath=", "", v => configurationPath = v},
             };
 
@@ -57,6 +60,9 @@ namespace LightBlue.Host
             {
                 Assembly = assembly,
                 RoleName = roleName,
+                Title = string.IsNullOrWhiteSpace(title)
+                    ? roleName
+                    : title,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
             };

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
 using LightBlue.Host.Stub;
@@ -10,9 +11,16 @@ namespace LightBlue.Host
 {
     public static class Program
     {
+        [DllImport("user32.dll")]
+        private static extern bool SetWindowText(IntPtr hWnd, string text);
+        
         public static void Main(string[] args)
         {
             var hostArgs = HostArgs.ParseArgs(args);
+
+            var handle = Process.GetCurrentProcess().MainWindowHandle;
+
+            SetWindowText(handle, hostArgs.Title);
 
             var appDomainSetup = new AppDomainSetup
             {
