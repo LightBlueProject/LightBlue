@@ -12,9 +12,8 @@ namespace LightBlue.Standalone
 
         public StandaloneAzureStorage(string connectionString)
         {
-            var baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "LightBlue");
             var storageAccountName = ExtractAccountName(connectionString);
-            _storageAccountDirectory = Path.Combine(baseDirectory, storageAccountName);
+            _storageAccountDirectory = Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, storageAccountName);
             Directory.CreateDirectory(_storageAccountDirectory);
         }
 

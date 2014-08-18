@@ -133,6 +133,7 @@
     <Compile Include="Standalone\StandaloneAzureStorage.cs" />
     <Compile Include="Standalone\StandaloneConfiguration.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobStorageClient.cs" />
+    <Compile Include="Standalone\StandaloneEnvironment.cs" />
     <Compile Include="Standalone\StandaloneMetadataStore.cs" />
   </ItemGroup>
   <ItemGroup />

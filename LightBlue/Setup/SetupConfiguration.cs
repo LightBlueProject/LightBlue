@@ -91,7 +91,7 @@ namespace LightBlue.Setup
             AzureLocalResources = new StandaloneAzureLocalResourceSource(
                 serviceDefinitionPath,
                 roleName,
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "LightBlue"),
+                StandaloneEnvironment.LightBlueDataDirectory,
                 roleEnvironmentExceptionCreator);
 
             AzureBlobContainerFactory = uri => new StandaloneAzureBlobContainer(uri);
