@@ -110,6 +110,7 @@
     <Compile Include="IAzureSettings.cs" />
     <Compile Include="IAzureStorage.cs" />
     <Compile Include="Infrastructure\ConfigurationLocator.cs" />
+    <Compile Include="Infrastructure\ConfigurationManipulation.cs" />
     <Compile Include="Infrastructure\ExceptionExtensions.cs" />
     <Compile Include="Infrastructure\HostRunner.cs" />
     <Compile Include="Infrastructure\ModuleSource.cs" />

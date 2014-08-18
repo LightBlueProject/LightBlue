@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
 
 using LightBlue.Host.Stub;
+using LightBlue.Infrastructure;
 
 namespace LightBlue.Host
 {
@@ -13,7 +12,7 @@ namespace LightBlue.Host
     {
         [DllImport("user32.dll")]
         private static extern bool SetWindowText(IntPtr hWnd, string text);
-        
+
         public static void Main(string[] args)
         {
             var hostArgs = HostArgs.ParseArgs(args);
@@ -30,7 +29,7 @@ namespace LightBlue.Host
             var configurationFile = hostArgs.Assembly + ".config";
             if (File.Exists(configurationFile))
             {
-                RemoveAzureTraceListenerFromConfiguration(configurationFile);
+                ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(configurationFile);
                 appDomainSetup.ConfigurationFile = configurationFile;
             }
 
@@ -56,37 +55,6 @@ namespace LightBlue.Host
                 configurationPath: hostArgs.ConfigurationPath,
                 serviceDefinitionPath: hostArgs.ServiceDefinitionPath,
                 roleName: hostArgs.RoleName);
-        }
-
-        private static void RemoveAzureTraceListenerFromConfiguration(string configurationFile)
-        {
-            var xdocument = XDocument.Load(configurationFile);
-            if (xdocument.Root == null)
-            {
-                return;
-            }
-
-            var diagnosticsElement = xdocument.Root.Element("system.diagnostics");
-            if (diagnosticsElement == null)
-            {
-                return;
-            }
-
-            var listenersElement = diagnosticsElement.Descendants("listeners")
-                .FirstOrDefault(l => l.Parent != null && l.Parent.Name == "trace");
-            if (listenersElement == null)
-            {
-                return;
-            }
-
-            foreach (var addElement in listenersElement.Descendants("add")
-                .Where(a => a.Attribute("type").Value.StartsWith("Microsoft.WindowsAzure"))
-                .ToList())
-            {
-                addElement.Remove();
-            }
-
-            xdocument.Save(configurationFile);
         }
     }
 }

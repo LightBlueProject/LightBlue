@@ -26,10 +26,18 @@ namespace LightBlue.WebHost
 
         private static void RunWebRole(WebHostArgs webHostArgs)
         {
-            var configurationFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".config");
-            GenerateConfigurationFile(webHostArgs, configurationFilePath);
+            var iisExpressConfigurationFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".config");
+            GenerateIisExpressConfigurationFile(webHostArgs, iisExpressConfigurationFilePath);
 
-            using (var process = Process.Start(BuildProcessStartInfo(webHostArgs, configurationFilePath)))
+            var webConfigFilePath = Path.Combine(webHostArgs.SiteDirectory, "web.config");
+            if (!File.Exists(webConfigFilePath))
+            {
+                throw new ArgumentException("No web.config could be located for the site");
+            }
+
+            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(webConfigFilePath);
+
+            using (var process = Process.Start(BuildProcessStartInfo(webHostArgs, iisExpressConfigurationFilePath)))
             {
                 if (process == null)
                 {
@@ -46,13 +54,13 @@ namespace LightBlue.WebHost
             }
         }
 
-        private static void GenerateConfigurationFile(WebHostArgs webHostArgs, string configurationFilePath)
+        private static void GenerateIisExpressConfigurationFile(WebHostArgs webHostArgs, string configurationFilePath)
         {
             var executingAssembly = Assembly.GetExecutingAssembly();
             var manifestResourceStream = executingAssembly.GetManifestResourceStream("LightBlue.WebHost.IISExpressConfiguration.template");
             if (manifestResourceStream == null)
             {
-                throw new InvalidOperationException("Unable to retreive IIS Express configuration template.");
+                throw new InvalidOperationException("Unable to retrieve IIS Express configuration template.");
             }
 
             var template = new StreamReader(manifestResourceStream).ReadToEnd();
