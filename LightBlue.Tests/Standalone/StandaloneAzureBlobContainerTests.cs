@@ -15,73 +15,83 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureBlobContainerTests : StandaloneAzureTestsBase
     {
+        private const string ContainerName = "container";
+
+        private readonly string _containerPath;
+
+        public StandaloneAzureBlobContainerTests()
+            : base(DirectoryType.Account)
+        {
+            _containerPath = Path.Combine(BasePath, ContainerName);
+        }
+
         [Fact]
         public void DoesNotCreateContainerDirectoryOnConstruction()
         {
-            new StandaloneAzureBlobContainer(BasePath);
+            new StandaloneAzureBlobContainer(_containerPath);
         }
 
         [Fact]
         public void WillCreateContainerPathOnCreateIfNotExists()
         {
-            new StandaloneAzureBlobContainer(BasePath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
-            Assert.True(Directory.Exists(BasePath));
+            Assert.True(Directory.Exists(_containerPath));
         }
 
         [Fact]
         public void WillCreateMetadataPathOnCreateIfNotExists()
         {
-            new StandaloneAzureBlobContainer(BasePath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
-            Assert.True(Directory.Exists(Path.Combine(BasePath, ".meta")));
+            Assert.True(Directory.Exists(Path.Combine(_containerPath, MetadataDirectory)));
         }
 
         [Fact]
         public void WillUseCorrectContainerPathWhenGivenBasePathAndContainerName()
         {
-            new StandaloneAzureBlobContainer(BasePath, SubPathElement).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
-            Assert.True(Directory.Exists(SubPath));
+            Assert.True(Directory.Exists(_containerPath));
         }
 
         [Fact]
         public void WillUseCorrectContainerPathWhenGiveUri()
         {
-            new StandaloneAzureBlobContainer(SubPathUri)
+            new StandaloneAzureBlobContainer(new Uri(_containerPath))
                 .CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
-            Assert.True(Directory.Exists(SubPath));
+            Assert.True(Directory.Exists(_containerPath));
         }
 
         [Fact]
         public void WillHaveCorrectUriWhenGivenContainerDirectory()
         {
-            var container = new StandaloneAzureBlobContainer(BasePath);
+            var container = new StandaloneAzureBlobContainer(_containerPath);
 
-            Assert.Equal(new Uri(BasePath), container.Uri);
+            Assert.Equal(new Uri(_containerPath), container.Uri);
         }
 
         [Fact]
         public void WillHaveCorrectUriWhenGivenBasePathAndContainerName()
         {
-            var container = new StandaloneAzureBlobContainer(BasePath, SubPathElement);
+            var container = new StandaloneAzureBlobContainer(BasePath, ContainerName);
 
-            Assert.Equal(SubPathUri, container.Uri);
+            Assert.Equal(new Uri(_containerPath), container.Uri);
         }
 
         [Fact]
         public void WillHaveCorrectUriWhenGivenUri()
         {
-            var container = new StandaloneAzureBlobContainer(SubPathUri);
+            var container = new StandaloneAzureBlobContainer(new Uri(_containerPath));
 
-            Assert.Equal(SubPathUri, container.Uri);
+            Assert.Equal(new Uri(_containerPath), container.Uri);
         }
 
         [Fact]
         public void CanDetermineContainerDoesNotExist()
         {
-            var container = new StandaloneAzureBlobContainer(BasePath);
+            var container = new StandaloneAzureBlobContainer(_containerPath);
 
             Assert.False(container.Exists());
         }
@@ -89,7 +99,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void CanDetermineContainerExists()
         {
-            var container = new StandaloneAzureBlobContainer(BasePath);
+            var container = new StandaloneAzureBlobContainer(_containerPath);
 
             container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
@@ -99,7 +109,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public async Task CanDetermineContainerDoesNotExistAsync()
         {
-            var container = new StandaloneAzureBlobContainer(BasePath);
+            var container = new StandaloneAzureBlobContainer(_containerPath);
 
             Assert.False(await container.ExistsAsynx());
         }
@@ -107,7 +117,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public async Task CanDetermineContainerExistsAsync()
         {
-            var container = new StandaloneAzureBlobContainer(BasePath);
+            var container = new StandaloneAzureBlobContainer(_containerPath);
 
             container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
@@ -117,7 +127,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void CanGetBlobInstance()
         {
-            var container = new StandaloneAzureBlobContainer(BasePath);
+            var container = new StandaloneAzureBlobContainer(_containerPath);
             container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
             var blob = container.GetBlockBlobReference("testblob");
@@ -125,7 +135,7 @@ namespace LightBlue.Tests.Standalone
             new
             {
                 Name = "testblob",
-                Uri = new Uri(Path.Combine(BasePath, "testblob"))
+                Uri = new Uri(Path.Combine(_containerPath, "testblob"))
             }.ToExpectedObject().ShouldMatch(blob);
         }
 
@@ -136,7 +146,7 @@ namespace LightBlue.Tests.Standalone
         [InlineData(SharedAccessBlobPermissions.Write)]
         public void WillReturnEmptyStringForSharedAccessKeySignature(SharedAccessBlobPermissions permissions)
         {
-            var container = new StandaloneAzureBlobContainer(BasePath);
+            var container = new StandaloneAzureBlobContainer(new Uri(_containerPath));
 
             Assert.Equal("", container.GetSharedAccessSignature(new SharedAccessBlobPolicy
             {

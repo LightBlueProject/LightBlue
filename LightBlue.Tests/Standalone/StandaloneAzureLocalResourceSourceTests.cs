@@ -15,6 +15,10 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureLocalResourceSourceTests : StandaloneAzureTestsBase
     {
+        public StandaloneAzureLocalResourceSourceTests()
+            : base(DirectoryType.Account)
+        {}
+
         [Fact]
         public void CanRetreiveSettingsFromFile()
         {

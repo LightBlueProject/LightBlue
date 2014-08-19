@@ -6,27 +6,28 @@ using ExpectedObjects;
 
 using LightBlue.Standalone;
 
-using Microsoft.WindowsAzure.Storage.Blob;
-
 using Xunit;
 
 namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureBlockBlobCopyTests : StandaloneAzureTestsBase
     {
+        private const string SourceBlobName = "source";
+        private const string DestinationBlobName = "destination";
+
         public StandaloneAzureBlockBlobCopyTests()
+            : base(DirectoryType.Container)
         {
-            Directory.CreateDirectory(Path.Combine(BasePath, ".meta"));
         }
 
         [Fact]
         public void CanCopyBlob()
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, "destination");
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
             Assert.Equal("File content", File.ReadAllText(destinationBlob.Uri.LocalPath));
@@ -36,27 +37,27 @@ namespace LightBlue.Tests.Standalone
         public void WillNotCopyMetadataWhereItDoesNotExist()
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, "destination");
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
-            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", "destination")));
+            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", DestinationBlobName)));
         }
 
         [Fact]
         public void WillCopyMetadataFromSourceWherePresent()
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
             sourceBlob.Metadata["thing"] = "something";
             sourceBlob.Properties.ContentType = "whatever";
             sourceBlob.SetMetadata();
             sourceBlob.SetProperties();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, "destination");
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
             destinationBlob.StartCopyFromBlob(sourceBlob);
             destinationBlob.FetchAttributes();
 
@@ -77,7 +78,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void CopyStateIsNullBeforeCopy()
         {
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
 
             Assert.Null(blob.CopyState);
         }
@@ -86,10 +87,10 @@ namespace LightBlue.Tests.Standalone
         public void CopyStateIsSuccessAfterCopy()
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, "destination");
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
             destinationBlob.StartCopyFromBlob(sourceBlob);
         }
     }

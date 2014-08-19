@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 
 using AssertExLib;
@@ -15,7 +14,10 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureBlockBlobPropertiesTests : StandaloneAzureTestsBase
     {
+        public const string BlobName = "someblob";
+
         public StandaloneAzureBlockBlobPropertiesTests()
+            : base(DirectoryType.Container)
         {
             var metadataDirectoryPath = Path.Combine(BasePath, ".meta");
             Directory.CreateDirectory(metadataDirectoryPath);
@@ -24,7 +26,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void WillThrowOnSaveOfPropertiesIfBlobDoesNotExist()
         {
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
 
             Assert.Throws<StorageException>(() => blob.SetProperties());
         }
@@ -32,7 +34,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void WillThrowOnAsyncSaveOfPropertiesIfBlobDoesNotExist()
         {
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
 
             AssertEx.Throws<StorageException>(() => blob.SetPropertiesAsync());
         }
@@ -40,13 +42,13 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void CanPersistAndRetrieveProperties()
         {
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             CreateBlobContent(sourceBlob);
 
             sourceBlob.Properties.ContentType = "something";
             sourceBlob.SetProperties();
 
-            var loadedBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             loadedBlob.FetchAttributes();
 
             new
@@ -62,7 +64,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void DefaultsToOctetStreamWhenLoadingPropertiesWhenPreviouslyUnset()
         {
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             CreateBlobContent(blob);
 
             blob.FetchAttributes();
@@ -80,13 +82,13 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void CanPersistPropertiesAsync()
         {
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             CreateBlobContent(sourceBlob);
 
             sourceBlob.Properties.ContentType = "something";
             sourceBlob.SetPropertiesAsync().Wait();
 
-            var loadedBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             loadedBlob.FetchAttributes();
 
             new
@@ -102,12 +104,12 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void PropertiesNotPersistedUntilSet()
         {
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             CreateBlobContent(sourceBlob);
 
             sourceBlob.Properties.ContentType = "something";
 
-            var loadedBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
 
             new
             {
@@ -122,13 +124,13 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void FetchingAttributesOverwritesAnyUnsavedPropertyValues()
         {
-            var sourceBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             CreateBlobContent(sourceBlob);
 
             sourceBlob.Properties.ContentType = "something";
             sourceBlob.SetProperties();
 
-            var loadedBlob = new StandaloneAzureBlockBlob(SubPathUri);
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             loadedBlob.FetchAttributes();
             sourceBlob.Properties.ContentType = "something else";
             loadedBlob.FetchAttributes();

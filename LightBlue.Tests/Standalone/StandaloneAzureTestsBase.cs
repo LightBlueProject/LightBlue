@@ -6,30 +6,32 @@ using LightBlue.Standalone;
 
 namespace LightBlue.Tests.Standalone
 {
-    public class StandaloneAzureTestsBase
+    public enum DirectoryType
     {
-        protected const string SubPathElement = "test";
+        Account = 0,
+        Container = 1,
+    }
+
+    public abstract class StandaloneAzureTestsBase
+    {
+        public const string MetadataDirectory = ".meta";
 
         protected readonly string BasePath;
 
-        protected StandaloneAzureTestsBase()
+        protected StandaloneAzureTestsBase(DirectoryType directoryType)
         {
             BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        }
+            Directory.CreateDirectory(BasePath);
 
-        protected string SubPath
-        {
-            get { return Path.Combine(BasePath, SubPathElement); }
+            if (directoryType == DirectoryType.Container)
+            {
+                Directory.CreateDirectory(Path.Combine(BasePath, MetadataDirectory));
+            }
         }
 
         protected Uri BasePathUri
         {
             get {  return new Uri(BasePath); }
-        }
-
-        protected Uri SubPathUri
-        {
-            get { return new Uri(SubPath); }
         }
 
         public void Dispose()

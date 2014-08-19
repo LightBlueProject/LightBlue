@@ -9,17 +9,18 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureBlockBlobDeleteTests : StandaloneAzureTestsBase
     {
+        private const string BlobName = "someblob";
+
         public StandaloneAzureBlockBlobDeleteTests()
-        {
-            Directory.CreateDirectory(Path.Combine(BasePath, ".meta"));
-        }
+            : base(DirectoryType.Container)
+        {}
 
         [Fact]
         public void CanDeleteBlob()
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
 
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             blob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
             blob.Delete();
@@ -32,14 +33,14 @@ namespace LightBlue.Tests.Standalone
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
 
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             blob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
             blob.Metadata["thing"] = "something";
             blob.SetMetadata();
 
             blob.Delete();
 
-            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", SubPathElement)));
+            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", BlobName)));
         }
     }
 }

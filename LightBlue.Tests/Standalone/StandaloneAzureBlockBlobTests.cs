@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -13,20 +14,23 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureBlockBlobTests : StandaloneAzureTestsBase
     {
+        private readonly Uri _blobUri;
+        private const string BlobName = "someblob";
         public StandaloneAzureBlockBlobTests()
+            : base(DirectoryType.Container)
         {
-            Directory.CreateDirectory(BasePath);
+            _blobUri = new Uri(Path.Combine(BasePath, BlobName));
         }
 
         [Fact]
         public void WillHaveCorrectValuesWhenGivenContainerDirectoryAndBlobName()
         {
-            var blob = new StandaloneAzureBlockBlob(BasePath, SubPathElement);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
 
             new
             {
-                Uri = SubPathUri,
-                Name = SubPathElement,
+                Uri = _blobUri,
+                Name = BlobName,
                 Properties = new
                 {
                     Length = (long) -1,
@@ -39,12 +43,12 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void WillHaveCorrectValuesWhenGivenUri()
         {
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(_blobUri);
 
             new
             {
-                Uri = SubPathUri,
-                Name = SubPathElement,
+                Uri = _blobUri,
+                Name = BlobName,
                 Properties = new
                 {
                     Length = (long) -1,
@@ -61,7 +65,7 @@ namespace LightBlue.Tests.Standalone
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
 
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             blob.UploadFromByteArrayAsync(buffer, index, count).Wait();
 
             Assert.Equal(expectedContent, File.ReadAllText(blob.Uri.LocalPath));
@@ -73,7 +77,7 @@ namespace LightBlue.Tests.Standalone
             var sourceFilePath = Path.Combine(BasePath, "source");
             File.WriteAllText(sourceFilePath, "Source file");
 
-            var blob = new StandaloneAzureBlockBlob(SubPathUri);
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             blob.UploadFromFileAsync(sourceFilePath);
 
             Assert.Equal("Source file", File.ReadAllText(blob.Uri.LocalPath));
@@ -90,7 +94,7 @@ namespace LightBlue.Tests.Standalone
                 memoryStream.Write(buffer, 0, buffer.Length);
                 memoryStream.Position = 0;
 
-                var blob = new StandaloneAzureBlockBlob(SubPathUri);
+                var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
                 blob.UploadFromStreamAsync(memoryStream).Wait();
 
                 Assert.Equal(sourceContent, File.ReadAllText(blob.Uri.LocalPath));

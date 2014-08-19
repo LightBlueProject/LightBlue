@@ -17,6 +17,7 @@ namespace LightBlue.Tests.Standalone
         private readonly StandaloneAzureBlobContainer _container;
 
         public StandaloneAzureBlobContainerListTests()
+            : base(DirectoryType.Container)
         {
             _container = new StandaloneAzureBlobContainer(BasePath);
             _container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
