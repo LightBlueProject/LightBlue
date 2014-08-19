@@ -33,10 +33,18 @@ namespace LightBlue.Host
                 appDomainSetup.ConfigurationFile = configurationFile;
             }
 
-            File.Copy(
-                typeof(HostStub).Assembly.Location,
-                Path.Combine(hostArgs.ApplicationBase, Path.GetFileName(typeof(HostStub).Assembly.Location)),
-                true);
+            var destinationHostStubPath = Path.Combine(hostArgs.ApplicationBase, Path.GetFileName(typeof(HostStub).Assembly.Location));
+            if (!File.Exists(destinationHostStubPath))
+            {
+                try
+                {
+                    File.Copy(typeof(HostStub).Assembly.Location, destinationHostStubPath, true);
+                }
+                catch (IOException)
+                {
+                    Console.WriteLine("Could not copy Host Stub. Assuming this is because it already exists and continuing.");
+                }
+            }
 
             var appDomain = AppDomain.CreateDomain(
                 "LightBlue",
