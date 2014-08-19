@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 
 using ExpectedObjects;
 
@@ -26,7 +28,11 @@ namespace LightBlue.Tests.Standalone
             {
                 MaximumSizeInMegabytes = 512,
                 Name = "TestStorage",
-                RootPath = Path.Combine(BasePath, ".resources", "TestStorage")
+                RootPath = Path.Combine(
+                    BasePath,
+                    ".resources",
+                    Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture),
+                    "TestStorage")
             }.ToExpectedObject().ShouldMatch(source["TestStorage"]);
         }
 

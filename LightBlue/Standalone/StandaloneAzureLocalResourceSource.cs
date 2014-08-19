@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -42,6 +43,8 @@ namespace LightBlue.Standalone
                 return;
             }
 
+            var processId = Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
+
             _localResources = localResourcesElement.Descendants()
                 .ToDictionary(
                     e => e.Attribute("name").Value,
@@ -49,7 +52,7 @@ namespace LightBlue.Standalone
                     {
                         Name = e.Attribute("name").Value,
                         MaximumSizeInMegabytes = Int32.Parse(e.Attribute("sizeInMB").Value),
-                        RootPath = Path.Combine(basePath, ".resources", e.Attribute("name").Value)
+                        RootPath = Path.Combine(basePath, ".resources", processId, e.Attribute("name").Value)
                     });
         }
 
