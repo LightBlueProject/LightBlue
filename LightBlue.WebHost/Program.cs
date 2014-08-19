@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using LightBlue.Host;
 using LightBlue.Host.Stub;
@@ -12,11 +13,18 @@ namespace LightBlue.WebHost
 {
     public static class Program
     {
+        [DllImport("user32.dll")]
+        private static extern bool SetWindowText(IntPtr hWnd, string text);
+
         public static void Main(string[] args)
         {
             try
             {
                 var webHostArgs = WebHostArgs.ParseArgs(args);
+
+                var handle = Process.GetCurrentProcess().MainWindowHandle;
+
+                SetWindowText(handle, webHostArgs.Title);
 
                 ConfigureWebConfig(webHostArgs);
 

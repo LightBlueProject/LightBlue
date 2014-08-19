@@ -14,6 +14,7 @@ namespace LightBlue.WebHost
         public string Assembly { get; private set; }
         public int Port { get; private set; }
         public string RoleName { get; private set; }
+        public string Title { get; private set; }
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
         public bool UseSsl { get; private set; }
@@ -34,15 +35,17 @@ namespace LightBlue.WebHost
             string assembly = null;
             var port = 0;
             string roleName = null;
+            string title = null;
             string configurationPath = null;
-            bool useSsl = false;
-            string hostname = "localhost";
+            var useSsl = false;
+            var hostname = "localhost";
 
             var options = new OptionSet
             {
                 {"a|assembly=", "", v => assembly = v},
                 {"p|port=", "", v => Int32.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out port)},
                 {"n|roleName=", "", v => roleName = v},
+                {"t|serviceTitle=", "", v => title = v},
                 {"c|configurationPath=", "", v => configurationPath = v},
                 {"s|useSsl=", "", v => Boolean.TryParse(v, out useSsl)},
                 {"h|hostname=", "", v => hostname = v},
@@ -85,6 +88,9 @@ namespace LightBlue.WebHost
                 Assembly = assembly,
                 Port = port,
                 RoleName = roleName,
+                Title = string.IsNullOrWhiteSpace(title)
+                    ? roleName
+                    : title,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
                 UseSsl = useSsl,
