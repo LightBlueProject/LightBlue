@@ -1,20 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
+using System.Diagnostics;
+using System.Threading.Tasks;
+
+using Autofac;
+
+using LightBlue;
+using LightBlue.Setup;
+
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace TestWebRole
 {
     public class WebRole : RoleEntryPoint
     {
+        private IContainer _container;
+
         public override bool OnStart()
         {
-            // For information on handling configuration changes
-            // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
+            var result = base.OnStart();
 
-            return base.OnStart();
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterLightBlueModules();
+
+            _container = containerBuilder.Build();
+
+            Trace.TraceInformation("TestWebRole has been started");
+
+            return result;
+        }
+
+        public override void Run()
+        {
+            while (true)
+            {
+                Trace.TraceInformation("Working: " + _container.Resolve<IAzureEnvironmentSource>().CurrentEnvironment);
+
+                Task.Delay(1000).Wait();
+            }
         }
     }
 }

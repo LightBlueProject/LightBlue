@@ -11,7 +11,7 @@ namespace LightBlue.WebHost
 {
     public class WebHostArgs
     {
-        public string SiteDirectory { get; private set; }
+        public string Assembly { get; private set; }
         public int Port { get; private set; }
         public string RoleName { get; private set; }
         public string ConfigurationPath { get; private set; }
@@ -19,9 +19,19 @@ namespace LightBlue.WebHost
         public bool UseSsl { get; private set; }
         public string Hostname { get; private set; }
 
+        public string SiteDirectory
+        {
+            get { return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly) ?? "", "..")); }
+        }
+
+        public string SiteBinDirectory
+        {
+            get { return Path.GetDirectoryName(Assembly) ?? ""; }
+        }
+
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
-            string siteDirectory = null;
+            string assembly = null;
             var port = 0;
             string roleName = null;
             string configurationPath = null;
@@ -30,7 +40,7 @@ namespace LightBlue.WebHost
 
             var options = new OptionSet
             {
-                {"d|siteDirectory=", "", v => siteDirectory = v},
+                {"a|assembly=", "", v => assembly = v},
                 {"p|port=", "", v => Int32.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out port)},
                 {"n|roleName=", "", v => roleName = v},
                 {"c|configurationPath=", "", v => configurationPath = v},
@@ -40,9 +50,9 @@ namespace LightBlue.WebHost
 
             options.Parse(args);
 
-            if (string.IsNullOrWhiteSpace(siteDirectory))
+            if (string.IsNullOrWhiteSpace(assembly))
             {
-                throw new ArgumentException("Host requires a site directory to run.");
+                throw new ArgumentException("Host requires an assembly to run.");
             }
             if (port == 0)
             {
@@ -61,14 +71,18 @@ namespace LightBlue.WebHost
                 throw new ArgumentException("Hostname must be specified.");
             }
 
-            if (!Directory.Exists(siteDirectory))
+            var roleAssemblyAbsolutePath = Path.IsPathRooted(assembly)
+                ? assembly
+                : Path.Combine(Environment.CurrentDirectory, assembly);
+
+            if (!File.Exists(roleAssemblyAbsolutePath))
             {
-                throw new FileNotFoundException("The specified site directory does not exist.");
+                throw new FileNotFoundException("The specified site assembly cannot be found.");
             }
 
             return new WebHostArgs
             {
-                SiteDirectory = siteDirectory,
+                Assembly = assembly,
                 Port = port,
                 RoleName = roleName,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),

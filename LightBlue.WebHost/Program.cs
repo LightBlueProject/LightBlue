@@ -4,6 +4,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 
+using LightBlue.Host;
+using LightBlue.Host.Stub;
 using LightBlue.Infrastructure;
 
 namespace LightBlue.WebHost
@@ -16,6 +18,9 @@ namespace LightBlue.WebHost
             {
                 var webHostArgs = WebHostArgs.ParseArgs(args);
 
+                ConfigureWebConfig(webHostArgs);
+
+                RunWebSite(webHostArgs);
                 RunWebRole(webHostArgs);
             }
             catch (Exception ex)
@@ -24,18 +29,21 @@ namespace LightBlue.WebHost
             }
         }
 
-        private static void RunWebRole(WebHostArgs webHostArgs)
+        private static void ConfigureWebConfig(WebHostArgs webHostArgs)
         {
-            var iisExpressConfigurationFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".config");
-            GenerateIisExpressConfigurationFile(webHostArgs, iisExpressConfigurationFilePath);
-
-            var webConfigFilePath = Path.Combine(webHostArgs.SiteDirectory, "web.config");
+            var webConfigFilePath = DetermineWebConfigPath(webHostArgs);
             if (!File.Exists(webConfigFilePath))
             {
                 throw new ArgumentException("No web.config could be located for the site");
             }
 
             ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(webConfigFilePath);
+        }
+
+        private static void RunWebSite(WebHostArgs webHostArgs)
+        {
+            var iisExpressConfigurationFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".config");
+            GenerateIisExpressConfigurationFile(webHostArgs, iisExpressConfigurationFilePath);
 
             using (var process = Process.Start(BuildProcessStartInfo(webHostArgs, iisExpressConfigurationFilePath)))
             {
@@ -45,13 +53,47 @@ namespace LightBlue.WebHost
                     return;
                 }
 
-                process.WaitForExit(3000);
+                process.WaitForExit(2000);
 
                 if (process.HasExited)
                 {
                     Console.WriteLine(process.StandardError.ReadToEnd());
                 }
             }
+        }
+
+        private static void RunWebRole(WebHostArgs webHostArgs)
+        {
+            var appDomainSetup = new AppDomainSetup
+            {
+                ApplicationBase = webHostArgs.SiteBinDirectory,
+                ConfigurationFile = DetermineWebConfigPath(webHostArgs)
+            };
+
+            StubManagement.CopyStubAssemblyToRoleDirectory(webHostArgs.SiteBinDirectory);
+
+            var appDomain = AppDomain.CreateDomain(
+                "LightBlue",
+                null,
+                appDomainSetup);
+
+            Trace.Listeners.Add(new ConsoleTraceListener());
+
+            var stub = (HostStub) appDomain.CreateInstanceAndUnwrap(
+                typeof(HostStub).Assembly.FullName,
+                typeof(HostStub).FullName);
+
+            stub.ConfigureTracing(new TraceShipper());
+
+            stub.Run(workerRoleAssembly: webHostArgs.Assembly,
+                configurationPath: webHostArgs.ConfigurationPath,
+                serviceDefinitionPath: webHostArgs.ServiceDefinitionPath,
+                roleName: webHostArgs.RoleName);
+        }
+
+        private static string DetermineWebConfigPath(WebHostArgs webHostArgs)
+        {
+            return Path.Combine(webHostArgs.SiteDirectory, "web.config");
         }
 
         private static void GenerateIisExpressConfigurationFile(WebHostArgs webHostArgs, string configurationFilePath)
