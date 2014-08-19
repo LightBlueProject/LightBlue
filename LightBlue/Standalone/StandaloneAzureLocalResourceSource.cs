@@ -43,7 +43,7 @@ namespace LightBlue.Standalone
                 return;
             }
 
-            var processId = Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
+            var processId = roleName + "-" + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
 
             _localResources = localResourcesElement.Descendants()
                 .ToDictionary(

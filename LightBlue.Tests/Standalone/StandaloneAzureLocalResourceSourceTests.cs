@@ -35,7 +35,7 @@ namespace LightBlue.Tests.Standalone
                 RootPath = Path.Combine(
                     BasePath,
                     ".resources",
-                    Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture),
+                    "TestWebRole-" + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture),
                     "TestStorage")
             }.ToExpectedObject().ShouldMatch(source["TestStorage"]);
         }
