@@ -23,28 +23,67 @@ namespace LightBlue.Host
             string roleName = null;
             string title = null;
             string configurationPath = null;
+            var displayHelp = false;
 
             var options = new OptionSet
             {
-                {"a|assembly=", "", v => assembly = v},
-                {"n|roleName=", "", v => roleName = v},
-                {"t|serviceTitle=", "", v => title = v},
-                {"c|configurationPath=", "", v => configurationPath = v},
+                {
+                    "a|assembly=",
+                    "The path to the primary {ASSEMBLY} for the worker role.",
+                    v => assembly = v
+                },
+                {
+                    "n|roleName=",
+                    "The {NAME} of the role as defined in the configuration file.",
+                    v => roleName = v
+                },
+                {
+                    "t|serviceTitle=",
+                    "Optional {TITLE} for the role window. Defaults to role name if not specified.",
+                    v => title = v
+                },
+                {
+                    "c|configurationPath=",
+                    "The {PATH} to the configuration file. Either the directory containing ServiceConfiguration.Local.cscfg or the path to a specific alternate .cscfg file.",
+                    v => configurationPath = v
+                },
+                {
+                    "help",
+                    "Show this message and exit.",
+                    v => displayHelp = true 
+                }
             };
 
-            options.Parse(args);
+            try
+            {
+                options.Parse(args);
+            }
+            catch (OptionException e)
+            {
+                DisplayErrorMessage(e.Message);
+                return null;
+            }
+
+            if (displayHelp)
+            {
+                DisplayHelp(options);
+                return null;
+            }
 
             if (string.IsNullOrWhiteSpace(assembly))
             {
-                throw new ArgumentException("Host requires an assembly to run.");
+                DisplayErrorMessage("Host requires an assembly to run.");
+                return null;
             }
             if (string.IsNullOrWhiteSpace(roleName))
             {
-                throw new ArgumentException("Role Name must be specified.");
+                DisplayErrorMessage("Role Name must be specified.");
+                return null;
             }
             if (string.IsNullOrWhiteSpace(configurationPath))
             {
-                throw new ArgumentException("Configuration path must be specified.");
+                DisplayErrorMessage("Configuration path must be specified.");
+                return null;
             }
 
             var roleAssemblyAbsolutePath = Path.IsPathRooted(assembly)
@@ -53,7 +92,8 @@ namespace LightBlue.Host
 
             if (!File.Exists(roleAssemblyAbsolutePath))
             {
-                throw new FileNotFoundException("The specified assembly cannot be found. The assembly must be in the host directory or be specified as an absolute path.");
+                DisplayErrorMessage("The specified assembly cannot be found. The assembly must be in the host directory or be specified as an absolute path.");
+                return null;
             }
 
             return new HostArgs
@@ -66,6 +106,22 @@ namespace LightBlue.Host
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
             };
+        }
+
+        private static void DisplayErrorMessage(string message)
+        {
+            Console.Write("LightBlue.Host: ");
+            Console.WriteLine(message);
+            Console.WriteLine("Try `LightBlue.Host --help' for more information.");
+        }
+
+        static void DisplayHelp(OptionSet p)
+        {
+            Console.WriteLine("Usage: LightBlue.Host [OPTIONS]");
+            Console.WriteLine("Host a LightBlue based Azure worker role.");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+            p.WriteOptionDescriptions(Console.Out);
         }
     }
 }

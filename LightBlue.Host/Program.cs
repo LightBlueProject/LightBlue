@@ -16,6 +16,10 @@ namespace LightBlue.Host
         public static void Main(string[] args)
         {
             var hostArgs = HostArgs.ParseArgs(args);
+            if (hostArgs == null)
+            {
+                return;
+            }
 
             var handle = Process.GetCurrentProcess().MainWindowHandle;
 
