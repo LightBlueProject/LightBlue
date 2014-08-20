@@ -21,6 +21,10 @@ namespace LightBlue.WebHost
             try
             {
                 var webHostArgs = WebHostArgs.ParseArgs(args);
+                if (webHostArgs == null)
+                {
+                    return;
+                }
 
                 var handle = Process.GetCurrentProcess().MainWindowHandle;
 

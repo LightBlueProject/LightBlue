@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 
 using LightBlue.Infrastructure;
@@ -39,39 +38,92 @@ namespace LightBlue.WebHost
             string configurationPath = null;
             var useSsl = false;
             var hostname = "localhost";
+            var displayHelp = false;
 
             var options = new OptionSet
             {
-                {"a|assembly=", "", v => assembly = v},
-                {"p|port=", "", v => Int32.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out port)},
-                {"n|roleName=", "", v => roleName = v},
-                {"t|serviceTitle=", "", v => title = v},
-                {"c|configurationPath=", "", v => configurationPath = v},
-                {"s|useSsl=", "", v => Boolean.TryParse(v, out useSsl)},
-                {"h|hostname=", "", v => hostname = v},
+                {
+                    "a|assembly=",
+                    "The path to the primary {ASSEMBLY} for the web role.",
+                    v => assembly = v
+                },
+                {
+                    "p|port=",
+                    "The {PORT} on which the website should be available.",
+                    (int v) => port = v
+                },
+                {
+                    "n|roleName=",
+                    "The {NAME} of the role as defined in the configuration file.",
+                    v => roleName = v
+                },
+                {
+                    "t|serviceTitle=",
+                    "Optional {TITLE} for the role window. Defaults to role name if not specified.",
+                    v => title = v
+                },
+                {
+                    "c|configurationPath=",
+                    "The {PATH} to the configuration file. Either the directory containing ServiceConfiguration.Local.cscfg or the path to a specific alternate .cscfg file.",
+                    v => configurationPath = v
+                },
+                {
+                    "s|useSsl=",
+                    "Indicates whether the site should be started with SSL. Defaults to false.",
+                    (bool v) => useSsl = v
+                },
+                {
+                    "h|hostname=",
+                    "The {HOSTNAME} the site should be started with. Defaults to localhost",
+                    v => hostname = v
+                },
+                {
+                    "help",
+                    "Show this message and exit.",
+                    v => displayHelp = true 
+                }
             };
 
-            options.Parse(args);
+            try
+            {
+                options.Parse(args);
+            }
+            catch (OptionException e)
+            {
+                DisplayErrorMessage(e.Message);
+                return null;
+            }
+
+            if (displayHelp)
+            {
+                DisplayHelp(options);
+                return null;
+            }
 
             if (string.IsNullOrWhiteSpace(assembly))
             {
-                throw new ArgumentException("Host requires an assembly to run.");
+                DisplayErrorMessage("Host requires an assembly to run.");
+                return null;
             }
             if (port == 0)
             {
-                throw new ArgumentException("Host requires a port to run the site on");
+                DisplayErrorMessage("Host requires a port to run the site on");
+                return null;
             }
             if (string.IsNullOrWhiteSpace(roleName))
             {
-                throw new ArgumentException("Role Name must be specified.");
+                DisplayErrorMessage("Role Name must be specified.");
+                return null;
             }
             if (string.IsNullOrWhiteSpace(configurationPath))
             {
-                throw new ArgumentException("Configuration path must be specified.");
+                DisplayErrorMessage("Configuration path must be specified.");
+                return null;
             }
             if (string.IsNullOrWhiteSpace(hostname))
             {
-                throw new ArgumentException("Hostname must be specified.");
+                DisplayErrorMessage("The hostname cannot be blank. Do not specify this option if you wish to use the default (localhost).");
+                return null;
             }
 
             var roleAssemblyAbsolutePath = Path.IsPathRooted(assembly)
@@ -80,7 +132,8 @@ namespace LightBlue.WebHost
 
             if (!File.Exists(roleAssemblyAbsolutePath))
             {
-                throw new FileNotFoundException("The specified site assembly cannot be found.");
+                DisplayErrorMessage("The specified site assembly cannot be found.");
+                return null;
             }
 
             return new WebHostArgs
@@ -96,6 +149,23 @@ namespace LightBlue.WebHost
                 UseSsl = useSsl,
                 Hostname = hostname
             };
+        }
+
+        private static void DisplayErrorMessage(string message)
+        {
+            Console.Write("LightBlue.WebHost: ");
+            Console.WriteLine(message);
+            Console.WriteLine("Try `LightBlue.WebHost --help' for more information.");
+        }
+
+        static void DisplayHelp(OptionSet p)
+        {
+            Console.WriteLine("Usage: LightBlue.WebHost [OPTIONS]");
+            Console.WriteLine("Host a LightBlue based Azure web role.");
+            Console.WriteLine("IIS Express is used to host the web site.");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+            p.WriteOptionDescriptions(Console.Out);
         }
     }
 }
