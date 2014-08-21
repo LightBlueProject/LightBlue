@@ -1,5 +1,4 @@
-﻿using LightBlue.Infrastructure;
-using LightBlue.Standalone;
+﻿using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
 
@@ -9,13 +8,25 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureSettingsTests
     {
+        private readonly StandaloneAzureSettings _settings;
+
+        public StandaloneAzureSettingsTests()
+        {
+            _settings = new StandaloneAzureSettings(new StandaloneConfiguration
+            {
+                ConfigurationPath = "ServiceConfiguration.Local.cscfg",
+                RoleName = "TestWorkerRole"
+            });
+        }
+
         [Fact]
         public void CanRetrieveSettingFromFile()
         {
-            var settings = new StandaloneAzureSettings(
-                "ServiceConfiguration.Local.cscfg",
-                "TestWorkerRole",
-                RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator());
+            var settings = new StandaloneAzureSettings(new StandaloneConfiguration
+            {
+                ConfigurationPath = "ServiceConfiguration.Local.cscfg",
+                RoleName = "TestWorkerRole"
+            });
 
             Assert.Equal("Running locally", settings["RandomSetting"]);
         }
@@ -23,12 +34,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void WillThrowOnUnknownKey()
         {
-            var settings = new StandaloneAzureSettings(
-                "ServiceConfiguration.Local.cscfg",
-                "TestWorkerRole",
-                RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator());
-
-            Assert.Throws<RoleEnvironmentException>(() => settings["Unknown"]);
+            Assert.Throws<RoleEnvironmentException>(() => _settings["Unknown"]);
         }
     }
 }

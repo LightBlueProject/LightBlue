@@ -4,23 +4,17 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
-using Microsoft.WindowsAzure.ServiceRuntime;
+using LightBlue.Setup;
 
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureSettings : IAzureSettings
     {
-        private readonly Func<string, RoleEnvironmentException> _exceptionFunc;
         private readonly Dictionary<string, string> _settings;
 
-        public StandaloneAzureSettings(
-            string configurationPath,
-            string roleName,
-            Func<string, RoleEnvironmentException> exceptionFunc)
+        public StandaloneAzureSettings(StandaloneConfiguration standaloneConfiguration)
         {
-            _exceptionFunc = exceptionFunc;
-
-            var xDocument = XDocument.Load(configurationPath);
+            var xDocument = XDocument.Load(standaloneConfiguration.ConfigurationPath);
 
             XNamespace serviceConfigurationNamespace = xDocument.Root
                 .Attributes()
@@ -29,7 +23,7 @@ namespace LightBlue.Standalone
                 .Value;
 
             var roleElement = xDocument.Descendants(serviceConfigurationNamespace + "Role")
-                .FirstOrDefault(r => r.Attribute("name").Value == roleName);
+                .FirstOrDefault(r => r.Attribute("name").Value == standaloneConfiguration.RoleName);
 
             if (roleElement == null)
             {
@@ -37,8 +31,8 @@ namespace LightBlue.Standalone
                     string.Format(
                         CultureInfo.InvariantCulture,
                         "Cannot find configuration for the role '{0}' in '{1}'",
-                        roleName,
-                        configurationPath));
+                        standaloneConfiguration.RoleName,
+                        standaloneConfiguration.ConfigurationPath));
             }
 
             _settings = roleElement.Descendants(serviceConfigurationNamespace + "ConfigurationSettings")
@@ -52,7 +46,7 @@ namespace LightBlue.Standalone
             {
                 if (!_settings.ContainsKey(index))
                 {
-                    throw _exceptionFunc(string.Format(
+                    throw  LightBlueConfiguration.RoleEnvironmentExceptionCreator(string.Format(
                         CultureInfo.InvariantCulture,
                         "Unknown setting '{0}'",
                         index));

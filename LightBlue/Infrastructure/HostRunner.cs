@@ -14,7 +14,7 @@ namespace LightBlue.Infrastructure
     {
         public void Run(string workerRoleAssembly, string configurationPath, string serviceDefinitionPath, string roleName)
         {
-            SetupConfiguration.SetAsHosted(
+            LightBlueConfiguration.SetAsLightBlue(
                 configurationPath: configurationPath,
                 serviceDefinitionPath: serviceDefinitionPath,
                 roleName: roleName);

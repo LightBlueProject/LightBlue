@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Autofac;
 
 using LightBlue;
-using LightBlue.Setup;
+using LightBlue.Autofac;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
 

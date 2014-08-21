@@ -4,7 +4,6 @@ using System.IO;
 
 using ExpectedObjects;
 
-using LightBlue.Infrastructure;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -15,18 +14,22 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureLocalResourceSourceTests : StandaloneAzureTestsBase
     {
+        private readonly StandaloneConfiguration _standaloneConfiguration;
+
         public StandaloneAzureLocalResourceSourceTests()
             : base(DirectoryType.Account)
-        {}
+        {
+            _standaloneConfiguration = new StandaloneConfiguration
+            {
+                ServiceDefinitionPath = "ServiceDefinition.csdef",
+                RoleName = "TestWebRole"
+            };
+        }
 
         [Fact]
         public void CanRetreiveSettingsFromFile()
         {
-            var source = new StandaloneAzureLocalResourceSource(
-                "ServiceDefinition.csdef",
-                "TestWebRole",
-                BasePath,
-                RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator());
+            var source = new StandaloneAzureLocalResourceSource(_standaloneConfiguration, BasePath);
 
             new
             {
@@ -43,21 +46,18 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void CanParseRoleWithNoResources()
         {
-            Assert.DoesNotThrow(() => new StandaloneAzureLocalResourceSource(
-                "ServiceDefinition.csdef",
-                "TestWorkerRole",
-                BasePath,
-                RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator()));
+            Assert.DoesNotThrow(() => new StandaloneAzureLocalResourceSource(new StandaloneConfiguration
+            {
+                ServiceDefinitionPath = "ServiceDefinition.csdef",
+                RoleName = "TestWorkerRole"
+            }, 
+            BasePath));
         }
 
         [Fact]
         public void RetreivingUnknownResourceThrowsRoleEnvironmentException()
         {
-            var source = new StandaloneAzureLocalResourceSource(
-                "ServiceDefinition.csdef",
-                "TestWebRole",
-                BasePath,
-                RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator());
+            var source = new StandaloneAzureLocalResourceSource(_standaloneConfiguration, BasePath);
 
             Assert.Throws<RoleEnvironmentException>(() => source["unknown"]);
         }
@@ -65,11 +65,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void RetreivingUnknownResourceThrowsRoleEnvironmentExceptionForRoleWithNoResources()
         {
-            var source = new StandaloneAzureLocalResourceSource(
-                "ServiceDefinition.csdef",
-                "TestWorkerRole",
-                BasePath,
-                RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator());
+            var source = new StandaloneAzureLocalResourceSource(_standaloneConfiguration, BasePath);
 
             Assert.Throws<RoleEnvironmentException>(() => source["unknown"]);
         }

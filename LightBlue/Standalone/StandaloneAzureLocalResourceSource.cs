@@ -6,24 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-using Microsoft.WindowsAzure.ServiceRuntime;
+using LightBlue.Setup;
 
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureLocalResourceSource : IAzureLocalResourceSource
     {
-        private readonly Func<string, RoleEnvironmentException> _exceptionFunc;
         private readonly IDictionary<string, StandaloneAzureLocalResource> _localResources;
 
-        public StandaloneAzureLocalResourceSource(
-            string serviceDefinitionPath,
-            string roleName,
-            string basePath,
-            Func<string, RoleEnvironmentException> exceptionFunc)
+        public StandaloneAzureLocalResourceSource(StandaloneConfiguration standaloneConfiguration, string dataDirectory)
         {
-            _exceptionFunc = exceptionFunc;
-
-            var xDocument = XDocument.Load(serviceDefinitionPath);
+            var xDocument = XDocument.Load(standaloneConfiguration.ServiceDefinitionPath);
 
             XNamespace serviceDefinitionNamespace = xDocument.Root
                 .Attributes()
@@ -32,7 +25,7 @@ namespace LightBlue.Standalone
                 .Value;
 
             var roleElement = xDocument.Root.Elements()
-                .First(e => e.Attribute("name").Value == roleName);
+                .First(e => e.Attribute("name").Value == standaloneConfiguration.RoleName);
 
             var localResourcesElement = roleElement.Descendants(serviceDefinitionNamespace + "LocalResources")
                 .FirstOrDefault();
@@ -43,7 +36,9 @@ namespace LightBlue.Standalone
                 return;
             }
 
-            var processId = roleName + "-" + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
+            var processId = standaloneConfiguration.RoleName
+                + "-"
+                + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
 
             _localResources = localResourcesElement.Descendants()
                 .ToDictionary(
@@ -52,7 +47,11 @@ namespace LightBlue.Standalone
                     {
                         Name = e.Attribute("name").Value,
                         MaximumSizeInMegabytes = Int32.Parse(e.Attribute("sizeInMB").Value),
-                        RootPath = Path.Combine(basePath, ".resources", processId, e.Attribute("name").Value)
+                        RootPath = Path.Combine(
+                            dataDirectory,
+                            ".resources",
+                            processId,
+                            e.Attribute("name").Value)
                     });
         }
 
@@ -62,7 +61,7 @@ namespace LightBlue.Standalone
             {
                 if (!_localResources.ContainsKey(index))
                 {
-                    throw _exceptionFunc(string.Format(
+                    throw LightBlueConfiguration.RoleEnvironmentExceptionCreator(string.Format(
                         CultureInfo.InvariantCulture,
                         "Unknown resource '{0}'",
                         index));

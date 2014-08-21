@@ -8,7 +8,7 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 
-using LightBlue.Setup;
+using LightBlue.Autofac;
 
 namespace TestWebRole
 {
@@ -16,8 +16,6 @@ namespace TestWebRole
     {
         protected void Application_Start()
         {
-            SetupConfiguration.SetupForWeb();
-
             ConfigureAutofac();
 
             AreaRegistration.RegisterAllAreas();

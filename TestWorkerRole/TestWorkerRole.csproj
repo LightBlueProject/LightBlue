@@ -92,6 +92,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LightBlue.Autofac\LightBlue.Autofac.csproj">
+      <Project>{74b1f607-28dd-4248-af6a-492b03ad321a}</Project>
+      <Name>LightBlue.Autofac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LightBlue.WorkerRoleDependency\LightBlue.WorkerRoleDependency.csproj">
       <Project>{54607C4C-10F5-4C25-BB66-C5A51178C7C1}</Project>
       <Name>LightBlue.WorkerRoleDependency</Name>
