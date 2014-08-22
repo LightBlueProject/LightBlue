@@ -13,7 +13,7 @@ namespace LightBlue.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            if (LightBlueConfiguration.DetermineEnvironment() != AzureEnvironment.LightBlue)
+            if (LightBlueContext.AzureEnvironment != AzureEnvironment.LightBlue)
             {
                 throw new InvalidOperationException("Can only use the LightBlue Standalone module when running in a LightBlue host.");
             }

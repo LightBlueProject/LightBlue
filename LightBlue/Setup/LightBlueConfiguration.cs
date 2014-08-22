@@ -38,7 +38,7 @@ namespace LightBlue.Setup
             };
         }
 
-        public static AzureEnvironment DetermineEnvironment()
+        internal static AzureEnvironment DetermineEnvironment()
         {
             if (_initialised)
             {

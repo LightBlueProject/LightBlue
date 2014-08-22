@@ -2,23 +2,19 @@
 
 using Autofac;
 
-using LightBlue.Setup;
-
 namespace LightBlue.Autofac
 {
     public static class ContainerBuilderExtensions
     {
         public static void RegisterLightBlueModules(this ContainerBuilder builder)
         {
-            var azureEnvironment = LightBlueConfiguration.DetermineEnvironment();
-
-            if (azureEnvironment == AzureEnvironment.LightBlue)
+            if (LightBlueContext.AzureEnvironment == AzureEnvironment.LightBlue)
             {
                 builder.RegisterModule<LightBlueStandaloneModule>();
                 return;
             }
 
-            if (azureEnvironment == AzureEnvironment.ActualAzure || azureEnvironment == AzureEnvironment.Emulator)
+            if (LightBlueContext.AzureEnvironment == AzureEnvironment.ActualAzure || LightBlueContext.AzureEnvironment == AzureEnvironment.Emulator)
             {
                 builder.RegisterModule<LightBlueHostedModule>();
             }

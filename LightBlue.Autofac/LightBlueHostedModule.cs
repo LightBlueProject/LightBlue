@@ -3,7 +3,6 @@ using System;
 using Autofac;
 
 using LightBlue.Hosted;
-using LightBlue.Setup;
 
 namespace LightBlue.Autofac
 {
@@ -11,7 +10,7 @@ namespace LightBlue.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var azureEnvironment = LightBlueConfiguration.DetermineEnvironment();
+            var azureEnvironment = LightBlueContext.AzureEnvironment;
             if (azureEnvironment != AzureEnvironment.ActualAzure && azureEnvironment != AzureEnvironment.Emulator)
             {
                 throw new InvalidOperationException("Can only use the LightBlue Hosted module when running in actual Azure or the Azure emulator.");

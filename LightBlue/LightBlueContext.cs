@@ -12,6 +12,7 @@ namespace LightBlue
         private static IAzureSettings _azureSettings;
         private static IAzureLocalResourceSource _azureLocalResources;
         private static Func<Uri, IAzureBlobContainer> _azureBlobContainerFactory;
+        private static AzureEnvironment _azureEnvironment;
 
         public static IAzureSettings AzureSettings
         {
@@ -40,6 +41,14 @@ namespace LightBlue
             }
         }
 
+        public static AzureEnvironment AzureEnvironment
+        {
+            get
+            {
+                Initialise();
+                return _azureEnvironment;
+            }
+        }
 
         private static void Initialise()
         {
@@ -48,9 +57,9 @@ namespace LightBlue
                 return;
             }
 
-            var azureEnvironment = LightBlueConfiguration.DetermineEnvironment();
+            _azureEnvironment = LightBlueConfiguration.DetermineEnvironment();
 
-            if (azureEnvironment == AzureEnvironment.LightBlue)
+            if (_azureEnvironment == AzureEnvironment.LightBlue)
             {
                 InitialiseAsLightBlue();
             }
