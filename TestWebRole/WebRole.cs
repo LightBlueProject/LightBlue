@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 using Autofac;
@@ -32,7 +33,11 @@ namespace TestWebRole
         {
             while (true)
             {
-                Trace.TraceInformation("Working: " + _container.Resolve<IAzureEnvironmentSource>().CurrentEnvironment);
+                Trace.TraceInformation(
+                    "Working: "
+                    + _container.Resolve<IAzureEnvironmentSource>().CurrentEnvironment
+                    + " "
+                    + Path.GetTempPath());
 
                 Task.Delay(1000).Wait();
             }

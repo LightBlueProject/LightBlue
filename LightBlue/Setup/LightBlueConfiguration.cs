@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 
 using LightBlue.Infrastructure;
 using LightBlue.Standalone;
@@ -25,7 +27,8 @@ namespace LightBlue.Setup
         public static void SetAsLightBlue(
             string configurationPath,
             string serviceDefinitionPath,
-            string roleName)
+            string roleName,
+            HostingType hostingType)
         {
             _initialised = true;
             _environment = AzureEnvironment.LightBlue;
@@ -36,6 +39,20 @@ namespace LightBlue.Setup
                 ServiceDefinitionPath = serviceDefinitionPath,
                 RoleName = roleName
             };
+
+            if (hostingType == HostingType.Direct)
+            {
+                var processId = roleName
+                    + "-"
+                    + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
+
+                var temporaryDirectory = Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, "temp", processId);
+
+                Directory.CreateDirectory(temporaryDirectory);
+
+                Environment.SetEnvironmentVariable("TMP", temporaryDirectory);
+                Environment.SetEnvironmentVariable("TEMP", temporaryDirectory);
+            }
         }
 
         internal static AzureEnvironment DetermineEnvironment()
@@ -50,7 +67,8 @@ namespace LightBlue.Setup
                 SetAsLightBlue(
                     configurationPath: Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
                     serviceDefinitionPath: Environment.GetEnvironmentVariable("LightBlueServiceDefinitionPath"),
-                    roleName: Environment.GetEnvironmentVariable("LightBlueRoleName"));
+                    roleName: Environment.GetEnvironmentVariable("LightBlueRoleName"),
+                    hostingType: HostingType.Indirect);
 
                 return _environment;
             }

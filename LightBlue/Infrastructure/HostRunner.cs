@@ -17,7 +17,8 @@ namespace LightBlue.Infrastructure
             LightBlueConfiguration.SetAsLightBlue(
                 configurationPath: configurationPath,
                 serviceDefinitionPath: serviceDefinitionPath,
-                roleName: roleName);
+                roleName: roleName,
+                hostingType: HostingType.Direct);
 
             try
             {

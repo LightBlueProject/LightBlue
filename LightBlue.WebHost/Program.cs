@@ -146,6 +146,20 @@ namespace LightBlue.WebHost
             processStartInfo.EnvironmentVariables.Add("LightBlueServiceDefinitionPath", webHostArgs.ServiceDefinitionPath);
             processStartInfo.EnvironmentVariables.Add("LightBlueRoleName", webHostArgs.RoleName);
 
+            var processId = webHostArgs.RoleName
+                + "-web-"
+                + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
+
+            var temporaryDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "LightBlue",
+                "temp",
+                processId);
+
+            Directory.CreateDirectory(temporaryDirectory);
+            processStartInfo.EnvironmentVariables["TMP"] = temporaryDirectory;
+            processStartInfo.EnvironmentVariables["TEMP"] = temporaryDirectory;
+
             return processStartInfo;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.IO;
+using System.Web.Mvc;
 
 using LightBlue;
 
@@ -15,7 +16,7 @@ namespace TestWebRole.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Message = _azureEnvironmentSource.CurrentEnvironment;
+            ViewBag.Message = _azureEnvironmentSource.CurrentEnvironment + " " + Path.GetTempPath();
 
             return View();
         }

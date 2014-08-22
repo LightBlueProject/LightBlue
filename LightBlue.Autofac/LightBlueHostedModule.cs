@@ -10,8 +10,7 @@ namespace LightBlue.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var azureEnvironment = LightBlueContext.AzureEnvironment;
-            if (azureEnvironment != AzureEnvironment.ActualAzure && azureEnvironment != AzureEnvironment.Emulator)
+            if (LightBlueContext.AzureEnvironment != AzureEnvironment.ActualAzure && LightBlueContext.AzureEnvironment != AzureEnvironment.Emulator)
             {
                 throw new InvalidOperationException("Can only use the LightBlue Hosted module when running in actual Azure or the Azure emulator.");
             }
@@ -20,7 +19,7 @@ namespace LightBlue.Autofac
                 .InNamespace(typeof(HostedAzureBlobContainer).Namespace)
                 .AsImplementedInterfaces();
 
-            builder.RegisterInstance(new AzureEnvironmentSource(azureEnvironment))
+            builder.RegisterInstance(new AzureEnvironmentSource(LightBlueContext.AzureEnvironment))
                 .As<IAzureEnvironmentSource>();
 
             builder.RegisterInstance((Func<string, IAzureStorage>) (connectionString => new HostedAzureStorage(connectionString)))
