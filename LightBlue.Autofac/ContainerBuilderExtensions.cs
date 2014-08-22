@@ -17,6 +17,7 @@ namespace LightBlue.Autofac
             if (LightBlueContext.AzureEnvironment == AzureEnvironment.ActualAzure || LightBlueContext.AzureEnvironment == AzureEnvironment.Emulator)
             {
                 builder.RegisterModule<LightBlueHostedModule>();
+                return;
             }
 
             throw new InvalidOperationException("Cannot register LightBlue when not hosted in the LightBlue, actual Azure or the Azure emulator.");
