@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerBuilderExtensions.cs" />
+    <Compile Include="LightBlueCommonModule.cs" />
     <Compile Include="LightBlueHostedModule.cs" />
     <Compile Include="LightBlueStandaloneModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

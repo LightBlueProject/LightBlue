@@ -24,17 +24,24 @@ namespace LightBlue.Standalone
 
         private static string ExtractAccountName(string connectionString)
         {
-            var valuePairs = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(component => component.Split(new[] {'='}, StringSplitOptions.RemoveEmptyEntries))
-                .ToDictionary(c => c[0].ToLowerInvariant(), c => c[1]);
+            try
+            {
+                var valuePairs = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(component => component.Split(new[] {'='}, StringSplitOptions.RemoveEmptyEntries))
+                    .ToDictionary(c => c[0].ToLowerInvariant(), c => c[1]);
 
-            if (valuePairs.ContainsKey("accountname"))
-            {
-                return valuePairs["accountname"];
+                if (valuePairs.ContainsKey("accountname"))
+                {
+                    return valuePairs["accountname"];
+                }
+                if (valuePairs.ContainsKey("usedevelopmentstorage"))
+                {
+                    return DevelopmentAccountName;
+                }
             }
-            if (valuePairs.ContainsKey("usedevelopmentstorage"))
+            catch (IndexOutOfRangeException ex)
             {
-                return DevelopmentAccountName;
+                throw new FormatException("Settings must be of the form \"name=value\".", ex);
             }
 
             throw new FormatException("Could not parse the connection string.");

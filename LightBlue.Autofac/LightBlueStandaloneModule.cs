@@ -29,24 +29,9 @@ namespace LightBlue.Autofac
                 .SingleInstance()
                 .As<Func<string, RoleEnvironmentException>>();
 
-            builder.RegisterInstance(LightBlueContext.AzureSettings)
-                .As<IAzureSettings>();
-
-            builder.RegisterInstance(LightBlueContext.AzureLocalResources)
-                .As<IAzureLocalResourceSource>();
-
             builder.RegisterType<StandaloneAzureRoleInformation>()
                 .WithParameter("roleName", LightBlueConfiguration.StandaloneConfiguration.RoleName)
                 .As<IAzureRoleInformation>();
-
-            builder.RegisterInstance((Func<string, IAzureStorage>)(connectionString => new StandaloneAzureStorage(connectionString)))
-                .As<Func<string, IAzureStorage>>();
-
-            builder.RegisterInstance((Func<Uri, IAzureBlockBlob>)(blobUri => new StandaloneAzureBlockBlob(blobUri)))
-                .As<Func<Uri, IAzureBlockBlob>>();
-
-            builder.RegisterInstance(LightBlueContext.AzureBlobContainerFactory)
-                .As<Func<Uri, IAzureBlobContainer>>();
         }
     }
 }

@@ -6,6 +6,9 @@ Version 0.1.8
 ###Bugfixes
 * Don't skip updating the host stub assembly if it already exists to prevent issues with older versions not being updated.
 
+###Features
+* Provide static access to blob entry points to allow use without an IoC container.
+
 Version 0.1.7
 --------------------
 ###BugFixes
