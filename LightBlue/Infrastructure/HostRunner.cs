@@ -18,7 +18,7 @@ namespace LightBlue.Infrastructure
                 configurationPath: configurationPath,
                 serviceDefinitionPath: serviceDefinitionPath,
                 roleName: roleName,
-                hostingType: HostingType.Direct);
+                lightBlueHostType: LightBlueHostType.Direct);
 
             try
             {

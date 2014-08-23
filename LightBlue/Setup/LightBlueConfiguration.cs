@@ -13,34 +13,54 @@ namespace LightBlue.Setup
     public static class LightBlueConfiguration
     {
         private static bool _initialised;
-        private static AzureEnvironment _environment;
+        private static EnvironmentDefinition _environmentDefinition;
         private static readonly Func<string, RoleEnvironmentException> _roleEnvironmentExceptionCreator
             = RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator();
-
-        public static StandaloneConfiguration StandaloneConfiguration { get; private set; }
 
         public static Func<string, RoleEnvironmentException> RoleEnvironmentExceptionCreator
         {
             get { return _roleEnvironmentExceptionCreator; }
         }
 
+        public static void SetAsExternal(AzureEnvironment azureEnvironment)
+        {
+            if (_initialised)
+            {
+                throw new InvalidOperationException(
+                    "LightBlue has already been initialised and cannot be reconfigured");
+            }
+
+            _initialised = true;
+            _environmentDefinition = new EnvironmentDefinition(
+                azureEnvironment,
+                HostingType.External,
+                null);
+        }
+
         public static void SetAsLightBlue(
             string configurationPath,
             string serviceDefinitionPath,
             string roleName,
-            HostingType hostingType)
+            LightBlueHostType lightBlueHostType)
         {
-            _initialised = true;
-            _environment = AzureEnvironment.LightBlue;
-
-            StandaloneConfiguration = new StandaloneConfiguration
+            if (_initialised)
             {
-                ConfigurationPath = configurationPath,
-                ServiceDefinitionPath = serviceDefinitionPath,
-                RoleName = roleName
-            };
+                throw new InvalidOperationException(
+                    "LightBlue has already been initialised and cannot be reconfigured");
+            }
 
-            if (hostingType == HostingType.Direct)
+            _initialised = true;
+            _environmentDefinition = new EnvironmentDefinition(
+                AzureEnvironment.LightBlue,
+                HostingType.Role,
+                new StandaloneConfiguration
+                {
+                    ConfigurationPath = configurationPath,
+                    ServiceDefinitionPath = serviceDefinitionPath,
+                    RoleName = roleName
+                });
+
+            if (lightBlueHostType == LightBlueHostType.Direct)
             {
                 var processId = roleName
                     + "-"
@@ -55,38 +75,46 @@ namespace LightBlue.Setup
             }
         }
 
-        internal static AzureEnvironment DetermineEnvironment()
+        internal static EnvironmentDefinition DetermineEnvironmentDefinition()
         {
-            if (_initialised)
+            if (!_initialised)
             {
-                return _environment;
+                LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition();
             }
 
+            return _environmentDefinition;
+        }
+
+        private static void LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition()
+        {
             if (HasLightBlueEnvironmentFlag())
             {
                 SetAsLightBlue(
                     configurationPath: Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
                     serviceDefinitionPath: Environment.GetEnvironmentVariable("LightBlueServiceDefinitionPath"),
                     roleName: Environment.GetEnvironmentVariable("LightBlueRoleName"),
-                    hostingType: HostingType.Indirect);
+                    lightBlueHostType: LightBlueHostType.Indirect);
 
-                return _environment;
+                return;
             }
 
             _initialised = true;
 
             try
             {
-                _environment = RoleEnvironment.IsEmulated
-                    ? AzureEnvironment.Emulator
-                    : AzureEnvironment.ActualAzure;
+                _environmentDefinition = new EnvironmentDefinition(
+                    RoleEnvironment.IsEmulated
+                        ? AzureEnvironment.Emulator
+                        : AzureEnvironment.ActualAzure,
+                    HostingType.Role,
+                    null);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                _environment = AzureEnvironment.External;
+                throw new InvalidOperationException(
+                    "Cannot determine what environment the code is running in. If running externally to Azure, the Azure emulator or a LightBlue host you must manually configure LightBlue by calling LightBlueConfiguration.SetAsExternal.",
+                    ex);
             }
-
-            return _environment;
         }
 
         private static bool HasLightBlueEnvironmentFlag()

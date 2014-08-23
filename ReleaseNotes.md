@@ -8,6 +8,7 @@ Version 0.1.8
 
 ###Features
 * Provide static access to blob entry points to allow use without an IoC container.
+* Support use outside the LightBlue hosts or actual or emulated Azure
 
 Version 0.1.7
 --------------------

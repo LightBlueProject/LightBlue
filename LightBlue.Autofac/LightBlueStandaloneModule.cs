@@ -30,7 +30,7 @@ namespace LightBlue.Autofac
                 .As<Func<string, RoleEnvironmentException>>();
 
             builder.RegisterType<StandaloneAzureRoleInformation>()
-                .WithParameter("roleName", LightBlueConfiguration.StandaloneConfiguration.RoleName)
+                .WithParameter("roleName", LightBlueContext.RoleName)
                 .As<IAzureRoleInformation>();
         }
     }

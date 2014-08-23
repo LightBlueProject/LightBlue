@@ -78,6 +78,8 @@
     <Compile Include="AzureEnvironment.cs" />
     <Compile Include="AzureEnvironmentSource.cs" />
     <Compile Include="BlobListing.cs" />
+    <Compile Include="External\ExternalAzureLocalResourceSource.cs" />
+    <Compile Include="External\ExternalAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureBlobContainer.cs" />
     <Compile Include="Hosted\HostedAzureBlobDirectory.cs" />
     <Compile Include="Hosted\HostedAzureBlobProperties.cs" />
@@ -112,7 +114,9 @@
     <Compile Include="Infrastructure\RoleEnvironmentExceptionCreatorFactory.cs" />
     <Compile Include="LightBlueContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Setup\EnvironmentDefinition.cs" />
     <Compile Include="Setup\HostingType.cs" />
+    <Compile Include="Setup\LightBlueHostType.cs" />
     <Compile Include="Setup\LightBlueConfiguration.cs" />
     <Compile Include="Standalone\StandaloneAzureCopyState.cs" />
     <Compile Include="Standalone\StandaloneAzureLocalResource.cs" />

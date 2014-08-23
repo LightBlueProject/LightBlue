@@ -1,8 +1,8 @@
-﻿namespace LightBlue.Setup
+namespace LightBlue.Setup
 {
     public enum HostingType
     {
-        Direct = 0,
-        Indirect = 1
+        Role = 0,
+        External = 1
     }
 }

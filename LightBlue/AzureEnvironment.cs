@@ -2,9 +2,8 @@
 {
     public enum AzureEnvironment
     {
-        External = 0,
-        LightBlue = 1,
-        Emulator = 2,
-        ActualAzure = 3
+        LightBlue = 0,
+        Emulator = 1,
+        ActualAzure = 2
     }
 }
