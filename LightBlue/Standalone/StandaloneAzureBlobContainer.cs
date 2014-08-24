@@ -61,7 +61,16 @@ namespace LightBlue.Standalone
 
         public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
         {
-            return "";
+            if (policy == null)
+            {
+                throw new ArgumentNullException("policy");
+            }
+
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "?sv={0:yyyy-MM-dd}&sr=c&sig=s&sp={1}",
+                DateTime.Today,
+                policy.Permissions.DeterminePermissionsString());
         }
 
         public Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(string prefix, BlobListing blobListing, BlobListingDetails blobListingDetails, int? maxResults, BlobContinuationToken currentToken)

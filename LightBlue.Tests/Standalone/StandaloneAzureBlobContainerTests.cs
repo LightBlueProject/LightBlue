@@ -140,15 +140,18 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [InlineData(SharedAccessBlobPermissions.Delete)]
-        [InlineData(SharedAccessBlobPermissions.List)]
-        [InlineData(SharedAccessBlobPermissions.Read)]
-        [InlineData(SharedAccessBlobPermissions.Write)]
-        public void WillReturnEmptyStringForSharedAccessKeySignature(SharedAccessBlobPermissions permissions)
+        [InlineData(SharedAccessBlobPermissions.Delete, "sp=d")]
+        [InlineData(SharedAccessBlobPermissions.List, "sp=l")]
+        [InlineData(SharedAccessBlobPermissions.Read, "sp=r")]
+        [InlineData(SharedAccessBlobPermissions.Write, "sp=w")]
+        [InlineData(SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.Write, "sp=rw")]
+        public void WillReturnEmptyStringForSharedAccessKeySignature(
+            SharedAccessBlobPermissions permissions, 
+            string expectedPermissions)
         {
             var container = new StandaloneAzureBlobContainer(new Uri(_containerPath));
 
-            Assert.Equal("", container.GetSharedAccessSignature(new SharedAccessBlobPolicy
+            Assert.Contains(expectedPermissions, container.GetSharedAccessSignature(new SharedAccessBlobPolicy
             {
                 Permissions = permissions
             }));

@@ -3,12 +3,13 @@ LightBlue
 
 Version 0.1.8
 --------------------
-###Bugfixes
+###BugFixes
 * Don't skip updating the host stub assembly if it already exists to prevent issues with older versions not being updated.
 
 ###Features
 * Provide static access to blob entry points to allow use without an IoC container.
 * Support use outside the LightBlue hosts or actual or emulated Azure
+* Return values from GetSharedAccessSignature that can be correctly parsed by StorageCredentials when in Standalone mode. This does not produce a usable StorageCredentials instance but this is never validated by Standalone mode.
 
 Version 0.1.7
 --------------------
@@ -47,7 +48,7 @@ Version 0.1.3
 
 Version 0.1.2
 --------------------
-###BugFix
+###BugFixes
 * Change name of GetBlockBlobReference to GetContainerReference on IAzureBlobStorageClient to correctly indicate what the method does.
 
 Version 0.1.1

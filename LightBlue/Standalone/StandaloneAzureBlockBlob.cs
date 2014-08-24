@@ -152,7 +152,12 @@ namespace LightBlue.Standalone
             {
                 throw new ArgumentNullException("policy");
             }
-            return "";
+
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "?sv={0:yyyy-MM-dd}&sr=b&sig=s&sp={1}",
+                DateTime.Today,
+                policy.Permissions.DeterminePermissionsString());
         }
 
         public void DownloadToStream(Stream target)

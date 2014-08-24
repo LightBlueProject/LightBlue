@@ -118,6 +118,7 @@
     <Compile Include="Setup\HostingType.cs" />
     <Compile Include="Setup\LightBlueHostType.cs" />
     <Compile Include="Setup\LightBlueConfiguration.cs" />
+    <Compile Include="Standalone\SharedAccessBlobPermissionsExtensions.cs" />
     <Compile Include="Standalone\StandaloneAzureCopyState.cs" />
     <Compile Include="Standalone\StandaloneAzureLocalResource.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobContainer.cs" />
