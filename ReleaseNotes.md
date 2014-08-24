@@ -10,6 +10,7 @@ Version 0.1.8
 * Provide static access to blob entry points to allow use without an IoC container.
 * Support use outside the LightBlue hosts or actual or emulated Azure
 * Return values from GetSharedAccessSignature that can be correctly parsed by StorageCredentials when in Standalone mode. This does not produce a usable StorageCredentials instance but this is never validated by Standalone mode.
+* Create local resource directories on retrieval.
 
 Version 0.1.7
 --------------------

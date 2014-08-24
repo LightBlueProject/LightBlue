@@ -66,7 +66,12 @@ namespace LightBlue.Standalone
                         "Unknown resource '{0}'",
                         index));
                 }
-                return _localResources[index];
+
+                var localResource = _localResources[index];
+
+                Directory.CreateDirectory(localResource.RootPath);
+
+                return localResource;
             }
         }
     }

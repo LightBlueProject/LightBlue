@@ -35,12 +35,36 @@ namespace LightBlue.Tests.Standalone
             {
                 MaximumSizeInMegabytes = 512,
                 Name = "TestStorage",
-                RootPath = Path.Combine(
-                    BasePath,
-                    ".resources",
-                    "TestWebRole-" + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture),
-                    "TestStorage")
+                RootPath = DetermineResourceDirectoryPath("TestStorage")
             }.ToExpectedObject().ShouldMatch(source["TestStorage"]);
+        }
+
+        [Fact]
+        public void ResourceDirectoryCreatedOnRetreival()
+        {
+            var source = new StandaloneAzureLocalResourceSource(_standaloneConfiguration, BasePath);
+
+            var resource = source["TestStorage"];
+
+            Assert.True(Directory.Exists(resource.RootPath));
+        }
+
+        [Fact]
+        public void CanRetrieveTheResourceDirectoruRepeatedly()
+        {
+            var source = new StandaloneAzureLocalResourceSource(_standaloneConfiguration, BasePath);
+
+            var resource = source["TestStorage"];
+
+            resource.ToExpectedObject().ShouldMatch(source["TestStorage"]);
+        }
+
+        [Fact]
+        public void ResourceDirectoryDoesNotExistUntilRetreival()
+        {
+            new StandaloneAzureLocalResourceSource(_standaloneConfiguration, BasePath);
+
+            Assert.False(Directory.Exists(DetermineResourceDirectoryPath("TestStorage")));
         }
 
         [Fact]
@@ -68,6 +92,15 @@ namespace LightBlue.Tests.Standalone
             var source = new StandaloneAzureLocalResourceSource(_standaloneConfiguration, BasePath);
 
             Assert.Throws<RoleEnvironmentException>(() => source["unknown"]);
+        }
+
+        private string DetermineResourceDirectoryPath(string resourceName)
+        {
+            return Path.Combine(
+                BasePath,
+                ".resources",
+                "TestWebRole-" + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture),
+                resourceName);
         }
     }
 }
