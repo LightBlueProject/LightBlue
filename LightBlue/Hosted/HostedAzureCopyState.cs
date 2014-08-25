@@ -15,5 +15,10 @@ namespace LightBlue.Hosted
         {
             get { return _copyState.Status; }
         }
+
+        public string StatusDescription
+        {
+            get { return _copyState.StatusDescription; }
+        }
     }
 }

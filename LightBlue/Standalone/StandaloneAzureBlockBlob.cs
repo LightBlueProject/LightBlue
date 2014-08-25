@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+
+using LightBlue.Infrastructure;
 
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -270,17 +273,43 @@ namespace LightBlue.Standalone
                 throw new ArgumentException("Can only copy between blobs in the same hosting environment");
             }
 
-            File.Delete(_blobPath);
-            File.Copy(standaloneAzureBlockBlob._blobPath, _blobPath);
-            File.Delete(_metadataPath);
-            if ( File.Exists(standaloneAzureBlockBlob._metadataPath))
+            try
             {
-                File.Copy(standaloneAzureBlockBlob._metadataPath, _metadataPath);
+                RetryFileOperation(() => File.Copy(standaloneAzureBlockBlob._blobPath, _blobPath, true));
+                if ( File.Exists(standaloneAzureBlockBlob._metadataPath))
+                {
+                    RetryFileOperation(() => File.Copy(standaloneAzureBlockBlob._metadataPath, _metadataPath, true));
+                }
+
+                CopyState = new StandaloneAzureCopyState(CopyStatus.Success, null);
             }
-
-            CopyState = new StandaloneAzureCopyState(CopyStatus.Success);
-
+            catch (IOException ex)
+            {
+                CopyState = new StandaloneAzureCopyState(CopyStatus.Failed, ex.ToTraceMessage());
+            }
             return Guid.NewGuid().ToString();
+        }
+
+        private static void RetryFileOperation(Action fileOperation)
+        {
+            var retryCount = 0;
+            while (true)
+            {
+                try
+                {
+                    fileOperation();
+                    break;
+                }
+                catch (IOException)
+                {
+                    if (retryCount++ >= 4)
+                    {
+                        throw;
+                    }
+
+                    Thread.Sleep(retryCount * 100);
+                }
+            }
         }
 
         private StandaloneMetadataStore LoadMetadataStore()

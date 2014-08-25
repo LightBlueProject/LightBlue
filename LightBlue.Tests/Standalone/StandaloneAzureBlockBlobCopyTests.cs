@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Security.AccessControl;
 using System.Text;
 
 using ExpectedObjects;
+using ExpectedObjects.Comparisons;
 
 using LightBlue.Standalone;
+
+using Microsoft.WindowsAzure.Storage.Blob;
 
 using Xunit;
 
@@ -92,6 +96,28 @@ namespace LightBlue.Tests.Standalone
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
             destinationBlob.StartCopyFromBlob(sourceBlob);
+
+            Assert.Equal(CopyStatus.Success, destinationBlob.CopyState.Status);
+        }
+
+        [Fact]
+        public void CopyStateIsFailedIfBlobLocked()
+        {
+            var buffer = Encoding.UTF8.GetBytes("File content");
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
+
+            using (new FileStream(sourceBlob.Uri.LocalPath, FileMode.Append, FileAccess.Write, FileShare.None))
+            {
+                var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+                destinationBlob.StartCopyFromBlob(sourceBlob);
+
+                new
+                {
+                    Status = CopyStatus.Failed,
+                    StatusDescription = new NotNullComparison()
+                }.ToExpectedObject().ShouldMatch(destinationBlob.CopyState);
+            }
         }
     }
 }
