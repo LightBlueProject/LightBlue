@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Security.AccessControl;
 using System.Text;
 
 using ExpectedObjects;
@@ -32,6 +31,21 @@ namespace LightBlue.Tests.Standalone
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            destinationBlob.StartCopyFromBlob(sourceBlob);
+
+            Assert.Equal("File content", File.ReadAllText(destinationBlob.Uri.LocalPath));
+        }
+
+        [Fact]
+        public void CanOverwriteBlob()
+        {
+            var sourceBuffer = Encoding.UTF8.GetBytes("File content");
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            sourceBlob.UploadFromByteArrayAsync(sourceBuffer, 0, sourceBuffer.Length).Wait();
+
+            var originalContentBuffer = Encoding.UTF8.GetBytes("Original content");
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            destinationBlob.UploadFromByteArrayAsync(originalContentBuffer, 0, originalContentBuffer.Length).Wait();
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
             Assert.Equal("File content", File.ReadAllText(destinationBlob.Uri.LocalPath));
@@ -77,6 +91,23 @@ namespace LightBlue.Tests.Standalone
                     Length = (long) 12
                 }
             }.ToExpectedObject().ShouldMatch(destinationBlob);
+        }
+
+        [Fact]
+        public void WillRemoveExistingMetadataWhereSourceDoesNotHaveMetadata()
+        {
+            var buffer = Encoding.UTF8.GetBytes("File content");
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
+
+            var originalContentBuffer = Encoding.UTF8.GetBytes("Original content");
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            destinationBlob.UploadFromByteArrayAsync(originalContentBuffer, 0, originalContentBuffer.Length).Wait();
+            destinationBlob.Metadata["thing"] = "other thing";
+            destinationBlob.SetMetadata();
+            destinationBlob.StartCopyFromBlob(sourceBlob);
+
+            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", DestinationBlobName)));
         }
 
         [Fact]

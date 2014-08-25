@@ -280,6 +280,10 @@ namespace LightBlue.Standalone
                 {
                     RetryFileOperation(() => File.Copy(standaloneAzureBlockBlob._metadataPath, _metadataPath, true));
                 }
+                else
+                {
+                    RetryFileOperation(() => File.Delete(_metadataPath));
+                }
 
                 CopyState = new StandaloneAzureCopyState(CopyStatus.Success, null);
             }

@@ -11,6 +11,7 @@ Version 0.1.8
 * Support use outside the LightBlue hosts or actual or emulated Azure
 * Return values from GetSharedAccessSignature that can be correctly parsed by StorageCredentials when in Standalone mode. This does not produce a usable StorageCredentials instance but this is never validated by Standalone mode.
 * Create local resource directories on retrieval.
+* Enhance StandaloneAzureBlockBlob.StartCopyFromBlob to be more robust in the face of transient IO errors.
 
 Version 0.1.7
 --------------------
