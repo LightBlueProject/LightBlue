@@ -6,6 +6,7 @@ using LightBlue.Setup;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Storage.Auth;
 
 namespace LightBlue
 {
@@ -17,7 +18,9 @@ namespace LightBlue
         private static IAzureLocalResourceSource _azureLocalResources;
         private static Func<string, IAzureStorage> _azureStorageFactory;
         private static Func<Uri, IAzureBlobContainer> _azureBlobContainerFactory;
+        private static Func<Uri, StorageCredentials, IAzureBlobContainer> _azureBlobContainerWithCredentialsFactory;
         private static Func<Uri, IAzureBlockBlob> _azureBlockBlobFactory;
+        private static Func<Uri, StorageCredentials, IAzureBlockBlob> _azureBlockBlobWithCredentialsFactory;
         private static AzureEnvironment _azureEnvironment;
 
         public static string RoleName
@@ -56,24 +59,6 @@ namespace LightBlue
             }
         }
 
-        public static Func<Uri, IAzureBlobContainer> AzureBlobContainerFactory
-        {
-            get
-            {
-                Initialise();
-                return _azureBlobContainerFactory;
-            }
-        }
-
-        public static Func<Uri, IAzureBlockBlob> AzureBlockBlobFactory
-        {
-            get
-            {
-                Initialise();
-                return _azureBlockBlobFactory;
-            }
-        }
-
         public static AzureEnvironment AzureEnvironment
         {
             get
@@ -81,6 +66,30 @@ namespace LightBlue
                 Initialise();
                 return _azureEnvironment;
             }
+        }
+
+        public static IAzureBlobContainer AzureBlobContainerFactory(Uri containerUri)
+        {
+            Initialise();
+            return _azureBlobContainerFactory(containerUri);
+        }
+
+        public static IAzureBlobContainer AzureBlobContainerFactory(Uri containerUri, StorageCredentials storageCredentials)
+        {
+            Initialise();
+            return _azureBlobContainerWithCredentialsFactory(containerUri, storageCredentials);
+        }
+
+        public static IAzureBlockBlob AzureBlockBlobFactory(Uri blobUri)
+        {
+            Initialise();
+            return _azureBlockBlobFactory(blobUri);
+        }
+
+        public static IAzureBlockBlob AzureBlockBlobFactory(Uri blobUri, StorageCredentials storageCredentials)
+        {
+            Initialise();
+            return _azureBlockBlobWithCredentialsFactory(blobUri, storageCredentials);
         }
 
         private static void Initialise()
@@ -122,7 +131,9 @@ namespace LightBlue
 
             _azureStorageFactory = connectionString => new StandaloneAzureStorage(connectionString);
             _azureBlobContainerFactory = uri => new StandaloneAzureBlobContainer(uri);
+            _azureBlobContainerWithCredentialsFactory = (uri, credentials) => new StandaloneAzureBlobContainer(uri);
             _azureBlockBlobFactory = blobUri => new StandaloneAzureBlockBlob(blobUri);
+            _azureBlockBlobWithCredentialsFactory = (blobUri, credentials) => new StandaloneAzureBlockBlob(blobUri);
         }
 
         private static void InitialiseAsHosted(EnvironmentDefinition environmentDefinition)
@@ -140,7 +151,9 @@ namespace LightBlue
 
             _azureStorageFactory = connectionString => new HostedAzureStorage(connectionString);
             _azureBlobContainerFactory = uri => new HostedAzureBlobContainer(uri);
+            _azureBlobContainerWithCredentialsFactory = (uri, credentials) => new HostedAzureBlobContainer(uri, credentials);
             _azureBlockBlobFactory = blobUri => new HostedAzureBlockBlob(blobUri);
+            _azureBlockBlobWithCredentialsFactory = (uri, credentials) => new HostedAzureBlockBlob(uri, credentials);
         }
 
         private static void ConfigureElementsNotAvailableExternalToHost()

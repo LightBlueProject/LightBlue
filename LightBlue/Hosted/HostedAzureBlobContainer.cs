@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Hosted
@@ -17,6 +18,11 @@ namespace LightBlue.Hosted
         public HostedAzureBlobContainer(Uri containerUri)
         {
             _cloudBlobContainer = new CloudBlobContainer(containerUri);
+        }
+
+        public HostedAzureBlobContainer(Uri containerUri, StorageCredentials credentials)
+        {
+            _cloudBlobContainer = new CloudBlobContainer(containerUri, credentials);
         }
 
         public Uri Uri

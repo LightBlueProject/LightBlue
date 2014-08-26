@@ -1,6 +1,12 @@
 LightBlue
 ====================
 
+Version 0.1.10
+--------------------
+###Features
+* Add functions that allow creating blobs and containers with Uri and StorageCredentials.
+
+
 Version 0.1.9
 --------------------
 ###BugFixes

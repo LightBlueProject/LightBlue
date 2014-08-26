@@ -2,6 +2,8 @@ using System;
 
 using Autofac;
 
+using Microsoft.WindowsAzure.Storage.Auth;
+
 namespace LightBlue.Autofac
 {
     public class LightBlueCommonModule : Module
@@ -17,11 +19,17 @@ namespace LightBlue.Autofac
             builder.RegisterInstance(LightBlueContext.AzureStorageFactory)
                 .As<Func<string, IAzureStorage>>();
 
-            builder.RegisterInstance(LightBlueContext.AzureBlobContainerFactory)
+            builder.RegisterInstance((Func<Uri, IAzureBlobContainer>) LightBlueContext.AzureBlobContainerFactory)
                 .As<Func<Uri, IAzureBlobContainer>>();
 
-            builder.RegisterInstance(LightBlueContext.AzureBlockBlobFactory)
+            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlobContainer>) LightBlueContext.AzureBlobContainerFactory)
+                .As<Func<Uri, StorageCredentials, IAzureBlobContainer>>();
+
+            builder.RegisterInstance((Func<Uri, IAzureBlockBlob>) LightBlueContext.AzureBlockBlobFactory)
                 .As<Func<Uri, IAzureBlockBlob>>();
+
+            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlockBlob>) LightBlueContext.AzureBlockBlobFactory)
+                .As<Func<Uri, StorageCredentials, IAzureBlockBlob>>();
         }
     }
 }
