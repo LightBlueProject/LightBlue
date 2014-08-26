@@ -1,6 +1,11 @@
 LightBlue
 ====================
 
+Version 0.1.9
+--------------------
+###BugFixes
+* Correct errors when constructing blobs and containers from Uris that include a security token.
+
 Version 0.1.8
 --------------------
 ###BugFixes

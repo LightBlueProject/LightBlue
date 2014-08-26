@@ -58,6 +58,24 @@ namespace LightBlue.Tests.Standalone
             }.ToExpectedObject().ShouldMatch(blob);
         }
 
+        [Fact]
+        public void WillHaveCorrectValuesWhenGivenUriWithToken()
+        {
+            var blob = new StandaloneAzureBlockBlob(new Uri(_blobUri.LocalPath + "?some=token"));
+
+            new
+            {
+                Uri = _blobUri,
+                Name = BlobName,
+                Properties = new
+                {
+                    Length = (long) -1,
+                    ContentType = (string) null
+                },
+                Metadata = new Dictionary<string, string>()
+            }.ToExpectedObject().ShouldMatch(blob);
+        }
+
         [Theory]
         [InlineData(0, 12, "File content")]
         [InlineData(5, 4, "cont")]

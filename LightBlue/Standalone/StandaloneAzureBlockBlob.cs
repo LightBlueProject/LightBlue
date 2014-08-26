@@ -36,8 +36,9 @@ namespace LightBlue.Standalone
         public StandaloneAzureBlockBlob(Uri blobUri)
             : this()
         {
-            _blobName = new FileInfo(blobUri.LocalPath).Name;
-            _blobPath = blobUri.LocalPath;
+            var localPath = blobUri.RemoveToken();
+            _blobName = new FileInfo(localPath).Name;
+            _blobPath = localPath;
             _metadataPath = Path.Combine(Path.GetDirectoryName(_blobPath) ?? "", ".meta", _blobName);
             _metadata = new Dictionary<string, string>();
         }

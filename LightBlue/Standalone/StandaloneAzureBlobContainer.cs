@@ -24,7 +24,7 @@ namespace LightBlue.Standalone
 
         public StandaloneAzureBlobContainer(Uri containerUri)
         {
-            _containerDirectory = containerUri.LocalPath;
+            _containerDirectory = containerUri.RemoveToken();
         }
 
         private string MetadataDirectory

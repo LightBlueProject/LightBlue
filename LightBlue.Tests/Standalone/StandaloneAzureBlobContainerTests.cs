@@ -89,6 +89,14 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Fact]
+        public void WillHaveCorrectUriWhenGivenUriWithToken()
+        {
+            var container = new StandaloneAzureBlobContainer(new Uri(_containerPath + "?some=token"));
+
+            Assert.Equal(new Uri(_containerPath), container.Uri);
+        }
+
+        [Fact]
         public void CanDetermineContainerDoesNotExist()
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
