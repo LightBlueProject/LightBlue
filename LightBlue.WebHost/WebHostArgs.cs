@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 using LightBlue.Infrastructure;
 
@@ -32,11 +34,11 @@ namespace LightBlue.WebHost
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
             string assembly = null;
-            var port = 0;
+            int? port = null;
             string roleName = null;
             string title = null;
             string configurationPath = null;
-            var useSsl = false;
+            bool? useSsl = null;
             var hostname = "localhost";
             var displayHelp = false;
 
@@ -49,7 +51,7 @@ namespace LightBlue.WebHost
                 },
                 {
                     "p|port=",
-                    "The {PORT} on which the website should be available.",
+                    "The {PORT} on which the website should be available. Must be specified if useSsl is specified.",
                     (int v) => port = v
                 },
                 {
@@ -69,7 +71,7 @@ namespace LightBlue.WebHost
                 },
                 {
                     "s|useSsl=",
-                    "Indicates whether the site should be started with SSL. Defaults to false.",
+                    "Indicates whether the site should be started with SSL. Defaults to false. Must be specified in port is specified.",
                     (bool v) => useSsl = v
                 },
                 {
@@ -105,11 +107,6 @@ namespace LightBlue.WebHost
                 DisplayErrorMessage("Host requires an assembly to run.");
                 return null;
             }
-            if (port == 0)
-            {
-                DisplayErrorMessage("Host requires a port to run the site on");
-                return null;
-            }
             if (string.IsNullOrWhiteSpace(roleName))
             {
                 DisplayErrorMessage("Role Name must be specified.");
@@ -136,19 +133,91 @@ namespace LightBlue.WebHost
                 return null;
             }
 
+            if (port.HasValue != useSsl.HasValue)
+            {
+                DisplayErrorMessage("If either port or useSsl is specified both must be specified.");
+                return null;
+            }
+
+            var serviceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath);
+
+            if (!port.HasValue)
+            {
+                var endpoint = GetEndpoint(serviceDefinitionPath, roleName);
+                if (endpoint == null)
+                {
+                    DisplayErrorMessage("Cannot locate endpoint in ServiceDefinition.csdef. Verify that an endpoint is defined.");
+                    return null;
+                }
+
+                port = endpoint.Item1;
+                useSsl = endpoint.Item2;
+            }
+
             return new WebHostArgs
             {
                 Assembly = assembly,
-                Port = port,
+                Port = port.Value,
                 RoleName = roleName,
                 Title = string.IsNullOrWhiteSpace(title)
                     ? roleName
                     : title,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
-                ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
-                UseSsl = useSsl,
+                ServiceDefinitionPath = serviceDefinitionPath,
+                UseSsl = useSsl.Value,
                 Hostname = hostname
             };
+        }
+
+        private static Tuple<int, bool> GetEndpoint(string serviceDefinitionPath, string roleName)
+        {
+            var xDocument = XDocument.Load(serviceDefinitionPath);
+
+            XNamespace serviceDefinitionNamespace = xDocument.Root
+                .Attributes()
+                .Where(a => a.IsNamespaceDeclaration)
+                .First(a => a.Value.Contains("ServiceDefinition"))
+                .Value;
+
+            var roleElement = xDocument.Root.Elements()
+                .FirstOrDefault(e => e.Attribute("name").Value == roleName);
+
+            if (roleElement == null)
+            {
+                return null;
+            }
+
+            var endpointsElement = roleElement.Descendants(serviceDefinitionNamespace + "Endpoints")
+                .FirstOrDefault();
+
+            if (endpointsElement == null)
+            {
+                return null;
+            }
+
+            var endpointElement = endpointsElement.Descendants(serviceDefinitionNamespace + "InputEndpoint")
+                .FirstOrDefault();
+
+            if (endpointElement == null)
+            {
+                return null;
+            }
+
+            var portAttribute = endpointElement.Attribute("port");
+            var protocolAttribute = endpointElement.Attribute("protocol");
+            if (portAttribute == null || protocolAttribute == null)
+            {
+                return null;
+            }
+
+            int port;
+
+            if (!Int32.TryParse(portAttribute.Value, out port) || string.IsNullOrWhiteSpace(protocolAttribute.Value))
+            {
+                return null;
+            }
+
+            return Tuple.Create(port, protocolAttribute.Value.ToLowerInvariant() == "https");
         }
 
         private static void DisplayErrorMessage(string message)
