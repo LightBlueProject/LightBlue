@@ -6,8 +6,8 @@
 	<title>LightBlue.Hosts</title>
     <authors>Colin David Scott</authors>
     <owners>Colin David Scott</owners>
-    <licenseUrl>https://github.com/ColinScott/LightBlue/blob/master/LICENCE</licenseUrl>
-    <projectUrl>https://github.com/ColinScott/LightBlue</projectUrl>
+    <licenseUrl>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</licenseUrl>
+    <projectUrl>https://github.com/LightBlueProject/LightBlue</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Host executables for the LightBlue lightweight Azure development platform</description>
     <copyright>Copyright 2014</copyright>
