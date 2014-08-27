@@ -12,7 +12,6 @@ namespace LightBlue.Setup
 {
     public static class LightBlueConfiguration
     {
-        private static bool _initialised;
         private static EnvironmentDefinition _environmentDefinition;
         private static readonly Func<string, RoleEnvironmentException> _roleEnvironmentExceptionCreator
             = RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator();
@@ -22,15 +21,27 @@ namespace LightBlue.Setup
             get { return _roleEnvironmentExceptionCreator; }
         }
 
+        public static bool IsInitialised
+        {
+            get { return _environmentDefinition != null; }
+        }
+
         public static void SetAsExternal(AzureEnvironment azureEnvironment)
         {
-            if (_initialised)
+            if (IsInitialised)
             {
+                if (_environmentDefinition.AzureEnvironment == azureEnvironment)
+                {
+                    return;
+                }
+
                 throw new InvalidOperationException(
-                    "LightBlue has already been initialised and cannot be reconfigured");
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "LightBlue has already been initialised for '{0}'. You cannot change the environment it is configured for.",
+                        _environmentDefinition.AzureEnvironment));
             }
 
-            _initialised = true;
             _environmentDefinition = new EnvironmentDefinition(
                 azureEnvironment,
                 HostingType.External,
@@ -43,13 +54,12 @@ namespace LightBlue.Setup
             string roleName,
             LightBlueHostType lightBlueHostType)
         {
-            if (_initialised)
+            if (IsInitialised)
             {
                 throw new InvalidOperationException(
                     "LightBlue has already been initialised and cannot be reconfigured");
             }
 
-            _initialised = true;
             _environmentDefinition = new EnvironmentDefinition(
                 AzureEnvironment.LightBlue,
                 HostingType.Role,
@@ -77,7 +87,7 @@ namespace LightBlue.Setup
 
         internal static EnvironmentDefinition DetermineEnvironmentDefinition()
         {
-            if (!_initialised)
+            if (!IsInitialised)
             {
                 LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition();
             }
@@ -97,8 +107,6 @@ namespace LightBlue.Setup
 
                 return;
             }
-
-            _initialised = true;
 
             try
             {

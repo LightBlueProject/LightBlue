@@ -1,11 +1,16 @@
 LightBlue
 ====================
 
+Version 0.1.11
+--------------------
+###Features
+* Don't throw on repeated calls to LightBlueConfiguration.SetAsExternal if the environment does not change.
+* Add LightBlueConfiguration.IsInitialised property
+
 Version 0.1.10
 --------------------
 ###Features
 * Add functions that allow creating blobs and containers with Uri and StorageCredentials.
-
 
 Version 0.1.9
 --------------------
