@@ -9,6 +9,7 @@ Version 0.1.11
 ###Features
 * Don't throw on repeated calls to LightBlueConfiguration.SetAsExternal if the environment does not change.
 * If port and useSsl are not specified use the values from the first endpoint in the ServiceDefintion.csdef file
+* Start hosted role processes in a new thread so that AppDomain.UnhandledException can be used by roles.
 * Add LightBlueConfiguration.IsInitialised property
 
 Version 0.1.10
