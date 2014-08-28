@@ -99,6 +99,7 @@
     <Compile Include="Standalone\StandaloneAzureLocalResourceSourceTests.cs" />
     <Compile Include="Standalone\StandaloneAzureSettingsTests.cs" />
     <Compile Include="Standalone\StandaloneAzureTestsBase.cs" />
+    <Compile Include="Standalone\WaitExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\TestCloudService\ServiceConfiguration.Local.cscfg">

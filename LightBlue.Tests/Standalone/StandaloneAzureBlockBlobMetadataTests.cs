@@ -142,5 +142,25 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
+
+        [Fact]
+        public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted()
+        {
+            var metadataPath = Path.Combine(BasePath, ".meta", BlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Metadata["thing"] = "something";
+            sourceBlob.SetMetadata();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            loadedBlob.FetchAttributes();
+            loadedBlob.Metadata["other thing"] = "whatever";
+            
+            using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                Assert.Throws<StorageException>(() => loadedBlob.SetMetadata());
+            }
+        }
     }
 }
