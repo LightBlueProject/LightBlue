@@ -7,12 +7,12 @@ using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
-    public class WaitExtensionsTests
+    public class FileLockExtensionsTests
     {
         protected readonly string FilePath;
         protected readonly string BasePath;
 
-        public WaitExtensionsTests()
+        public FileLockExtensionsTests()
         {
             BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             FilePath = Path.Combine(BasePath, String.Format("{0}.txt", Guid.NewGuid()));
@@ -31,7 +31,7 @@ namespace LightBlue.Tests.Standalone
             // act
             using (File.CreateText(path))
             {
-                WaitExtensions.WaitAndRetryOnFileLock(() =>
+                FileLockExtensions.WaitAndRetryOnFileLock(() =>
                 {
                     callCount++;
                     File.OpenText(path);
@@ -54,7 +54,7 @@ namespace LightBlue.Tests.Standalone
             // act
             using (File.CreateText(path))
             {
-                WaitExtensions.WaitAndRetryOnFileLock(() =>
+                FileLockExtensions.WaitAndRetryOnFileLock(() =>
                 {
                     lapTimes.Add(DateTime.Now);
                     File.OpenText(path);
@@ -80,7 +80,7 @@ namespace LightBlue.Tests.Standalone
             // act
             using (File.CreateText(path))
             {
-                WaitExtensions.WaitAndRetryOnFileLock(() => File.OpenText(path), 
+                FileLockExtensions.WaitAndRetryOnFileLock(() => File.OpenText(path), 
                     maximumRetryAttempts:0,  
                     whenSharingViolationOccurs: (retryAttemptsRemaining) => whenSharingViolationOccursCalled = true 
                 );

@@ -135,7 +135,7 @@
     <Compile Include="Standalone\StandaloneEnvironment.cs" />
     <Compile Include="Standalone\StandaloneMetadataStore.cs" />
     <Compile Include="Standalone\UriExtensions.cs" />
-    <Compile Include="Standalone\WaitExtensions.cs" />
+    <Compile Include="Standalone\FileLockExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

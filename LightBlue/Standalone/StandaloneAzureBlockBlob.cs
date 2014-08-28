@@ -17,7 +17,7 @@ namespace LightBlue.Standalone
     public class StandaloneAzureBlockBlob : IAzureBlockBlob
     {
         private const int BufferSize = 4096;
-        private readonly TimeSpan _retryWaitTime = TimeSpan.FromSeconds(5);
+        private readonly TimeSpan WaitTimeBetweenRetries = TimeSpan.FromSeconds(5);
         private const int MaxFileLockRetryAttempts = 5;
 
         private readonly string _blobName;
@@ -127,7 +127,7 @@ namespace LightBlue.Standalone
                 };
             }
             
-            WaitExtensions.WaitAndRetryOnFileLock(()=> SetMetadata(metadataStore), _retryWaitTime, MaxFileLockRetryAttempts, WhenSetMetadataFileHasSharingViolation);
+            FileLockExtensions.WaitAndRetryOnFileLock(()=> SetMetadata(metadataStore), WaitTimeBetweenRetries, MaxFileLockRetryAttempts, WhenSetMetadataFileHasSharingViolation);
         }
 
         private void WhenSetMetadataFileHasSharingViolation(int retriesRemaining)
