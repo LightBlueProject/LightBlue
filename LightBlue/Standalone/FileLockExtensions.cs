@@ -8,6 +8,11 @@ namespace LightBlue.Standalone
     public static class FileLockExtensions
     {
         /// <summary>
+        /// 0x80070020 ERROR_SHARING_VIOLATION
+        /// </summary>
+        const int SharingViolationErrorHResult = -2147024864;
+
+        /// <summary>
         /// Executes an action and attempts retries up to a specified maximum if a sharing violation is detected.
         /// </summary>
         /// <param name="ioAction">The action that could potentially throw an IOException</param>
@@ -33,7 +38,7 @@ namespace LightBlue.Standalone
                 catch (IOException ex)
                 {
                     var hResult = Marshal.GetHRForException(ex);
-                    if (hResult != -2147024864) // 0x80070020 ERROR_SHARING_VIOLATION
+                    if (hResult != SharingViolationErrorHResult)
                     {
                         throw;
                     }

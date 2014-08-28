@@ -151,7 +151,8 @@ namespace LightBlue.Standalone
                 {
                     currentMetadataStore.Metadata[key] = _metadata[key];
                 }
-
+                
+                fileStream.SetLength(0);
                 WriteMetadataStore(currentMetadataStore, fileStream);
             }
         }

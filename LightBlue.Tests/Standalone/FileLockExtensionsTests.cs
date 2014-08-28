@@ -7,14 +7,12 @@ using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
-    public class FileLockExtensionsTests
+    public class FileLockExtensionsTests : StandaloneAzureTestsBase
     {
         protected readonly string FilePath;
-        protected readonly string BasePath;
-
-        public FileLockExtensionsTests()
+        
+        public FileLockExtensionsTests():base(DirectoryType.Container)
         {
-            BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             FilePath = Path.Combine(BasePath, String.Format("{0}.txt", Guid.NewGuid()));
             Directory.CreateDirectory(BasePath);
         }

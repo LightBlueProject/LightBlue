@@ -81,6 +81,31 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
+        
+        [Fact]
+        public void CanAppendToExistingPersistedMetadata()
+        {
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Metadata["thing"] = "something";
+            sourceBlob.SetMetadata();
+
+            sourceBlob.FetchAttributes();
+            sourceBlob.Metadata["other thing"] = "whatever";
+            sourceBlob.SetMetadata();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            loadedBlob.FetchAttributes();
+            new
+            {
+                Metadata = new Dictionary<string, string>
+                {
+                    { "thing", "something"},
+                    {"other thing", "whatever"}
+                }
+            }.ToExpectedObject().ShouldMatch(loadedBlob);
+        }
 
         [Fact]
         public void CanPersistMetadataASync()
@@ -102,7 +127,7 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
-
+        
         [Fact]
         public void MetadataNotPersistedUntilSet()
         {
@@ -142,7 +167,7 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
-
+        
         [Fact]
         public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted()
         {
