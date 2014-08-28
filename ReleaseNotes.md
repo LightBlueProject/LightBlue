@@ -3,6 +3,9 @@ LightBlue
 
 Version 0.1.11
 --------------------
+###BugFixes
+* LightBlue package no longer requires Autofac
+
 ###Features
 * Don't throw on repeated calls to LightBlueConfiguration.SetAsExternal if the environment does not change.
 * If port and useSsl are not specified use the values from the first endpoint in the ServiceDefintion.csdef file
