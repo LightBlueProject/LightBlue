@@ -81,6 +81,31 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
+        
+        [Fact]
+        public void CanAppendToExistingPersistedMetadata()
+        {
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Metadata["thing"] = "something";
+            sourceBlob.SetMetadata();
+
+            sourceBlob.FetchAttributes();
+            sourceBlob.Metadata["other thing"] = "whatever";
+            sourceBlob.SetMetadata();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            loadedBlob.FetchAttributes();
+            new
+            {
+                Metadata = new Dictionary<string, string>
+                {
+                    { "thing", "something"},
+                    {"other thing", "whatever"}
+                }
+            }.ToExpectedObject().ShouldMatch(loadedBlob);
+        }
 
         [Fact]
         public void CanPersistMetadataASync()
@@ -102,7 +127,7 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
-
+        
         [Fact]
         public void MetadataNotPersistedUntilSet()
         {
@@ -141,6 +166,26 @@ namespace LightBlue.Tests.Standalone
                     { "thing", "something"}
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
+        }
+        
+        [Fact]
+        public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted()
+        {
+            var metadataPath = Path.Combine(BasePath, ".meta", BlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Metadata["thing"] = "something";
+            sourceBlob.SetMetadata();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            loadedBlob.FetchAttributes();
+            loadedBlob.Metadata["other thing"] = "whatever";
+            
+            using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                Assert.Throws<StorageException>(() => loadedBlob.SetMetadata());
+            }
         }
     }
 }
