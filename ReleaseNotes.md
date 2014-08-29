@@ -1,6 +1,12 @@
 LightBlue
 ====================
 
+Version 0.1.12
+--------------------
+###Features
+* Lock metadata file for the duration of an update so that concurrent access doesn't overwrite values unexpectedly.
+* Add overload of IAzureBlockBlob.UploadFromByteArrayAsync that uploads the entire buffer.
+
 Version 0.1.11
 --------------------
 ###BugFixes
