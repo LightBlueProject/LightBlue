@@ -76,10 +76,19 @@ namespace LightBlue.Tests.Standalone
             }.ToExpectedObject().ShouldMatch(blob);
         }
 
+        [Fact]
+        public void CanUploadContentFromFullByteArray()
+        {
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            blob.UploadFromByteArrayAsync(Encoding.UTF8.GetBytes("File content")).Wait();
+
+            Assert.Equal("File content", File.ReadAllText(blob.Uri.LocalPath));
+        }
+
         [Theory]
         [InlineData(0, 12, "File content")]
         [InlineData(5, 4, "cont")]
-        public void CanUploadContentFromByteArray(int index, int count, string expectedContent)
+        public void CanUploadContentFromByteArrayWithRangeSpecifier(int index, int count, string expectedContent)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
 

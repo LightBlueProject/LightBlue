@@ -131,6 +131,11 @@ namespace LightBlue.Hosted
             return _cloudBlockBlob.UploadFromFileAsync(path, FileMode.Open);
         }
 
+        public Task UploadFromByteArrayAsync(byte[] buffer)
+        {
+            return _cloudBlockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length);
+        }
+
         public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
         {
             return _cloudBlockBlob.UploadFromByteArrayAsync(buffer, index, count);

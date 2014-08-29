@@ -17,14 +17,14 @@ namespace LightBlue.Standalone
     public class StandaloneAzureBlockBlob : IAzureBlockBlob
     {
         private const int BufferSize = 4096;
-        private readonly TimeSpan WaitTimeBetweenRetries = TimeSpan.FromSeconds(5);
         private const int MaxFileLockRetryAttempts = 5;
 
         private readonly string _blobName;
         private readonly string _blobPath;
         private readonly string _metadataPath;
         private readonly StandaloneAzureBlobProperties _properties;
-        private Dictionary<string, string> _metadata; 
+        private Dictionary<string, string> _metadata;
+        private readonly TimeSpan _waitTimeBetweenRetries = TimeSpan.FromSeconds(5);
 
         public StandaloneAzureBlockBlob(string containerDirectory, string blobName)
             : this()
@@ -127,7 +127,7 @@ namespace LightBlue.Standalone
                 };
             }
             
-            FileLockExtensions.WaitAndRetryOnFileLock(()=> SetMetadata(metadataStore), WaitTimeBetweenRetries, MaxFileLockRetryAttempts, WhenSetMetadataFileHasSharingViolation);
+            FileLockExtensions.WaitAndRetryOnFileLock(()=> SetMetadata(metadataStore), _waitTimeBetweenRetries, MaxFileLockRetryAttempts, WhenSetMetadataFileHasSharingViolation);
         }
 
         private void WhenSetMetadataFileHasSharingViolation(int retriesRemaining)
@@ -285,6 +285,11 @@ namespace LightBlue.Standalone
             File.Copy(path, _blobPath, true);
 
             return Task.FromResult(new object());
+        }
+
+        public Task UploadFromByteArrayAsync(byte[] buffer)
+        {
+            return UploadFromByteArrayAsync(buffer, 0, buffer.Length);
         }
 
         public async Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
