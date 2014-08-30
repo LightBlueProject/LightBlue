@@ -5,7 +5,7 @@ $coreNuspecPath = join-path $parentDirectory "LightBlue.nuspec"
 $autofacNuspecPath = join-path $parentDirectory "LightBlue.Autofac.nuspec"
 $hostsNuspecPath = join-path $parentDirectory "LightBlue.Hosts.nuspec"
 
-$thirdPartyLicencePath = join-path $parentDirectory "THIRDPARTY"
+$noticePath = join-path $parentDirectory "NOTICE"
 
 $lightBlueDllPath = join-path $parentDirectory "LightBlue\bin\Release\LightBlue.dll"
 $lightBlueAutofacDllPath = join-path $parentDirectory "LightBlue.Autofac\bin\Release\LightBlue.Autofac.dll"
@@ -47,7 +47,7 @@ Copy-Item $workerHostExePath $toolsPath
 Copy-Item $workerHostStubDllPath $toolsPath
 Copy-Item $ndeskDllPath $toolsPath
 Copy-Item $webHostExePath $toolsPath
-Copy-Item $thirdPartyLicencePath $toolsPath
+Copy-Item $noticePath $toolsPath
 
 Push-Location -Path $corePackagePath
 

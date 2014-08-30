@@ -1,6 +1,11 @@
-LightBlue may ship with the following third party libraries:
+LightBlue
+=========
 
-NDesk.Options
+Copyright 2014 Colin David Scott (@AbstractCode) and contributors
+
+LightBlue contains the following third party libraries:
+
+* NDesk.Options
 
 The MIT License (MIT)
 
