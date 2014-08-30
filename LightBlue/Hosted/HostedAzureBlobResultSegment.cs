@@ -25,6 +25,13 @@ namespace LightBlue.Hosted
                 {
                     return (IAzureListBlobItem) new HostedAzureBlockBlob(cloudBlockBlob);
                 }
+
+                var cloudPageBlob = s as CloudPageBlob;
+                if (cloudPageBlob != null)
+                {
+                    return (IAzureListBlobItem) new HostedAzurePageBlob(cloudPageBlob);
+                }
+
                 var cloudBlobDirectory = s as CloudBlobDirectory;
                 if (cloudBlobDirectory != null)
                 {

@@ -89,6 +89,7 @@
     <Compile Include="Hosted\HostedAzureCopyState.cs" />
     <Compile Include="Hosted\HostedAzureLocalResource.cs" />
     <Compile Include="Hosted\HostedAzureLocalResourceSource.cs" />
+    <Compile Include="Hosted\HostedAzurePageBlob.cs" />
     <Compile Include="Hosted\HostedAzureRoleInformation.cs" />
     <Compile Include="Hosted\HostedAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureStorage.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="IAzureListBlobItem.cs" />
     <Compile Include="IAzureLocalResource.cs" />
     <Compile Include="IAzureLocalResourceSource.cs" />
+    <Compile Include="IAzurePageBlob.cs" />
     <Compile Include="IAzureRoleInformation.cs" />
     <Compile Include="IAzureSettings.cs" />
     <Compile Include="IAzureStorage.cs" />
