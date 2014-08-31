@@ -95,7 +95,10 @@ namespace LightBlue.Standalone
                 .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
                 .Skip(numberToSkip)
                 .Take(maxResults.HasValue ? maxResults.Value : Int32.MaxValue)
-                .Select(f => new StandaloneAzureBlockBlob(new Uri(f.FullName)))
+                .Select(f =>
+                    new StandaloneAzureBlockBlob(
+                        _containerDirectory,
+                        f.FullName.Substring(_containerDirectory.Length + 1)))
                 .ToList();
 
             var resultSegment = new StandaloneAzureBlobResultSegment(
@@ -114,7 +117,10 @@ namespace LightBlue.Standalone
                 .Select(f => (IAzureListBlobItem) new StandaloneAzureBlobDirectory(f.FullName));
             var files = new DirectoryInfo(_containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
                 .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
-                .Select(f => (IAzureListBlobItem) new StandaloneAzureBlockBlob(new Uri(f.FullName)));
+                .Select(f =>
+                    (IAzureListBlobItem)new StandaloneAzureBlockBlob(
+                        _containerDirectory,
+                        f.FullName.Substring(_containerDirectory.Length + 1)));
 
             var combined = directories.Concat(files)
                 .Skip(numberToSkip)

@@ -23,12 +23,14 @@ namespace LightBlue.Standalone
                 throw new ArgumentException("Only file Uris can be separated", "blobUri");
             }
 
-            if (!blobUri.LocalPath.StartsWith(_lightBlueDataDirectory))
+            var localPath = blobUri.RemoveToken();
+
+            if (!localPath.StartsWith(_lightBlueDataDirectory))
             {
-                throw new ArgumentException("Blob Uris must be located in the LightBlue data directory", "blobUri");
+                throw new ArgumentException("Blob must be located in the LightBlue data directory", "blobUri");
             }
 
-            var subsection = blobUri.LocalPath.Substring(_lightBlueDataDirectory.Length);
+            var subsection = localPath.Substring(_lightBlueDataDirectory.Length);
 
             var index = IndexOfNth(subsection, Path.DirectorySeparatorChar, 3);
 

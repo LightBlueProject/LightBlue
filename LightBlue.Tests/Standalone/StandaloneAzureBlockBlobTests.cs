@@ -41,42 +41,6 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Fact]
-        public void WillHaveCorrectValuesWhenGivenUri()
-        {
-            var blob = new StandaloneAzureBlockBlob(_blobUri);
-
-            new
-            {
-                Uri = _blobUri,
-                Name = BlobName,
-                Properties = new
-                {
-                    Length = (long) -1,
-                    ContentType = (string) null
-                },
-                Metadata = new Dictionary<string, string>()
-            }.ToExpectedObject().ShouldMatch(blob);
-        }
-
-        [Fact]
-        public void WillHaveCorrectValuesWhenGivenUriWithToken()
-        {
-            var blob = new StandaloneAzureBlockBlob(new Uri(_blobUri.LocalPath + "?some=token"));
-
-            new
-            {
-                Uri = _blobUri,
-                Name = BlobName,
-                Properties = new
-                {
-                    Length = (long) -1,
-                    ContentType = (string) null
-                },
-                Metadata = new Dictionary<string, string>()
-            }.ToExpectedObject().ShouldMatch(blob);
-        }
-
-        [Fact]
         public void CanUploadContentFromFullByteArray()
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);

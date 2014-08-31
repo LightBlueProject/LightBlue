@@ -9,9 +9,13 @@ namespace LightBlue
     {
         public static IAzureBlockBlob Build(Uri blobUri)
         {
-            return blobUri.Scheme == "file"
-                ? (IAzureBlockBlob)new StandaloneAzureBlockBlob(blobUri)
-                : new HostedAzureBlockBlob(blobUri);
+            if (blobUri.Scheme != "file")
+            {
+                return new HostedAzureBlockBlob(blobUri);
+            }
+
+            var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+            return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
         }
     }
 }

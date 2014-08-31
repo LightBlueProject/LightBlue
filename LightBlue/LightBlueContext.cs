@@ -132,8 +132,16 @@ namespace LightBlue
             _azureStorageFactory = connectionString => new StandaloneAzureStorage(connectionString);
             _azureBlobContainerFactory = uri => new StandaloneAzureBlobContainer(uri);
             _azureBlobContainerWithCredentialsFactory = (uri, credentials) => new StandaloneAzureBlobContainer(uri);
-            _azureBlockBlobFactory = blobUri => new StandaloneAzureBlockBlob(blobUri);
-            _azureBlockBlobWithCredentialsFactory = (blobUri, credentials) => new StandaloneAzureBlockBlob(blobUri);
+            _azureBlockBlobFactory = blobUri =>
+            {
+                var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+                return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
+            };
+            _azureBlockBlobWithCredentialsFactory = (blobUri, credentials) =>
+            {
+                var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+                return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
+            };
         }
 
         private static void InitialiseAsHosted(EnvironmentDefinition environmentDefinition)

@@ -26,7 +26,7 @@ namespace LightBlue.Tests.Standalone
         [Theory]
         [InlineData("randomblob")]
         [InlineData(@"various\path\elements\to\blob")]
-        public void CanSplitBlob(string blobPath)
+        public void CanSplitBlobUri(string blobPath)
         {
             var blobUri = new Uri(Path.Combine(_containerPath, blobPath));
 
@@ -37,6 +37,21 @@ namespace LightBlue.Tests.Standalone
                 ContainerPath = _containerPath,
                 BlobPath = blobPath
             }.ToExpectedObject().ShouldMatch(locationParts);
+        }
+
+        [Fact]
+        public void WillStripAccessToken()
+        {
+            var blobUri = new Uri(Path.Combine(_containerPath, "randomblob") + "?some=token");
+
+            var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+
+            new
+            {
+                ContainerPath = _containerPath,
+                BlobPath = "randomblob"
+            }.ToExpectedObject().ShouldMatch(locationParts);
+            
         }
 
         [Fact]

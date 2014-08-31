@@ -8,6 +8,11 @@ Version 0.1.12
 * Add overload of IAzureBlockBlob.UploadFromByteArrayAsync that uploads the entire buffer.
 * Add minimal page blob abstraction so that lists don't blow up when the container includes a page blob.
 
+###Implementation
+* Removed the StandaloneAzureBlockBlob(Uri) constructor.
+* Added StandaloneEnvironment.SeparateBlobUri helper
+* Added trailing separator character to StandaloneEnvironment.LightBlueDataDirectory
+
 Version 0.1.11
 --------------------
 ###BugFixes

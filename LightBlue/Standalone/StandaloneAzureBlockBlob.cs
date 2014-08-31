@@ -27,26 +27,11 @@ namespace LightBlue.Standalone
         private readonly TimeSpan _waitTimeBetweenRetries = TimeSpan.FromSeconds(5);
 
         public StandaloneAzureBlockBlob(string containerDirectory, string blobName)
-            : this()
         {
             _blobName = blobName;
             _blobPath = Path.Combine(containerDirectory, blobName);
             _metadataPath = Path.Combine(containerDirectory, ".meta", blobName);
             _metadata = new Dictionary<string, string>();
-        }
-
-        public StandaloneAzureBlockBlob(Uri blobUri)
-            : this()
-        {
-            var localPath = blobUri.RemoveToken();
-            _blobName = new FileInfo(localPath).Name;
-            _blobPath = localPath;
-            _metadataPath = Path.Combine(Path.GetDirectoryName(_blobPath) ?? "", ".meta", _blobName);
-            _metadata = new Dictionary<string, string>();
-        }
-
-        private StandaloneAzureBlockBlob()
-        {
             _properties = new StandaloneAzureBlobProperties {Length = -1, ContentType = null};
         }
 
