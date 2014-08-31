@@ -1,0 +1,58 @@
+﻿using System;
+using System.IO;
+
+using ExpectedObjects;
+
+using LightBlue.Standalone;
+
+using Xunit;
+using Xunit.Extensions;
+
+namespace LightBlue.Tests.Standalone
+{
+    public class StandaloneEnvironmentFixture
+    {
+        private readonly string _containerPath;
+
+        public StandaloneEnvironmentFixture()
+        {
+            _containerPath = Path.Combine(
+                StandaloneEnvironment.LightBlueDataDirectory,
+                "dev",
+                "blob",
+                "testcontainer");
+        }
+
+        [Theory]
+        [InlineData("randomblob")]
+        [InlineData(@"various\path\elements\to\blob")]
+        public void CanSplitBlob(string blobPath)
+        {
+            var blobUri = new Uri(Path.Combine(_containerPath, blobPath));
+
+            var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+
+            new
+            {
+                ContainerPath = _containerPath,
+                BlobPath = blobPath
+            }.ToExpectedObject().ShouldMatch(locationParts);
+        }
+
+        [Fact]
+        public void ThrowsIfBlobUriIsNotAFileUri()
+        {
+            var blobUri = new Uri("http://www.abstractcode.com/");
+
+            Assert.Throws<ArgumentException>(() => StandaloneEnvironment.SeparateBlobUri(blobUri));
+        }
+
+        [Fact]
+        public void ThrowsIfBlobUriIsNotInLightBlueDataDirectoru()
+        {
+            var blobUri = new Uri("file:///c:/temp/");
+
+            Assert.Throws<ArgumentException>(() => StandaloneEnvironment.SeparateBlobUri(blobUri));
+        }
+    }
+}

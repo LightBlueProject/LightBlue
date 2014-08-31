@@ -100,6 +100,7 @@
     <Compile Include="Standalone\StandaloneAzureSettingsTests.cs" />
     <Compile Include="Standalone\StandaloneAzureTestsBase.cs" />
     <Compile Include="Standalone\FileLockExtensionsTests.cs" />
+    <Compile Include="Standalone\StandaloneEnvironmentFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\TestCloudService\ServiceConfiguration.Local.cscfg">
