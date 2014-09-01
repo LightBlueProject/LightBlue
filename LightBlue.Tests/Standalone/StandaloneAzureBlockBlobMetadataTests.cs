@@ -169,6 +169,7 @@ namespace LightBlue.Tests.Standalone
         }
         
         [Fact]
+        [Trait("Category", "Slow")]
         public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted()
         {
             var metadataPath = Path.Combine(BasePath, ".meta", BlobName);
