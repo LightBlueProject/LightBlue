@@ -10,8 +10,6 @@ using LightBlue.Infrastructure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-using Newtonsoft.Json;
-
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureBlockBlob : IAzureBlockBlob
@@ -32,7 +30,7 @@ namespace LightBlue.Standalone
             _blobPath = Path.Combine(containerDirectory, blobName);
             _metadataPath = Path.Combine(containerDirectory, ".meta", blobName);
             _metadata = new Dictionary<string, string>();
-            _properties = new StandaloneAzureBlobProperties {Length = -1, ContentType = null};
+            _properties = new StandaloneAzureBlobProperties { Length = -1, ContentType = null };
         }
 
         public Uri Uri
@@ -86,7 +84,7 @@ namespace LightBlue.Standalone
             {
                 throw new StorageException("The specified blob does not exist");
             }
-            
+
             var metadataStore = LoadMetadataStore();
             _properties.ContentType = metadataStore.ContentType;
             _properties.Length = fileInfo.Length;
@@ -111,14 +109,10 @@ namespace LightBlue.Standalone
 
             if (!File.Exists(_metadataPath))
             {
-                metadataStore = new StandaloneMetadataStore
-                {
-                    ContentType = File.Exists(_blobPath) ? "application/octet-stream" : null,
-                    Metadata = new Dictionary<string, string>()
-                };
+                metadataStore = CreateStandaloneMetadataStore();
             }
-            
-            FileLockExtensions.WaitAndRetryOnFileLock(()=> SetMetadata(metadataStore), _waitTimeBetweenRetries, MaxFileLockRetryAttempts, WhenSetMetadataFileHasSharingViolation);
+
+            FileLockExtensions.WaitAndRetryOnFileLock(() => SetMetadata(metadataStore), _waitTimeBetweenRetries, MaxFileLockRetryAttempts, WhenSetMetadataFileHasSharingViolation);
         }
 
         private void WhenSetMetadataFileHasSharingViolation(int retriesRemaining)
@@ -135,16 +129,16 @@ namespace LightBlue.Standalone
             {
                 if (currentMetadataStore == null)
                 {
-                    currentMetadataStore = ReadMetadataStore(fileStream);
+                    currentMetadataStore = StandaloneMetadataStore.ReadFromStream(fileStream);
                 }
 
                 foreach (var key in _metadata.Keys)
                 {
                     currentMetadataStore.Metadata[key] = _metadata[key];
                 }
-                
+
                 fileStream.SetLength(0);
-                WriteMetadataStore(currentMetadataStore, fileStream);
+                currentMetadataStore.WriteToStreamAndClose(fileStream);
             }
         }
 
@@ -306,7 +300,7 @@ namespace LightBlue.Standalone
             try
             {
                 RetryFileOperation(() => File.Copy(standaloneAzureBlockBlob._blobPath, _blobPath, true));
-                if ( File.Exists(standaloneAzureBlockBlob._metadataPath))
+                if (File.Exists(standaloneAzureBlockBlob._metadataPath))
                 {
                     RetryFileOperation(() => File.Copy(standaloneAzureBlockBlob._metadataPath, _metadataPath, true));
                 }
@@ -350,40 +344,30 @@ namespace LightBlue.Standalone
         {
             if (!File.Exists(_metadataPath))
             {
-                return new StandaloneMetadataStore
-                {
-                    ContentType = File.Exists(_blobPath) ? "application/octet-stream" : null,
-                    Metadata = new Dictionary<string, string>()
-                };
+                return CreateStandaloneMetadataStore();
             }
 
-            using (var file = File.OpenText(_metadataPath))
+            using (var fileStream = new FileStream(_metadataPath, FileMode.Open, FileAccess.Read,
+                    FileShare.None, BufferSize, true))
             {
-                var serializer = new JsonSerializer();
-                return (StandaloneMetadataStore)serializer.Deserialize(file, typeof(StandaloneMetadataStore));
+                return StandaloneMetadataStore.ReadFromStream(fileStream);
             }
+        }
+
+        private StandaloneMetadataStore CreateStandaloneMetadataStore()
+        {
+            return new StandaloneMetadataStore
+            {
+                ContentType = File.Exists(_blobPath) ? "application/octet-stream" : null,
+                Metadata = new Dictionary<string, string>()
+            };
         }
 
         private void WriteMetadataStore(StandaloneMetadataStore metadataStore)
         {
-            using (var file = File.CreateText(_metadataPath))
+            using (var fileStream = new FileStream(_metadataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, BufferSize, true))
             {
-                var serializer = new JsonSerializer();
-                serializer.Serialize(file, metadataStore);
-            }
-        }
-
-        private StandaloneMetadataStore ReadMetadataStore(Stream fileStream)
-        {
-            var serializer = new JsonSerializer();
-            return (StandaloneMetadataStore)serializer.Deserialize(new StreamReader(fileStream), typeof(StandaloneMetadataStore));
-        }
-
-        private void WriteMetadataStore(StandaloneMetadataStore metadataStore, Stream fileStream)
-        {
-            using (var streamWriter = new StreamWriter(fileStream))
-            {
-                new JsonSerializer().Serialize(streamWriter, metadataStore);
+                metadataStore.WriteToStreamAndClose(fileStream);
             }
         }
     }
