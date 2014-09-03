@@ -15,13 +15,19 @@ namespace LightBlue.Infrastructure
     {
         private RoleEntryPoint _workerRole;
 
-        public void Run(string workerRoleAssembly, string configurationPath, string serviceDefinitionPath, string roleName)
+        public void Run(
+            string workerRoleAssembly,
+            string configurationPath,
+            string serviceDefinitionPath,
+            string roleName,
+            bool useHostedStorage)
         {
             LightBlueConfiguration.SetAsLightBlue(
                 configurationPath: configurationPath,
                 serviceDefinitionPath: serviceDefinitionPath,
                 roleName: roleName,
-                lightBlueHostType: LightBlueHostType.Direct);
+                lightBlueHostType: LightBlueHostType.Direct,
+                useHostedStorage: useHostedStorage);
 
             try
             {

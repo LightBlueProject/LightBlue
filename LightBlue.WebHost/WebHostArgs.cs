@@ -20,6 +20,7 @@ namespace LightBlue.WebHost
         public string ServiceDefinitionPath { get; private set; }
         public bool UseSsl { get; private set; }
         public string Hostname { get; private set; }
+        public bool UseHostedStorage { get; private set; }
 
         public string SiteDirectory
         {
@@ -40,6 +41,7 @@ namespace LightBlue.WebHost
             string configurationPath = null;
             bool? useSsl = null;
             var hostname = "localhost";
+            var useHostedStorage = false;
             var displayHelp = false;
 
             var options = new OptionSet
@@ -78,6 +80,11 @@ namespace LightBlue.WebHost
                     "h|hostname=",
                     "The {HOSTNAME} the site should be started with. Defaults to localhost",
                     v => hostname = v
+                },
+                {
+                    "useHostedStorage",
+                    "Use hosted storage (Emulator/Actual Azure) inside the LightBlue host.",
+                    v => useHostedStorage = true
                 },
                 {
                     "help",
@@ -165,7 +172,8 @@ namespace LightBlue.WebHost
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = serviceDefinitionPath,
                 UseSsl = useSsl.Value,
-                Hostname = hostname
+                Hostname = hostname,
+                UseHostedStorage = useHostedStorage
             };
         }
 

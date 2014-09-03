@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 using LightBlue.External;
 using LightBlue.Hosted;
@@ -129,19 +130,14 @@ namespace LightBlue
                 ConfigureElementsNotAvailableExternalToHost();
             }
 
-            _azureStorageFactory = connectionString => new StandaloneAzureStorage(connectionString);
-            _azureBlobContainerFactory = uri => new StandaloneAzureBlobContainer(uri);
-            _azureBlobContainerWithCredentialsFactory = (uri, credentials) => new StandaloneAzureBlobContainer(uri);
-            _azureBlockBlobFactory = blobUri =>
+            if (environmentDefinition.StandaloneConfiguration.UseHostedStorage)
             {
-                var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
-                return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
-            };
-            _azureBlockBlobWithCredentialsFactory = (blobUri, credentials) =>
+                ConfigureHostedStorage();
+            }
+            else
             {
-                var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
-                return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
-            };
+                ConfigureStandaloneStorage();
+            }
         }
 
         private static void InitialiseAsHosted(EnvironmentDefinition environmentDefinition)
@@ -157,6 +153,28 @@ namespace LightBlue
                 ConfigureElementsNotAvailableExternalToHost();
             }
 
+            ConfigureHostedStorage();
+        }
+
+        private static void ConfigureStandaloneStorage()
+        {
+            _azureStorageFactory = connectionString => new StandaloneAzureStorage(connectionString);
+            _azureBlobContainerFactory = uri => new StandaloneAzureBlobContainer(uri);
+            _azureBlobContainerWithCredentialsFactory = (uri, credentials) => new StandaloneAzureBlobContainer(uri);
+            _azureBlockBlobFactory = blobUri =>
+            {
+                var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+                return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
+            };
+            _azureBlockBlobWithCredentialsFactory = (blobUri, credentials) =>
+            {
+                var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+                return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
+            };
+        }
+
+        private static void ConfigureHostedStorage()
+        {
             _azureStorageFactory = connectionString => new HostedAzureStorage(connectionString);
             _azureBlobContainerFactory = uri => new HostedAzureBlobContainer(uri);
             _azureBlobContainerWithCredentialsFactory = (uri, credentials) => new HostedAzureBlobContainer(uri, credentials);

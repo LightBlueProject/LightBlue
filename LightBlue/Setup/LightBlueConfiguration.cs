@@ -52,7 +52,8 @@ namespace LightBlue.Setup
             string configurationPath,
             string serviceDefinitionPath,
             string roleName,
-            LightBlueHostType lightBlueHostType)
+            LightBlueHostType lightBlueHostType,
+            bool useHostedStorage)
         {
             if (IsInitialised)
             {
@@ -67,7 +68,8 @@ namespace LightBlue.Setup
                 {
                     ConfigurationPath = configurationPath,
                     ServiceDefinitionPath = serviceDefinitionPath,
-                    RoleName = roleName
+                    RoleName = roleName,
+                    UseHostedStorage = useHostedStorage
                 });
 
             if (lightBlueHostType == LightBlueHostType.Direct)
@@ -103,7 +105,8 @@ namespace LightBlue.Setup
                     configurationPath: Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
                     serviceDefinitionPath: Environment.GetEnvironmentVariable("LightBlueServiceDefinitionPath"),
                     roleName: Environment.GetEnvironmentVariable("LightBlueRoleName"),
-                    lightBlueHostType: LightBlueHostType.Indirect);
+                    lightBlueHostType: LightBlueHostType.Indirect,
+                    useHostedStorage: Boolean.Parse(Environment.GetEnvironmentVariable("LightBlueUseHostedStorage")));
 
                 return;
             }

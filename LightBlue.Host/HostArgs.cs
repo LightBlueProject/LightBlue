@@ -15,6 +15,7 @@ namespace LightBlue.Host
         public string Title { get; private set; }
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
+        public bool UseHostedStorage { get; private set; }
         public string ApplicationBase { get { return Path.GetDirectoryName(Assembly); } }
 
         public static HostArgs ParseArgs(IEnumerable<string> args)
@@ -23,6 +24,7 @@ namespace LightBlue.Host
             string roleName = null;
             string title = null;
             string configurationPath = null;
+            var useHostedStorage = false;
             var displayHelp = false;
 
             var options = new OptionSet
@@ -46,6 +48,11 @@ namespace LightBlue.Host
                     "c|configurationPath=",
                     "The {PATH} to the configuration file. Either the directory containing ServiceConfiguration.Local.cscfg or the path to a specific alternate .cscfg file.",
                     v => configurationPath = v
+                },
+                {
+                    "useHostedStorage",
+                    "Use hosted storage (Emulator/Actual Azure) inside the LightBlue host.",
+                    v => useHostedStorage = true
                 },
                 {
                     "help",
@@ -105,6 +112,7 @@ namespace LightBlue.Host
                     : title,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
+                UseHostedStorage = useHostedStorage
             };
         }
 

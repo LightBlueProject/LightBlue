@@ -100,7 +100,8 @@ namespace LightBlue.WebHost
             stub.Run(workerRoleAssembly: webHostArgs.Assembly,
                 configurationPath: webHostArgs.ConfigurationPath,
                 serviceDefinitionPath: webHostArgs.ServiceDefinitionPath,
-                roleName: webHostArgs.RoleName);
+                roleName: webHostArgs.RoleName,
+                useHostedStorage: webHostArgs.UseHostedStorage);
         }
 
         private static string DetermineWebConfigPath(WebHostArgs webHostArgs)
@@ -145,6 +146,7 @@ namespace LightBlue.WebHost
             processStartInfo.EnvironmentVariables.Add("LightBlueConfigurationPath", webHostArgs.ConfigurationPath);
             processStartInfo.EnvironmentVariables.Add("LightBlueServiceDefinitionPath", webHostArgs.ServiceDefinitionPath);
             processStartInfo.EnvironmentVariables.Add("LightBlueRoleName", webHostArgs.RoleName);
+            processStartInfo.EnvironmentVariables.Add("LightBlueUseHostedStorage", webHostArgs.UseHostedStorage.ToString());
 
             var processId = webHostArgs.RoleName
                 + "-web-"

@@ -12,7 +12,12 @@ namespace LightBlue.Host.Stub
             Trace.Listeners.Add(new CrossDomainTraceListener(traceShipper));
         }
 
-        public void Run(string workerRoleAssembly, string configurationPath, string serviceDefinitionPath, string roleName)
+        public void Run(
+            string workerRoleAssembly,
+            string configurationPath,
+            string serviceDefinitionPath,
+            string roleName,
+            bool useHostedStorage)
         {
             var roleDirectory = Path.GetDirectoryName(workerRoleAssembly);
 
@@ -26,7 +31,7 @@ namespace LightBlue.Host.Stub
             var runnerType = lightBlueAssembly.GetType("LightBlue.Infrastructure.HostRunner");
             var runMethod = runnerType.GetMethod("Run");
             var runner = Activator.CreateInstance(runnerType);
-            runMethod.Invoke(runner, new object[] {workerRoleAssembly, configurationPath, serviceDefinitionPath, roleName});
+            runMethod.Invoke(runner, new object[] {workerRoleAssembly, configurationPath, serviceDefinitionPath, roleName, useHostedStorage});
         }
     }
 }

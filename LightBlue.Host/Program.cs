@@ -55,7 +55,8 @@ namespace LightBlue.Host
             stub.Run(workerRoleAssembly: hostArgs.Assembly,
                 configurationPath: hostArgs.ConfigurationPath,
                 serviceDefinitionPath: hostArgs.ServiceDefinitionPath,
-                roleName: hostArgs.RoleName);
+                roleName: hostArgs.RoleName,
+                useHostedStorage: hostArgs.UseHostedStorage);
         }
     }
 }
