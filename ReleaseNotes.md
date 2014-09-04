@@ -7,6 +7,8 @@ Version 0.1.12
 * Lock metadata file for the duration of an update so that concurrent access doesn't overwrite values unexpectedly.
 * Add overload of IAzureBlockBlob.UploadFromByteArrayAsync that uploads the entire buffer.
 * Add minimal page blob abstraction so that lists don't blow up when the container includes a page blob.
+* Add flag that causes LightBlue hosts to provide the hosted storage implementation (via the LightBlue APIs)
+* Add additional async variations of storage API methods for which async support makes sense.
 
 ###Implementation
 * Removed the StandaloneAzureBlockBlob(Uri) constructor.
