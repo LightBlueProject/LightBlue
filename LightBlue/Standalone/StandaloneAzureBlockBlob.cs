@@ -16,6 +16,7 @@ namespace LightBlue.Standalone
     {
         private const int BufferSize = 4096;
         private const int MaxFileLockRetryAttempts = 5;
+        private const string DefaultContentType = "application/octet-stream";
 
         private readonly string _blobName;
         private readonly string _blobPath;
@@ -79,12 +80,7 @@ namespace LightBlue.Standalone
 
         public void FetchAttributes()
         {
-            var fileInfo = new FileInfo(_blobPath);
-            if (!fileInfo.Exists)
-            {
-                throw new StorageException("The specified blob does not exist");
-            }
-
+            var fileInfo = EnsureBlobFileExists();
             var metadataStore = LoadMetadataStore();
             _properties.ContentType = metadataStore.ContentType;
             _properties.Length = fileInfo.Length;
@@ -99,12 +95,7 @@ namespace LightBlue.Standalone
 
         public void SetMetadata()
         {
-            var fileInfo = new FileInfo(_blobPath);
-            if (!fileInfo.Exists)
-            {
-                throw new StorageException("The specified blob does not exist");
-            }
-
+            EnsureBlobFileExists();
             StandaloneMetadataStore metadataStore = null;
 
             if (!File.Exists(_metadataPath))
@@ -119,7 +110,7 @@ namespace LightBlue.Standalone
         {
             if (retriesRemaining <= 0)
             {
-                throw new StorageException(String.Format("Tried {0} times to write to locked metadata file {1}", MaxFileLockRetryAttempts, _metadataPath));
+                throw new StorageException(String.Format(CultureInfo.InvariantCulture, "Tried {0} times to write to locked metadata file {1}", MaxFileLockRetryAttempts, _metadataPath));
             }
         }
 
@@ -150,15 +141,10 @@ namespace LightBlue.Standalone
 
         public void SetProperties()
         {
-            var fileInfo = new FileInfo(_blobPath);
-            if (!fileInfo.Exists)
-            {
-                throw new StorageException("The specified blob does not exist");
-            }
+            EnsureBlobFileExists();
+
             var metadataStore = LoadMetadataStore();
-
             metadataStore.ContentType = _properties.ContentType;
-
             WriteMetadataStore(metadataStore);
         }
 
@@ -318,6 +304,16 @@ namespace LightBlue.Standalone
             return Guid.NewGuid().ToString();
         }
 
+        private FileInfo EnsureBlobFileExists()
+        {
+            var fileInfo = new FileInfo(_blobPath);
+            if (!fileInfo.Exists)
+            {
+                throw new StorageException("The specified blob does not exist");
+            }
+            return fileInfo;
+        }
+
         private static void RetryFileOperation(Action fileOperation)
         {
             var retryCount = 0;
@@ -353,22 +349,22 @@ namespace LightBlue.Standalone
                 return StandaloneMetadataStore.ReadFromStream(fileStream);
             }
         }
-
-        private StandaloneMetadataStore CreateStandaloneMetadataStore()
-        {
-            return new StandaloneMetadataStore
-            {
-                ContentType = File.Exists(_blobPath) ? "application/octet-stream" : null,
-                Metadata = new Dictionary<string, string>()
-            };
-        }
-
+        
         private void WriteMetadataStore(StandaloneMetadataStore metadataStore)
         {
             using (var fileStream = new FileStream(_metadataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, BufferSize, true))
             {
                 metadataStore.WriteToStreamAndClose(fileStream);
             }
+        }
+
+        private StandaloneMetadataStore CreateStandaloneMetadataStore()
+        {
+            return new StandaloneMetadataStore
+            {
+                ContentType = File.Exists(_blobPath) ? DefaultContentType : null,
+                Metadata = new Dictionary<string, string>()
+            };
         }
     }
 }

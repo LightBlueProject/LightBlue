@@ -245,7 +245,7 @@ namespace LightBlue.Tests.Standalone
                 );
             }
         }
-
+        
         private static void WriteJsonPropertiesToFile(string metadataPath, IEnumerable<KeyValuePair<string, string>> properties)
         {
             JObject jObject;
