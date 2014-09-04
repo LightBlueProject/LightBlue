@@ -18,6 +18,7 @@ namespace LightBlue
         bool Exists();
         Task<bool> ExistsAsync();
         void FetchAttributes();
+        Task FetchAttributesAsync();
         void SetMetadata();
         Task SetMetadataAsync();
         void SetProperties();

@@ -56,6 +56,30 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Fact]
+        public async Task WillCreateContainerPathOnCreateIfNotExistsAsync()
+        {
+            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(BlobContainerPublicAccessType.Off);
+
+            Assert.True(Directory.Exists(_containerPath));
+        }
+
+        [Fact]
+        public async Task WillCreateMetadataPathOnCreateIfNotExistsAsync()
+        {
+            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(BlobContainerPublicAccessType.Off);
+
+            Assert.True(Directory.Exists(Path.Combine(_containerPath, MetadataDirectory)));
+        }
+
+        [Fact]
+        public async Task WillUseCorrectContainerPathWhenGivenBasePathAndContainerNameAsync()
+        {
+            await new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExistsAsync(BlobContainerPublicAccessType.Off);
+
+            Assert.True(Directory.Exists(_containerPath));
+        }
+
+        [Fact]
         public void WillUseCorrectContainerPathWhenGiveUri()
         {
             new StandaloneAzureBlobContainer(new Uri(_containerPath))

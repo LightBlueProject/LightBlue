@@ -86,6 +86,11 @@ namespace LightBlue.Hosted
             _cloudBlockBlob.FetchAttributes();
         }
 
+        public Task FetchAttributesAsync()
+        {
+            return _cloudBlockBlob.FetchAttributesAsync();
+        }
+
         public void SetMetadata()
         {
             _cloudBlockBlob.SetMetadata();

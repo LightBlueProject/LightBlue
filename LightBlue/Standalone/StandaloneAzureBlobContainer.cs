@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.Data.OData;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Standalone
@@ -42,6 +43,12 @@ namespace LightBlue.Standalone
             Directory.CreateDirectory(_containerDirectory);
             Directory.CreateDirectory(MetadataDirectory);
             return true;
+        }
+
+        public Task<bool> CreateIfNotExistsAsync(BlobContainerPublicAccessType accessType)
+        {
+            CreateIfNotExists(accessType);
+            return Task.FromResult(true);
         }
 
         public bool Exists()

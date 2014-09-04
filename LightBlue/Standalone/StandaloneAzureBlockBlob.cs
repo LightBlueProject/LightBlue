@@ -93,6 +93,12 @@ namespace LightBlue.Standalone
             _metadata = metadataStore.Metadata;
         }
 
+        public Task FetchAttributesAsync()
+        {
+            FetchAttributes();
+            return Task.FromResult(new object());
+        }
+
         public void SetMetadata()
         {
             var fileInfo = new FileInfo(_blobPath);

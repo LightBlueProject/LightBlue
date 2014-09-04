@@ -9,6 +9,7 @@ namespace LightBlue
     {
         Uri Uri { get; }
         bool CreateIfNotExists(BlobContainerPublicAccessType accessType);
+        Task<bool> CreateIfNotExistsAsync(BlobContainerPublicAccessType accessType);
         bool Exists();
         Task<bool> ExistsAsynx();
         IAzureBlockBlob GetBlockBlobReference(string blobName);

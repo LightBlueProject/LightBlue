@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 using AssertExLib;
 
@@ -81,7 +82,28 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
-        
+
+        [Fact]
+        public async Task CanPersistAndRetrieveMetadataAsync()
+        {
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Metadata["thing"] = "something";
+            sourceBlob.SetMetadata();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            await loadedBlob.FetchAttributesAsync();
+
+            new
+            {
+                Metadata = new Dictionary<string, string>
+                {
+                    { "thing", "something"}
+                }
+            }.ToExpectedObject().ShouldMatch(loadedBlob);
+        }
+
         [Fact]
         public void CanAppendToExistingPersistedMetadata()
         {
@@ -108,7 +130,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Fact]
-        public void CanPersistMetadataASync()
+        public void CanPersistMetadataAsync()
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
             CreateBlobContent(sourceBlob);

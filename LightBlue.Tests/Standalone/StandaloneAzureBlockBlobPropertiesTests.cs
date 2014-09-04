@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 
 using AssertExLib;
 
@@ -68,6 +69,46 @@ namespace LightBlue.Tests.Standalone
             CreateBlobContent(blob);
 
             blob.FetchAttributes();
+
+            new
+            {
+                Properties = new
+                {
+                    ContentType = "application/octet-stream",
+                    Length = (long) 12
+                }
+            }.ToExpectedObject().ShouldMatch(blob);
+        }
+
+        [Fact]
+        public async Task CanPersistAndRetrievePropertiesAsync()
+        {
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Properties.ContentType = "something";
+            sourceBlob.SetProperties();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            await loadedBlob.FetchAttributesAsync();
+
+            new
+            {
+                Properties = new
+                {
+                    ContentType = "something",
+                    Length = (long) 12
+                }
+            }.ToExpectedObject().ShouldMatch(loadedBlob);
+        }
+
+        [Fact]
+        public async Task DefaultsToOctetStreamWhenLoadingPropertiesWhenPreviouslyUnsetAsync()
+        {
+            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(blob);
+
+            await blob.FetchAttributesAsync();
 
             new
             {
