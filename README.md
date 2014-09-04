@@ -26,7 +26,7 @@ How Closely Does LightBlue Match Azure?
 ---------------------------------------
 The LightBlue storage APIs are in general fairly similar to the Azure SDK APIs. The abstractions are not identical but should be familiar to developers who've used the Azure SDKs.
 
-LightBlue makes a deliberate decision to not be identical to Azure in favour of being simple and loghtweight. The blob storage implementation provided for development use is based on the file system. As such this places limitations on length and valid characters in blob names that do not match what Azure supports. LightBlue also does not support any form of security for blob storage access.
+LightBlue makes a deliberate decision to not be identical to Azure in favour of being simple and lightweight. The blob storage implementation provided for development use is based on the file system. This places limitations on length and valid characters in blob names that do not match what Azure supports. LightBlue also does not support any form of security for blob storage access.
 
 Most code developed against LightBlue should work against Azure without issue but verification against the emulator or actual Azure is recommended. LightBlue supports this by retaining fully the ability to run against the emulator.
 
