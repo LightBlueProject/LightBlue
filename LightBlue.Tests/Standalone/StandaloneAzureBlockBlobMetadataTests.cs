@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+
 using System.Threading.Tasks;
+using System.Linq;
 
 using AssertExLib;
 
@@ -9,7 +11,8 @@ using ExpectedObjects;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.Storage;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace LightBlue.Tests.Standalone
@@ -208,6 +211,55 @@ namespace LightBlue.Tests.Standalone
             using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
                 Assert.Throws<StorageException>(() => loadedBlob.SetMetadata());
+            }
+        }
+        
+        [Fact]
+        public void SavingPreservesUnknownMetadata()
+        {
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            CreateBlobContent(sourceBlob);
+            sourceBlob.Metadata["thing"] = "something";
+            sourceBlob.SetMetadata();
+
+            var metadataPath = Path.Combine(BasePath, ".meta", BlobName);
+            var expectedProperties = new Dictionary<string, string>()
+            {
+                {"foo", "bar"}, {"couci-couça","svo-svo"}
+            };
+            WriteJsonPropertiesToFile(metadataPath, expectedProperties);
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            loadedBlob.FetchAttributes();
+            loadedBlob.Metadata["another thing"] = "whatever else";
+            loadedBlob.SetMetadata();
+
+            using (var reader = new StreamReader(metadataPath))
+            {
+                var loaded = JObject.Load(new JsonTextReader(reader));
+                var actualMetadata = loaded["Metadata"];
+                Assert.Equal("something", actualMetadata["thing"]);
+                Assert.Equal("whatever else", actualMetadata["another thing"]);
+                expectedProperties.ToList().ForEach(kvp =>
+                    Assert.Equal(kvp.Value, loaded[kvp.Key])
+                );
+            }
+        }
+        
+        private static void WriteJsonPropertiesToFile(string metadataPath, IEnumerable<KeyValuePair<string, string>> properties)
+        {
+            JObject jObject;
+            using (var reader = new StreamReader(metadataPath))
+            {
+                jObject = JObject.Load(new JsonTextReader(reader));
+                foreach (var pair in properties)
+                {
+                    jObject[pair.Key] = pair.Value;
+                }
+            }
+            using (var writer = new JsonTextWriter(new StreamWriter(metadataPath)))
+            {
+                new JsonSerializer().Serialize(writer, jObject);
             }
         }
     }
