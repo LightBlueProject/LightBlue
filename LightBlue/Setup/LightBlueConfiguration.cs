@@ -45,7 +45,10 @@ namespace LightBlue.Setup
             _environmentDefinition = new EnvironmentDefinition(
                 azureEnvironment,
                 HostingType.External,
-                null);
+                new StandaloneConfiguration
+                {
+                    UseHostedStorage = azureEnvironment != AzureEnvironment.LightBlue
+                });
         }
 
         public static void SetAsLightBlue(
