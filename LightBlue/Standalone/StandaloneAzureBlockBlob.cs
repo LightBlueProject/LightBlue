@@ -103,14 +103,23 @@ namespace LightBlue.Standalone
                 metadataStore = CreateStandaloneMetadataStore();
             }
 
-            FileLockExtensions.WaitAndRetryOnFileLock(() => SetMetadata(metadataStore), _waitTimeBetweenRetries, MaxFileLockRetryAttempts, WhenSetMetadataFileHasSharingViolation);
+            FileLockExtensions.WaitAndRetryOnFileLock(
+                () => SetMetadata(metadataStore),
+                _waitTimeBetweenRetries,
+                MaxFileLockRetryAttempts,
+                WhenSetMetadataFileHasSharingViolation);
         }
 
         private void WhenSetMetadataFileHasSharingViolation(int retriesRemaining)
         {
             if (retriesRemaining <= 0)
             {
-                throw new StorageException(String.Format(CultureInfo.InvariantCulture, "Tried {0} times to write to locked metadata file {1}", MaxFileLockRetryAttempts, _metadataPath));
+                throw new StorageException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Tried {0} times to write to locked metadata file '{1}'",
+                        MaxFileLockRetryAttempts,
+                        _metadataPath));
             }
         }
 

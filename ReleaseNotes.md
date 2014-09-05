@@ -14,6 +14,7 @@ Version 0.1.12
 * Removed the StandaloneAzureBlockBlob(Uri) constructor.
 * Added StandaloneEnvironment.SeparateBlobUri helper
 * Added trailing separator character to StandaloneEnvironment.LightBlueDataDirectory
+* Don't overwrite unknown values in the metadata file to allow for future extension of the format.
 
 Version 0.1.11
 --------------------
