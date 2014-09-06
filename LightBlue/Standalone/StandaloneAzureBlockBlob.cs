@@ -24,12 +24,33 @@ namespace LightBlue.Standalone
         private readonly StandaloneAzureBlobProperties _properties;
         private Dictionary<string, string> _metadata;
         private readonly TimeSpan _waitTimeBetweenRetries = TimeSpan.FromSeconds(5);
+        private string _blobDirectory;
+        private string _metadataDirectory;
 
         public StandaloneAzureBlockBlob(string containerDirectory, string blobName)
         {
             _blobName = blobName;
             _blobPath = Path.Combine(containerDirectory, blobName);
             _metadataPath = Path.Combine(containerDirectory, ".meta", blobName);
+
+            var blobDirectory = Path.GetDirectoryName(_blobPath);
+            if (blobDirectory == null)
+            {
+                throw new InvalidOperationException("Could not determine the blob directory");
+            }
+            if (blobDirectory != containerDirectory)
+            {
+                if (!Directory.Exists(blobDirectory))
+                {
+                    _blobDirectory = blobDirectory;
+                }
+                var metadataDirectory = Path.GetDirectoryName(_metadataPath);
+                if (metadataDirectory != null && !Directory.Exists(metadataDirectory))
+                {
+                    _metadataDirectory = metadataDirectory;
+                }
+            }
+
             _metadata = new Dictionary<string, string>();
             _properties = new StandaloneAzureBlobProperties { Length = -1, ContentType = null };
         }
@@ -96,6 +117,7 @@ namespace LightBlue.Standalone
         public void SetMetadata()
         {
             EnsureBlobFileExists();
+            EnsureMetadataDirectoryExists();
             StandaloneMetadataStore metadataStore = null;
 
             if (!File.Exists(_metadataPath))
@@ -151,6 +173,7 @@ namespace LightBlue.Standalone
         public void SetProperties()
         {
             EnsureBlobFileExists();
+            EnsureMetadataDirectoryExists();
 
             var metadataStore = LoadMetadataStore();
             metadataStore.ContentType = _properties.ContentType;
@@ -247,6 +270,9 @@ namespace LightBlue.Standalone
             {
                 throw new ArgumentNullException("source");
             }
+
+            EnsureBlobDirectoryExists();
+
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 var buffer = new byte[BufferSize];
@@ -262,6 +288,8 @@ namespace LightBlue.Standalone
 
         public Task UploadFromFileAsync(string path)
         {
+            EnsureBlobDirectoryExists();
+
             File.Copy(path, _blobPath, true);
 
             return Task.FromResult(new object());
@@ -278,6 +306,9 @@ namespace LightBlue.Standalone
             {
                 throw new ArgumentNullException("buffer");
             }
+
+            EnsureBlobDirectoryExists();
+
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 await fileStream.WriteAsync(buffer, index, count).ConfigureAwait(false);
@@ -358,7 +389,7 @@ namespace LightBlue.Standalone
                 return StandaloneMetadataStore.ReadFromStream(fileStream);
             }
         }
-        
+
         private void WriteMetadataStore(StandaloneMetadataStore metadataStore)
         {
             using (var fileStream = new FileStream(_metadataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, BufferSize, true))
@@ -374,6 +405,24 @@ namespace LightBlue.Standalone
                 ContentType = File.Exists(_blobPath) ? DefaultContentType : null,
                 Metadata = new Dictionary<string, string>()
             };
+        }
+
+        private void EnsureBlobDirectoryExists()
+        {
+            if (_blobDirectory != null)
+            {
+                Directory.CreateDirectory(_blobDirectory);
+                _blobDirectory = null;
+            }
+        }
+
+        private void EnsureMetadataDirectoryExists()
+        {
+            if (_metadataDirectory != null)
+            {
+                Directory.CreateDirectory(_metadataDirectory);
+                _metadataDirectory = null;
+            }
         }
     }
 }
