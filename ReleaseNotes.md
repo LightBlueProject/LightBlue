@@ -4,6 +4,7 @@ LightBlue
 Version 0.1.12
 --------------------
 ###Features
+* Basic support fir blobs with path separators in their names.
 * Lock metadata file for the duration of an update so that concurrent access doesn't overwrite values unexpectedly.
 * Add overload of IAzureBlockBlob.UploadFromByteArrayAsync that uploads the entire buffer.
 * Add minimal page blob abstraction so that lists don't blow up when the container includes a page blob.
