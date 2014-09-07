@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -328,6 +329,9 @@ namespace LightBlue.Standalone
 
             try
             {
+                EnsureBlobDirectoryExists();
+                EnsureMetadataDirectoryExists();
+
                 RetryFileOperation(() => File.Copy(standaloneAzureBlockBlob._blobPath, _blobPath, true));
                 if (File.Exists(standaloneAzureBlockBlob._metadataPath))
                 {

@@ -10,72 +10,87 @@ using LightBlue.Standalone;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 using Xunit;
+using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureBlockBlobCopyTests : StandaloneAzureTestsBase
     {
-        private const string SourceBlobName = "source";
-        private const string DestinationBlobName = "destination";
-
         public StandaloneAzureBlockBlobCopyTests()
             : base(DirectoryType.Container)
+        {}
+
+        public static IEnumerable<object[]> CopyBlobNames
         {
+            get
+            {
+                yield return new object[] { "source", "destination" };
+                yield return new object[] { "source", @"destination\with\path" };
+                yield return new object[] { "source", "destination/with/path/alternate" };
+                yield return new object[] { @"source\with\path", "destination" };
+                yield return new object[] { "source/with/path/alternate", "destination" };
+                yield return new object[] { @"source\with\path", @"destination\with\path" };
+            }
         }
 
-        [Fact]
-        public void CanCopyBlob()
+
+        [Theory]
+        [PropertyData("CopyBlobNames")]
+        public void CanCopyBlob(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
             Assert.Equal("File content", File.ReadAllText(destinationBlob.Uri.LocalPath));
         }
 
-        [Fact]
-        public void CanOverwriteBlob()
+        [Theory]
+        [PropertyData("CopyBlobNames")]
+        public void CanOverwriteBlob(string source, string destination)
         {
             var sourceBuffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(sourceBuffer, 0, sourceBuffer.Length).Wait();
 
             var originalContentBuffer = Encoding.UTF8.GetBytes("Original content");
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.UploadFromByteArrayAsync(originalContentBuffer, 0, originalContentBuffer.Length).Wait();
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
             Assert.Equal("File content", File.ReadAllText(destinationBlob.Uri.LocalPath));
         }
 
-        [Fact]
-        public void WillNotCopyMetadataWhereItDoesNotExist()
+        [Theory]
+        [PropertyData("CopyBlobNames")]
+        public void WillNotCopyMetadataWhereItDoesNotExist(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
-            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", DestinationBlobName)));
+            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", destination)));
         }
 
-        [Fact]
-        public void WillCopyMetadataFromSourceWherePresent()
+        [Theory]
+        [PropertyData("CopyBlobNames")]
+        public void WillCopyMetadataFromSourceWherePresent(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
             sourceBlob.Metadata["thing"] = "something";
             sourceBlob.Properties.ContentType = "whatever";
             sourceBlob.SetMetadata();
             sourceBlob.SetProperties();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.StartCopyFromBlob(sourceBlob);
             destinationBlob.FetchAttributes();
 
@@ -93,54 +108,58 @@ namespace LightBlue.Tests.Standalone
             }.ToExpectedObject().ShouldMatch(destinationBlob);
         }
 
-        [Fact]
-        public void WillRemoveExistingMetadataWhereSourceDoesNotHaveMetadata()
+        [Theory]
+        [PropertyData("CopyBlobNames")]
+        public void WillRemoveExistingMetadataWhereSourceDoesNotHaveMetadata(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
             var originalContentBuffer = Encoding.UTF8.GetBytes("Original content");
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.UploadFromByteArrayAsync(originalContentBuffer, 0, originalContentBuffer.Length).Wait();
             destinationBlob.Metadata["thing"] = "other thing";
             destinationBlob.SetMetadata();
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
-            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", DestinationBlobName)));
+            Assert.False(File.Exists(Path.Combine(BasePath, ".meta", destination)));
         }
 
-        [Fact]
-        public void CopyStateIsNullBeforeCopy()
+        [Theory]
+        [PropertyData("BlobNames")]
+        public void CopyStateIsNullBeforeCopy(string blobName)
         {
-            var blob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
             Assert.Null(blob.CopyState);
         }
 
-        [Fact]
-        public void CopyStateIsSuccessAfterCopy()
+        [Theory]
+        [PropertyData("CopyBlobNames")]
+        public void CopyStateIsSuccessAfterCopy(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
-            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+            var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.StartCopyFromBlob(sourceBlob);
 
             Assert.Equal(CopyStatus.Success, destinationBlob.CopyState.Status);
         }
 
-        [Fact]
-        public void CopyStateIsFailedIfBlobLocked()
+        [Theory]
+        [PropertyData("CopyBlobNames")]
+        public void CopyStateIsFailedIfBlobLocked(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, SourceBlobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
             using (new FileStream(sourceBlob.Uri.LocalPath, FileMode.Append, FileAccess.Write, FileShare.None))
             {
-                var destinationBlob = new StandaloneAzureBlockBlob(BasePath, DestinationBlobName);
+                var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
                 destinationBlob.StartCopyFromBlob(sourceBlob);
 
                 new
