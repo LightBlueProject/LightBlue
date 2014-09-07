@@ -93,6 +93,7 @@
     <Compile Include="Standalone\StandaloneAzureBlobDirectoryTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlobCopyTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlobDeleteTests.cs" />
+    <Compile Include="Standalone\StandaloneAzureBlockBlobDownloadTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlobMetadataTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlobPropertiesTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlobTests.cs" />
