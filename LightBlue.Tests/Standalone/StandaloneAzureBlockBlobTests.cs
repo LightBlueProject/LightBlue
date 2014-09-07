@@ -14,23 +14,20 @@ namespace LightBlue.Tests.Standalone
 {
     public class StandaloneAzureBlockBlobTests : StandaloneAzureTestsBase
     {
-        private readonly Uri _blobUri;
-        private const string BlobName = "someblob";
         public StandaloneAzureBlockBlobTests()
             : base(DirectoryType.Container)
-        {
-            _blobUri = new Uri(Path.Combine(BasePath, BlobName));
-        }
+        {}
 
-        [Fact]
-        public void WillHaveCorrectValuesWhenGivenContainerDirectoryAndBlobName()
+        [Theory]
+        [PropertyData("BlobNames")]
+        public void WillHaveCorrectValuesWhenGivenContainerDirectoryAndBlobName(string blobName)
         {
-            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
             new
             {
-                Uri = _blobUri,
-                Name = BlobName,
+                Uri = ToUri(blobName),
+                Name = blobName,
                 Properties = new
                 {
                     Length = (long) -1,
@@ -40,42 +37,49 @@ namespace LightBlue.Tests.Standalone
             }.ToExpectedObject().ShouldMatch(blob);
         }
 
-        [Fact]
-        public void CanUploadContentFromFullByteArray()
+        [Theory]
+        [PropertyData("BlobNames")]
+        public void CanUploadContentFromFullByteArray(string blobName)
         {
-            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
             blob.UploadFromByteArrayAsync(Encoding.UTF8.GetBytes("File content")).Wait();
 
             Assert.Equal("File content", File.ReadAllText(blob.Uri.LocalPath));
         }
 
         [Theory]
-        [InlineData(0, 12, "File content")]
-        [InlineData(5, 4, "cont")]
-        public void CanUploadContentFromByteArrayWithRangeSpecifier(int index, int count, string expectedContent)
+        [InlineData(0, 12, "File content", "randomblob")]
+        [InlineData(5, 4, "cont", "randomblob")]
+        [InlineData(0, 12, "File content", @"with\path\blob")]
+        [InlineData(5, 4, "cont", @"with\path\blob")]
+        [InlineData(0, 12, "File content", "with/alternate/separator")]
+        [InlineData(5, 4, "cont", "with/alternate/separator")]
+        public void CanUploadContentFromByteArrayWithRangeSpecifier(int index, int count, string expectedContent, string blobName)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
 
-            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
             blob.UploadFromByteArrayAsync(buffer, index, count).Wait();
 
             Assert.Equal(expectedContent, File.ReadAllText(blob.Uri.LocalPath));
         }
 
-        [Fact]
-        public void CanUploadContentFromFile()
+        [Theory]
+        [PropertyData("BlobNames")]
+        public void CanUploadContentFromFile(string blobName)
         {
             var sourceFilePath = Path.Combine(BasePath, "source");
             File.WriteAllText(sourceFilePath, "Source file");
 
-            var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+            var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
             blob.UploadFromFileAsync(sourceFilePath);
 
             Assert.Equal("Source file", File.ReadAllText(blob.Uri.LocalPath));
         }
 
-        [Fact]
-        public void CanUploadContentFromStream()
+        [Theory]
+        [PropertyData("BlobNames")]
+        public void CanUploadContentFromStream(string blobName)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -85,7 +89,7 @@ namespace LightBlue.Tests.Standalone
                 memoryStream.Write(buffer, 0, buffer.Length);
                 memoryStream.Position = 0;
 
-                var blob = new StandaloneAzureBlockBlob(BasePath, BlobName);
+                var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
                 blob.UploadFromStreamAsync(memoryStream).Wait();
 
                 Assert.Equal(sourceContent, File.ReadAllText(blob.Uri.LocalPath));
@@ -100,6 +104,11 @@ namespace LightBlue.Tests.Standalone
                 stringBuilder.Append("Source content");
             }
             return stringBuilder.ToString();
+        }
+
+        public Uri ToUri(string path)
+        {
+            return new Uri(Path.Combine(BasePath, path));
         }
     }
 }
