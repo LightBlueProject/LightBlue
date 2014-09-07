@@ -80,7 +80,10 @@ namespace LightBlue.Standalone
         public void Delete()
         {
             File.Delete(_blobPath);
-            File.Delete(_metadataPath);
+            if (File.Exists(_metadataPath))
+            {
+                File.Delete(_metadataPath);
+            }
         }
 
         public Task DeleteAsync()

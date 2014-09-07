@@ -27,16 +27,6 @@ namespace LightBlue.Tests.Standalone
             Directory.CreateDirectory(metadataDirectoryPath);
         }
 
-        public static IEnumerable<object[]> BlobNames
-        {
-            get
-            {
-                yield return new object[] {"someblob"};
-                yield return new object[] {"with/path/blob"};
-                yield return new object[] {@"with\alternate\separator"};
-            }
-        }
-
         [Theory]
         [PropertyData("BlobNames")]
         public void WillThrowOnFetchOfAttributesIfBlobDoesNotExist(string blobName)

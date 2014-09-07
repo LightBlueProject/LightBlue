@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -32,6 +33,16 @@ namespace LightBlue.Tests.Standalone
         protected Uri BasePathUri
         {
             get {  return new Uri(BasePath); }
+        }
+
+        public static IEnumerable<object[]> BlobNames
+        {
+            get
+            {
+                yield return new object[] {"someblob"};
+                yield return new object[] {@"with\path\blob"};
+                yield return new object[] {"with/alternate/separator"};
+            }
         }
 
         public void Dispose()
