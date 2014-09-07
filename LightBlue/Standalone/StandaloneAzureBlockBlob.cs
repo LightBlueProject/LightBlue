@@ -409,20 +409,24 @@ namespace LightBlue.Standalone
 
         private void EnsureBlobDirectoryExists()
         {
-            if (_blobDirectory != null)
+            if (_blobDirectory == null)
             {
-                Directory.CreateDirectory(_blobDirectory);
-                _blobDirectory = null;
+                return;
             }
+
+            Directory.CreateDirectory(_blobDirectory);
+            _blobDirectory = null;
         }
 
         private void EnsureMetadataDirectoryExists()
         {
-            if (_metadataDirectory != null)
+            if (_metadataDirectory == null)
             {
-                Directory.CreateDirectory(_metadataDirectory);
-                _metadataDirectory = null;
+                return;
             }
+
+            Directory.CreateDirectory(_metadataDirectory);
+            _metadataDirectory = null;
         }
     }
 }
