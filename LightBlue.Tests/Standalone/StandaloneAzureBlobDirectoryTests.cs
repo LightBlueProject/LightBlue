@@ -4,6 +4,7 @@ using System.IO;
 using LightBlue.Standalone;
 
 using Xunit;
+using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
@@ -13,12 +14,15 @@ namespace LightBlue.Tests.Standalone
             : base(DirectoryType.Container)
         {}
 
-        [Fact]
-        public void WillHaveCorrectUriWhenGivenDirectory()
+        [Theory]
+        [InlineData("directory")]
+        [InlineData(@"directory\subdirectory")]
+        [InlineData("directory/subdirectory")]
+        public void WillHaveCorrectUriWhenGivenDirectory(string directoryName)
         {
-            var directoryPath = Path.Combine(BasePath, "directory");
+            var directoryPath = Path.Combine(BasePath, directoryName);
 
-            var directory = new StandaloneAzureBlobDirectory(directoryPath);
+            var directory = new StandaloneAzureBlobDirectory(BasePath, directoryName);
 
             Assert.Equal(new Uri(directoryPath), directory.Uri);
         }

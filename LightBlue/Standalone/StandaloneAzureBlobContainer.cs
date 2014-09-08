@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Data.OData;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Standalone
@@ -80,7 +79,35 @@ namespace LightBlue.Standalone
                 policy.Permissions.DeterminePermissionsString());
         }
 
-        public Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(string prefix, BlobListing blobListing, BlobListingDetails blobListingDetails, int? maxResults, BlobContinuationToken currentToken)
+        public Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(
+            string prefix,
+            BlobListing blobListing,
+            BlobListingDetails blobListingDetails,
+            int? maxResults,
+            BlobContinuationToken currentToken)
+        {
+            return Task.FromResult(StandaloneList.ListBlobsSegmentedAsync(
+                _containerDirectory,
+                null,
+                prefix,
+                blobListing,
+                blobListingDetails,
+                maxResults,
+                currentToken));
+        }
+
+    }
+
+    internal static class StandaloneList
+    {
+        public static IAzureBlobResultSegment ListBlobsSegmentedAsync(
+            string containerDirectory,
+            string searchDirectory,
+            string prefix,
+            BlobListing blobListing,
+            BlobListingDetails blobListingDetails,
+            int? maxResults,
+            BlobContinuationToken currentToken)
         {
             if (blobListing == BlobListing.Hierarchical && (blobListingDetails & BlobListingDetails.Snapshots) == BlobListingDetails.Snapshots)
             {
@@ -90,22 +117,27 @@ namespace LightBlue.Standalone
             var numberToSkip = DetermineNumberToSkip(currentToken);
 
             var resultSegment = blobListing == BlobListing.Flat
-                ? FindFilesFlattened(prefix, maxResults, numberToSkip)
-                : FindFilesHierarchical(prefix, maxResults, numberToSkip);
+                ? FindFilesFlattened(containerDirectory, searchDirectory, prefix, maxResults, numberToSkip)
+                : FindFilesHierarchical(containerDirectory, searchDirectory, prefix, maxResults, numberToSkip);
 
-            return Task.FromResult((IAzureBlobResultSegment) resultSegment);
+            return resultSegment;
         }
 
-        private StandaloneAzureBlobResultSegment FindFilesFlattened(string prefix, int? maxResults, int numberToSkip)
+        private static StandaloneAzureBlobResultSegment FindFilesFlattened(
+            string containerDirectory,
+            string searchDirectory,
+            string prefix,
+            int? maxResults,
+            int numberToSkip)
         {
-            var files = new DirectoryInfo(_containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.AllDirectories)
+            var files = new DirectoryInfo(searchDirectory ?? containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.AllDirectories)
                 .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
                 .Skip(numberToSkip)
                 .Take(maxResults.HasValue ? maxResults.Value : Int32.MaxValue)
                 .Select(f =>
                     new StandaloneAzureBlockBlob(
-                        _containerDirectory,
-                        f.FullName.Substring(_containerDirectory.Length + 1)))
+                        containerDirectory,
+                        f.FullName.Substring(containerDirectory.Length + 1)))
                 .ToList();
 
             var resultSegment = new StandaloneAzureBlobResultSegment(
@@ -117,17 +149,22 @@ namespace LightBlue.Standalone
             return resultSegment;
         }
 
-        private StandaloneAzureBlobResultSegment FindFilesHierarchical(string prefix, int? maxResults, int numberToSkip)
+        private static StandaloneAzureBlobResultSegment FindFilesHierarchical(
+            string containerDirectory,
+            string searchDirectory,
+            string prefix,
+            int? maxResults,
+            int numberToSkip)
         {
-            var directories = new DirectoryInfo(_containerDirectory).EnumerateDirectories((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
+            var directories = new DirectoryInfo(searchDirectory ?? containerDirectory).EnumerateDirectories((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
                 .Where(f => !f.Name.EndsWith(".meta"))
-                .Select(f => (IAzureListBlobItem) new StandaloneAzureBlobDirectory(f.FullName));
-            var files = new DirectoryInfo(_containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
+                .Select(f => (IAzureListBlobItem)new StandaloneAzureBlobDirectory(containerDirectory, f.FullName.Substring(containerDirectory.Length + 1)));
+            var files = new DirectoryInfo(searchDirectory ?? containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
                 .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
                 .Select(f =>
                     (IAzureListBlobItem)new StandaloneAzureBlockBlob(
-                        _containerDirectory,
-                        f.FullName.Substring(_containerDirectory.Length + 1)));
+                        containerDirectory,
+                        f.FullName.Substring(containerDirectory.Length + 1)));
 
             var combined = directories.Concat(files)
                 .Skip(numberToSkip)
