@@ -136,6 +136,7 @@
     <Compile Include="Standalone\StandaloneConfiguration.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobStorageClient.cs" />
     <Compile Include="Standalone\StandaloneEnvironment.cs" />
+    <Compile Include="Standalone\StandaloneList.cs" />
     <Compile Include="Standalone\StandaloneMetadataStore.cs" />
     <Compile Include="Standalone\UriExtensions.cs" />
     <Compile Include="Standalone\FileLockExtensions.cs" />
