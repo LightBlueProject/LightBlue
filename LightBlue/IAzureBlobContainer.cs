@@ -11,7 +11,7 @@ namespace LightBlue
         bool CreateIfNotExists(BlobContainerPublicAccessType accessType);
         Task<bool> CreateIfNotExistsAsync(BlobContainerPublicAccessType accessType);
         bool Exists();
-        Task<bool> ExistsAsynx();
+        Task<bool> ExistsAsync();
         IAzureBlockBlob GetBlockBlobReference(string blobName);
         string GetSharedAccessSignature(SharedAccessBlobPolicy policy);
         Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(

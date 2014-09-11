@@ -45,7 +45,7 @@ namespace LightBlue.Hosted
             return _cloudBlobContainer.Exists();
         }
 
-        public Task<bool> ExistsAsynx()
+        public Task<bool> ExistsAsync()
         {
             return _cloudBlobContainer.ExistsAsync();
         }

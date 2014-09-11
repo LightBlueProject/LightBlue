@@ -54,7 +54,7 @@ namespace LightBlue.Standalone
             return Directory.Exists(_containerDirectory);
         }
 
-        public Task<bool> ExistsAsynx()
+        public Task<bool> ExistsAsync()
         {
             return Task.FromResult(Directory.Exists(_containerDirectory));
         }

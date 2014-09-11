@@ -143,7 +143,7 @@ namespace LightBlue.Tests.Standalone
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
 
-            Assert.False(await container.ExistsAsynx());
+            Assert.False(await container.ExistsAsync());
         }
 
         [Fact]
@@ -153,7 +153,7 @@ namespace LightBlue.Tests.Standalone
 
             container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
 
-            Assert.True(await container.ExistsAsynx());
+            Assert.True(await container.ExistsAsync());
         }
 
         [Fact]
