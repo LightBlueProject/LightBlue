@@ -158,13 +158,37 @@ namespace LightBlue.Tests.Standalone
             sourceBlob.Properties.ContentType = "something";
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            loadedBlob.FetchAttributes();
 
             new
             {
                 Properties = new
                 {
-                    ContentType = (string) null,
-                    Length = (long) -1,
+                    ContentType = "application/octet-stream",
+                }
+            }.ToExpectedObject().ShouldMatch(loadedBlob);
+        }
+
+        [Theory]
+        [PropertyData("BlobNames")]
+        public void PropertiesCanBeSetRepeatedly(string blobName)
+        {
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Properties.ContentType = "something";
+            sourceBlob.SetProperties();
+            sourceBlob.Properties.ContentType = "something else";
+            sourceBlob.SetProperties();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            loadedBlob.FetchAttributes();
+
+            new
+            {
+                Properties = new
+                {
+                    ContentType = "something else"
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
