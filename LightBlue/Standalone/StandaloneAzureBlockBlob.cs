@@ -121,15 +121,9 @@ namespace LightBlue.Standalone
         {
             EnsureBlobFileExists();
             EnsureMetadataDirectoryExists();
-            StandaloneMetadataStore metadataStore = null;
-
-            if (!File.Exists(_metadataPath))
-            {
-                metadataStore = CreateStandaloneMetadataStore();
-            }
 
             FileLockExtensions.WaitAndRetryOnFileLock(
-                () => SetMetadata(metadataStore),
+                SetMetadataImplementation,
                 _waitTimeBetweenRetries,
                 MaxFileLockRetryAttempts,
                 WhenSetMetadataFileHasSharingViolation);
@@ -141,22 +135,21 @@ namespace LightBlue.Standalone
             return Task.FromResult(new object());
         }
 
-        private void SetMetadata(StandaloneMetadataStore currentMetadataStore)
+        private void SetMetadataImplementation()
         {
             using (var fileStream = new FileStream(_metadataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, BufferSize, true))
             {
-                if (currentMetadataStore == null)
-                {
-                    currentMetadataStore = StandaloneMetadataStore.ReadFromStream(fileStream);
-                }
+                var metadataStore = fileStream.Length == 0
+                    ? CreateStandaloneMetadataStore()
+                    : StandaloneMetadataStore.ReadFromStream(fileStream);
 
                 foreach (var key in _metadata.Keys)
                 {
-                    currentMetadataStore.Metadata[key] = _metadata[key];
+                   metadataStore.Metadata[key] = _metadata[key];
                 }
 
                 fileStream.SetLength(0);
-                currentMetadataStore.WriteToStreamAndClose(fileStream);
+                metadataStore.WriteToStreamAndClose(fileStream);
             }
         }
 
@@ -177,33 +170,26 @@ namespace LightBlue.Standalone
         {
             EnsureBlobFileExists();
             EnsureMetadataDirectoryExists();
-            StandaloneMetadataStore metadataStore = null;
-
-            if (!File.Exists(_metadataPath))
-            {
-                metadataStore = CreateStandaloneMetadataStore();
-            }
 
             FileLockExtensions.WaitAndRetryOnFileLock(
-                () => SetProperties(metadataStore),
+                SetPropertiesImplementation,
                 _waitTimeBetweenRetries,
                 MaxFileLockRetryAttempts,
                 WhenSetMetadataFileHasSharingViolation);
         }
 
-        private void SetProperties(StandaloneMetadataStore currentMetadataStore)
+        private void SetPropertiesImplementation()
         {
             using (var fileStream = new FileStream(_metadataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, BufferSize, true))
             {
-                if (currentMetadataStore == null)
-                {
-                    currentMetadataStore = StandaloneMetadataStore.ReadFromStream(fileStream);
-                }
+                var metadataStore = fileStream.Length == 0
+                    ? CreateStandaloneMetadataStore()
+                    : StandaloneMetadataStore.ReadFromStream(fileStream);
 
-                currentMetadataStore.ContentType = _properties.ContentType;
+                metadataStore.ContentType = _properties.ContentType;
 
                 fileStream.SetLength(0);
-                currentMetadataStore.WriteToStreamAndClose(fileStream);
+                metadataStore.WriteToStreamAndClose(fileStream);
             }
         }
 
@@ -417,14 +403,6 @@ namespace LightBlue.Standalone
                     FileShare.None, BufferSize, true))
             {
                 return StandaloneMetadataStore.ReadFromStream(fileStream);
-            }
-        }
-
-        private void WriteMetadataStore(StandaloneMetadataStore metadataStore)
-        {
-            using (var fileStream = new FileStream(_metadataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, BufferSize, true))
-            {
-                metadataStore.WriteToStreamAndClose(fileStream);
             }
         }
 
