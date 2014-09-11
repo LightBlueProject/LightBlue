@@ -193,5 +193,27 @@ namespace LightBlue.Tests.Standalone
                 }
             }.ToExpectedObject().ShouldMatch(loadedBlob);
         }
+
+        [Theory]
+        [PropertyData("BlobNames")]
+        [Trait("Category", "Slow")]
+        public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted(string blobName)
+        {
+            var metadataPath = Path.Combine(BasePath, ".meta", blobName);
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            CreateBlobContent(sourceBlob);
+
+            sourceBlob.Properties.ContentType = "thing";
+            sourceBlob.SetProperties();
+
+            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            loadedBlob.FetchAttributes();
+            loadedBlob.Properties.ContentType = "otherthing";
+
+            using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                Assert.Throws<StorageException>(() => loadedBlob.SetProperties());
+            }
+        }
     }
 }

@@ -135,17 +135,10 @@ namespace LightBlue.Standalone
                 WhenSetMetadataFileHasSharingViolation);
         }
 
-        private void WhenSetMetadataFileHasSharingViolation(int retriesRemaining)
+        public Task SetMetadataAsync()
         {
-            if (retriesRemaining <= 0)
-            {
-                throw new StorageException(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Tried {0} times to write to locked metadata file '{1}'",
-                        MaxFileLockRetryAttempts,
-                        _metadataPath));
-            }
+            SetMetadata();
+            return Task.FromResult(new object());
         }
 
         private void SetMetadata(StandaloneMetadataStore currentMetadataStore)
@@ -167,20 +160,51 @@ namespace LightBlue.Standalone
             }
         }
 
-        public Task SetMetadataAsync()
+        private void WhenSetMetadataFileHasSharingViolation(int retriesRemaining)
         {
-            SetMetadata();
-            return Task.FromResult(new object());
+            if (retriesRemaining <= 0)
+            {
+                throw new StorageException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Tried {0} times to write to locked metadata file '{1}'",
+                        MaxFileLockRetryAttempts,
+                        _metadataPath));
+            }
         }
 
         public void SetProperties()
         {
             EnsureBlobFileExists();
             EnsureMetadataDirectoryExists();
+            StandaloneMetadataStore metadataStore = null;
 
-            var metadataStore = LoadMetadataStore();
-            metadataStore.ContentType = _properties.ContentType;
-            WriteMetadataStore(metadataStore);
+            if (!File.Exists(_metadataPath))
+            {
+                metadataStore = CreateStandaloneMetadataStore();
+            }
+
+            FileLockExtensions.WaitAndRetryOnFileLock(
+                () => SetProperties(metadataStore),
+                _waitTimeBetweenRetries,
+                MaxFileLockRetryAttempts,
+                WhenSetMetadataFileHasSharingViolation);
+        }
+
+        private void SetProperties(StandaloneMetadataStore currentMetadataStore)
+        {
+            using (var fileStream = new FileStream(_metadataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, BufferSize, true))
+            {
+                if (currentMetadataStore == null)
+                {
+                    currentMetadataStore = StandaloneMetadataStore.ReadFromStream(fileStream);
+                }
+
+                currentMetadataStore.ContentType = _properties.ContentType;
+
+                fileStream.SetLength(0);
+                currentMetadataStore.WriteToStreamAndClose(fileStream);
+            }
         }
 
         public Task SetPropertiesAsync()
