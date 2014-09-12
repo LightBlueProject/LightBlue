@@ -14,7 +14,8 @@ $workerHostStubDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\
 $ndeskDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\NDesk.Options.dll"
 $webHostExePath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.exe"
 
-$linqpadEnvironmentTemplatePath = join-path $parentDirectory "LINQPad\LightBlue Environment Template.linq"
+$linqpadEnvironmentTemplatePath = join-path $parentDirectory "LINQPad\Environment Template.linq"
+$linqpadIssueTemplatePath = join-path $parentDirectory "LINQPad\Issue Report Template.linq"
 
 $packagePath = join-path $parentDirectory -childpath "createpackage"
 $outputDirectory = join-path $packagePath "output"
@@ -40,7 +41,8 @@ New-Item -ItemType directory -Path $coreNet45LibPath | Out-Null
 New-Item -ItemType directory -Path $linqpadSamplesPath | Out-Null
 Copy-Item $coreNuspecPath $corePackagePath
 Copy-Item  $lightBlueDllPath $coreNet45LibPath
-Copy-Item $linqpadEnvironmentTemplatePath  $linqpadSamplesPath
+Copy-Item $linqpadEnvironmentTemplatePath $linqpadSamplesPath
+Copy-Item $linqpadIssueTemplatePath $linqpadSamplesPath
 
 New-Item -ItemType directory -Path $autofacNet45LibPath | Out-Null
 Copy-Item $autofacNuspecPath $autofacPackagePath
