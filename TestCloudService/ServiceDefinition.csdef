@@ -26,4 +26,12 @@
       <LocalStorage name="TestStorage" cleanOnRoleRecycle="false" sizeInMB="512" />
     </LocalResources>
   </WebRole>
+  <WorkerRole name="TestWindsorRole" vmsize="Small">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <ConfigurationSettings>
+      <Setting name="WindsorSetting" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>

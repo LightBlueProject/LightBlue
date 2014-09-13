@@ -45,6 +45,14 @@
       <RoleName>TestWebRole</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
+    <ProjectReference Include="..\TestWindsorRole\TestWindsorRole.csproj">
+      <Name>TestWindsorRole</Name>
+      <Project>{6d9b78cd-717e-4764-bd29-93007089343f}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>TestWindsorRole</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\TestWorkerRole\TestWorkerRole.csproj">
       <Name>TestWorkerRole</Name>
       <Project>{8dda4190-8288-4be4-ad3c-f73b2f81dd0a}</Project>
@@ -56,10 +64,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestWebRoleContent\" />
+    <Folder Include="TestWindsorRoleContent\" />
     <Folder Include="TestWorkerRoleContent\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestWebRoleContent\diagnostics.wadcfg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TestWindsorRoleContent\diagnostics.wadcfg">
       <SubType>Content</SubType>
     </Content>
     <Content Include="TestWorkerRoleContent\diagnostics.wadcfg">
