@@ -4,6 +4,7 @@ LightBlue
 Version 0.1.12
 --------------------
 ###Features
+* Support for Castle Windsor
 * Basic support for blobs with path separators in their names.
 * Add IAzureBlobDirectory.ListBlobsSegmentedAsync
 * Lock metadata file for the duration of an update so that concurrent access doesn't overwrite values unexpectedly.

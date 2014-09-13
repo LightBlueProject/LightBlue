@@ -4,11 +4,13 @@ $parentDirectory = split-path $PSScriptRoot -parent
 $coreNuspecPath = join-path $parentDirectory "LightBlue.nuspec"
 $autofacNuspecPath = join-path $parentDirectory "LightBlue.Autofac.nuspec"
 $hostsNuspecPath = join-path $parentDirectory "LightBlue.Hosts.nuspec"
+$windsorNuspecPath = join-path $parentDirectory "LightBlue.Windsor.nuspec"
 
 $noticePath = join-path $parentDirectory "NOTICE"
 
 $lightBlueDllPath = join-path $parentDirectory "LightBlue\bin\Release\LightBlue.dll"
 $lightBlueAutofacDllPath = join-path $parentDirectory "LightBlue.Autofac\bin\Release\LightBlue.Autofac.dll"
+$lightBlueWindsorDllPath = join-path $parentDirectory "LightBlue.Windsor\bin\Release\LightBlue.Windsor.dll"
 $workerHostExePath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.exe"
 $workerHostStubDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.dll"
 $ndeskDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\NDesk.Options.dll"
@@ -26,6 +28,9 @@ $linqpadSamplesPath = join-path $corePackagePath -childpath "linqpad-samples\Lig
 
 $autofacPackagePath = join-path $packagePath -childpath "autofac"
 $autofacNet45LibPath = join-path $autofacPackagePath -childpath "lib\net45"
+
+$windsorPackagePath = join-path $packagePath -childpath "windsor"
+$windsorNet45LibPath = join-path $windsorPackagePath -childpath "lib\net45"
 
 $hostsPackagePath = join-path $packagePath -childpath "host"
 $toolsPath = join-path $hostsPackagePath "tools"
@@ -47,6 +52,10 @@ Copy-Item $linqpadIssueTemplatePath $linqpadSamplesPath
 New-Item -ItemType directory -Path $autofacNet45LibPath | Out-Null
 Copy-Item $autofacNuspecPath $autofacPackagePath
 Copy-Item  $lightBlueAutofacDllPath $autofacNet45LibPath
+
+New-Item -ItemType directory -Path $windsorNet45LibPath | Out-Null
+Copy-Item $windsorNuspecPath $windsorPackagePath
+Copy-Item  $lightBlueWindsorDllPath $windsorNet45LibPath
 
 New-Item -ItemType directory -Path $toolsPath | Out-Null
 Copy-Item $hostsNuspecPath $hostsPackagePath
@@ -73,6 +82,13 @@ Pop-Location
 Push-Location -Path $hostsPackagePath
 
 & '..\..\.nuget\nuget.exe' Pack "LightBlue.Hosts.nuspec"
+Copy-Item "*.nupkg" $outputDirectory
+
+Pop-Location
+
+Push-Location -Path $windsorPackagePath
+
+& '..\..\.nuget\nuget.exe' Pack "LightBlue.Windsor.nuspec"
 Copy-Item "*.nupkg" $outputDirectory
 
 Pop-Location
