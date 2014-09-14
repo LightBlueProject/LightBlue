@@ -96,6 +96,34 @@ namespace LightBlue.Tests.Standalone
             }
         }
 
+        [Fact]
+        public void WillThrowIfConstructorContainerDirectoryIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlockBlob(null, "blob"));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void WillThrowIfConstructorContainerDirectoryIsEmpty(string containerDirectory)
+        {
+            Assert.Throws<ArgumentException>(() => new StandaloneAzureBlockBlob(containerDirectory, "blob"));
+        }
+
+        [Fact]
+        public void WillThrowIfConstructorBlobNameIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlockBlob(BasePath, null));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void WillThrowIfConstructorBlobNameIsEmpty(string blobName)
+        {
+            Assert.Throws<ArgumentException>(() => new StandaloneAzureBlockBlob(BasePath, blobName));
+        }
+
         private static string GenerateSourceContent()
         {
             var stringBuilder = new StringBuilder();

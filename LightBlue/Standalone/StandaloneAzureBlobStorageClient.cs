@@ -10,7 +10,10 @@ namespace LightBlue.Standalone
 
         public StandaloneAzureBlobStorageClient(string storageAccountDirectory)
         {
+            StringValidation.NotNullOrWhitespace(storageAccountDirectory, "storageAccountDirectory");
+
             _blobStorageDirectory = Path.Combine(storageAccountDirectory, "blob");
+            
             Directory.CreateDirectory(_blobStorageDirectory);
         }
 

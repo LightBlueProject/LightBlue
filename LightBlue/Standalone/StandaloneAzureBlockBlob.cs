@@ -29,6 +29,9 @@ namespace LightBlue.Standalone
 
         public StandaloneAzureBlockBlob(string containerDirectory, string blobName)
         {
+            StringValidation.NotNullOrWhitespace(containerDirectory, "containerDirectory");
+            StringValidation.NotNullOrWhitespace(blobName, "blobName");
+
             _blobName = blobName;
             _blobPath = Path.Combine(containerDirectory, blobName);
             _metadataPath = Path.Combine(containerDirectory, ".meta", blobName);
