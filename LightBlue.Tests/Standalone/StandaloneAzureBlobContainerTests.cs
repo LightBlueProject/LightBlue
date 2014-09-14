@@ -211,7 +211,6 @@ namespace LightBlue.Tests.Standalone
             Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer(null, "container"));
         }
 
-
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
