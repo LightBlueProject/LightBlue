@@ -171,6 +171,22 @@ namespace LightBlue.Tests.Standalone
             }.ToExpectedObject().ShouldMatch(blob);
         }
 
+        [Fact]
+        public void WillThrowIfBlobNameNotGiven()
+        {
+            var container = new StandaloneAzureBlobContainer(_containerPath);
+
+            Assert.Throws<ArgumentNullException>(() => container.GetBlockBlobReference(null));
+        }
+
+        [Fact]
+        public void WillThrowIfBlobNameEmpty()
+        {
+            var container = new StandaloneAzureBlobContainer(_containerPath);
+
+            Assert.Throws<ArgumentException>(() => container.GetBlockBlobReference(""));
+        }
+
         [Theory]
         [InlineData(SharedAccessBlobPermissions.Delete, "sp=d")]
         [InlineData(SharedAccessBlobPermissions.List, "sp=l")]
@@ -187,6 +203,55 @@ namespace LightBlue.Tests.Standalone
             {
                 Permissions = permissions
             }));
+        }
+
+        [Fact]
+        public void WillThrowIfConstructorBlobStorageDirectoryIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer(null, "container"));
+        }
+
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void WillThrowIfConstructorBlobStorageDirectoryIsEmpty(string blobStorageDirectory)
+        {
+            Assert.Throws<ArgumentException>(() => new StandaloneAzureBlobContainer(blobStorageDirectory, "container"));
+        }
+
+        [Fact]
+        public void WillThrowIfConstructorContainerNameIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer(BasePath, null));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void WillThrowIfConstructorContainerNameIsEmpty(string containerName)
+        {
+            Assert.Throws<ArgumentException>(() => new StandaloneAzureBlobContainer(BasePath, containerName));
+        }
+
+        [Fact]
+        public void WillThrowIfConstructorContainerDirectoryIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer((string) null));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void WillThrowIfConstructorContainerDirectoryIsEmpty(string containerDirectory)
+        {
+            Assert.Throws<ArgumentException>(() => new StandaloneAzureBlobContainer(containerDirectory));
+        }
+
+        [Fact]
+        public void WillThrowIfConstructorContainerUriIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer((Uri) null));
         }
     }
 }

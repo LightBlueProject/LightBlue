@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
+using LightBlue.Infrastructure;
+
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Standalone
@@ -13,17 +15,27 @@ namespace LightBlue.Standalone
 
         public StandaloneAzureBlobContainer(string blobStorageDirectory, string containerName)
         {
+            StringValidation.NotNullOrWhitespace(blobStorageDirectory, "blobStorageDirectory");
+            StringValidation.NotNullOrWhitespace(containerName, "containerName");
+
             _containerDirectory = Path.Combine(blobStorageDirectory, containerName);
         }
 
         public StandaloneAzureBlobContainer(string containerDirectory)
         {
+            StringValidation.NotNullOrWhitespace(containerDirectory, "containerDirectory");
+
             _containerDirectory = containerDirectory;
         }
 
         public StandaloneAzureBlobContainer(Uri containerUri)
         {
-            _containerDirectory = containerUri.RemoveToken();
+            if (containerUri == null)
+            {
+                throw new ArgumentNullException("containerUri");
+            }
+
+            _containerDirectory = containerUri.GetLocalPathWithoutToken();
         }
 
         private string MetadataDirectory
@@ -61,6 +73,8 @@ namespace LightBlue.Standalone
 
         public IAzureBlockBlob GetBlockBlobReference(string blobName)
         {
+            StringValidation.NotNullOrEmpty(blobName, "blobName");
+
             return new StandaloneAzureBlockBlob(_containerDirectory, blobName);
         }
 

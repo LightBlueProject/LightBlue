@@ -19,7 +19,11 @@ namespace LightBlue.Standalone
         /// <param name="timeToAttemptRetry">A duration to wait between try attempts. The default duration is 1 second.</param>
         /// <param name="maximumRetryAttempts">The maximum number of retries to attempt before this method returns.</param>
         /// <param name="whenSharingViolationOccurs">An action to invoke when a file sharing violation is detected. This is passed the remaining number of retries.</param>
-        public static void WaitAndRetryOnFileLock(Action ioAction, TimeSpan? timeToAttemptRetry = null, int maximumRetryAttempts = 3, Action<int> whenSharingViolationOccurs = null)
+        public static void WaitAndRetryOnFileLock(
+            Action ioAction,
+            TimeSpan? timeToAttemptRetry = null,
+            int maximumRetryAttempts = 3,
+            Action<int> whenSharingViolationOccurs = null)
         {
             var waitTime = TimeSpan.FromSeconds(1);
             if (timeToAttemptRetry.HasValue)

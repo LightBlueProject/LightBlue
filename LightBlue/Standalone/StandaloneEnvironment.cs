@@ -23,7 +23,7 @@ namespace LightBlue.Standalone
                 throw new ArgumentException("Only file Uris can be separated", "blobUri");
             }
 
-            var localPath = blobUri.RemoveToken();
+            var localPath = blobUri.GetLocalPathWithoutToken();
 
             if (!localPath.StartsWith(_lightBlueDataDirectory))
             {
