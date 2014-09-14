@@ -13,6 +13,7 @@ Version 0.1.12
 * Add flag that causes LightBlue hosts to provide the hosted storage implementation (via the LightBlue APIs)
 * Add additional async variations of storage API methods for which async support makes sense.
 * Listing of blobs will load metadata when the BlobListingDetails.Metadata flag is specified for standalone containers and directories.
+* Added additional parameter validation to various Standalone classes
 
 ###Implementation
 * Removed the StandaloneAzureBlockBlob(Uri) constructor.
