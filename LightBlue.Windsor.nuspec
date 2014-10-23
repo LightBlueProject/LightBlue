@@ -16,12 +16,12 @@
       <dependency id="LightBlue" version="1.1.12-beta" />
       <dependency id="Castle.Core" version="3.3.1" />
       <dependency id="Castle.Windsor" version="3.3.0" />
-      <dependency id="Microsoft.Data.Edm" version="5.6.2" />
-      <dependency id="Microsoft.Data.OData" version="5.6.2" />
-      <dependency id="Microsoft.Data.Services.Client" version="5.6.2" />
+      <dependency id="Microsoft.Data.Edm" version="5.6.3" />
+      <dependency id="Microsoft.Data.OData" version="5.6.3" />
+      <dependency id="Microsoft.Data.Services.Client" version="5.6.3" />
       <dependency id="Microsoft.WindowsAzure.ConfigurationManager" version="2.0.3" />
       <dependency id="Newtonsoft.Json" version="6.0.5" />
-      <dependency id="System.Spatial" version="5.6.2" />
+      <dependency id="System.Spatial" version="5.6.3" />
       <dependency id="WindowsAzure.Storage" version="4.3.0" />
     </dependencies>
   </metadata>
