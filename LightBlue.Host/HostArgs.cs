@@ -13,6 +13,7 @@ namespace LightBlue.Host
         public string Assembly { get; private set; }
         public string RoleName { get; private set; }
         public string Title { get; private set; }
+        public string RoleConfigurationFile { get; private set; }
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
         public bool UseHostedStorage { get; private set; }
@@ -103,6 +104,13 @@ namespace LightBlue.Host
                 return null;
             }
 
+            var roleConfigurationFile = assembly + ".config";
+            if (!File.Exists(roleConfigurationFile))
+            {
+                DisplayErrorMessage("The configuration file for the role cannot be located.");
+                return null;
+            }
+
             return new HostArgs
             {
                 Assembly = assembly,
@@ -112,7 +120,8 @@ namespace LightBlue.Host
                     : title,
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
-                UseHostedStorage = useHostedStorage
+                UseHostedStorage = useHostedStorage,
+                RoleConfigurationFile = roleConfigurationFile
             };
         }
 

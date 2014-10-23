@@ -30,12 +30,8 @@ namespace LightBlue.Host
                 ApplicationBase = hostArgs.ApplicationBase
             };
 
-            var configurationFile = hostArgs.Assembly + ".config";
-            if (File.Exists(configurationFile))
-            {
-                ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(configurationFile);
-                appDomainSetup.ConfigurationFile = configurationFile;
-            }
+            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(hostArgs.RoleConfigurationFile);
+            appDomainSetup.ConfigurationFile = hostArgs.RoleConfigurationFile;
 
             StubManagement.CopyStubAssemblyToRoleDirectory(hostArgs.ApplicationBase);
 
