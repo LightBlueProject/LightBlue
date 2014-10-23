@@ -1,6 +1,12 @@
 LightBlue
 ====================
 
+Version 0.1.13
+--------------------
+###Features
+* Handle the configuration path having a training double quote due to escaping quotes paths in the shell.
+* Require worker roles to have a configuration file.
+
 Version 0.1.12
 --------------------
 ###Features
