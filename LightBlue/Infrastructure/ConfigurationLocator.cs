@@ -7,17 +7,19 @@ namespace LightBlue.Infrastructure
     {
         public static string LocateConfigurationFile(string configurationPath)
         {
-            if (File.Exists(configurationPath))
+            var path = RemoveTrailingDoubleQuote(configurationPath);
+
+            if (File.Exists(path))
             {
-                return configurationPath;
+                return path;
             }
 
-            if (!Directory.Exists(configurationPath))
+            if (!Directory.Exists(path))
             {
                 throw new ArgumentException("The configuration path does not exist. Specify the specific configuration file or the directory in which ServiceConfiguration.Local.cscfg is located.");
             }
 
-            var configurationFile = Path.Combine(configurationPath, "ServiceConfiguration.Local.cscfg");
+            var configurationFile = Path.Combine(path, "ServiceConfiguration.Local.cscfg");
             if (!File.Exists(configurationFile))
             {
                 throw new ArgumentException("ServiceConfiguration.Local.cscfg cannot be located in the configuration path.");
@@ -28,9 +30,11 @@ namespace LightBlue.Infrastructure
 
         public static string LocateServiceDefinition(string configurationPath)
         {
-            var directoryPath = File.Exists(configurationPath)
-                ? Path.GetDirectoryName(configurationPath) ?? ""
-                : configurationPath;
+            var path = RemoveTrailingDoubleQuote(configurationPath);
+
+            var directoryPath = File.Exists(path)
+                ? Path.GetDirectoryName(path) ?? ""
+                : path;
 
             if (!Directory.Exists(directoryPath))
             {
@@ -45,6 +49,13 @@ namespace LightBlue.Infrastructure
             }
 
             return serviceDefinitionPath;
+        }
+
+        private static string RemoveTrailingDoubleQuote(string configurationPath)
+        {
+            return configurationPath.EndsWith("\"")
+                ? configurationPath.Substring(0, configurationPath.Length - 1)
+                : configurationPath;
         }
     }
 }
