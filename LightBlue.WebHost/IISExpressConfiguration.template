@@ -164,7 +164,7 @@
             </site>
             <siteDefaults>
                 <logFile logFormat="W3C" directory="%IIS_USER_HOME%\Logs" />
-                <traceFailedRequestsLogging directory="%IIS_USER_HOME%\TraceLogFiles" enabled="true" maxLogFileSizeKB="1024" />
+                <traceFailedRequestsLogging directory="%IIS_USER_HOME%\TraceLogFiles" enabled="false" maxLogFileSizeKB="1024" />
             </siteDefaults>
             <applicationDefaults applicationPool="IISExpressAppPool" />
             <virtualDirectoryDefaults allowSubDirConfig="true" />
