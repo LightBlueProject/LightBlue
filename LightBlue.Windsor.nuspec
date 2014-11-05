@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>LightBlue.Windsor</id>
-    <version>1.1.13-beta</version>
+    <version>1.1.14-beta</version>
 	<title>LightBlue.Windsor</title>
     <authors>Colin David Scott</authors>
     <owners>Colin David Scott</owners>
@@ -13,7 +13,7 @@
     <copyright>Copyright 2014</copyright>
     <tags>azure</tags>
     <dependencies>
-      <dependency id="LightBlue" version="1.1.13-beta" />
+      <dependency id="LightBlue" version="1.1.14-beta" />
       <dependency id="Castle.Core" version="3.3.1" />
       <dependency id="Castle.Windsor" version="3.3.0" />
       <dependency id="Microsoft.Data.Edm" version="5.6.3" />
