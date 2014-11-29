@@ -2,7 +2,6 @@
 <ServiceDefinition name="TestCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-06.2.4">
   <WorkerRole name="TestWorkerRole" vmsize="Small">
     <Imports>
-      <Import moduleName="Diagnostics" />
     </Imports>
     <ConfigurationSettings>
       <Setting name="RandomSetting" />
@@ -20,7 +19,6 @@
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />
     </Endpoints>
     <Imports>
-      <Import moduleName="Diagnostics" />
     </Imports>
     <LocalResources>
       <LocalStorage name="TestStorage" cleanOnRoleRecycle="false" sizeInMB="512" />
@@ -28,7 +26,6 @@
   </WebRole>
   <WorkerRole name="TestWindsorRole" vmsize="Small">
     <Imports>
-      <Import moduleName="Diagnostics" />
     </Imports>
     <ConfigurationSettings>
       <Setting name="WindsorSetting" />
