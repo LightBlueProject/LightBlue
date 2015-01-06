@@ -21,6 +21,7 @@ namespace LightBlue.WebHost
         public bool UseSsl { get; private set; }
         public string Hostname { get; private set; }
         public bool UseHostedStorage { get; private set; }
+        public bool AllowSilentFail { get; private set; }
 
         public string SiteDirectory
         {
@@ -42,6 +43,7 @@ namespace LightBlue.WebHost
             bool? useSsl = null;
             var hostname = "localhost";
             var useHostedStorage = false;
+            var allowSilentFail = false;
             var displayHelp = false;
 
             var options = new OptionSet
@@ -85,6 +87,11 @@ namespace LightBlue.WebHost
                     "useHostedStorage",
                     "Use hosted storage (Emulator/Actual Azure) inside the LightBlue host.",
                     v => useHostedStorage = true
+                },
+                {
+                    "allowSilentFail",
+                    "Allow the host to fail silently instead of throwing an exception when the hosted process exits. Applies only to the background process not the website.",
+                    v => allowSilentFail = true
                 },
                 {
                     "help",
@@ -173,7 +180,8 @@ namespace LightBlue.WebHost
                 ServiceDefinitionPath = serviceDefinitionPath,
                 UseSsl = useSsl.Value,
                 Hostname = hostname,
-                UseHostedStorage = useHostedStorage
+                UseHostedStorage = useHostedStorage,
+                AllowSilentFail = allowSilentFail
             };
         }
 

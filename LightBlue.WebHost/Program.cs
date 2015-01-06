@@ -18,14 +18,14 @@ namespace LightBlue.WebHost
 
         public static void Main(string[] args)
         {
+            var webHostArgs = WebHostArgs.ParseArgs(args);
+            if (webHostArgs == null)
+            {
+                return;
+            }
+
             try
             {
-                var webHostArgs = WebHostArgs.ParseArgs(args);
-                if (webHostArgs == null)
-                {
-                    return;
-                }
-
                 var handle = Process.GetCurrentProcess().MainWindowHandle;
 
                 SetWindowText(handle, webHostArgs.Title);
@@ -38,6 +38,15 @@ namespace LightBlue.WebHost
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToTraceMessage());
+            }
+
+            if (!webHostArgs.AllowSilentFail)
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "The web host {0} has exited unexpectedly",
+                        webHostArgs.Title));
             }
         }
 

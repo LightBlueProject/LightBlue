@@ -17,6 +17,7 @@ namespace LightBlue.Host
         public string ConfigurationPath { get; private set; }
         public string ServiceDefinitionPath { get; private set; }
         public bool UseHostedStorage { get; private set; }
+        public bool AllowSilentFail { get; private set; }
         public string ApplicationBase { get { return Path.GetDirectoryName(Assembly); } }
 
         public static HostArgs ParseArgs(IEnumerable<string> args)
@@ -26,6 +27,7 @@ namespace LightBlue.Host
             string title = null;
             string configurationPath = null;
             var useHostedStorage = false;
+            var allowSilentFail = false;
             var displayHelp = false;
 
             var options = new OptionSet
@@ -54,6 +56,11 @@ namespace LightBlue.Host
                     "useHostedStorage",
                     "Use hosted storage (Emulator/Actual Azure) inside the LightBlue host.",
                     v => useHostedStorage = true
+                },
+                {
+                    "allowSilentFail",
+                    "Allow the host to fail silently instead of throwing an exception when the hosted process exits.",
+                    v => allowSilentFail = true
                 },
                 {
                     "help",
@@ -121,6 +128,7 @@ namespace LightBlue.Host
                 ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
                 UseHostedStorage = useHostedStorage,
+                AllowSilentFail = allowSilentFail,
                 RoleConfigurationFile = roleConfigurationFile
             };
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 using LightBlue.Host.Stub;
@@ -53,6 +53,15 @@ namespace LightBlue.Host
                 serviceDefinitionPath: hostArgs.ServiceDefinitionPath,
                 roleName: hostArgs.RoleName,
                 useHostedStorage: hostArgs.UseHostedStorage);
+
+            if (!hostArgs.AllowSilentFail)
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "The host {0} has exited unexpectedly",
+                        hostArgs.Title));
+            }
         }
     }
 }
