@@ -1,6 +1,17 @@
 LightBlue
 ====================
 
+
+Version 1.1.15
+--------------------
+###Features
+* Throw exception if role exits (suppress with --allowSilentFail)
+
+###Implementation
+* Update to Azure SDK 2.5
+* Update to NewtonSoft.Json 6.0.7
+* Update to Castle 3.3.3
+
 Version 1.1.14
 --------------------
 ###Implementation
