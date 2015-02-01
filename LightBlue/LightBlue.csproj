@@ -79,6 +79,7 @@
     <Compile Include="BlobListing.cs" />
     <Compile Include="External\ExternalAzureLocalResourceSource.cs" />
     <Compile Include="External\ExternalAzureSettings.cs" />
+    <Compile Include="Hosted\AzureQueueMessageExtensions.cs" />
     <Compile Include="Hosted\HostedAzureBlobContainer.cs" />
     <Compile Include="Hosted\HostedAzureBlobDirectory.cs" />
     <Compile Include="Hosted\HostedAzureBlobProperties.cs" />
@@ -89,6 +90,9 @@
     <Compile Include="Hosted\HostedAzureLocalResource.cs" />
     <Compile Include="Hosted\HostedAzureLocalResourceSource.cs" />
     <Compile Include="Hosted\HostedAzurePageBlob.cs" />
+    <Compile Include="Hosted\HostedAzureQueue.cs" />
+    <Compile Include="Hosted\HostedAzureQueueMessage.cs" />
+    <Compile Include="Hosted\HostedAzureQueueStorageClient.cs" />
     <Compile Include="Hosted\HostedAzureRoleInformation.cs" />
     <Compile Include="Hosted\HostedAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureStorage.cs" />
@@ -104,6 +108,9 @@
     <Compile Include="IAzureLocalResource.cs" />
     <Compile Include="IAzureLocalResourceSource.cs" />
     <Compile Include="IAzurePageBlob.cs" />
+    <Compile Include="IAzureQueue.cs" />
+    <Compile Include="IAzureQueueMessage.cs" />
+    <Compile Include="IAzureQueueStorageClient.cs" />
     <Compile Include="IAzureRoleInformation.cs" />
     <Compile Include="IAzureSettings.cs" />
     <Compile Include="IAzureStorage.cs" />
