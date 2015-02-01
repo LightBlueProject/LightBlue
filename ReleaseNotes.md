@@ -1,6 +1,10 @@
 LightBlue
 ====================
 
+Version 1.1.15
+--------------------
+###Implementation
+* Update to NewtonSoft.Json 6.0.8
 
 Version 1.1.15
 --------------------
