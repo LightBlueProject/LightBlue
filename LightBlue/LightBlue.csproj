@@ -137,6 +137,8 @@
     <Compile Include="Standalone\StandaloneAzureBlobResultSegment.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlob.cs" />
     <Compile Include="Standalone\StandaloneAzureLocalResourceSource.cs" />
+    <Compile Include="Standalone\StandaloneAzureQueue.cs" />
+    <Compile Include="Standalone\StandaloneAzureQueueStorageClient.cs" />
     <Compile Include="Standalone\StandaloneAzureRoleInformation.cs" />
     <Compile Include="Standalone\StandaloneAzureSettings.cs" />
     <Compile Include="Standalone\StandaloneAzureStorage.cs" />

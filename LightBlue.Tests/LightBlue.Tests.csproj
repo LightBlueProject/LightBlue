@@ -106,6 +106,8 @@
     <Compile Include="Standalone\StandaloneAzureBlockBlobPropertiesTests.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlobTests.cs" />
     <Compile Include="Standalone\StandaloneAzureLocalResourceSourceTests.cs" />
+    <Compile Include="Standalone\StandaloneAzureQueueTests.cs" />
+    <Compile Include="Standalone\StandaloneAzureQueueStorageClientTests.cs" />
     <Compile Include="Standalone\StandaloneAzureSettingsTests.cs" />
     <Compile Include="Standalone\StandaloneAzureTestsBase.cs" />
     <Compile Include="Standalone\FileLockExtensionsTests.cs" />

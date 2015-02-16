@@ -29,6 +29,8 @@ namespace LightBlue.Tests.Standalone
         public void DoesNotCreateContainerDirectoryOnConstruction()
         {
             new StandaloneAzureBlobContainer(_containerPath);
+
+            Assert.False(Directory.Exists(_containerPath));
         }
 
         [Fact]

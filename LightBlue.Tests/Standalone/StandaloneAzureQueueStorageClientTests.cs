@@ -7,12 +7,12 @@ using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
-    public class StandaloneAzureBlobStorageClientTests
+    public class StandaloneAzureQueueStorageClientTests
     {
         [Fact]
         public void WillThrowIfConstructorStorageAccountDirectoryIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobStorageClient(null));
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureQueueStorageClient(null));
         }
 
         [Theory]
@@ -20,7 +20,7 @@ namespace LightBlue.Tests.Standalone
         [InlineData(" ")]
         public void WillThrowIfConstructorStorageAccountDirectoryIsEmpty(string storageAccountDirectory)
         {
-            Assert.Throws<ArgumentException>(() => new StandaloneAzureBlobStorageClient(storageAccountDirectory));
+            Assert.Throws<ArgumentException>(() => new StandaloneAzureQueueStorageClient(storageAccountDirectory));
         }
     }
 }
