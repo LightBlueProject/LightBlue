@@ -48,6 +48,66 @@ namespace LightBlue.Host
 
             stub.ConfigureTracing(new TraceShipper());
 
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            {
+                var originalColours = SetEmphasisConsoleColours();
+
+                Console.WriteLine(
+                    "The hosted application {0} has thrown an unhandled exception",
+                    hostArgs.Title);
+                Console.WriteLine();
+                Console.WriteLine("Options:");
+                Console.WriteLine("Press 'x' to kill the process without viewing the error");
+                Console.WriteLine("Press 'd' to launch the debugger");
+                Console.WriteLine("Press 't' to throw the exception");
+                Console.WriteLine("Press anything else to write the exception to the console and exit");
+
+                var option = Console.ReadKey();
+                Console.WriteLine();
+
+                switch (option.KeyChar)
+                {
+                    case 'x':
+                    case 'X':
+                        RestoreConsoleColours(originalColours);
+                        Environment.Exit(1);
+                        return;
+                    case 'd':
+                    case 'D':
+                        if (Debugger.IsAttached)
+                        {
+                            Debugger.Break();
+                        }
+                        else
+                        {
+                            Debugger.Launch();
+                        }
+                        break;
+                    case 't':
+                    case 'T':
+                        RestoreConsoleColours(originalColours);
+                        return;
+                    default:
+                        var exception = eventArgs.ExceptionObject as Exception;
+                        if (exception == null)
+                        {
+                            Console.WriteLine("Unhandled exception cannot be cast to System.Exception");
+                            if (eventArgs.ExceptionObject != null)
+                            {
+                                Console.WriteLine(eventArgs.ExceptionObject.ToString());
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(exception.ToTraceMessage());
+                        }
+                        RestoreConsoleColours(originalColours);
+                        Environment.Exit(1);
+                        break;
+                }
+                RestoreConsoleColours(originalColours);
+            };
+
             stub.Run(workerRoleAssembly: hostArgs.Assembly,
                 configurationPath: hostArgs.ConfigurationPath,
                 serviceDefinitionPath: hostArgs.ServiceDefinitionPath,
@@ -62,6 +122,20 @@ namespace LightBlue.Host
                         "The host {0} has exited unexpectedly",
                         hostArgs.Title));
             }
+        }
+
+        private static void RestoreConsoleColours(ConsoleColor[] originalColours)
+        {
+            Console.ForegroundColor = originalColours[0];
+            Console.BackgroundColor = originalColours[1];
+        }
+
+        private static ConsoleColor[] SetEmphasisConsoleColours()
+        {
+            var originalColours = new[] {Console.ForegroundColor, Console.BackgroundColor};
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Red;
+            return originalColours;
         }
     }
 }

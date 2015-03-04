@@ -57,6 +57,9 @@
     <Compile Include="..\LightBlue\Infrastructure\ConfigurationManipulation.cs">
       <Link>ConfigurationManipulation.cs</Link>
     </Compile>
+    <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs">
+      <Link>ExceptionExtensions.cs</Link>
+    </Compile>
     <Compile Include="HostArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
