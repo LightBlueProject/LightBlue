@@ -120,6 +120,23 @@ namespace LightBlue.WebHost
 
         private static void GenerateIisExpressConfigurationFile(WebHostArgs webHostArgs, string configurationFilePath)
         {
+            var template = ObtainIisExpressConfigurationTemplate(webHostArgs);
+
+            template = template.Replace("__SITEPATH__", webHostArgs.SiteDirectory);
+            template = template.Replace("__PROTOCOL__", webHostArgs.UseSsl ? "https" : "http");
+            template = template.Replace("__PORT__", webHostArgs.Port.ToString(CultureInfo.InvariantCulture));
+            template = template.Replace("__HOSTNAME__", webHostArgs.Hostname);
+
+            File.WriteAllText(configurationFilePath, template);
+        }
+
+        private static string ObtainIisExpressConfigurationTemplate(WebHostArgs webHostArgs)
+        {
+            if (!string.IsNullOrWhiteSpace(webHostArgs.IisExpressTemplate))
+            {
+                return File.ReadAllText(webHostArgs.IisExpressTemplate);
+            }
+
             var executingAssembly = Assembly.GetExecutingAssembly();
             var manifestResourceStream = executingAssembly.GetManifestResourceStream("LightBlue.WebHost.IISExpressConfiguration.template");
             if (manifestResourceStream == null)
@@ -128,12 +145,7 @@ namespace LightBlue.WebHost
             }
 
             var template = new StreamReader(manifestResourceStream).ReadToEnd();
-            template = template.Replace("__SITEPATH__", webHostArgs.SiteDirectory);
-            template = template.Replace("__PROTOCOL__", webHostArgs.UseSsl ? "https" : "http");
-            template = template.Replace("__PORT__", webHostArgs.Port.ToString(CultureInfo.InvariantCulture));
-            template = template.Replace("__HOSTNAME__", webHostArgs.Hostname);
-
-            File.WriteAllText(configurationFilePath, template);
+            return template;
         }
 
         private static ProcessStartInfo BuildProcessStartInfo(WebHostArgs webHostArgs, string configurationFilePath)
