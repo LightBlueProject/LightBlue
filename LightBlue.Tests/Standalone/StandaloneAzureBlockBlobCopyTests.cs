@@ -33,7 +33,6 @@ namespace LightBlue.Tests.Standalone
             }
         }
 
-
         [Theory]
         [PropertyData("CopyBlobNames")]
         public void CanCopyBlob(string source, string destination)
