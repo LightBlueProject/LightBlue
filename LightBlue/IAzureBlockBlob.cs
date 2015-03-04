@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -31,5 +32,6 @@ namespace LightBlue
         Task UploadFromByteArrayAsync(byte[] buffer);
         Task UploadFromByteArrayAsync(byte[] buffer, int index, int count);
         string StartCopyFromBlob(IAzureBlockBlob source);
+        string StartCopyFromBlob(Uri source);
     }
 }

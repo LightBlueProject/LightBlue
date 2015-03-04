@@ -156,5 +156,10 @@ namespace LightBlue.Hosted
 
             return _cloudBlockBlob.StartCopyFromBlob(hostedAzureBlockBlob._cloudBlockBlob);
         }
+
+        public string StartCopyFromBlob(Uri source)
+        {
+            return _cloudBlockBlob.StartCopyFromBlob(source);
+        }
     }
 }

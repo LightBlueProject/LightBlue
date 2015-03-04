@@ -363,6 +363,13 @@ namespace LightBlue.Standalone
             return Guid.NewGuid().ToString();
         }
 
+        public string StartCopyFromBlob(Uri source)
+        {
+            var parts = StandaloneEnvironment.SeparateBlobUri(source);
+            var sourceBlob = new StandaloneAzureBlockBlob(Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, parts.ContainerPath), parts.BlobPath);
+            return StartCopyFromBlob(sourceBlob);
+        }
+
         private FileInfo EnsureBlobFileExists()
         {
             var fileInfo = new FileInfo(_blobPath);
