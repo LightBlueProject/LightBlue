@@ -30,6 +30,8 @@ namespace LightBlue.Tests.Standalone
                 yield return new object[] { @"source\with\path", "destination" };
                 yield return new object[] { "source/with/path/alternate", "destination" };
                 yield return new object[] { @"source\with\path", @"destination\with\path" };
+                yield return new object[] { "source/with/path/alternate", @"destination\with\path" };
+                yield return new object[] { "source/with/path/alternate", @"destination/with/path/alternate" };
             }
         }
 
