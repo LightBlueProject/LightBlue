@@ -22,6 +22,7 @@ namespace LightBlue.WebHost
         public string Hostname { get; private set; }
         public bool UseHostedStorage { get; private set; }
         public bool AllowSilentFail { get; private set; }
+        public string IisExpressTemplate { get; private set; }
 
         public string SiteDirectory
         {
@@ -44,6 +45,7 @@ namespace LightBlue.WebHost
             var hostname = "localhost";
             var useHostedStorage = false;
             var allowSilentFail = false;
+            string iisExpressTemplate = null;
             var displayHelp = false;
 
             var options = new OptionSet
@@ -92,6 +94,11 @@ namespace LightBlue.WebHost
                     "allowSilentFail",
                     "Allow the host to fail silently instead of throwing an exception when the hosted process exits. Applies only to the background process not the website.",
                     v => allowSilentFail = true
+                },
+                {
+                    "iet|iisExpressTemplate=",
+                    "Path to an alternate {TEMPLATE} for IIS Express. If not specified the inbuilt default is used.",
+                    v => iisExpressTemplate = v
                 },
                 {
                     "help",
@@ -168,6 +175,12 @@ namespace LightBlue.WebHost
                 useSsl = endpoint.Item2;
             }
 
+            if (!string.IsNullOrWhiteSpace(iisExpressTemplate) && !File.Exists(iisExpressTemplate))
+            {
+                DisplayErrorMessage("The specified IIS Express template cannot be located.");
+                return null;
+            }
+
             return new WebHostArgs
             {
                 Assembly = assembly,
@@ -181,7 +194,8 @@ namespace LightBlue.WebHost
                 UseSsl = useSsl.Value,
                 Hostname = hostname,
                 UseHostedStorage = useHostedStorage,
-                AllowSilentFail = allowSilentFail
+                AllowSilentFail = allowSilentFail,
+                IisExpressTemplate = iisExpressTemplate
             };
         }
 
