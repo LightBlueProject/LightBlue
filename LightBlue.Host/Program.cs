@@ -13,6 +13,23 @@ namespace LightBlue.Host
         [DllImport("user32.dll")]
         private static extern bool SetWindowText(IntPtr hWnd, string text);
 
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct FLASHWINFO
+        {
+            public UInt32 cbSize;
+            public IntPtr hwnd;
+            public UInt32 dwFlags;
+            public UInt32 uCount;
+            public Int32 dwTimeout;
+        }
+
+        private const UInt32 FLASHW_STOP = 0;
+        public const UInt32 FLASHW_ALL = 3;
+
         public static void Main(string[] args)
         {
             var hostArgs = HostArgs.ParseArgs(args);
@@ -50,6 +67,8 @@ namespace LightBlue.Host
 
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
             {
+                FlashWindow(FLASHW_ALL);
+
                 var originalColours = SetEmphasisConsoleColours();
 
                 Console.WriteLine(
@@ -63,6 +82,8 @@ namespace LightBlue.Host
                 Console.WriteLine("Press anything else to write the exception to the console and exit");
 
                 var option = Console.ReadKey();
+
+                FlashWindow(FLASHW_STOP);
                 Console.WriteLine();
 
                 switch (option.KeyChar)
@@ -136,6 +157,19 @@ namespace LightBlue.Host
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Red;
             return originalColours;
+        }
+
+        private static void FlashWindow(uint flags)
+        {
+            var fInfo = new FLASHWINFO();
+
+            fInfo.cbSize = Convert.ToUInt32(Marshal.SizeOf(fInfo));
+            fInfo.hwnd = Process.GetCurrentProcess().MainWindowHandle;
+            fInfo.dwFlags = flags;
+            fInfo.uCount = UInt32.MaxValue;
+            fInfo.dwTimeout = 0;
+
+            FlashWindowEx(ref fInfo);
         }
     }
 }
