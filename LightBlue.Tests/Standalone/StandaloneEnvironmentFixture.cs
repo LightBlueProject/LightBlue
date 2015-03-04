@@ -16,6 +16,7 @@ namespace LightBlue.Tests.Standalone
 
         public StandaloneEnvironmentFixture()
         {
+            StandaloneEnvironment.SetStandardLightBlueDataDirectory();
             _containerPath = Path.Combine(
                 StandaloneEnvironment.LightBlueDataDirectory,
                 "dev",

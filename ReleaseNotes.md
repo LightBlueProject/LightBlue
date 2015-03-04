@@ -3,6 +3,11 @@ LightBlue
 
 Version 1.1.15
 --------------------
+###Features
+* Added IAzureBlockBlob.StartCopyFromBlob(Uri) method
+
+Version 1.1.15
+--------------------
 ###Implementation
 * Update to NewtonSoft.Json 6.0.8
 

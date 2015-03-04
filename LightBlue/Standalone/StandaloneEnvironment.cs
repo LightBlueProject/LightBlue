@@ -5,11 +5,27 @@ namespace LightBlue.Standalone
 {
     public static class StandaloneEnvironment
     {
-        private static readonly string _lightBlueDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LightBlue" + Path.DirectorySeparatorChar);
+        private static string _lightBlueDataDirectory;
+
+        static StandaloneEnvironment()
+        {
+            SetStandardLightBlueDataDirectory();
+        }
 
         public static string LightBlueDataDirectory
         {
             get { return _lightBlueDataDirectory; }
+            set
+            {
+                _lightBlueDataDirectory = value.EndsWith(Path.DirectorySeparatorChar.ToString())
+                    ? value
+                    : value + Path.DirectorySeparatorChar;
+            }
+        }
+
+        public static void SetStandardLightBlueDataDirectory()
+        {
+            _lightBlueDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LightBlue" + Path.DirectorySeparatorChar);;
         }
 
         public static BlobLocationParts SeparateBlobUri(Uri blobUri)
@@ -28,8 +44,7 @@ namespace LightBlue.Standalone
             if (!localPath.StartsWith(_lightBlueDataDirectory))
             {
                 throw new ArgumentException("Blob must be located in the LightBlue data directory", "blobUri");
-            }
-
+            } 
             var subsection = localPath.Substring(_lightBlueDataDirectory.Length);
 
             var index = IndexOfNth(subsection, Path.DirectorySeparatorChar, 3);

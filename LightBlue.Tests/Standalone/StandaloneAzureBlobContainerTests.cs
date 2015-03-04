@@ -20,7 +20,7 @@ namespace LightBlue.Tests.Standalone
         private readonly string _containerPath;
 
         public StandaloneAzureBlobContainerTests()
-            : base(DirectoryType.Account)
+            : base(DirectoryType.BlobStorage)
         {
             _containerPath = Path.Combine(BasePath, ContainerName);
         }

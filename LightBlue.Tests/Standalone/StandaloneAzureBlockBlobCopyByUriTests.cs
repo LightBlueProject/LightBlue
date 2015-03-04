@@ -14,9 +14,9 @@ using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
-    public class StandaloneAzureBlockBlobCopyTests : StandaloneAzureTestsBase
+    public class StandaloneAzureBlockBlobCopyByUriTests : StandaloneAzureTestsBase
     {
-        public StandaloneAzureBlockBlobCopyTests()
+        public StandaloneAzureBlockBlobCopyByUriTests()
             : base(DirectoryType.Container)
         {}
 
@@ -44,7 +44,7 @@ namespace LightBlue.Tests.Standalone
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
-            destinationBlob.StartCopyFromBlob(sourceBlob);
+            destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
 
             Assert.Equal("File content", File.ReadAllText(destinationBlob.Uri.LocalPath));
         }
@@ -60,7 +60,7 @@ namespace LightBlue.Tests.Standalone
             var originalContentBuffer = Encoding.UTF8.GetBytes("Original content");
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.UploadFromByteArrayAsync(originalContentBuffer, 0, originalContentBuffer.Length).Wait();
-            destinationBlob.StartCopyFromBlob(sourceBlob);
+            destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
 
             Assert.Equal("File content", File.ReadAllText(destinationBlob.Uri.LocalPath));
         }
@@ -74,7 +74,7 @@ namespace LightBlue.Tests.Standalone
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
-            destinationBlob.StartCopyFromBlob(sourceBlob);
+            destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
 
             Assert.False(File.Exists(Path.Combine(BasePath, ".meta", destination)));
         }
@@ -92,7 +92,7 @@ namespace LightBlue.Tests.Standalone
             sourceBlob.SetProperties();
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
-            destinationBlob.StartCopyFromBlob(sourceBlob);
+            destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
             destinationBlob.FetchAttributes();
 
             new
@@ -122,7 +122,7 @@ namespace LightBlue.Tests.Standalone
             destinationBlob.UploadFromByteArrayAsync(originalContentBuffer, 0, originalContentBuffer.Length).Wait();
             destinationBlob.Metadata["thing"] = "other thing";
             destinationBlob.SetMetadata();
-            destinationBlob.StartCopyFromBlob(sourceBlob);
+            destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
 
             Assert.False(File.Exists(Path.Combine(BasePath, ".meta", destination)));
         }
@@ -145,7 +145,7 @@ namespace LightBlue.Tests.Standalone
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
-            destinationBlob.StartCopyFromBlob(sourceBlob);
+            destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
 
             Assert.Equal(CopyStatus.Success, destinationBlob.CopyState.Status);
         }
@@ -161,7 +161,7 @@ namespace LightBlue.Tests.Standalone
             using (new FileStream(sourceBlob.Uri.LocalPath, FileMode.Append, FileAccess.Write, FileShare.None))
             {
                 var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
-                destinationBlob.StartCopyFromBlob(sourceBlob);
+                destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
 
                 new
                 {

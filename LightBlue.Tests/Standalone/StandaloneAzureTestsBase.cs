@@ -10,7 +10,8 @@ namespace LightBlue.Tests.Standalone
     public enum DirectoryType
     {
         Account = 0,
-        Container = 1,
+        BlobStorage = 1,
+        Container = 2
     }
 
     public abstract class StandaloneAzureTestsBase
@@ -18,15 +19,32 @@ namespace LightBlue.Tests.Standalone
         public const string MetadataDirectory = ".meta";
 
         protected readonly string BasePath;
+        private readonly string _appDataDirectory;
 
         protected StandaloneAzureTestsBase(DirectoryType directoryType)
         {
-            BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            Directory.CreateDirectory(BasePath);
+            _appDataDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var lightBlueDirectory = Path.Combine(_appDataDirectory, "LightBlue");
+            var accountDirectory = Path.Combine(lightBlueDirectory, "dev");
+            var blobDirectory = Path.Combine(accountDirectory, "blob");
 
-            if (directoryType == DirectoryType.Container)
+            StandaloneEnvironment.LightBlueDataDirectory = lightBlueDirectory;
+
+            Directory.CreateDirectory(blobDirectory);
+
+            switch (directoryType)
             {
-                Directory.CreateDirectory(Path.Combine(BasePath, MetadataDirectory));
+                case DirectoryType.Account:
+                    BasePath = accountDirectory;
+                    break;
+                case DirectoryType.BlobStorage:
+                    BasePath = blobDirectory;
+                    break;
+                case DirectoryType.Container:
+                    var containerDirectory = Path.Combine(blobDirectory, "container");
+                    Directory.CreateDirectory(Path.Combine(containerDirectory, MetadataDirectory));
+                    BasePath = containerDirectory;
+                    break;
             }
         }
 
@@ -47,9 +65,20 @@ namespace LightBlue.Tests.Standalone
 
         public void Dispose()
         {
-            if (!string.IsNullOrWhiteSpace(BasePath) && Directory.Exists(BasePath))
+            StandaloneEnvironment.SetStandardLightBlueDataDirectory();
+            if (!string.IsNullOrWhiteSpace(_appDataDirectory) && Directory.Exists(_appDataDirectory))
             {
-                Directory.Delete(BasePath, true);
+                var tries = 0;
+                while (tries++ < 2)
+                try
+                {
+                    Directory.Delete(_appDataDirectory, true);
+                    return;
+                }
+                catch (IOException)
+                {}
+                catch (UnauthorizedAccessException)
+                {}
             }
         }
 
