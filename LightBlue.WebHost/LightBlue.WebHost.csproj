@@ -49,6 +49,9 @@
     <Compile Include="..\LightBlue.Host\StubManagement.cs">
       <Link>StubManagement.cs</Link>
     </Compile>
+    <Compile Include="..\LightBlue.Host\UnhandledExceptionBehaviour.cs">
+      <Link>UnhandledExceptionBehaviour.cs</Link>
+    </Compile>
     <Compile Include="..\LightBlue\Infrastructure\ConfigurationLocator.cs">
       <Link>ConfigurationLocator.cs</Link>
     </Compile>

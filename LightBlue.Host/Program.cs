@@ -48,6 +48,8 @@ namespace LightBlue.Host
 
             stub.ConfigureTracing(new TraceShipper());
 
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionBehaviour.UnhandledExceptionHandler(hostArgs.Title);
+
             stub.Run(workerRoleAssembly: hostArgs.Assembly,
                 configurationPath: hostArgs.ConfigurationPath,
                 serviceDefinitionPath: hostArgs.ServiceDefinitionPath,

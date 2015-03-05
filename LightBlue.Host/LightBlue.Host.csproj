@@ -57,10 +57,14 @@
     <Compile Include="..\LightBlue\Infrastructure\ConfigurationManipulation.cs">
       <Link>ConfigurationManipulation.cs</Link>
     </Compile>
+    <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs">
+      <Link>ExceptionExtensions.cs</Link>
+    </Compile>
     <Compile Include="HostArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StubManagement.cs" />
+    <Compile Include="UnhandledExceptionBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

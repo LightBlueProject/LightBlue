@@ -106,6 +106,8 @@ namespace LightBlue.WebHost
 
             stub.ConfigureTracing(new TraceShipper());
 
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionBehaviour.UnhandledExceptionHandler(webHostArgs.Title);
+
             stub.Run(workerRoleAssembly: webHostArgs.Assembly,
                 configurationPath: webHostArgs.ConfigurationPath,
                 serviceDefinitionPath: webHostArgs.ServiceDefinitionPath,
