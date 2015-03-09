@@ -1,10 +1,12 @@
 LightBlue
 ====================
 
-Version 1.1.15
+Version 1.1.16
 --------------------
 ###Features
 * Added IAzureBlockBlob.StartCopyFromBlob(Uri) method
+* Improved unhandled exception handling providing options to handle crashes
+* Provide "iisExpressTemplate" command line parameter for specifying the template to use with IIS Express in the web host.
 
 Version 1.1.15
 --------------------
@@ -143,4 +145,4 @@ Version 0.1.0
 * Settings support
 * Resource support
 * Blob storage abstraction
-* Create NuGet package 
+* Create NuGet package
