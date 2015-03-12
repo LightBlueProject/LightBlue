@@ -36,7 +36,6 @@ namespace LightBlue.WebHost
 
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
-            Debugger.Break();
             string assembly = null;
             int? port = null;
             string roleName = null;
