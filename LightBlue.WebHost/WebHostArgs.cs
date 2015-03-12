@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-
 using LightBlue.Infrastructure;
-
 using NDesk.Options;
 
 namespace LightBlue.WebHost
@@ -23,6 +22,7 @@ namespace LightBlue.WebHost
         public bool UseHostedStorage { get; private set; }
         public bool AllowSilentFail { get; private set; }
         public string IisExpressTemplate { get; private set; }
+        public bool Use64Bit { get; private set; }
 
         public string SiteDirectory
         {
@@ -36,6 +36,7 @@ namespace LightBlue.WebHost
 
         public static WebHostArgs ParseArgs(IEnumerable<string> args)
         {
+            Debugger.Break();
             string assembly = null;
             int? port = null;
             string roleName = null;
@@ -47,6 +48,7 @@ namespace LightBlue.WebHost
             var allowSilentFail = false;
             string iisExpressTemplate = null;
             var displayHelp = false;
+            bool use64Bit = false;
 
             var options = new OptionSet
             {
@@ -103,7 +105,12 @@ namespace LightBlue.WebHost
                 {
                     "help",
                     "Show this message and exit.",
-                    v => displayHelp = true 
+                    v => displayHelp = true
+                },
+                {
+                    "u|use64bit=",
+                    "Indicates whether to use IISExpress 64 bit. Defaults to false.",
+                    (bool v) => use64Bit = v
                 }
             };
 
@@ -140,7 +147,8 @@ namespace LightBlue.WebHost
             }
             if (string.IsNullOrWhiteSpace(hostname))
             {
-                DisplayErrorMessage("The hostname cannot be blank. Do not specify this option if you wish to use the default (localhost).");
+                DisplayErrorMessage(
+                    "The hostname cannot be blank. Do not specify this option if you wish to use the default (localhost).");
                 return null;
             }
 
@@ -167,7 +175,8 @@ namespace LightBlue.WebHost
                 var endpoint = GetEndpoint(serviceDefinitionPath, roleName);
                 if (endpoint == null)
                 {
-                    DisplayErrorMessage("Cannot locate endpoint in ServiceDefinition.csdef. Verify that an endpoint is defined.");
+                    DisplayErrorMessage(
+                        "Cannot locate endpoint in ServiceDefinition.csdef. Verify that an endpoint is defined.");
                     return null;
                 }
 
@@ -195,7 +204,8 @@ namespace LightBlue.WebHost
                 Hostname = hostname,
                 UseHostedStorage = useHostedStorage,
                 AllowSilentFail = allowSilentFail,
-                IisExpressTemplate = iisExpressTemplate
+                IisExpressTemplate = iisExpressTemplate,
+                Use64Bit = use64Bit
             };
         }
 
@@ -257,7 +267,7 @@ namespace LightBlue.WebHost
             Console.WriteLine("Try `LightBlue.WebHost --help' for more information.");
         }
 
-        static void DisplayHelp(OptionSet p)
+        private static void DisplayHelp(OptionSet p)
         {
             Console.WriteLine("Usage: LightBlue.WebHost [OPTIONS]");
             Console.WriteLine("Host a LightBlue based Azure web role.");
