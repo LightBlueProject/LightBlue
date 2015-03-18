@@ -189,6 +189,12 @@ namespace LightBlue.WebHost
                 return null;
             }
 
+            if (use64Bit && Environment.Is64BitOperatingSystem && string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ProgramW6432")))
+            {
+                DisplayErrorMessage("Use64Bit flag cannot be true on a 32bit platform");
+                return null;
+            }
+
             return new WebHostArgs
             {
                 Assembly = assembly,
