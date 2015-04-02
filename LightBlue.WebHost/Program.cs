@@ -152,9 +152,8 @@ namespace LightBlue.WebHost
 
         private static ProcessStartInfo BuildProcessStartInfo(WebHostArgs webHostArgs, string configurationFilePath)
         {
-            string envPath = Environment.GetEnvironmentVariable("ProgramW6432");
-            string path = webHostArgs.Use64Bit && !string.IsNullOrEmpty(envPath)
-                ? Path.Combine(envPath, @"IIS Express\iisexpress.exe")
+            string path = webHostArgs.Use64Bit
+                ? Path.Combine(Environment.GetEnvironmentVariable("ProgramW6432"), @"IIS Express\iisexpress.exe")
                 : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),@"IIS Express\iisexpress.exe");
 
             var processStartInfo = new ProcessStartInfo
