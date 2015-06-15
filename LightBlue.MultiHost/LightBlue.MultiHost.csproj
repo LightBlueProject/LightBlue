@@ -49,6 +49,9 @@
     <Compile Include="..\LightBlue.Host\HostArgs.cs">
       <Link>HostArgs.cs</Link>
     </Compile>
+    <Compile Include="..\LightBlue.Host\UnhandledExceptionBehaviour.cs">
+      <Link>UnhandledExceptionBehaviour.cs</Link>
+    </Compile>
     <Compile Include="..\LightBlue\Infrastructure\ConfigurationLocator.cs">
       <Link>ConfigurationLocator.cs</Link>
     </Compile>
@@ -57,7 +60,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnhandledExceptionBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
