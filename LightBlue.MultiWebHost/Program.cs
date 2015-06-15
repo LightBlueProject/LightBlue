@@ -39,7 +39,7 @@ namespace LightBlue.MultiWebHost
             Console.Title = "Multi-Web-Host LightBlue emulator";
 
             var basePath = args[0];
-            var configFile = File.ReadAllLines(Path.Combine(basePath, args[1]));
+            var configFile = args[1].Split(new [] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
 
             Trace.Listeners.Add(new NewRelicFilteringTraceListener());
             AppDomain.CurrentDomain.UnhandledException +=
