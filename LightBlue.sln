@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue", "LightBlue\LightBlue.csproj", "{28F5B274-4B25-4295-98AE-3E5A60C34D8D}"
 EndProject
@@ -33,6 +33,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Windsor", "LightBlue.Windsor\LightBlue.Windsor.csproj", "{3CD6CA86-2F50-4A1C-8912-56DD96C1ED67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWindsorRole", "TestWindsorRole\TestWindsorRole.csproj", "{6D9B78CD-717E-4764-BD29-93007089343F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.MultiHost", "LightBlue.MultiHost\LightBlue.MultiHost.csproj", "{EE1D37C2-E80D-4E12-B47F-FFE5AEF36D9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.MultiWebHost", "LightBlue.MultiWebHost\LightBlue.MultiWebHost.csproj", "{3B08828F-A84A-47C9-AE92-6552BECF2175}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +92,14 @@ Global
 		{6D9B78CD-717E-4764-BD29-93007089343F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D9B78CD-717E-4764-BD29-93007089343F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D9B78CD-717E-4764-BD29-93007089343F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE1D37C2-E80D-4E12-B47F-FFE5AEF36D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE1D37C2-E80D-4E12-B47F-FFE5AEF36D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE1D37C2-E80D-4E12-B47F-FFE5AEF36D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE1D37C2-E80D-4E12-B47F-FFE5AEF36D9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B08828F-A84A-47C9-AE92-6552BECF2175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B08828F-A84A-47C9-AE92-6552BECF2175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B08828F-A84A-47C9-AE92-6552BECF2175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B08828F-A84A-47C9-AE92-6552BECF2175}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

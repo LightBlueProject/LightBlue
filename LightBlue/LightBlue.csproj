@@ -118,6 +118,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup\EnvironmentDefinition.cs" />
     <Compile Include="Setup\HostingType.cs" />
+    <Compile Include="Setup\LightBlueContextStorageFactory.cs" />
     <Compile Include="Setup\LightBlueHostType.cs" />
     <Compile Include="Setup\LightBlueConfiguration.cs" />
     <Compile Include="Standalone\BlobLocationParts.cs" />
