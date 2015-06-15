@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-
+using System.Threading;
 using LightBlue.Infrastructure;
 using LightBlue.Standalone;
 
@@ -10,27 +10,36 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Setup
 {
-    public static class LightBlueConfiguration
+    public class LightBlueConfiguration
     {
-        private static EnvironmentDefinition _environmentDefinition;
-        private static readonly Func<string, RoleEnvironmentException> _roleEnvironmentExceptionCreator
+        public static LightBlueConfiguration Instance
+        {
+            get {
+                return _getConfiguration();
+            }
+        }
+
+        private static Func<LightBlueConfiguration> _getConfiguration = LightBlueContextStorageFactory.FromAppDomainContext("LightBlueConfiguration", () => new LightBlueConfiguration());
+
+        private EnvironmentDefinition _environmentDefinition;
+        private readonly Func<string, RoleEnvironmentException> _roleEnvironmentExceptionCreator
             = RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator();
 
         public static Func<string, RoleEnvironmentException> RoleEnvironmentExceptionCreator
         {
-            get { return _roleEnvironmentExceptionCreator; }
+            get { return Instance._roleEnvironmentExceptionCreator; }
         }
 
         public static bool IsInitialised
         {
-            get { return _environmentDefinition != null; }
+            get { return Instance._environmentDefinition != null; }
         }
 
         public static void SetAsExternal(AzureEnvironment azureEnvironment)
         {
             if (IsInitialised)
             {
-                if (_environmentDefinition.AzureEnvironment == azureEnvironment)
+                if (Instance._environmentDefinition.AzureEnvironment == azureEnvironment)
                 {
                     return;
                 }
@@ -39,16 +48,22 @@ namespace LightBlue.Setup
                     string.Format(
                         CultureInfo.InvariantCulture,
                         "LightBlue has already been initialised for '{0}'. You cannot change the environment it is configured for.",
-                        _environmentDefinition.AzureEnvironment));
+                        Instance._environmentDefinition.AzureEnvironment));
             }
 
-            _environmentDefinition = new EnvironmentDefinition(
+            Instance._environmentDefinition = new EnvironmentDefinition(
                 azureEnvironment,
                 HostingType.External,
                 new StandaloneConfiguration
                 {
                     UseHostedStorage = azureEnvironment != AzureEnvironment.LightBlue
                 });
+        }
+
+        public static void RunAsMultiHost()
+        {
+            _getConfiguration = LightBlueContextStorageFactory.FromCallContext("LightBlueConfiguration", () => new LightBlueConfiguration());
+            LightBlueContext.RunAsMultiHost();
         }
 
         public static void SetAsLightBlue(
@@ -64,7 +79,7 @@ namespace LightBlue.Setup
                     "LightBlue has already been initialised and cannot be reconfigured");
             }
 
-            _environmentDefinition = new EnvironmentDefinition(
+            Instance._environmentDefinition = new EnvironmentDefinition(
                 AzureEnvironment.LightBlue,
                 HostingType.Role,
                 new StandaloneConfiguration
@@ -97,7 +112,7 @@ namespace LightBlue.Setup
                 LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition();
             }
 
-            return _environmentDefinition;
+            return Instance._environmentDefinition;
         }
 
         private static void LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition()
@@ -116,7 +131,7 @@ namespace LightBlue.Setup
 
             try
             {
-                _environmentDefinition = new EnvironmentDefinition(
+                Instance._environmentDefinition = new EnvironmentDefinition(
                     RoleEnvironment.IsEmulated
                         ? AzureEnvironment.Emulator
                         : AzureEnvironment.ActualAzure,
