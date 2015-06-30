@@ -5,7 +5,7 @@ using LightBlue.Standalone;
 using Xunit;
 using Xunit.Extensions;
 
-namespace LightBlue.Tests.Standalone
+namespace LightBlue.Tests.Standalone.QueueStorage
 {
     public class StandaloneAzureQueueStorageClientTests
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using LightBlue.Infrastructure;
 
@@ -25,7 +26,8 @@ namespace LightBlue.Standalone
 
         public IEnumerable<IAzureQueue> ListQueues()
         {
-            yield break;
+            return Directory.GetDirectories(_queueStorageDirectory)
+                .Select(d => new StandaloneAzureQueue(d));
         }
     }
 }
