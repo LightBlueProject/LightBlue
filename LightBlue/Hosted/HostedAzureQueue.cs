@@ -34,24 +34,24 @@ namespace LightBlue.Hosted
             return _cloudQueue.DeleteAsync();
         }
 
-        public Task DeleteIsExistsAsync()
+        public Task DeleteIfExistsAsync()
         {
             return _cloudQueue.DeleteIfExistsAsync();
         }
 
-        public Task AddMessageAsync(IAzureQueueMessage message)
+        public Task AddMessageAsync(CloudQueueMessage message)
         {
-            return _cloudQueue.AddMessageAsync(message.ToCloudQueueMessage());
+            return _cloudQueue.AddMessageAsync(message);
         }
 
-        public async Task<IAzureQueueMessage> GetMessageAsync()
+        public Task<CloudQueueMessage> GetMessageAsync()
         {
-            return new HostedAzureQueueMessage(await _cloudQueue.GetMessageAsync());
+            return _cloudQueue.GetMessageAsync();
         }
 
-        public Task DeleteMessageAsync(IAzureQueueMessage message)
+        public Task DeleteMessageAsync(CloudQueueMessage message)
         {
-            return _cloudQueue.DeleteMessageAsync(message.ToCloudQueueMessage());
+            return _cloudQueue.DeleteMessageAsync(message);
         }
     }
 }

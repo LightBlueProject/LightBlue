@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Microsoft.WindowsAzure.Storage.Queue;
+
 namespace LightBlue
 {
     public interface IAzureQueue
@@ -10,10 +12,10 @@ namespace LightBlue
 
         Task CreateIfNotExistsAsync();
         Task DeleteAsync();
-        Task DeleteIsExistsAsync();
+        Task DeleteIfExistsAsync();
 
-        Task AddMessageAsync(IAzureQueueMessage message);
-        Task<IAzureQueueMessage> GetMessageAsync();
-        Task DeleteMessageAsync(IAzureQueueMessage message);
+        Task AddMessageAsync(CloudQueueMessage message);
+        Task<CloudQueueMessage> GetMessageAsync();
+        Task DeleteMessageAsync(CloudQueueMessage message);
     }
 }

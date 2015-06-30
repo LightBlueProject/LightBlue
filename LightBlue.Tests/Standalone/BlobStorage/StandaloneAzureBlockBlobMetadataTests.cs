@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 using AssertExLib;
 
@@ -11,12 +10,14 @@ using ExpectedObjects;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.Storage;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using Xunit;
 using Xunit.Extensions;
 
-namespace LightBlue.Tests.Standalone
+namespace LightBlue.Tests.Standalone.BlobStorage
 {
     public class StandaloneAzureBlockBlobMetadataTests : StandaloneAzureTestsBase
     {

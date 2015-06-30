@@ -12,7 +12,8 @@ namespace LightBlue.Tests.Standalone
         Account = 0,
         BlobStorage = 1,
         Container = 2,
-        Queue = 3
+        QueueStorage = 3,
+        Queue = 4
     }
 
     public abstract class StandaloneAzureTestsBase
@@ -28,10 +29,12 @@ namespace LightBlue.Tests.Standalone
             var lightBlueDirectory = Path.Combine(_appDataDirectory, "LightBlue");
             var accountDirectory = Path.Combine(lightBlueDirectory, "dev");
             var blobDirectory = Path.Combine(accountDirectory, "blob");
+            var queuesDirectory = Path.Combine(accountDirectory, "queuse");
 
             StandaloneEnvironment.LightBlueDataDirectory = lightBlueDirectory;
 
             Directory.CreateDirectory(blobDirectory);
+            Directory.CreateDirectory(queuesDirectory);
 
             switch (directoryType)
             {
@@ -45,6 +48,14 @@ namespace LightBlue.Tests.Standalone
                     var containerDirectory = Path.Combine(blobDirectory, "container");
                     Directory.CreateDirectory(Path.Combine(containerDirectory, MetadataDirectory));
                     BasePath = containerDirectory;
+                    break;
+                case DirectoryType.QueueStorage:
+                    BasePath = queuesDirectory;
+                    break;
+                case DirectoryType.Queue:
+                    var queueDirectory = Path.Combine(queuesDirectory, "queue");
+                    Directory.CreateDirectory(Path.Combine(queueDirectory, MetadataDirectory));
+                    BasePath = queueDirectory;
                     break;
             }
         }
@@ -67,10 +78,13 @@ namespace LightBlue.Tests.Standalone
         public void Dispose()
         {
             StandaloneEnvironment.SetStandardLightBlueDataDirectory();
-            if (!string.IsNullOrWhiteSpace(_appDataDirectory) && Directory.Exists(_appDataDirectory))
+            if (string.IsNullOrWhiteSpace(_appDataDirectory) || !Directory.Exists(_appDataDirectory))
             {
-                var tries = 0;
-                while (tries++ < 2)
+                return;
+            }
+
+            var tries = 0;
+            while (tries++ < 2)
                 try
                 {
                     Directory.Delete(_appDataDirectory, true);
@@ -80,7 +94,6 @@ namespace LightBlue.Tests.Standalone
                 {}
                 catch (UnauthorizedAccessException)
                 {}
-            }
         }
 
         protected static void CreateBlobContent(StandaloneAzureBlockBlob blob)

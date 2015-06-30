@@ -6,7 +6,7 @@ using LightBlue.Standalone;
 using Xunit;
 using Xunit.Extensions;
 
-namespace LightBlue.Tests.Standalone
+namespace LightBlue.Tests.Standalone.BlobStorage
 {
     public class StandaloneAzureBlockBlobDeleteTests : StandaloneAzureTestsBase
     {
