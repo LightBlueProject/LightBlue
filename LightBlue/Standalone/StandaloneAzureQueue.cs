@@ -15,11 +15,11 @@ namespace LightBlue.Standalone
     public class StandaloneAzureQueue : IAzureQueue
     {
         private static readonly Action<CloudQueueMessage, string> _idAssigner = CloudQueueMessageAccessorFactory.BuildIdAssigner();
+        private static readonly ConcurrentDictionary<string, FileStream> _fileLocks = new ConcurrentDictionary<string, FileStream>();
 
         private readonly Random _random = new Random();
         private readonly string _queueName;
         private readonly string _queueDirectory;
-        private readonly ConcurrentDictionary<string, FileStream> _fileLocks = new ConcurrentDictionary<string, FileStream>(); 
 
         public StandaloneAzureQueue(string queueStorageDirectory, string queueName)
         {
