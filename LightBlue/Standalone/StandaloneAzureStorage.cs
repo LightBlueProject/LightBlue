@@ -24,7 +24,7 @@ namespace LightBlue.Standalone
 
         public IAzureQueueStorageClient CreateAzureQueueStorageClient()
         {
-            throw new NotSupportedException();
+            return new StandaloneAzureQueueStorageClient(_storageAccountDirectory);
         }
 
         private static string ExtractAccountName(string connectionString)
