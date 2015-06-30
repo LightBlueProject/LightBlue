@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using LightBlue.Infrastructure;
 
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace LightBlue.Standalone
@@ -16,27 +17,30 @@ namespace LightBlue.Standalone
         private static readonly Action<CloudQueueMessage, string> _idAssigner = CloudQueueMessageAccessorFactory.BuildIdAssigner();
 
         private readonly Random _random = new Random();
+        private readonly string _queueName;
         private readonly string _queueDirectory;
         private readonly ConcurrentDictionary<string, FileStream> _fileLocks = new ConcurrentDictionary<string, FileStream>(); 
 
         public StandaloneAzureQueue(string queueStorageDirectory, string queueName)
         {
             _queueDirectory = Path.Combine(queueStorageDirectory, queueName);
+            _queueName = queueName;
         }
 
         public StandaloneAzureQueue(string queueDirectory)
         {
             _queueDirectory = queueDirectory;
+            _queueName = Path.GetFileName(_queueDirectory);
         }
 
         public Uri Uri
         {
-            get { return null; }
+            get { return new Uri(_queueDirectory); }
         }
 
         public string Name
         {
-            get { return null; }
+            get { return _queueName; }
         }
 
         public Task CreateIfNotExistsAsync()
@@ -48,12 +52,31 @@ namespace LightBlue.Standalone
 
         public Task DeleteAsync()
         {
-            return null;
+            try
+            {
+                Directory.Delete(_queueDirectory, true);
+                return Task.FromResult(new object());
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                throw new StorageException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "The queue '{0}' cannot be deleted as it does not exist",
+                        Name),
+                    ex);
+            }
         }
 
         public Task DeleteIfExistsAsync()
         {
-            return null;
+            try
+            {
+                Directory.Delete(_queueDirectory, true);
+            }
+            catch (DirectoryNotFoundException)
+            {}
+            return Task.FromResult(new object());
         }
 
         public async Task AddMessageAsync(CloudQueueMessage message)
@@ -145,12 +168,20 @@ namespace LightBlue.Standalone
         public Task DeleteMessageAsync(CloudQueueMessage message)
         {
             var filePath = Path.Combine(_queueDirectory, message.Id);
-            File.Delete(filePath);
-            var fileStream = _fileLocks[message.Id];
-            if (fileStream != null)
+
+            try
             {
-                fileStream.Dispose();
+                File.Delete(filePath);
             }
+            finally
+            {
+                FileStream fileStream;
+                if (_fileLocks.TryGetValue(message.Id, out fileStream))
+                { 
+                    fileStream.Dispose();
+                }
+            }
+
             return Task.FromResult(new object());
         }
     }

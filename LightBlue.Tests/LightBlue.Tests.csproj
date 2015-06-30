@@ -108,8 +108,8 @@
     <Compile Include="Standalone\QueueStorage\AddMessageTests.cs" />
     <Compile Include="Standalone\QueueStorage\DeleteMessageTests.cs" />
     <Compile Include="Standalone\QueueStorage\GetMessageTests.cs" />
+    <Compile Include="Standalone\QueueStorage\StandaloneAzureQueueTests.cs" />
     <Compile Include="Standalone\StandaloneAzureLocalResourceSourceTests.cs" />
-    <Compile Include="Standalone\StandaloneAzureQueueTests.cs" />
     <Compile Include="Standalone\StandaloneAzureQueueStorageClientTests.cs" />
     <Compile Include="Standalone\StandaloneAzureSettingsTests.cs" />
     <Compile Include="Standalone\StandaloneAzureTestsBase.cs" />
