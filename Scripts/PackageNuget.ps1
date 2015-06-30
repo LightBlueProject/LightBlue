@@ -9,12 +9,18 @@ $windsorNuspecPath = join-path $parentDirectory "LightBlue.Windsor.nuspec"
 $noticePath = join-path $parentDirectory "NOTICE"
 
 $lightBlueDllPath = join-path $parentDirectory "LightBlue\bin\Release\LightBlue.dll"
+$lightBluePdbPath = join-path $parentDirectory "LightBlue\bin\Release\LightBlue.pdb"
 $lightBlueAutofacDllPath = join-path $parentDirectory "LightBlue.Autofac\bin\Release\LightBlue.Autofac.dll"
+$lightBlueAutofacPdbPath = join-path $parentDirectory "LightBlue.Autofac\bin\Release\LightBlue.Autofac.pdb"
 $lightBlueWindsorDllPath = join-path $parentDirectory "LightBlue.Windsor\bin\Release\LightBlue.Windsor.dll"
+$lightBlueWindsorPdbPath = join-path $parentDirectory "LightBlue.Windsor\bin\Release\LightBlue.Windsor.pdb"
 $workerHostExePath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.exe"
+$workerHostPdbPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.pdb"
 $workerHostStubDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.dll"
+$workerHostStubPdbPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.pdb"
 $ndeskDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\NDesk.Options.dll"
 $webHostExePath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.exe"
+$webHostPdbPath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.pdb"
 
 $linqpadEnvironmentTemplatePath = join-path $parentDirectory "LINQPad\Environment Template.linq"
 $linqpadIssueTemplatePath = join-path $parentDirectory "LINQPad\Issue Report Template.linq"
@@ -46,23 +52,29 @@ New-Item -ItemType directory -Path $coreNet45LibPath | Out-Null
 New-Item -ItemType directory -Path $linqpadSamplesPath | Out-Null
 Copy-Item $coreNuspecPath $corePackagePath
 Copy-Item  $lightBlueDllPath $coreNet45LibPath
+Copy-Item  $lightBluePdbPath $coreNet45LibPath
 Copy-Item $linqpadEnvironmentTemplatePath $linqpadSamplesPath
 Copy-Item $linqpadIssueTemplatePath $linqpadSamplesPath
 
 New-Item -ItemType directory -Path $autofacNet45LibPath | Out-Null
 Copy-Item $autofacNuspecPath $autofacPackagePath
 Copy-Item  $lightBlueAutofacDllPath $autofacNet45LibPath
+Copy-Item  $lightBlueAutofacPdbPath $autofacNet45LibPath
 
 New-Item -ItemType directory -Path $windsorNet45LibPath | Out-Null
 Copy-Item $windsorNuspecPath $windsorPackagePath
 Copy-Item  $lightBlueWindsorDllPath $windsorNet45LibPath
+Copy-Item  $lightBlueWindsorPdbPath $windsorNet45LibPath
 
 New-Item -ItemType directory -Path $toolsPath | Out-Null
 Copy-Item $hostsNuspecPath $hostsPackagePath
 Copy-Item $workerHostExePath $toolsPath
+Copy-Item $workerHostPdbPath $toolsPath
 Copy-Item $workerHostStubDllPath $toolsPath
+Copy-Item $workerHostStubPdbPath $toolsPath
 Copy-Item $ndeskDllPath $toolsPath
 Copy-Item $webHostExePath $toolsPath
+Copy-Item $webHostPdbPath $toolsPath
 Copy-Item $noticePath $toolsPath
 
 Push-Location -Path $corePackagePath
