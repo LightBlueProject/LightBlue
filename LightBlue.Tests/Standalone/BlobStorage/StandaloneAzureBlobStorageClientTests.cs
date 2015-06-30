@@ -5,7 +5,7 @@ using LightBlue.Standalone;
 using Xunit;
 using Xunit.Extensions;
 
-namespace LightBlue.Tests.Standalone
+namespace LightBlue.Tests.Standalone.BlobStorage
 {
     public class StandaloneAzureBlobStorageClientTests
     {
@@ -22,6 +22,5 @@ namespace LightBlue.Tests.Standalone
         {
             Assert.Throws<ArgumentException>(() => new StandaloneAzureBlobStorageClient(storageAccountDirectory));
         }
-         
     }
 }

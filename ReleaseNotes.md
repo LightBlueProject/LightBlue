@@ -1,6 +1,14 @@
 LightBlue
 ====================
 
+Version 1.1.17
+--------------------
+###Features
+* Queue storage
+
+###Implementation
+* Include PDBs in NuGet packages
+
 Version 1.1.16
 --------------------
 ###Features

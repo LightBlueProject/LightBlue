@@ -13,7 +13,12 @@ namespace LightBlue.Hosted
 
         public IAzureBlobStorageClient CreateAzureBlobStorageClient()
         {
-            return new HostedAzureBlobStorageClient(_cloudStorageAccount.CreateCloudBlobClient()      );
+            return new HostedAzureBlobStorageClient(_cloudStorageAccount.CreateCloudBlobClient());
+        }
+
+        public IAzureQueueStorageClient CreateAzureQueueStorageClient()
+        {
+            return new HostedAzureQueueStorageClient(_cloudStorageAccount.CreateCloudQueueClient());
         }
     }
 }

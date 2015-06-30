@@ -3,5 +3,6 @@
     public interface IAzureStorage
     {
         IAzureBlobStorageClient CreateAzureBlobStorageClient();
+        IAzureQueueStorageClient CreateAzureQueueStorageClient();
     }
 }

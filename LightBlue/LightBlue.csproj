@@ -89,6 +89,8 @@
     <Compile Include="Hosted\HostedAzureLocalResource.cs" />
     <Compile Include="Hosted\HostedAzureLocalResourceSource.cs" />
     <Compile Include="Hosted\HostedAzurePageBlob.cs" />
+    <Compile Include="Hosted\HostedAzureQueue.cs" />
+    <Compile Include="Hosted\HostedAzureQueueStorageClient.cs" />
     <Compile Include="Hosted\HostedAzureRoleInformation.cs" />
     <Compile Include="Hosted\HostedAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureStorage.cs" />
@@ -104,9 +106,12 @@
     <Compile Include="IAzureLocalResource.cs" />
     <Compile Include="IAzureLocalResourceSource.cs" />
     <Compile Include="IAzurePageBlob.cs" />
+    <Compile Include="IAzureQueue.cs" />
+    <Compile Include="IAzureQueueStorageClient.cs" />
     <Compile Include="IAzureRoleInformation.cs" />
     <Compile Include="IAzureSettings.cs" />
     <Compile Include="IAzureStorage.cs" />
+    <Compile Include="Infrastructure\CloudQueueMessageAccessorFactory.cs" />
     <Compile Include="Infrastructure\ConfigurationLocator.cs" />
     <Compile Include="Infrastructure\ConfigurationManipulation.cs" />
     <Compile Include="Infrastructure\ExceptionExtensions.cs" />
@@ -130,6 +135,8 @@
     <Compile Include="Standalone\StandaloneAzureBlobResultSegment.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlob.cs" />
     <Compile Include="Standalone\StandaloneAzureLocalResourceSource.cs" />
+    <Compile Include="Standalone\StandaloneAzureQueue.cs" />
+    <Compile Include="Standalone\StandaloneAzureQueueStorageClient.cs" />
     <Compile Include="Standalone\StandaloneAzureRoleInformation.cs" />
     <Compile Include="Standalone\StandaloneAzureSettings.cs" />
     <Compile Include="Standalone\StandaloneAzureStorage.cs" />

@@ -13,7 +13,7 @@ namespace LightBlue.Standalone
             StringValidation.NotNullOrWhitespace(storageAccountDirectory, "storageAccountDirectory");
 
             _blobStorageDirectory = Path.Combine(storageAccountDirectory, "blob");
-            
+
             Directory.CreateDirectory(_blobStorageDirectory);
         }
 

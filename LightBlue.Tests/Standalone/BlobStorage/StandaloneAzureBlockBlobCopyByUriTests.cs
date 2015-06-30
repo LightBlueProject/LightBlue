@@ -12,7 +12,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Xunit;
 using Xunit.Extensions;
 
-namespace LightBlue.Tests.Standalone
+namespace LightBlue.Tests.Standalone.BlobStorage
 {
     public class StandaloneAzureBlockBlobCopyByUriTests : StandaloneAzureTestsBase
     {
