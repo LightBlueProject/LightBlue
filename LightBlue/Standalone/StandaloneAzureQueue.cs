@@ -190,5 +190,19 @@ namespace LightBlue.Standalone
 
             return Task.FromResult(new object());
         }
+
+        public string GetSharedAccessSignature(SharedAccessQueuePolicy policy)
+        {
+            if (policy == null)
+            {
+                throw new ArgumentNullException("policy");
+            }
+
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "?sv={0:yyyy-MM-dd}&sr=c&sig=s&sp={1}",
+                DateTime.Today,
+                policy.Permissions.DeterminePermissionsString());
+        }
     }
 }

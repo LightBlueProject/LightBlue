@@ -195,7 +195,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [InlineData(SharedAccessBlobPermissions.Read, "sp=r")]
         [InlineData(SharedAccessBlobPermissions.Write, "sp=w")]
         [InlineData(SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.Write, "sp=rw")]
-        public void WillReturnEmptyStringForSharedAccessKeySignature(
+        public void WillReturnParseableSharedAccessSignature(
             SharedAccessBlobPermissions permissions, 
             string expectedPermissions)
         {

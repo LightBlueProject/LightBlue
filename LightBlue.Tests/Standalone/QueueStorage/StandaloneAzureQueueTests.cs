@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Queue;
 
 using Xunit;
+using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.QueueStorage
 {
@@ -157,5 +160,24 @@ namespace LightBlue.Tests.Standalone.QueueStorage
 
             Assert.DoesNotThrow(() => queue.DeleteIfExistsAsync());
         }
+
+        [Theory]
+        [InlineData(SharedAccessQueuePermissions.Read, "sp=r")]
+        [InlineData(SharedAccessQueuePermissions.Add, "sp=a")]
+        [InlineData(SharedAccessQueuePermissions.Update, "sp=u")]
+        [InlineData(SharedAccessQueuePermissions.ProcessMessages, "sp=p")]
+        [InlineData(SharedAccessQueuePermissions.Read | SharedAccessQueuePermissions.Add, "sp=ra")]
+        public void WillReturnParseableSharedAccessSignature(
+            SharedAccessQueuePermissions permissions,
+            string expectedPermissions)
+        {
+            var queue = new StandaloneAzureQueue(BasePath, QueueName);
+
+            Assert.Contains(expectedPermissions, queue.GetSharedAccessSignature(new SharedAccessQueuePolicy
+            {
+                Permissions = permissions
+            }));
+        }
+
     }
 }

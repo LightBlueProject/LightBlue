@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace LightBlue.Hosted
@@ -57,6 +58,11 @@ namespace LightBlue.Hosted
         public Task DeleteMessageAsync(CloudQueueMessage message)
         {
             return _cloudQueue.DeleteMessageAsync(message);
+        }
+
+        public string GetSharedAccessSignature(SharedAccessQueuePolicy policy)
+        {
+            return _cloudQueue.GetSharedAccessSignature(policy);
         }
     }
 }
