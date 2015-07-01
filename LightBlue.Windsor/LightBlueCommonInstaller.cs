@@ -39,6 +39,10 @@ namespace LightBlue.Windsor
             container.Register(
                 Component.For<Func<Uri, StorageCredentials, IAzureBlockBlob>>()
                     .Instance(LightBlueContext.AzureBlockBlobFactory));
+
+            container.Register(
+                Component.For<Func<Uri, IAzureQueue>>()
+                    .Instance(LightBlueContext.AzureQueueFactory));
         }
     }
 }

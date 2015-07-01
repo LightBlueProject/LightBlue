@@ -14,6 +14,11 @@ namespace LightBlue.Hosted
             _cloudQueue = cloudQueue;
         }
 
+        public HostedAzureQueue(Uri queueUri)
+        {
+            _cloudQueue = new CloudQueue(queueUri);
+        }
+
         public Uri Uri
         {
             get { return _cloudQueue.Uri; }

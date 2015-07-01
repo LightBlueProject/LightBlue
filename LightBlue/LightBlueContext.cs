@@ -21,6 +21,7 @@ namespace LightBlue
         private static Func<Uri, StorageCredentials, IAzureBlobContainer> _azureBlobContainerWithCredentialsFactory;
         private static Func<Uri, IAzureBlockBlob> _azureBlockBlobFactory;
         private static Func<Uri, StorageCredentials, IAzureBlockBlob> _azureBlockBlobWithCredentialsFactory;
+        private static Func<Uri, IAzureQueue> _azureQueueFactory; 
         private static AzureEnvironment _azureEnvironment;
 
         public static string RoleName
@@ -90,6 +91,12 @@ namespace LightBlue
         {
             Initialise();
             return _azureBlockBlobWithCredentialsFactory(blobUri, storageCredentials);
+        }
+
+        public static IAzureQueue AzureQueueFactory(Uri containerUri)
+        {
+            Initialise();
+            return _azureQueueFactory(containerUri);
         }
 
         private static void Initialise()
@@ -170,6 +177,7 @@ namespace LightBlue
                 var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
                 return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
             };
+            _azureQueueFactory = uri => new StandaloneAzureQueue(uri);
         }
 
         private static void ConfigureHostedStorage()
@@ -179,6 +187,7 @@ namespace LightBlue
             _azureBlobContainerWithCredentialsFactory = (uri, credentials) => new HostedAzureBlobContainer(uri, credentials);
             _azureBlockBlobFactory = blobUri => new HostedAzureBlockBlob(blobUri);
             _azureBlockBlobWithCredentialsFactory = (uri, credentials) => new HostedAzureBlockBlob(uri, credentials);
+            _azureQueueFactory = uri => new HostedAzureQueue(uri);
         }
 
         private static void ConfigureElementsNotAvailableExternalToHost()

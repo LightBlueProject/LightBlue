@@ -1,7 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
-
-using AssertExLib;
 
 using LightBlue.Standalone;
 
@@ -24,11 +23,29 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillSetQueueUriOnConstructionFromQueuePath()
+        public void WillSetQueueNameOnConstructionFromQueuePath()
         {
             var queuePath = Path.Combine(BasePath, QueueName);
 
             var queue = new StandaloneAzureQueue(queuePath);
+
+            Assert.Equal(QueueName, queue.Name);
+        }
+
+        [Fact]
+        public void WillSetQueueNameOnConstructionFromStorageDirectoryAndQueueName()
+        {
+            var queue = new StandaloneAzureQueue(BasePath, QueueName);
+
+            Assert.Equal(QueueName, queue.Name);
+        }
+
+        [Fact]
+        public void WillSetQueueNameOnConstructionFromQueueUri()
+        {
+            var queuePath = Path.Combine(BasePath, QueueName);
+
+            var queue = new StandaloneAzureQueue(new Uri(queuePath));
 
             Assert.Equal(QueueName, queue.Name);
         }
@@ -42,7 +59,7 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillSetQueueNameOnConstructionFromQueuePath()
+        public void WillSetQueueUriOnConstructionFromQueuePath()
         {
             var queuePath = Path.Combine(BasePath, QueueName);
 
@@ -52,13 +69,25 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillSetQueueNameOnConstructionFromStorageDirectoryAndQueueName()
+        public void WillSetQueueUriOnConstructionFromQueueUri()
         {
-            var queue = new StandaloneAzureQueue(BasePath, QueueName);
+            var queuePath = Path.Combine(BasePath, QueueName);
 
-            Assert.Equal(QueueName, queue.Name);
+            var queue = new StandaloneAzureQueue(new Uri(queuePath));
+
+            Assert.Equal(queuePath, queue.Uri.LocalPath);
         }
-        
+
+        [Fact]
+        public void WillSetQueueUriOnConstructionFromQueueUriWithToken()
+        {
+            var queuePath = Path.Combine(BasePath, QueueName);
+
+            var queue = new StandaloneAzureQueue(new Uri(queuePath + "?some=token"));
+
+            Assert.Equal(queuePath, queue.Uri.LocalPath);
+        }
+
         [Fact]
         public void DoesNotCreateContainerDirectoryOnConstructionFromQueuePath()
         {

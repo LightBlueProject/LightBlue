@@ -33,6 +33,12 @@ namespace LightBlue.Standalone
             _queueName = Path.GetFileName(_queueDirectory);
         }
 
+        public StandaloneAzureQueue(Uri queueUri)
+        {
+            _queueDirectory = queueUri.GetLocalPathWithoutToken(); ;
+            _queueName = Path.GetFileName(_queueDirectory);
+        }
+
         public Uri Uri
         {
             get { return new Uri(_queueDirectory); }

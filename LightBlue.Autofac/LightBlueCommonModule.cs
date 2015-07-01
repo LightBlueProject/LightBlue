@@ -30,6 +30,9 @@ namespace LightBlue.Autofac
 
             builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlockBlob>) LightBlueContext.AzureBlockBlobFactory)
                 .As<Func<Uri, StorageCredentials, IAzureBlockBlob>>();
+
+            builder.RegisterInstance((Func<Uri, IAzureQueue>) LightBlueContext.AzureQueueFactory)
+                .As<Func<Uri, IAzureQueue>>();
         }
     }
 }
