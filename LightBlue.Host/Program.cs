@@ -46,7 +46,7 @@ namespace LightBlue.Host
                 typeof(HostStub).Assembly.FullName,
                 typeof(HostStub).FullName);
 
-            stub.ConfigureTracing(new TraceShipper());
+            stub.ConfigureTracing(new ConsoleTraceShipper());
 
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionBehaviour.UnhandledExceptionHandler(hostArgs.Title);
 

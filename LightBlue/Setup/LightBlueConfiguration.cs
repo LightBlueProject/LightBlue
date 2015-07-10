@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-
 using LightBlue.Infrastructure;
+using LightBlue.Setup.Contexts;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -12,7 +12,7 @@ namespace LightBlue.Setup
 {
     public static class LightBlueConfiguration
     {
-        private static EnvironmentDefinition _environmentDefinition;
+        private static ILightBlueContext _context;
         private static readonly Func<string, RoleEnvironmentException> _roleEnvironmentExceptionCreator
             = RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator();
 
@@ -23,32 +23,34 @@ namespace LightBlue.Setup
 
         public static bool IsInitialised
         {
-            get { return _environmentDefinition != null; }
+            get { return _context != null; }
         }
 
         public static void SetAsExternal(AzureEnvironment azureEnvironment)
         {
             if (IsInitialised)
             {
-                if (_environmentDefinition.AzureEnvironment == azureEnvironment)
+                if (_context.AzureEnvironment == azureEnvironment)
                 {
                     return;
                 }
 
-                throw new InvalidOperationException(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "LightBlue has already been initialised for '{0}'. You cannot change the environment it is configured for.",
-                        _environmentDefinition.AzureEnvironment));
+                var msg = string.Format(CultureInfo.InvariantCulture, "LightBlue has already been initialised for '{0}'. You cannot change the environment it is configured for.", _context.AzureEnvironment);
+                throw new InvalidOperationException(msg);
             }
 
-            _environmentDefinition = new EnvironmentDefinition(
-                azureEnvironment,
-                HostingType.External,
-                new StandaloneConfiguration
-                {
-                    UseHostedStorage = azureEnvironment != AzureEnvironment.LightBlue
-                });
+            _context = azureEnvironment == AzureEnvironment.LightBlue
+                ? (ILightBlueContext)new ExternalLightBlueContext()
+                : (ILightBlueContext)new ExternalAzureContext();
+        }
+
+        public static void SetAsMultiHost()
+        {
+            if (IsInitialised)
+            {
+                throw new InvalidOperationException("LightBlue has already been initialised and cannot be reconfigured");
+            }
+            _context = new LightBlueLogicalCallContext();
         }
 
         public static void SetAsLightBlue(
@@ -58,22 +60,19 @@ namespace LightBlue.Setup
             LightBlueHostType lightBlueHostType,
             bool useHostedStorage)
         {
-            if (IsInitialised)
+            var logicalCallContext = _context as LightBlueLogicalCallContext;
+            if (logicalCallContext != null)
             {
-                throw new InvalidOperationException(
-                    "LightBlue has already been initialised and cannot be reconfigured");
+                logicalCallContext.InitializeLogicalContext(configurationPath, serviceDefinitionPath, roleName, useHostedStorage);
+                return;
             }
 
-            _environmentDefinition = new EnvironmentDefinition(
-                AzureEnvironment.LightBlue,
-                HostingType.Role,
-                new StandaloneConfiguration
-                {
-                    ConfigurationPath = configurationPath,
-                    ServiceDefinitionPath = serviceDefinitionPath,
-                    RoleName = roleName,
-                    UseHostedStorage = useHostedStorage
-                });
+            if (IsInitialised)
+            {
+                throw new InvalidOperationException("LightBlue has already been initialised and cannot be reconfigured");
+            }
+
+            _context = new LightBlueAppDomainContext(configurationPath, serviceDefinitionPath, roleName, useHostedStorage);
 
             if (lightBlueHostType == LightBlueHostType.Direct)
             {
@@ -90,14 +89,14 @@ namespace LightBlue.Setup
             }
         }
 
-        internal static EnvironmentDefinition DetermineEnvironmentDefinition()
+        internal static ILightBlueContext GetConfiguredContext()
         {
             if (!IsInitialised)
             {
                 LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition();
             }
 
-            return _environmentDefinition;
+            return _context;
         }
 
         private static void LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition()
@@ -116,12 +115,7 @@ namespace LightBlue.Setup
 
             try
             {
-                _environmentDefinition = new EnvironmentDefinition(
-                    RoleEnvironment.IsEmulated
-                        ? AzureEnvironment.Emulator
-                        : AzureEnvironment.ActualAzure,
-                    HostingType.Role,
-                    null);
+                _context = new AzureContext();
             }
             catch (InvalidOperationException ex)
             {
