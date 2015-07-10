@@ -3,5 +3,6 @@ Contributors
 * Colin Scott (Twitter: @AbstractCode)
 * Daniel Breese
 * Andrew Campbell (campbellja@gmail.com)
-
-LightBlue has also received invaluable design feedback from James Miles and Eric Winkler.
+* Graeme Foster (Twitter: @graefoster) 
+* James Miles (jamesmiles@gmail.com)
+* Eric Winkler
