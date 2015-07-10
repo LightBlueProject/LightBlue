@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-
+using System.Threading.Tasks;
 using LightBlue.Setup;
 
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -29,20 +29,8 @@ namespace LightBlue.Infrastructure
                 lightBlueHostType: LightBlueHostType.Direct,
                 useHostedStorage: useHostedStorage);
 
-            try
-            {
-                var workerRoleType = LoadWorkerRoleType(workerRoleAssembly);
-
-                var thread = new Thread(() => RunRole(workerRoleType));
-                thread.Start();
-
-                thread.Join();
-                _workerRole.OnStop();
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceError(ex.ToTraceMessage());
-            }
+            var workerRoleType = LoadWorkerRoleType(workerRoleAssembly);
+            RunRole(workerRoleType);
         }
 
         private void RunRole(Type workerRoleType)
@@ -53,8 +41,33 @@ namespace LightBlue.Infrastructure
                 Trace.TraceError("Role failed to start for '{0}'", workerRoleType);
                 return;
             }
-
-            _workerRole.Run();
+            try
+            {
+                if (workerRoleType.Name.Contains("WebRole"))
+                {
+                    Trace.TraceInformation("HostRunner: Will not call Run() on WebRole, waiting for thread control.");
+                    try
+                    {
+                        Task.Delay(-1, LightBlueThreadControl.CancellationToken).Wait();
+                    }
+                    catch (AggregateException)
+                    {
+                        Trace.TraceError("HostRunner: Cancellation requested, terminating.");
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Trace.TraceError("HostRunner: Cancellation requested, terminating.");
+                    }
+                }
+                else
+                {
+                    _workerRole.Run();
+                }
+            }
+            finally
+            {
+                _workerRole.OnStop();
+            }
         }
 
         private static Type LoadWorkerRoleType(string workerRoleAssembly)

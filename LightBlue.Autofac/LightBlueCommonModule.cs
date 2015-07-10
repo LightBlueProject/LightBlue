@@ -16,22 +16,22 @@ namespace LightBlue.Autofac
             builder.RegisterInstance(LightBlueContext.AzureLocalResources)
                 .As<IAzureLocalResourceSource>();
 
-            builder.RegisterInstance(LightBlueContext.AzureStorageFactory)
+            builder.RegisterInstance((Func<string, IAzureStorage>)LightBlueContext.GetStorageAccount)
                 .As<Func<string, IAzureStorage>>();
 
-            builder.RegisterInstance((Func<Uri, IAzureBlobContainer>) LightBlueContext.AzureBlobContainerFactory)
+            builder.RegisterInstance((Func<Uri, IAzureBlobContainer>) LightBlueContext.GetBlobContainer)
                 .As<Func<Uri, IAzureBlobContainer>>();
 
-            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlobContainer>) LightBlueContext.AzureBlobContainerFactory)
+            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlobContainer>) LightBlueContext.GetBlobContainer)
                 .As<Func<Uri, StorageCredentials, IAzureBlobContainer>>();
 
-            builder.RegisterInstance((Func<Uri, IAzureBlockBlob>) LightBlueContext.AzureBlockBlobFactory)
+            builder.RegisterInstance((Func<Uri, IAzureBlockBlob>) LightBlueContext.GetBlockBlob)
                 .As<Func<Uri, IAzureBlockBlob>>();
 
-            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlockBlob>) LightBlueContext.AzureBlockBlobFactory)
+            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlockBlob>) LightBlueContext.GetBlockBlob)
                 .As<Func<Uri, StorageCredentials, IAzureBlockBlob>>();
 
-            builder.RegisterInstance((Func<Uri, IAzureQueue>) LightBlueContext.AzureQueueFactory)
+            builder.RegisterInstance((Func<Uri, IAzureQueue>) LightBlueContext.GetQueue)
                 .As<Func<Uri, IAzureQueue>>();
         }
     }

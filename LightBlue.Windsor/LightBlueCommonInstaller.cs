@@ -22,27 +22,27 @@ namespace LightBlue.Windsor
 
             container.Register(
                 Component.For<Func<string, IAzureStorage>>()
-                    .Instance(LightBlueContext.AzureStorageFactory));
+                    .Instance(LightBlueContext.GetStorageAccount));
 
             container.Register(
                 Component.For<Func<Uri, IAzureBlobContainer>>()
-                    .Instance(LightBlueContext.AzureBlobContainerFactory));
+                    .Instance(LightBlueContext.GetBlobContainer));
 
             container.Register(
                 Component.For<Func<Uri, StorageCredentials, IAzureBlobContainer>>()
-                    .Instance(LightBlueContext.AzureBlobContainerFactory));
+                    .Instance((x,y) =>LightBlueContext.GetBlobContainer(x,y)));
 
             container.Register(
                 Component.For<Func<Uri, IAzureBlockBlob>>()
-                    .Instance(LightBlueContext.AzureBlockBlobFactory));
+                    .Instance(LightBlueContext.GetBlockBlob));
 
             container.Register(
                 Component.For<Func<Uri, StorageCredentials, IAzureBlockBlob>>()
-                    .Instance(LightBlueContext.AzureBlockBlobFactory));
+                    .Instance((x,y)=>LightBlueContext.GetBlockBlob(x,y)));
 
             container.Register(
                 Component.For<Func<Uri, IAzureQueue>>()
-                    .Instance(LightBlueContext.AzureQueueFactory));
+                    .Instance(LightBlueContext.GetQueue));
         }
     }
 }
