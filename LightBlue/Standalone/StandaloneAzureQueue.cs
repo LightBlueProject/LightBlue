@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using LightBlue.Infrastructure;
@@ -16,6 +18,9 @@ namespace LightBlue.Standalone
     {
         private static readonly Action<CloudQueueMessage, string> _idAssigner = CloudQueueMessageAccessorFactory.BuildIdAssigner();
         private static readonly ConcurrentDictionary<string, FileStream> _fileLocks = new ConcurrentDictionary<string, FileStream>();
+        private static readonly int _processId = Process.GetCurrentProcess().Id;
+
+        private static int _messageIncrement;
 
         private readonly Random _random = new Random();
         private readonly string _queueName;
@@ -90,9 +95,7 @@ namespace LightBlue.Standalone
             var tries = 0;
             while (true)
             {
-                var fileName = Path.Combine(
-                    _queueDirectory,
-                    DateTimeOffset.UtcNow.Ticks.ToString());
+                var fileName = DetermineFileName();
 
                 try
                 {
@@ -203,6 +206,18 @@ namespace LightBlue.Standalone
                 "?sv={0:yyyy-MM-dd}&sr=c&sig=s&sp={1}",
                 DateTime.Today,
                 policy.Permissions.DeterminePermissionsString());
+        }
+
+        private string DetermineFileName()
+        {
+            return Path.Combine(
+                _queueDirectory,
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0}.{1}.{2}",
+                    DateTimeOffset.UtcNow.Ticks,
+                    Interlocked.Increment(ref _messageIncrement),
+                    _processId));
         }
     }
 }
