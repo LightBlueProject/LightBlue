@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -93,7 +95,8 @@ namespace LightBlue.MultiHost.ViewModel
 
         public TextBox TraceBox { get; private set; }
 
-        internal readonly RoleConfiguration Config;
+        public RoleConfiguration Config { get; private set; }
+
         private IState _state;
 
         private RoleRunner _current;
@@ -128,6 +131,7 @@ namespace LightBlue.MultiHost.ViewModel
             };
             TraceElements = new ObservableCollection<string>();
             TraceWriteLine(role.Title + " configuration loaded...\r\n");
+
         }
 
         public void StartAutomatically()
@@ -259,6 +263,12 @@ namespace LightBlue.MultiHost.ViewModel
             {
                 TraceBox.Dispatcher.Invoke(a);
             }
+        }
+
+        public void UpdateServiceConfiguration()
+        {
+            var service = new ServiceConfiguationService();
+            service.Edit(null, null);
         }
     }
 }

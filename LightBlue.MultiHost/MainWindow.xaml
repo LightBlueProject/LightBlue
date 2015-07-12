@@ -33,6 +33,11 @@
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Edit" Click="EditConfiguration_OnClick"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
         </ListView>
         
         <!--<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Horizontal">
