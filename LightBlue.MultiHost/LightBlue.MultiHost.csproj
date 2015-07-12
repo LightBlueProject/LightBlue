@@ -49,6 +49,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -75,6 +77,10 @@
     <Compile Include="Runners\RunnerFactory.cs" />
     <Compile Include="Runners\ThreadRunner.cs" />
     <Compile Include="Runners\ThreadRunnerAssemblyCache.cs" />
+    <Compile Include="ServiceConfigurationView.xaml.cs">
+      <DependentUpon>ServiceConfigurationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\IServiceConfiguationService.cs" />
     <Compile Include="ViewModel\RoleStates\AutoStarting.cs" />
     <Compile Include="ViewModel\RoleStates\Crashing.cs" />
     <Compile Include="ViewModel\ImageUtil.cs" />
@@ -107,6 +113,9 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    <Page Include="ServiceConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
