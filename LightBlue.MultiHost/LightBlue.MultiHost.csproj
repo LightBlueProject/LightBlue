@@ -73,14 +73,15 @@
     <Compile Include="IISExpress\IisExpressHelper.cs" />
     <Compile Include="IISExpress\WebConfigHelper.cs" />
     <Compile Include="IISExpress\WebHostArgs.cs" />
+    <Compile Include="RoleConfigurationService.cs" />
     <Compile Include="Runners\RoleIsolationMode.cs" />
     <Compile Include="Runners\RunnerFactory.cs" />
     <Compile Include="Runners\ThreadRunner.cs" />
     <Compile Include="Runners\ThreadRunnerAssemblyCache.cs" />
-    <Compile Include="ServiceConfigurationView.xaml.cs">
-      <DependentUpon>ServiceConfigurationView.xaml</DependentUpon>
+    <Compile Include="RoleConfigurationView.xaml.cs">
+      <DependentUpon>RoleConfigurationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\IServiceConfiguationService.cs" />
+    <Compile Include="IRoleConfiguationService.cs" />
     <Compile Include="ViewModel\RoleStates\AutoStarting.cs" />
     <Compile Include="ViewModel\RoleStates\Crashing.cs" />
     <Compile Include="ViewModel\ImageUtil.cs" />
@@ -114,6 +115,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     <Page Include="ServiceConfigurationView.xaml">
+    <Page Include="RoleConfigurationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

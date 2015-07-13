@@ -1,21 +1,22 @@
 ﻿using System.Windows;
-using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost
 {
     /// <summary>
-    /// Interaction logic for ServiceConfiguration.xaml
+    /// Interaction logic for RoleConfigurationView.xaml
     /// </summary>
-    public partial class ServiceConfigurationView : Window
+    public partial class RoleConfigurationView : Window
     {
-        private readonly Role _vm;
+        private readonly RoleConfigurationViewModel _vm;
 
-        public ServiceConfigurationView()
+        public bool Cancelled { get; set; }
+
+        public RoleConfigurationView()
         {
             InitializeComponent();
         }
 
-        public ServiceConfigurationView(Role vm)
+        public RoleConfigurationView(RoleConfigurationViewModel vm)
         {
             _vm = vm;
             DataContext = vm;
@@ -24,13 +25,13 @@ namespace LightBlue.MultiHost
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            Cancelled = true;
             Close();
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            _vm.UpdateServiceConfiguration();
-
+            _vm.UpdateRoleConfiguration();
             Close();
         }
     }

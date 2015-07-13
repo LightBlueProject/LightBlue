@@ -23,11 +23,13 @@ namespace LightBlue.MultiHost
     {
         public static MultiHostConfiguration Configuration { get; private set; }
 
+        public static string MultiHostConfigurationFilePath { get; private set; }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             try
             {
-                string configFilePath = null;
+                MultiHostConfigurationFilePath = null;
 
                 if (e.Args.Length != 1)
                 {
@@ -37,16 +39,16 @@ namespace LightBlue.MultiHost
                     d.CheckFileExists = true;
                     if (d.ShowDialog().GetValueOrDefault())
                     {
-                        configFilePath = d.FileName;
+                        MultiHostConfigurationFilePath = d.FileName;
 
                     }
                 }
                 else
                 {
-                    configFilePath = e.Args.Single();
+                    MultiHostConfigurationFilePath = e.Args.Single();
                 }
 
-                if (string.IsNullOrWhiteSpace(configFilePath))
+                if (string.IsNullOrWhiteSpace(MultiHostConfigurationFilePath))
                 {
                     Configuration = new MultiHostConfiguration
                     {
@@ -71,8 +73,8 @@ namespace LightBlue.MultiHost
                 }
                 else
                 {
-                    var configDir = Path.GetDirectoryName(configFilePath);
-                    var json = File.ReadAllText(configFilePath);
+                    var configDir = Path.GetDirectoryName(MultiHostConfigurationFilePath);
+                    var json = File.ReadAllText(MultiHostConfigurationFilePath);
                     Configuration = JsonConvert.DeserializeObject<MultiHostConfiguration>(json);
 
                     foreach (var c in Configuration.Roles)
