@@ -4,6 +4,7 @@ LightBlue
 Version 1.1.18
 --------------------
 ###Features
+* "Steel Blue" multihost.
 * Add incrementing number and PID to queue message filenames to ensure uniqueness.
 
 Version 1.1.17
