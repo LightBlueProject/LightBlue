@@ -186,6 +186,31 @@ namespace LightBlue.MultiHost
             _searchText = FilterTextBox.Text;
             CollectionViewSource.View.Refresh();
         }
+
+        private void EditConfiguration_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (VerifiySingleSelection())
+            {
+                var role = listView.SelectedItems.Cast<Role>().Single();
+                var view = new ServiceConfigurationView(role);
+                view.Show();
+            }
+        }
+
+        private bool VerifiySingleSelection()
+        {
+            if (listView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Can't perform action: you don't have any services selected.");
+                return false;
+            }
+            if (listView.SelectedItems.Count > 1)
+            {
+                MessageBox.Show("Can't perform action: you have more than one service selected.");
+                return false;
+            }
+            return true;
+        }
     }
 }
 

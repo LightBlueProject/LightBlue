@@ -1,0 +1,51 @@
+﻿<Window x:Class="LightBlue.MultiHost.ServiceConfigurationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ServiceConfiguration" Height="400" Width="400">
+    <Grid>
+        <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Row="0" Grid.Column="0" Content="EnabledOnStartup:"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Assembly:"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="RoleName:"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Title:"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="ConfigurationPath:"/>
+                <Label Grid.Row="5" Grid.Column="0" Content="Port:"/>
+                <Label Grid.Row="6" Grid.Column="0" Content="UseSsl:"/>
+                <Label Grid.Row="7" Grid.Column="0" Content="Hostname:"/>
+                <Label Grid.Row="8" Grid.Column="0" Content="RoleIsolationMode:"/>
+                
+                <TextBox Grid.Column="1" Grid.Row="0" Margin="3" Text="{Binding Config.EnabledOnStartup}"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Margin="3" Text="{Binding Config.Assembly}"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Margin="3" Text="{Binding Config.RoleName}"/>
+                <TextBox Grid.Column="1" Grid.Row="3" Margin="3" Text="{Binding Config.Title}"/>
+                <TextBox Grid.Column="1" Grid.Row="4" Margin="3" Text="{Binding Config.ConfigurationPath}"/>
+                <TextBox Grid.Column="1" Grid.Row="5" Margin="3" Text="{Binding Config.Port}"/>
+                <TextBox Grid.Column="1" Grid.Row="6" Margin="3" Text="{Binding Config.UseSsl}"/>
+                <TextBox Grid.Column="1" Grid.Row="7" Margin="3" Text="{Binding Config.Hostname}"/>
+                <TextBox Grid.Column="1" Grid.Row="8" Margin="3" Text="{Binding Config.RoleIsolationMode}"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="BtnOk" Content="OK" Margin="4" Padding="8" Click="BtnOk_Click" HorizontalAlignment="Right" />
+                <Button x:Name="BtnCancel" Content="Cancel" Margin="4" Padding="8" Click="BtnCancel_Click" HorizontalAlignment="Right" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
