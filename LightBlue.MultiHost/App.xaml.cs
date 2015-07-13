@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
+
+using LightBlue.Infrastructure;
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.IISExpress;
 using LightBlue.MultiHost.Runners;
@@ -23,75 +25,82 @@ namespace LightBlue.MultiHost
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            string configFilePath = null;
-
-            if (e.Args.Length != 1)
+            try
             {
-                var d = new OpenFileDialog();
-                d.Title = "LightBlue MultiHost: please select multi-host configuration file (.json)";
-                d.Filter = "MultiHost Configuration Files (.json)|*.json";
-                d.CheckFileExists = true;
-                if (d.ShowDialog().GetValueOrDefault())
+                string configFilePath = null;
+
+                if (e.Args.Length != 1)
                 {
-                    configFilePath = d.FileName;
-
-                }
-            }
-            else
-            {
-                configFilePath = e.Args.Single();
-            }
-
-            if (string.IsNullOrWhiteSpace(configFilePath))
-            {
-                Configuration = new MultiHostConfiguration
-                {
-                    Roles = new[]
+                    var d = new OpenFileDialog();
+                    d.Title = "LightBlue MultiHost: please select multi-host configuration file (.json)";
+                    d.Filter = "MultiHost Configuration Files (.json)|*.json";
+                    d.CheckFileExists = true;
+                    if (d.ShowDialog().GetValueOrDefault())
                     {
-                        new RoleConfiguration {Title = "Demo Web Site", RoleName = "WebRole"},
-                        new RoleConfiguration
-                        {
-                            Title = "Demo Web Site 2",
-                            RoleName = "WebRole",
-                            RoleIsolationMode = "AppDomain"
-                        },
-                        new RoleConfiguration {Title = "Demo Domain", RoleName = "CommandProcessor"},
-                        new RoleConfiguration
-                        {
-                            Title = "Demo Domain 2",
-                            RoleName = "ReadModelPopulator",
-                            RoleIsolationMode = "AppDomain"
-                        }
-                    },
-                };
-            }
-            else
-            {
-                var configDir = Path.GetDirectoryName(configFilePath);
-                var json = File.ReadAllText(configFilePath);
-                Configuration = JsonConvert.DeserializeObject<MultiHostConfiguration>(json);
+                        configFilePath = d.FileName;
 
-                foreach (var c in Configuration.Roles)
+                    }
+                }
+                else
                 {
-                    c.ConfigurationPath = Path.GetFullPath(Path.Combine(configDir, c.ConfigurationPath));
-                    c.Assembly = Path.GetFullPath(Path.Combine(configDir, c.Assembly));
+                    configFilePath = e.Args.Single();
                 }
 
-                var query =
-                    from c in Configuration.Roles
-                    let relativePath = c.Assembly.ToLowerInvariant().EndsWith(".dll")
-                        ? Path.GetDirectoryName(c.Assembly)
-                        : c.Assembly
-                    select relativePath;
+                if (string.IsNullOrWhiteSpace(configFilePath))
+                {
+                    Configuration = new MultiHostConfiguration
+                    {
+                        Roles = new[]
+                        {
+                            new RoleConfiguration {Title = "Demo Web Site", RoleName = "WebRole"},
+                            new RoleConfiguration
+                            {
+                                Title = "Demo Web Site 2",
+                                RoleName = "WebRole",
+                                RoleIsolationMode = "AppDomain"
+                            },
+                            new RoleConfiguration {Title = "Demo Domain", RoleName = "CommandProcessor"},
+                            new RoleConfiguration
+                            {
+                                Title = "Demo Domain 2",
+                                RoleName = "ReadModelPopulator",
+                                RoleIsolationMode = "AppDomain"
+                            }
+                        },
+                    };
+                }
+                else
+                {
+                    var configDir = Path.GetDirectoryName(configFilePath);
+                    var json = File.ReadAllText(configFilePath);
+                    Configuration = JsonConvert.DeserializeObject<MultiHostConfiguration>(json);
 
-                var assemblyLocations = query.ToArray();
+                    foreach (var c in Configuration.Roles)
+                    {
+                        c.ConfigurationPath = Path.GetFullPath(Path.Combine(configDir, c.ConfigurationPath));
+                        c.Assembly = Path.GetFullPath(Path.Combine(configDir, c.Assembly));
+                    }
 
-                ThreadRunnerAssemblyCache.Initialise(assemblyLocations);
-                IisExpressHelper.KillIisExpressProcesses();
-                LightBlueConfiguration.SetAsMultiHost();
+                    var query =
+                        from c in Configuration.Roles
+                        let relativePath = c.Assembly.ToLowerInvariant().EndsWith(".dll")
+                            ? Path.GetDirectoryName(c.Assembly)
+                            : c.Assembly
+                        select relativePath;
+
+                    var assemblyLocations = query.ToArray();
+
+                    ThreadRunnerAssemblyCache.Initialise(assemblyLocations);
+                    IisExpressHelper.KillIisExpressProcesses();
+                    LightBlueConfiguration.SetAsMultiHost();
+                }
+
+                base.OnStartup(e);
             }
-
-            base.OnStartup(e);
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not start multi-host: " + ex.ToTraceMessage());
+            }
         }
     }
 }
