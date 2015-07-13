@@ -18,9 +18,14 @@ $workerHostExePath = join-path $parentDirectory "LightBlue.Host\bin\Release\Ligh
 $workerHostPdbPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.pdb"
 $workerHostStubDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.dll"
 $workerHostStubPdbPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.pdb"
-$ndeskDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\NDesk.Options.dll"
 $webHostExePath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.exe"
 $webHostPdbPath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.pdb"
+$multiHostExePath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.exe"
+$multiHostDllPath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.dll"
+$multiHostPdbPath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.pdb"
+$multiHostConfigPath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.config"
+
+$ndeskDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\NDesk.Options.dll"
 
 $linqpadEnvironmentTemplatePath = join-path $parentDirectory "LINQPad\Environment Template.linq"
 $linqpadIssueTemplatePath = join-path $parentDirectory "LINQPad\Issue Report Template.linq"
@@ -58,13 +63,13 @@ Copy-Item $linqpadIssueTemplatePath $linqpadSamplesPath
 
 New-Item -ItemType directory -Path $autofacNet45LibPath | Out-Null
 Copy-Item $autofacNuspecPath $autofacPackagePath
-Copy-Item  $lightBlueAutofacDllPath $autofacNet45LibPath
-Copy-Item  $lightBlueAutofacPdbPath $autofacNet45LibPath
+Copy-Item $lightBlueAutofacDllPath $autofacNet45LibPath
+Copy-Item $lightBlueAutofacPdbPath $autofacNet45LibPath
 
 New-Item -ItemType directory -Path $windsorNet45LibPath | Out-Null
 Copy-Item $windsorNuspecPath $windsorPackagePath
-Copy-Item  $lightBlueWindsorDllPath $windsorNet45LibPath
-Copy-Item  $lightBlueWindsorPdbPath $windsorNet45LibPath
+Copy-Item $lightBlueWindsorDllPath $windsorNet45LibPath
+Copy-Item $lightBlueWindsorPdbPath $windsorNet45LibPath
 
 New-Item -ItemType directory -Path $toolsPath | Out-Null
 Copy-Item $hostsNuspecPath $hostsPackagePath
@@ -76,6 +81,10 @@ Copy-Item $ndeskDllPath $toolsPath
 Copy-Item $webHostExePath $toolsPath
 Copy-Item $webHostPdbPath $toolsPath
 Copy-Item $noticePath $toolsPath
+Copy-Item $multiHostExePath $toolsPath
+Copy-Item $multiHostDllPath $toolsPath
+Copy-Item $multiHostPdbPath $toolsPath
+Copy-Item $multiHostConfigPath $toolsPath
 
 Push-Location -Path $corePackagePath
 
