@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -203,7 +204,7 @@ namespace LightBlue.MultiHost
             {
                 var role = listView.SelectedItems.Cast<Role>().Single();
                 var service = new RoleConfigurationService();
-                var wasUpdated = service.Edit(role.Title, App.MultiHostConfigurationFilePath);
+                var changed = service.Edit(role.Title, App.MultiHostConfigurationFilePath);
             }
         }
 

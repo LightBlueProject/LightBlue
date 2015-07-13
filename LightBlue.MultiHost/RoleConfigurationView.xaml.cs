@@ -23,16 +23,26 @@ namespace LightBlue.MultiHost
             InitializeComponent();
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Cancelled = true;
             Close();
         }
 
-        private void BtnOk_Click(object sender, RoutedEventArgs e)
+        private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            _vm.UpdateRoleConfiguration();
+            _vm.SaveRoleConfiguration();
             Close();
+        }
+
+        private void BrowseToAssemblyButton_Click(object sender, RoutedEventArgs e)
+        {
+            _vm.BrowseToAssembly();
+        }
+
+        private void BrowseToServerConfigurationButton_Click(object sender, RoutedEventArgs e)
+        {
+            _vm.BrowseToServiceConfiguration();
         }
     }
 }
