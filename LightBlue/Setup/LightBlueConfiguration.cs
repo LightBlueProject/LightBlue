@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+
 using LightBlue.Infrastructure;
 using LightBlue.Setup.Contexts;
 using LightBlue.Standalone;
@@ -40,8 +41,8 @@ namespace LightBlue.Setup
             }
 
             _context = azureEnvironment == AzureEnvironment.LightBlue
-                ? (ILightBlueContext)new ExternalLightBlueContext()
-                : (ILightBlueContext)new ExternalAzureContext();
+                ? new ExternalLightBlueContext()
+                : (ILightBlueContext)new ExternalAzureContext(azureEnvironment);
         }
 
         public static void SetAsMultiHost()

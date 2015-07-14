@@ -1,24 +1,27 @@
 ﻿using System;
+
 using LightBlue.Hosted;
-using Microsoft.WindowsAzure.ServiceRuntime;
+
 using Microsoft.WindowsAzure.Storage.Auth;
 
 namespace LightBlue.Setup.Contexts
 {
     abstract class AzureContextBase : ILightBlueContext
     {
+        private readonly AzureEnvironment _azureEnvironment;
+
+        protected AzureContextBase(AzureEnvironment azureEnvironment)
+        {
+            _azureEnvironment = azureEnvironment;
+        }
+
         public abstract string RoleName { get; }
         public abstract IAzureSettings Settings { get; }
         public abstract IAzureLocalResourceSource LocalResources { get; }
 
         public AzureEnvironment AzureEnvironment
         {
-            get
-            {
-                return RoleEnvironment.IsEmulated
-                    ? AzureEnvironment.Emulator
-                    : AzureEnvironment.ActualAzure;
-            }
+            get { return _azureEnvironment; }
         }
 
         public IAzureStorage GetStorageAccount(string connectionString)
