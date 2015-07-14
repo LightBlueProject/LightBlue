@@ -1,6 +1,11 @@
 LightBlue
 ====================
 
+Version 1.1.19
+--------------------
+###Implementation
+* Fix bug calling SetAsExternal multiple times when AzureEnvironment is ActualAzure or Emulator.
+
 Version 1.1.18
 --------------------
 ###Features
