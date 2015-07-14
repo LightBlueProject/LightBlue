@@ -185,8 +185,8 @@ namespace LightBlue.Standalone
             finally
             {
                 FileStream fileStream;
-                if (_fileLocks.TryGetValue(message.Id, out fileStream))
-                { 
+                if (_fileLocks.TryRemove(message.Id, out fileStream))
+                {
                     fileStream.Dispose();
                 }
             }
