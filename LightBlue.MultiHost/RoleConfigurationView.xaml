@@ -32,9 +32,7 @@
                 <Label Grid.Row="6" Grid.Column="0" Content="UseSsl:"/>
                 <Label Grid.Row="7" Grid.Column="0" Content="Hostname:"/>
                 <Label Grid.Row="8" Grid.Column="0" Content="RoleIsolationMode:"/>
-
-
-
+                
                 <CheckBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" IsChecked="{Binding RoleConfiguration.EnabledOnStartup}"/>
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock Text="{Binding RoleConfiguration.Assembly}" />

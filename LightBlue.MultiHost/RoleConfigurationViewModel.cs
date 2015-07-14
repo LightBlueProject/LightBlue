@@ -42,7 +42,7 @@ namespace LightBlue.MultiHost
         public void BrowseToServiceConfiguration()
         {
             IOpenFileDialogService service = new OpenFileDialogService();
-            RoleConfiguration.Assembly = service.OpenFileDialog(RoleConfiguration.Assembly,
+            RoleConfiguration.ConfigurationPath = service.OpenFileDialog(RoleConfiguration.ConfigurationPath,
                 "Choose service configuration",
                 "Service Configuration Files (.cscfg)|*.cscfg");
         }
