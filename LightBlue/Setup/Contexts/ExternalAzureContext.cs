@@ -4,6 +4,10 @@ namespace LightBlue.Setup.Contexts
 {
     class ExternalAzureContext : AzureContextBase
     {
+        public ExternalAzureContext(AzureEnvironment azureEnvironment)
+            : base(azureEnvironment)
+        {}
+
         public override string RoleName
         {
             get { return "External (AzureContext)"; }

@@ -12,7 +12,7 @@ namespace LightBlue.Setup.Contexts
 
         public AzureEnvironment AzureEnvironment
         {
-            get { return LightBlue.AzureEnvironment.LightBlue; }
+            get { return AzureEnvironment.LightBlue; }
         }
 
         public IAzureStorage GetStorageAccount(string connectionString)

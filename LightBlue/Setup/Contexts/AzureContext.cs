@@ -8,7 +8,11 @@ namespace LightBlue.Setup.Contexts
         private readonly string _roleName;
         private readonly HostedAzureSettings _settings;
         private readonly HostedAzureLocalResourceSource _localResources;
+
         public AzureContext()
+            : base(RoleEnvironment.IsEmulated
+                ? AzureEnvironment.Emulator
+                : AzureEnvironment.ActualAzure)
         {
             _roleName = RoleEnvironment.CurrentRoleInstance.Role.Name;
             _settings = new HostedAzureSettings();
