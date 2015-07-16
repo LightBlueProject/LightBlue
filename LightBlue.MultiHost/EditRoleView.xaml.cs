@@ -6,18 +6,18 @@ namespace LightBlue.MultiHost
     /// <summary>
     /// Interaction logic for RoleConfigurationView.xaml
     /// </summary>
-    public partial class RoleConfigurationView : Window
+    public partial class EditRoleView : Window
     {
-        private readonly RoleConfigurationViewModel _vm;
+        private readonly EditRole _vm;
 
         public bool Cancelled { get; set; }
 
-        public RoleConfigurationView()
+        public EditRoleView()
         {
             InitializeComponent();
         }
 
-        public RoleConfigurationView(RoleConfigurationViewModel vm)
+        public EditRoleView(EditRole vm)
         {
             _vm = vm;
             DataContext = vm;

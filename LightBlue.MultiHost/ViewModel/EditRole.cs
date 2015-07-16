@@ -1,17 +1,18 @@
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Media;
 using LightBlue.MultiHost.Configuration;
 
 namespace LightBlue.MultiHost.ViewModel
 {
-    public class RoleConfigurationViewModel : INotifyPropertyChanged
+    public class EditRole : INotifyPropertyChanged
     {
         private readonly string _serviceTitle;
         private readonly MultiHostConfiguration _multiHostConfiguration;
         private readonly string _multiHostConfigurationFilePath;
         private RoleConfiguration _roleConfiguration;
 
-        public RoleConfigurationViewModel(string serviceTitle, MultiHostConfiguration multiHostConfiguration, string multiHostConfigurationFilePath)
+        public EditRole(string serviceTitle, MultiHostConfiguration multiHostConfiguration, string multiHostConfigurationFilePath)
         {
             _serviceTitle = serviceTitle;
             _multiHostConfiguration = multiHostConfiguration;
@@ -19,6 +20,8 @@ namespace LightBlue.MultiHost.ViewModel
 
             RoleConfiguration = _multiHostConfiguration.Roles.Single(x => x.Title == _serviceTitle);
         }
+
+        public ImageSource MainIcon { get { return ImageUtil.ColourImage(@"Resources\debug.ico", CustomBrushes.Main); } }
 
         public RoleConfiguration RoleConfiguration
         {

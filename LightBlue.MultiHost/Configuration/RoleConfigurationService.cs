@@ -8,8 +8,8 @@ namespace LightBlue.MultiHost.Configuration
         {
             var service = new MultiHostConfigurationService();
             var configuration = service.Load(multiHostConfigurationFilePath);
-            var vm = new RoleConfigurationViewModel(serviceTitle, configuration, multiHostConfigurationFilePath);
-            var view = new RoleConfigurationView(vm);
+            var vm = new EditRole(serviceTitle, configuration, multiHostConfigurationFilePath);
+            var view = new EditRoleView(vm);
             view.Show();
             return !view.Cancelled;
         }

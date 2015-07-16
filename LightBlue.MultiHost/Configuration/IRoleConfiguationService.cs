@@ -1,4 +1,4 @@
-namespace LightBlue.MultiHost
+namespace LightBlue.MultiHost.Configuration
 {
     public interface IRoleConfiguationService
     {

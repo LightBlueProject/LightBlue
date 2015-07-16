@@ -79,15 +79,15 @@
     <Compile Include="Configuration\MultiHostConfigurationService.cs" />
     <Compile Include="OpenFileDialogService.cs" />
     <Compile Include="Configuration\RoleConfigurationService.cs" />
-    <Compile Include="ViewModel\RoleConfigurationViewModel.cs" />
+    <Compile Include="ViewModel\EditRole.cs" />
     <Compile Include="Runners\RoleIsolationMode.cs" />
     <Compile Include="Runners\RunnerFactory.cs" />
     <Compile Include="Runners\ThreadRunner.cs" />
     <Compile Include="Runners\ThreadRunnerAssemblyCache.cs" />
-    <Compile Include="RoleConfigurationView.xaml.cs">
-      <DependentUpon>RoleConfigurationView.xaml</DependentUpon>
+    <Compile Include="EditRoleView.xaml.cs">
+      <DependentUpon>EditRoleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IRoleConfiguationService.cs" />
+    <Compile Include="Configuration\IRoleConfiguationService.cs" />
     <Compile Include="ViewModel\RoleStates\AutoStarting.cs" />
     <Compile Include="ViewModel\RoleStates\Crashing.cs" />
     <Compile Include="ViewModel\ImageUtil.cs" />
@@ -122,6 +122,7 @@
       <SubType>Designer</SubType>
     <Page Include="ServiceConfigurationView.xaml">
     <Page Include="RoleConfigurationView.xaml">
+    <Page Include="EditRoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
