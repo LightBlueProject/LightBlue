@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost
 {

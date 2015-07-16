@@ -76,10 +76,10 @@
     <Compile Include="IISExpress\WebConfigHelper.cs" />
     <Compile Include="IISExpress\WebHostArgs.cs" />
     <Compile Include="IOpenFileDialogService.cs" />
-    <Compile Include="MultiHostConfigurationService.cs" />
+    <Compile Include="Configuration\MultiHostConfigurationService.cs" />
     <Compile Include="OpenFileDialogService.cs" />
-    <Compile Include="RoleConfigurationService.cs" />
-    <Compile Include="RoleConfigurationViewModel.cs" />
+    <Compile Include="Configuration\RoleConfigurationService.cs" />
+    <Compile Include="ViewModel\RoleConfigurationViewModel.cs" />
     <Compile Include="Runners\RoleIsolationMode.cs" />
     <Compile Include="Runners\RunnerFactory.cs" />
     <Compile Include="Runners\ThreadRunner.cs" />

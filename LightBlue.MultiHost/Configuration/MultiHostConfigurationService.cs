@@ -1,8 +1,7 @@
 using System.IO;
-using LightBlue.MultiHost.Configuration;
 using Newtonsoft.Json;
 
-namespace LightBlue.MultiHost
+namespace LightBlue.MultiHost.Configuration
 {
     public class MultiHostConfigurationService
     {
@@ -18,7 +17,7 @@ namespace LightBlue.MultiHost
             using (var fs = new FileStream(path, FileMode.Truncate, FileAccess.Write))
             using (var sw = new StreamWriter(fs))
             {
-                sw.WriteLine(JsonConvert.SerializeObject(multiHostConfiguration));
+                sw.WriteLine(JsonConvert.SerializeObject(multiHostConfiguration, Formatting.Indented));
             }
         }
     }

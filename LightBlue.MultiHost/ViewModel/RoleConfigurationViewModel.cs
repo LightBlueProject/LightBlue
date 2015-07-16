@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Linq;
 using LightBlue.MultiHost.Configuration;
 
-namespace LightBlue.MultiHost
+namespace LightBlue.MultiHost.ViewModel
 {
     public class RoleConfigurationViewModel : INotifyPropertyChanged
     {

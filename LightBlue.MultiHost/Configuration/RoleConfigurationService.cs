@@ -1,4 +1,6 @@
-namespace LightBlue.MultiHost
+using LightBlue.MultiHost.ViewModel;
+
+namespace LightBlue.MultiHost.Configuration
 {
     public class RoleConfigurationService : IRoleConfiguationService
     {
