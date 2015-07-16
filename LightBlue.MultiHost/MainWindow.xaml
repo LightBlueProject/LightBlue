@@ -5,7 +5,7 @@
         Icon="{Binding MainIcon}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -23,14 +23,20 @@
             <TextBox x:Name="FilterTextBox" Width="180" Height="26" VerticalContentAlignment="Center" TextChanged="FilterTextBox_OnTextChanged"></TextBox>
         </StackPanel>
 
-        <ListView Background="White" x:Name="listView" Margin="2" Grid.Column="0" Grid.Row="1" BorderThickness="0" ItemsSource="{Binding CollectionViewSource.View}" SelectedItem="{Binding SelectedItem}">
+        <ListView Grid.IsSharedSizeScope="True" Background="White" x:Name="listView" Margin="2" Grid.Column="0" Grid.Row="1" BorderThickness="0" ItemsSource="{Binding CollectionViewSource.View}" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Image}" Height="32" Width="32" VerticalAlignment="Center"></Image>
-                        <Label Content="{Binding DisplayText}" VerticalContentAlignment="Center"/>
-                        <Label Content="{Binding Status}" Foreground="{Binding StatusColor}" VerticalContentAlignment="Center" FontWeight="Bold"/>
-                    </StackPanel>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto" SharedSizeGroup="ImageColumn" />
+                      <ColumnDefinition Width="*" SharedSizeGroup="NameColumn" />
+                      <ColumnDefinition Width="Auto" SharedSizeGroup="StatusColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Column="0" Source="{Binding Image}" Height="32" Width="32" VerticalAlignment="Center"></Image>
+                    <Label Grid.Column="1" Content="{Binding DisplayText}" VerticalContentAlignment="Center"/>
+                    <Label Grid.Column="2" Content="{Binding Status}" Foreground="{Binding StatusColor}" VerticalContentAlignment="Center" FontWeight="Bold"/>
+                  </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
