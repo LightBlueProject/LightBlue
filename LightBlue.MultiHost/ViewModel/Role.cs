@@ -2,11 +2,14 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using LightBlue.MultiHost.Configuration;
+using LightBlue.MultiHost.Infrastructure.Controls;
 using LightBlue.MultiHost.Runners;
 using LightBlue.MultiHost.ViewModel.RoleStates;
 
@@ -79,25 +82,12 @@ namespace LightBlue.MultiHost.ViewModel
 
         public string DisplayText { get { return Config.Title; } }
 
-        public string Trace
-        {
-            get { return _trace; }
-            set
-            {
-                _trace = value;
-                OnPropertyChanged("Trace");
-            }
-        }
-
-        public ObservableCollection<string> TraceElements { get; set; }
-
-        public TextBox TraceBox { get; private set; }
+        public FifoLog Log { get; private set; }
 
         internal readonly RoleConfiguration Config;
+        private readonly Dispatcher _dispatcher;
         private IState _state;
-
         private RoleRunner _current;
-        private string _trace;
 
         internal IState State
         {
@@ -115,19 +105,11 @@ namespace LightBlue.MultiHost.ViewModel
         {
             Config = role;
             State = Config.EnabledOnStartup ? (IState)new AutoStarting(this) : (IState)new Stopped(this);
-            TraceBox = new TextBox
-            {
-                TextWrapping = TextWrapping.Wrap,
-                Background = Brushes.Black,
-                Foreground = Brushes.LightGray,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Visible,
-                IsReadOnly = true,
-                FontFamily = new FontFamily("Consolas"),
-                FontSize = 14,
-                AcceptsReturn = true,
-            };
-            TraceElements = new ObservableCollection<string>();
-            TraceWriteLine(role.Title + " configuration loaded...\r\n");
+            _dispatcher = Dispatcher.CurrentDispatcher;
+
+            Log = new FifoLog(50000); // 50,000 codeunits/role * 2 bytes/codeunit * ~100 roles = ~9.5 MB
+
+            Log.Write(role.Title + " configuration loaded...");
         }
 
         public void StartAutomatically()
@@ -206,58 +188,31 @@ namespace LightBlue.MultiHost.ViewModel
         public void TraceWrite(string s)
         {
             if (s.StartsWith("NewRelic")) return;
-            EnsureUIThread(() =>
-            {
-                Trace += s;
 
-                if (TraceElements.Count > 0)
-                {
-                    var index = TraceElements.Count - 1;
-                    var msg = TraceElements[index];
-                    TraceElements.RemoveAt(index);
-                    TraceElements.Add(msg + s);
-                }
-                else
-                {
-                    TraceElements.Add(s);
-                }
-
-                TraceBox.AppendText(s);
-                TraceBox.ScrollToEnd();
-            });
+            EnsureUIThread(() => Log.Write(s));
         }
 
         public void TraceWriteLine(string s)
         {
             if (s.StartsWith("NewRelic")) return;
-            EnsureUIThread(() =>
-            {
-                Trace += s + "\r\n";
-                TraceElements.Add(s);
-                TraceBox.AppendText(s + "\r\n");
-                TraceBox.ScrollToEnd();
-            });
+
+            EnsureUIThread(() => Log.WriteLine(s));
         }
 
         public void TraceClear()
         {
-            EnsureUIThread(() =>
-            {
-                Trace = "";
-                TraceElements.Clear();
-                TraceBox.Clear();
-            });
+            EnsureUIThread(() => Log.Clear());
         }
 
         private void EnsureUIThread(Action a)
         {
-            if (TraceBox.Dispatcher.CheckAccess())
+            if (_dispatcher.CheckAccess())
             {
                 a();
             }
             else
             {
-                TraceBox.Dispatcher.Invoke(a);
+                _dispatcher.Invoke(a);
             }
         }
     }
