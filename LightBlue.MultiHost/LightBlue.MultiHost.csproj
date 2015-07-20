@@ -120,8 +120,7 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    <Page Include="ServiceConfigurationView.xaml">
-    <Page Include="RoleConfigurationView.xaml">
+    </Page>
     <Page Include="EditRoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
