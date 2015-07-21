@@ -3,11 +3,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost
@@ -105,6 +107,16 @@ namespace LightBlue.MultiHost
 
             var autos = Services.Where(x => x.Status == RoleStatus.Sequenced).ToArray();
             BeginAutoStart(autos);
+        }
+
+        public string Version
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly()
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    .InformationalVersion;
+            }
         }
 
         async void BeginAutoStart(Role[] roles)
