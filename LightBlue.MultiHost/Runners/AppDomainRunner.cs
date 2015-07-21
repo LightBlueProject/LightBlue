@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Remoting;
 using System.Threading;
@@ -24,6 +25,7 @@ namespace LightBlue.MultiHost.Runners
 
         public Task Started { get { return _started.Task; } }
         public Task Completed { get { return _completed.Task; } }
+        public string Identifier { get { return "App Domain: " + _role.Config.Title; } }
 
         public AppDomainRunner(Role role,
             AppDomainSetup appDomainSetup,
@@ -46,6 +48,8 @@ namespace LightBlue.MultiHost.Runners
             t.Start();
         }
 
+        public IEnumerable<string> Runners { get { yield return "App Domain Runner"; } }
+
         private void StartInternal()
         {
             ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(_configurationFilePath);
@@ -54,8 +58,8 @@ namespace LightBlue.MultiHost.Runners
             _hostStub = (HostStub)_appDomain.CreateInstanceAndUnwrap(typeof(HostStub).Assembly.FullName, typeof(HostStub).FullName);
 
             var shipper = new EventTraceShipper();
-            Action<string> twh = m => _role.TraceWrite(m);
-            Action<string> twlh = m => _role.TraceWriteLine(m);
+            Action<string> twh = m => _role.TraceWrite(Identifier, m);
+            Action<string> twlh = m => _role.TraceWriteLine(Identifier, m);
             shipper.TraceWrite += twh;
             shipper.TraceWriteLine += twlh;
             _hostStub.ConfigureTracing(shipper);
@@ -66,12 +70,12 @@ namespace LightBlue.MultiHost.Runners
             try
             {
                 _started.SetResult(new object());
-                _role.TraceWriteLine("Role started in app domain: " + _appDomain.Id + " by " + Thread.CurrentThread.Name);
+                _role.TraceWriteLine(Identifier, "Role started in app domain: " + _appDomain.Id + " by " + Thread.CurrentThread.Name);
                 _hostStub.Run(_assemblyFilePath, _configurationFilePath, _serviceDefinitionFilePath, _roleName, false);
             }
             catch (Exception ex)
             {
-                _role.TraceWriteLine(ex.ToString());
+                _role.TraceWriteLine(Identifier, ex.ToString());
             }
             finally
             {
@@ -83,44 +87,44 @@ namespace LightBlue.MultiHost.Runners
 
         public void Dispose()
         {
-            _role.TraceWriteLine("Request thread shutdown...");
+            _role.TraceWriteLine(Identifier, "Request thread shutdown...");
             try
             {
                 _hostStub.RequestShutdown();
 
                 if (Completed.Wait(TimeSpan.FromSeconds(30)))
                 {
-                    _role.TraceWriteLine("Thread shutdown sucessful.");
+                    _role.TraceWriteLine(Identifier, "Thread shutdown sucessful.");
                 }
                 else
                 {
-                    _role.TraceWriteLine("Thread shutdown failed to complete within 30 seconds.");
+                    _role.TraceWriteLine(Identifier, "Thread shutdown failed to complete within 30 seconds.");
                 }
             }
             catch (RemotingException ex)
             {
-                _role.TraceWriteLine("That shutdown failed: " + ex.Message);
+                _role.TraceWriteLine(Identifier, "That shutdown failed: " + ex.Message);
             }
 
-            _role.TraceWriteLine("Unloading AppDomain.");
+            _role.TraceWriteLine(Identifier, "Unloading AppDomain.");
 
             while (true)
             {
                 try
                 {
                     AppDomain.Unload(_appDomain);
-                    _role.TraceWriteLine("AppDomain Unloaded.");
+                    _role.TraceWriteLine(Identifier, "AppDomain Unloaded.");
                     return;
                 }
                 catch (Exception ex)
                 {
-                    _role.TraceWriteLine("Error Unloading AppDomain: " + ex.Message);
+                    _role.TraceWriteLine(Identifier, "Error Unloading AppDomain: " + ex.Message);
                     Thread.Sleep(1000);
                 }
             }
         }
 
-        public static void CopyStubAssemblyToRoleDirectory(string applicationBase, Role role)
+        public void CopyStubAssemblyToRoleDirectory(string applicationBase, Role role)
         {
             var destinationHostStubPath = Path.Combine(applicationBase, Path.GetFileName(typeof(HostStub).Assembly.Location));
             try
@@ -129,7 +133,7 @@ namespace LightBlue.MultiHost.Runners
             }
             catch (IOException)
             {
-                role.TraceWriteLine("Could not copy Host Stub. Assuming this is because it already exists and continuing.");
+                role.TraceWriteLine(Identifier, "Could not copy Host Stub. Assuming this is because it already exists and continuing.");
             }
         }
     }

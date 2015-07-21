@@ -27,6 +27,8 @@ namespace LightBlue.MultiHost.Runners
             get { return CreateFriendlyTask(); }
         }
 
+        public string Identifier { get { return "Role Runner: " + _role.Config.Title; } }
+
         private async Task CreateFriendlyTask()
         {
             var tasks = _resources.Select(x => x.Completed).ToArray();
@@ -43,6 +45,8 @@ namespace LightBlue.MultiHost.Runners
             return !string.IsNullOrWhiteSpace(_role.Config.Hostname);
         }
 
+        public IEnumerable<string> RunnerIdentifiers { get { return _resources.Select(r => r.Identifier); }}
+
         public void Start()
         {
 
@@ -51,8 +55,8 @@ namespace LightBlue.MultiHost.Runners
             {
                 var website = RunnerFactory.CreateForWebSite(_role);
                 var role = RunnerFactory.CreateForWebRole(_role, _role.IsolationMode);
-                _resources.Add(website);
                 _resources.Add(role);
+                _resources.Add(website);
                 website.Start();
                 role.Start();
             }
