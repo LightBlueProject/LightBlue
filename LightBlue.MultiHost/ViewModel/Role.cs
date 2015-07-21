@@ -215,5 +215,17 @@ namespace LightBlue.MultiHost.ViewModel
                 _dispatcher.Invoke(a);
             }
         }
+
+        public void Debug()
+        {
+            if (_current != null)
+            {
+                _current.Debug();
+            }
+            else
+            {
+                Debugger.Launch();
+            }
+        }
     }
 }

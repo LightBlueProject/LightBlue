@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using LightBlue.MultiHost.IISExpress;
 using LightBlue.MultiHost.ViewModel;
@@ -51,6 +53,17 @@ namespace LightBlue.MultiHost.Runners
                 _completed.SetResult(new object());
             }
             _started.SetResult(new object());
+		}
+
+        public bool Debug()
+        {
+            if (File.Exists(@"c:\\windows\\system32\\vsjitdebugger.exe"))
+            {
+                var psi = new ProcessStartInfo(@"c:\\windows\\system32\\vsjitdebugger.exe", "-p " + _process.Id);
+                Process.Start(psi);
+                return true;
+            }
+            return false;
         }
 
         public void Dispose()

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using LightBlue.MultiHost.ViewModel;
 
@@ -45,8 +47,6 @@ namespace LightBlue.MultiHost.Runners
 
         public void Start()
         {
-
-
             if (IsWebSite())
             {
                 var website = RunnerFactory.CreateForWebSite(_role);
@@ -70,6 +70,19 @@ namespace LightBlue.MultiHost.Runners
             {
                 r.Dispose();
             }
+        }
+
+        public void Debug()
+        {
+            if (IsWebSite())
+            {
+                if (_resources.OfType<IisExpressRunner>().First().Debug())
+                {
+                    return;
+                }
+            }
+
+            Debugger.Launch();
         }
     }
 }
