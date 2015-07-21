@@ -17,6 +17,7 @@ namespace LightBlue.MultiHost.Runners
 
         public Task Started { get { return _started.Task; } }
         public Task Completed { get { return _completed.Task; } }
+        public string Identifier { get { return "IIS Express: " + _role.Config.Title; } }
 
         public IisExpressRunner(Role role)
         {
@@ -38,19 +39,47 @@ namespace LightBlue.MultiHost.Runners
                 _process.StartInfo = IisExpressHelper.BuildProcessStartInfo(_args, iisExpressConfigurationFilePath);
                 if (_process.Start())
                 {
-                    _role.TraceWriteLine("Website started in new IISExpress process: " + _process.Id);
+                    _role.TraceWriteLine(Identifier, "Website started in new IISExpress process: " + _process.Id);
                 }
                 else
                 {
                     throw new NotSupportedException("James: I've not yet found a scenario where this can happen.");
                 }
+                BeginAsyncInfoLoop(_process);
+                BeginAsyncErrorLoop(_process);
             }
             catch (Exception ex)
             {
-                _role.TraceWriteLine("Could not start IIS process: " + ex.Message);
+                _role.TraceWriteLine(Identifier, "Could not start IIS process: " + ex.Message);
                 _completed.SetResult(new object());
             }
             _started.SetResult(new object());
+        }
+
+        private async void BeginAsyncInfoLoop(Process process)
+        {
+            while (!Completed.IsCompleted)
+            {
+                var trace = process.StandardOutput.ReadLineAsync();
+                var s = await trace;
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    _role.TraceWriteLine(Identifier, s);
+                }
+            }
+        }
+
+        private async void BeginAsyncErrorLoop(Process process)
+        {
+            while (!Completed.IsCompleted)
+            {
+                var trace = process.StandardError.ReadLineAsync();
+                var s = await trace;
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    _role.TraceWriteLine(Identifier, s);
+                }
+            }
         }
 
         public void Dispose()
@@ -60,16 +89,16 @@ namespace LightBlue.MultiHost.Runners
                 try
                 {
                     _process.Kill();
-                    _role.TraceWriteLine("Terminated IIS Express process: " + _process.Id);
+                    _role.TraceWriteLine(Identifier, "Terminated IIS Express process: " + _process.Id);
                 }
                 catch (InvalidOperationException ex)
                 {
-                    _role.TraceWriteLine("Couldn't terminate IIS Express process: " + ex.Message);
+                    _role.TraceWriteLine(Identifier, "Couldn't terminate IIS Express process: " + ex.Message);
                 }
             }
             else
             {
-                _role.TraceWriteLine("Could not terminate IIS Express process");
+                _role.TraceWriteLine(Identifier, "Could not terminate IIS Express process");
             }
         }
     }

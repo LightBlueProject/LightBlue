@@ -7,6 +7,7 @@ namespace LightBlue.MultiHost.Runners
     {
         Task Started { get; }
         Task Completed { get; }
+        string Identifier { get; }
         void Start();
     }
 }

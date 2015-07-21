@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using LightBlue.MultiHost.Configuration;
@@ -82,12 +81,21 @@ namespace LightBlue.MultiHost.ViewModel
 
         public string DisplayText { get { return Config.Title; } }
 
-        public FifoLog Log { get; private set; }
+        public IDictionary<string, FifoLog> Logs
+        {
+            get { return _logs; }
+            private set
+            {
+                _logs = value; 
+                OnPropertyChanged("Logs");
+            }
+        }
 
         internal readonly RoleConfiguration Config;
         private readonly Dispatcher _dispatcher;
         private IState _state;
         private RoleRunner _current;
+        private IDictionary<string, FifoLog> _logs;
 
         internal IState State
         {
@@ -106,10 +114,7 @@ namespace LightBlue.MultiHost.ViewModel
             Config = role;
             State = Config.EnabledOnStartup ? (IState)new AutoStarting(this) : (IState)new Stopped(this);
             _dispatcher = Dispatcher.CurrentDispatcher;
-
-            Log = new FifoLog(50000); // 50,000 codeunits/role * 2 bytes/codeunit * ~100 roles = ~9.5 MB
-
-            Log.Write(role.Title + " configuration loaded...");
+            Logs = new Dictionary<string, FifoLog>();
         }
 
         public void StartAutomatically()
@@ -185,23 +190,35 @@ namespace LightBlue.MultiHost.ViewModel
             }
         }
 
-        public void TraceWrite(string s)
+        public void TraceWrite(string runner, string s)
         {
             if (s.StartsWith("NewRelic")) return;
 
-            EnsureUIThread(() => Log.Write(s));
+            EnsureUIThread(() => RunnersLog(runner).Write(s));
         }
 
-        public void TraceWriteLine(string s)
+        private FifoLog RunnersLog(string runner)
+        {
+            FifoLog logger;
+            if (Logs.TryGetValue(runner, out logger))
+            {
+                return logger;
+            }
+            var fifoLog = new FifoLog(50000);
+            Logs.Add(runner, fifoLog);
+            return fifoLog;
+        }
+
+        public void TraceWriteLine(string runner, string s)
         {
             if (s.StartsWith("NewRelic")) return;
 
-            EnsureUIThread(() => Log.WriteLine(s));
+            EnsureUIThread(() => RunnersLog(runner).WriteLine(s));
         }
 
         public void TraceClear()
         {
-            EnsureUIThread(() => Log.Clear());
+            EnsureUIThread(() => Logs = new Dictionary<string, FifoLog>());
         }
 
         private void EnsureUIThread(Action a)

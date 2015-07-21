@@ -29,8 +29,8 @@ namespace LightBlue.MultiHost.IISExpress
                     CultureInfo.InvariantCulture,
                     "/config:\"{0}\" /site:LightBlue",
                     configurationFilePath),
-                RedirectStandardOutput = false,
-                RedirectStandardError = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
             };

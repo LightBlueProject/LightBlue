@@ -27,6 +27,8 @@ namespace LightBlue.MultiHost.Runners
         public Task Started { get { return _started.Task; } }
         public Task Completed { get { return _completed.Task; } }
 
+        public string Identifier { get { return "Thread Runner: " + _role.Config.Title; } }
+
         public ThreadRunner(Role role,
             string assemblyPath,
             string configurationFilePath,
@@ -147,8 +149,8 @@ namespace LightBlue.MultiHost.Runners
                 throw new InvalidOperationException("There is already a trace listener configured on this logical call context");
             _traceListener = LogicalCallContextTraceListener.Current;
 
-            Action<string> twh = m => _role.TraceWrite(m);
-            Action<string> twlh = m => _role.TraceWriteLine(m);
+            Action<string> twh = m => _role.TraceWrite(Identifier, m);
+            Action<string> twlh = m => _role.TraceWriteLine(Identifier, m);
             _traceListener.TraceWrite += twh;
             _traceListener.TraceWriteLine += twlh;
 
@@ -159,12 +161,12 @@ namespace LightBlue.MultiHost.Runners
             try
             {
                 _started.SetResult(new object());
-                _role.TraceWriteLine("Role started in thread: " + Thread.CurrentThread.ManagedThreadId + " : " + Thread.CurrentThread.Name);
+                _role.TraceWriteLine(Identifier, "Role started in thread: " + Thread.CurrentThread.ManagedThreadId + " : " + Thread.CurrentThread.Name);
                 _hostStub.Run(_assemblyFilePath, _configurationFilePath, _serviceDefinitionFilePath, _roleName, false);
             }
             catch (Exception ex)
             {
-                _role.TraceWriteLine(ex.ToString());
+                _role.TraceWriteLine(Identifier, ex.ToString());
             }
             finally
             {
@@ -178,36 +180,36 @@ namespace LightBlue.MultiHost.Runners
 
         public void Dispose()
         {
-            _role.TraceWriteLine("Request thread shutdown...");
+            _role.TraceWriteLine(Identifier, "Request thread shutdown...");
             _hostStub.RequestShutdown();
 
             if (Completed.Wait(TimeSpan.FromSeconds(30)))
             {
-                _role.TraceWriteLine("Thread shutdown sucessful.");
+                _role.TraceWriteLine(Identifier, "Thread shutdown sucessful.");
             }
             else
             {
-                _role.TraceWriteLine("Thread shutdown failed to complete within 30 seconds.");
-                _role.TraceWriteLine("Aborting: " + _thread.Name);
+                _role.TraceWriteLine(Identifier, "Thread shutdown failed to complete within 30 seconds.");
+                _role.TraceWriteLine(Identifier, "Aborting: " + _thread.Name);
                 try
                 {
                     _thread.Abort();
                     while (!Completed.Wait(TimeSpan.FromSeconds(5)))
                     {
-                        _role.TraceWriteLine("Waiting for thread to be aborted...");
+                        _role.TraceWriteLine(Identifier, "Waiting for thread to be aborted...");
                     }
-                    _role.TraceWriteLine("Thread aborted.");
+                    _role.TraceWriteLine(Identifier, "Thread aborted.");
                 }
                 catch (Exception ex)
                 {
-                    _role.TraceWriteLine("Could not abort thread: " + ex.Message);
+                    _role.TraceWriteLine(Identifier, "Could not abort thread: " + ex.Message);
                 }
             }
 
             //Trace.Listeners.Remove(_traceListener);
         }
 
-        public static void CopyStubAssemblyToRoleDirectory(string applicationBase, Role role)
+        public void CopyStubAssemblyToRoleDirectory(string applicationBase, Role role)
         {
             var destinationHostStubPath = Path.Combine(applicationBase, Path.GetFileName(typeof(HostStub).Assembly.Location));
             try
@@ -216,7 +218,7 @@ namespace LightBlue.MultiHost.Runners
             }
             catch (IOException)
             {
-                role.TraceWriteLine("Could not copy Host Stub. Assuming this is because it already exists and continuing.");
+                role.TraceWriteLine(Identifier, "Could not copy Host Stub. Assuming this is because it already exists and continuing.");
             }
         }
 
