@@ -176,7 +176,14 @@ namespace LightBlue.MultiHost
 
         private void Debug_OnClick(object sender, RoutedEventArgs e)
         {
-            Debugger.Launch();
+            if (SelectedItem != null)
+            {
+                SelectedItem.Debug();
+            }
+            else
+            {
+                Debugger.Launch();
+            }
         }
 
         private void FilterTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
