@@ -39,6 +39,7 @@ namespace LightBlue.MultiHost.Infrastructure.Controls
         {
             base.OnApplyTemplate();
             _textBox = (TextBox)GetTemplateChild(TextBoxTemplatePart);
+            _textBox.UndoLimit = 0;
         }
 
         public void Write(string logItem)
