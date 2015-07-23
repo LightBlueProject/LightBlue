@@ -26,8 +26,12 @@ namespace LightBlue.MultiHost.Infrastructure.Controls
         public FifoLog(int maxLines)
         {
             _maxLines = maxLines;
-            _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Normal, OnDumpText, Dispatcher);
-            Loaded += (s, a) => { _textBox.ScrollToEnd(); _timer.Start(); };
+            _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Normal, OnTimerTick, Dispatcher);
+            Loaded += (s, a) =>
+            {
+                DumpText();
+                _timer.Start();
+            };
             Unloaded += (s, a) => _timer.Stop();
         }
 
@@ -60,7 +64,12 @@ namespace LightBlue.MultiHost.Infrastructure.Controls
             _needsDump = true;
         }
 
-        private void OnDumpText(object sender, EventArgs e)
+        private void OnTimerTick(object sender, EventArgs e)
+        {
+            DumpText();
+        }
+
+        private void DumpText()
         {
             if (_textBox == null)
             {
