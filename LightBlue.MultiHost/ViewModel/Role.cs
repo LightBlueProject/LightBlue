@@ -206,7 +206,7 @@ namespace LightBlue.MultiHost.ViewModel
             }
             return EnsureUiThread(() =>
             {
-                return Logs.AddOrUpdate(runner, s => new FifoLog(200), (s, f) => f);
+                return Logs.GetOrAdd(runner, s => new FifoLog(200));
             });
         }
 
