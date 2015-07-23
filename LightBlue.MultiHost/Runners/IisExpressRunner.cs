@@ -73,7 +73,7 @@ namespace LightBlue.MultiHost.Runners
         {
             while (!Completed.IsCompleted)
             {
-                var trace = process.StandardOutput.ReadLineAsync();
+                var trace = process.StandardOutput.ReadLineAsync().ConfigureAwait(false);
                 var s = await trace;
                 if (!string.IsNullOrWhiteSpace(s))
                 {
@@ -86,7 +86,7 @@ namespace LightBlue.MultiHost.Runners
         {
             while (!Completed.IsCompleted)
             {
-                var trace = process.StandardError.ReadLineAsync();
+                var trace = process.StandardError.ReadLineAsync().ConfigureAwait(false);
                 var s = await trace;
                 if (!string.IsNullOrWhiteSpace(s))
                 {

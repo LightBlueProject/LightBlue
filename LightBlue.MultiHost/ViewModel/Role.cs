@@ -81,12 +81,12 @@ namespace LightBlue.MultiHost.ViewModel
 
         public string DisplayText { get { return Config.Title; } }
 
-        public IDictionary<string, FifoLog> Logs
+        public ConcurrentDictionary<string, FifoLog> Logs
         {
             get { return _logs; }
             private set
             {
-                _logs = value; 
+                _logs = value;
                 OnPropertyChanged("Logs");
             }
         }
@@ -95,7 +95,7 @@ namespace LightBlue.MultiHost.ViewModel
         private readonly Dispatcher _dispatcher;
         private IState _state;
         private RoleRunner _current;
-        private IDictionary<string, FifoLog> _logs;
+        private ConcurrentDictionary<string, FifoLog> _logs;
 
         internal IState State
         {
@@ -114,7 +114,7 @@ namespace LightBlue.MultiHost.ViewModel
             Config = role;
             State = Config.EnabledOnStartup ? (IState)new AutoStarting(this) : (IState)new Stopped(this);
             _dispatcher = Dispatcher.CurrentDispatcher;
-            Logs = new Dictionary<string, FifoLog>();
+            Logs = new ConcurrentDictionary<string, FifoLog>();
         }
 
         public void StartAutomatically()
@@ -194,7 +194,7 @@ namespace LightBlue.MultiHost.ViewModel
         {
             if (s.StartsWith("NewRelic")) return;
 
-            EnsureUIThread(() => RunnersLog(runner).Write(s));
+            RunnersLog(runner).Write(s);
         }
 
         private FifoLog RunnersLog(string runner)
@@ -204,33 +204,34 @@ namespace LightBlue.MultiHost.ViewModel
             {
                 return logger;
             }
-            var fifoLog = new FifoLog(50000);
-            Logs.Add(runner, fifoLog);
-            return fifoLog;
+            return EnsureUiThread(() =>
+            {
+                return Logs.GetOrAdd(runner, s => new FifoLog(200));
+            });
         }
 
         public void TraceWriteLine(string runner, string s)
         {
             if (s.StartsWith("NewRelic")) return;
 
-            EnsureUIThread(() => RunnersLog(runner).WriteLine(s));
+            RunnersLog(runner).WriteLine(s);
         }
 
         public void TraceClear()
         {
-            EnsureUIThread(() => Logs = new Dictionary<string, FifoLog>());
+            foreach (var log in Logs.Values)
+            {
+                log.Clear();
+            }
         }
 
-        private void EnsureUIThread(Action a)
+        private T EnsureUiThread<T>(Func<T> a)
         {
             if (_dispatcher.CheckAccess())
             {
-                a();
+                return a();
             }
-            else
-            {
-                _dispatcher.Invoke(a);
-            }
+            return _dispatcher.Invoke(a);
         }
 
         public void Debug()

@@ -1,121 +1,100 @@
 ﻿using System;
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 
 namespace LightBlue.MultiHost.Infrastructure.Controls
 {
+    [TemplatePart(Name = TextBoxTemplatePart, Type = typeof(TextBoxBase))]
     public class FifoLog : Control
     {
+        private readonly int _maxLines;
+        private readonly object _bufferLock = new object();
+        private readonly LinkedList<string> _internalBuffer = new LinkedList<string>(new[] { string.Empty });
+        private readonly DispatcherTimer _timer;
+        private bool _needsDump;
+        private TextBoxBase _textBox;
+        private const string TextBoxTemplatePart = "PART_LogContentDisplayer";
+
         static FifoLog()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FifoLog), new FrameworkPropertyMetadata(typeof(FifoLog)));
         }
 
-        public static readonly DependencyProperty TextBoxProperty =
-            DependencyProperty.Register(
-                "TextBox",
-                typeof(TextBox),
-                typeof(FifoLog));
-
-        public TextBox TextBox
+        public FifoLog(int maxLines)
         {
-            get { return (TextBox)GetValue(TextBoxProperty); }
-            set { SetValue(TextBoxProperty, value); }
+            _maxLines = maxLines;
+            _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Normal, OnDumpText, Dispatcher);
+            Loaded += (s, a) => { _textBox.ScrollToEnd(); _timer.Start(); };
+            Unloaded += (s, a) => _timer.Stop();
         }
 
-        private readonly int _capacity;
-        private int _size;
-        private int _selectionStart;
-        private int _selectionEnd;
-
-        public FifoLog(int capacity)
+        public override void OnApplyTemplate()
         {
-            _capacity = capacity;
-            TextBox = new TextBox();
-
-            Loaded += OnLoaded;
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
-        {
-            TextBox.ScrollToEnd();
+            base.OnApplyTemplate();
+            _textBox = (TextBox)GetTemplateChild(TextBoxTemplatePart);
         }
 
         public void Write(string logItem)
         {
-            // Check if new log exceeds capacity
-            var remaining = _capacity - _size;
-
-            if (logItem.Length > remaining)
+            if (logItem.EndsWith(Environment.NewLine))
             {
-                // Reduce size
-                var sizeToReduce = logItem.Length - remaining;
+                lock (_bufferLock)
+                {
+                    _internalBuffer.AddLast(logItem);
+                    if (_internalBuffer.Count > _maxLines)
+                    {
+                        _internalBuffer.RemoveFirst();
+                    }
+                }
+            }
+            else
+            {
+                lock (_bufferLock)
+                {
+                    _internalBuffer.Last.Value += logItem;
+                }
+            }
+            _needsDump = true;
+        }
 
-                SaveSelection();
-
-                sizeToReduce = GetValidUnicodeSizeToReduce(sizeToReduce);
-
-                TextBox.Select(0, sizeToReduce);
-                TextBox.SelectedText = string.Empty;
-                _size -= sizeToReduce;
-
-                TransformSavedSelection(sizeToReduce);
-                ReapplySavedSelection();
+        private void OnDumpText(object sender, EventArgs e)
+        {
+            if (_textBox == null)
+            {
+                return;
             }
 
-            TextBox.AppendText(logItem);
-            _size += logItem.Length;
-            TextBox.ScrollToEnd();
+            if (_needsDump)
+            {
+                _needsDump = false;
+                lock (_bufferLock)
+                {
+                    var content = string.Join(string.Empty, _internalBuffer);
+                    UpdateTextInternal(content);
+                    _textBox.ScrollToEnd();
+                }
+            }
+        }
+
+        private void UpdateTextInternal(string content)
+        {
+            _textBox.SetValue(TextBox.TextProperty, content);
         }
 
         public void WriteLine(string logItem)
         {
-            Write(logItem + "\r\n");
+            Write(logItem + Environment.NewLine);
         }
 
         public void Clear()
         {
-            TextBox.Clear();
-            _size = 0;
-        }
-
-        private void SaveSelection()
-        {
-            _selectionStart = TextBox.SelectionStart;
-            _selectionEnd = _selectionStart + TextBox.SelectionLength;
-        }
-
-        private void TransformSavedSelection(int sizeToReduce)
-        {
-            _selectionStart = Math.Max(0, _selectionStart - sizeToReduce);
-            _selectionEnd = Math.Max(0, _selectionEnd - sizeToReduce);
-        }
-
-        private void ReapplySavedSelection()
-        {
-            TextBox.Select(_selectionStart, _selectionEnd - _selectionStart);
-        }
-
-        private int GetValidUnicodeSizeToReduce(int sizeToReduce)
-        {
-            TextBox.Select(0, sizeToReduce);
-
-            if (IsInvalidUnicode(TextBox.SelectedText))
+            lock (_bufferLock)
             {
-                sizeToReduce++;
+                _internalBuffer.Clear();
             }
-
-            return sizeToReduce;
-        }
-
-        private static bool IsInvalidUnicode(string text)
-        {
-            // https://mnaoumov.wordpress.com/2014/06/14/stripping-invalid-characters-from-utf-16-strings/
-            var invalidCharactersRegex = new Regex("([\ud800-\udbff](?![\udc00-\udfff]))|((?<![\ud800-\udbff])[\udc00-\udfff])");
-            return invalidCharactersRegex.IsMatch(text);
         }
     }
 }
