@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace LightBlue.MultiHost.Infrastructure.Controls
 {
-    [TemplatePart(Name = TextBoxTemplatePart, Type = typeof(TextBoxBase))]
+    [TemplatePart(Name = TextBoxTemplatePart, Type = typeof(TextBox))]
     public class FifoLog : Control
     {
         private readonly int _maxLines;
@@ -15,7 +15,7 @@ namespace LightBlue.MultiHost.Infrastructure.Controls
         private readonly LinkedList<string> _internalBuffer = new LinkedList<string>(new[] { string.Empty });
         private readonly DispatcherTimer _timer;
         private bool _needsDump;
-        private TextBoxBase _textBox;
+        private TextBox _textBox;
         private const string TextBoxTemplatePart = "PART_LogContentDisplayer";
 
         static FifoLog()
@@ -40,6 +40,28 @@ namespace LightBlue.MultiHost.Infrastructure.Controls
             base.OnApplyTemplate();
             _textBox = (TextBox)GetTemplateChild(TextBoxTemplatePart);
             _textBox.UndoLimit = 0;
+            _textBox.SelectionChanged += TextWasSelected;
+        }
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+            if (_textBox != null && e.Key == Key.Enter && _textBox.SelectionLength > 0)
+            {
+                _textBox.SelectionLength = 0;
+            }
+        }
+
+        private void TextWasSelected(object sender, RoutedEventArgs routedEventArgs)
+        {
+            if (_textBox.SelectionLength == 0)
+            {
+                if (!_timer.IsEnabled) _timer.Start();
+            }
+            else
+            {
+                _timer.Stop();
+            }
         }
 
         public void Write(string logItem)
@@ -82,16 +104,16 @@ namespace LightBlue.MultiHost.Infrastructure.Controls
                 _needsDump = false;
                 lock (_bufferLock)
                 {
-                    var content = string.Join(string.Empty, _internalBuffer);
-                    UpdateTextInternal(content);
+                    UpdateTextInternal();
+                    _textBox.CaretIndex = _textBox.Text.Length;
                     _textBox.ScrollToEnd();
                 }
             }
         }
 
-        private void UpdateTextInternal(string content)
+        private void UpdateTextInternal()
         {
-            _textBox.SetValue(TextBox.TextProperty, content);
+            _textBox.SetValue(TextBox.TextProperty, string.Join(string.Empty, _internalBuffer));
         }
 
         public void WriteLine(string logItem)
