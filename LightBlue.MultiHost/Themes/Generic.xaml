@@ -7,19 +7,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:FifoLog}">
-                    <ControlTemplate.Resources>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="TextWrapping" Value="{x:Static TextWrapping.Wrap}"/>
-                            <Setter Property="Background" Value="{x:Static Brushes.Black}"/>
-                            <Setter Property="Foreground" Value="{x:Static Brushes.LightGray}"/>
-                            <Setter Property="VerticalScrollBarVisibility" Value="{x:Static ScrollBarVisibility.Visible}"/>
-                            <Setter Property="IsReadOnly" Value="True"/>
-                            <Setter Property="FontFamily" Value="Consolas"/>
-                            <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="AcceptsReturn" Value="True"/>
-                        </Style>
-                    </ControlTemplate.Resources>
-                    <ContentControl Content="{TemplateBinding TextBox}"/>
+                    <TextBox x:Name="PART_LogContentDisplayer" TextWrapping="Wrap"
+                             Background="Black" Foreground="LightGray" 
+                             VerticalScrollBarVisibility="Visible" IsReadOnly="True"
+                             FontFamily="Consolas" FontSize="14" AcceptsReturn="True" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
