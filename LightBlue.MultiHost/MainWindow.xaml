@@ -24,7 +24,9 @@
             <TextBox x:Name="FilterTextBox" Width="180" Height="26" VerticalContentAlignment="Center" TextChanged="FilterTextBox_OnTextChanged"></TextBox>
         </StackPanel>
 
-        <ListView Grid.IsSharedSizeScope="True" Background="White" x:Name="listView" Margin="2" Grid.Column="0" Grid.Row="1" BorderThickness="0" ItemsSource="{Binding CollectionViewSource.View}" SelectedItem="{Binding SelectedItem}">
+        <ListView Grid.IsSharedSizeScope="True" Background="White" x:Name="listView" Margin="2" Grid.Column="0" Grid.Row="1" 
+                  BorderThickness="0" ItemsSource="{Binding CollectionViewSource.View}" SelectedItem="{Binding SelectedItem}"
+                  VirtualizingStackPanel.IsVirtualizing="False">
             <ListView.ItemTemplate>
                 <DataTemplate>
                   <Grid>
@@ -58,7 +60,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding Key}"/>
-                        <ContentControl Margin="5" Grid.Row="1" Content="{Binding Value}"/>
+                        <ContentControl Margin="5" Grid.Row="1" Content="{Binding Value}" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
