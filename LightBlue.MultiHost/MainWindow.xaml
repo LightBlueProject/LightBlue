@@ -63,13 +63,13 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding Key}"/>
-                        <ContentControl Margin="5" Grid.Row="1" Content="{Binding Value}" />
+                        <TextBlock Margin="0 0 0 2" FontSize="14" FontFamily="Consolas" Text="{Binding Key}"/>
+                        <ContentControl Grid.Row="1" Content="{Binding Value}" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
