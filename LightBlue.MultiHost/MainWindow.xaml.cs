@@ -20,7 +20,7 @@ namespace LightBlue.MultiHost
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow :  INotifyPropertyChanged
     {
         private Role _selectedItem;
         private string _searchText;
