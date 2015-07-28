@@ -4,7 +4,18 @@ LightBlue
 Version 1.1.19
 --------------------
 ###Implementation
+* Fixed memory leak in queue emulation
+* Fixed memory leak in multi-host UI standard output redirection
 * Fix bug calling SetAsExternal multiple times when AzureEnvironment is ActualAzure or Emulator.
+###Features
+* Multi-host now has functionality allowing modification & persistence of service configuration
+* Multi-host now has FIFO buffered text box for multi-host standard output redirection
+* Multi-host standard output redirection text box now behaves like a standard command window dialog in that it freezes when the user makes a selection
+* Multi-host now has IIS express output redirection
+* Multi-host has an improved list view layout (now uses a grid instead of a stack panel)
+* Multi-host title now includes a version number
+* Multi-host now has ability to launch debugger & attach to IIS express process
+* Multi-host has new menu system
 
 Version 1.1.18
 --------------------
