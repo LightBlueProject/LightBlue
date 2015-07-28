@@ -104,5 +104,5 @@ namespace LightBlue.MultiHost
                 MessageBox.Show("Could not start multi-host: " + ex.ToTraceMessage());
             }
         }
-    }
+    }    
 }

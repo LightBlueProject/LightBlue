@@ -56,7 +56,11 @@ namespace LightBlue.MultiHost.Controls
                 }
 
             };
-            if (_textBox.IsVisible) _timer.Start();
+            if (_textBox.IsVisible)
+            {
+                DumpText();
+                _timer.Start();
+            }
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)

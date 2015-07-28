@@ -4,14 +4,17 @@ namespace LightBlue.MultiHost.Configuration
 {
     public class RoleConfigurationService : IRoleConfiguationService
     {
-        public bool Edit(string serviceTitle, string multiHostConfigurationFilePath)
+        public RoleConfiguration Edit(string serviceTitle, string multiHostConfigurationFilePath)
         {
             var service = new MultiHostConfigurationService();
             var configuration = service.Load(multiHostConfigurationFilePath);
             var vm = new EditRole(serviceTitle, configuration, multiHostConfigurationFilePath);
             var view = new EditRoleView(vm);
-            view.Show();
-            return !view.Cancelled;
+            view.Owner = App.Current.MainWindow;
+            view.ShowDialog();
+            return view.Cancelled
+                ? null
+                : vm.RoleConfiguration;
         }
     }
 }

@@ -84,7 +84,7 @@ namespace LightBlue.MultiHost.ViewModel
         public ConcurrentDictionary<string, FifoLog> Logs
         {
             get { return _logs; }
-            private set
+            set
             {
                 _logs = value;
                 OnPropertyChanged("Logs");
@@ -206,7 +206,9 @@ namespace LightBlue.MultiHost.ViewModel
             }
             return EnsureUiThread(() =>
             {
-                return Logs.GetOrAdd(runner, s => new FifoLog(200));
+                var l = Logs.GetOrAdd(runner, s => new FifoLog(200));
+                OnPropertyChanged("Logs");
+                return l;
             });
         }
 

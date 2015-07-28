@@ -70,7 +70,6 @@
     </ApplicationDefinition>
     <Compile Include="Configuration\MultiHostConfiguration.cs" />
     <Compile Include="Controls\FifoLog.cs" />
-    <Compile Include="Infrastructure\Controls\FifoLog.cs" />
     <Compile Include="EnumToItemsSource.cs" />
     <Compile Include="IISExpress\IisExpressHelper.cs" />
     <Compile Include="IISExpress\WebConfigHelper.cs" />
