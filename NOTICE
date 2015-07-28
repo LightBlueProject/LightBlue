@@ -1,11 +1,12 @@
 LightBlue
 =========
 
-Copyright 2014 Colin David Scott (@AbstractCode) and contributors
+Copyright 2014-2015 Colin David Scott (@AbstractCode) and contributors
 
 LightBlue contains the following third party libraries:
 
 * Autofac
+* MahApps (Licence: http://opensource.org/licenses/MS-PL)
 * Microsoft.Data.Edm (Licence: http://go.microsoft.com/?linkid=9809688)
 * Microsoft.Data.OData (Licence: http://go.microsoft.com/?linkid=9809688)
 * Microsoft.Data.Services.Client (Licence: http://go.microsoft.com/?linkid=9809688
