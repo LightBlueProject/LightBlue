@@ -184,13 +184,14 @@ namespace LightBlue.MultiHost
 
         private void Debug_OnClick(object sender, RoutedEventArgs e)
         {
-            if (SelectedItem != null)
+            Debugger.Launch();
+        }
+
+        private void DebugIis_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItem != null && SelectedItem.IsIisExpress)
             {
-                SelectedItem.Debug();
-            }
-            else
-            {
-                Debugger.Launch();
+                SelectedItem.DebugIisExpress();
             }
         }
 
