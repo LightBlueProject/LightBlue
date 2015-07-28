@@ -21,11 +21,12 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="310"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <!--<RowDefinition Height="30"/>-->
@@ -52,7 +53,16 @@
                     <TextBlock>STOP</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Margin="4" Click="EditConfiguration_OnClick">Edit</Button>
+            <Button Margin="4" Click="EditConfiguration_OnClick">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle HorizontalAlignment="Stretch" Width="10" Margin="0 0 5 0">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_page_edit}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock>EDIT CFG</TextBlock>
+                </StackPanel>
+            </Button>
             <Button Margin="4" Click="Debug_OnClick">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle HorizontalAlignment="Stretch" Width="10" Margin="0 0 5 0">
@@ -73,13 +83,15 @@
                     <TextBlock>DEBUG IIS</TextBlock>
                 </StackPanel>
             </Button>
-            <StackPanel Margin="4" Orientation="Horizontal">
-                <Label>Filter</Label>
-                <TextBox x:Name="FilterTextBox" Width="180" Height="26" VerticalContentAlignment="Center" TextChanged="FilterTextBox_OnTextChanged"></TextBox>
-            </StackPanel>
         </WrapPanel>
 
-        <ListView Grid.IsSharedSizeScope="True" Background="White" x:Name="listView" Margin="2" Grid.Column="0" Grid.Row="1" 
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label>Filter</Label>
+            <TextBox x:Name="FilterTextBox" Width="180" Height="26" VerticalContentAlignment="Center" 
+                     TextChanged="FilterTextBox_OnTextChanged" controls:TextBoxHelper.ClearTextButton="True" />
+        </StackPanel>
+
+        <ListView Grid.IsSharedSizeScope="True" Background="White" x:Name="listView" Margin="2" Grid.Column="0" Grid.Row="2" 
                   BorderThickness="0" ItemsSource="{Binding CollectionViewSource.View}" SelectedItem="{Binding SelectedItem}"
                   VirtualizingStackPanel.IsVirtualizing="False">
             <ListView.ItemTemplate>
@@ -99,9 +111,9 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Column="1" Grid.RowSpan="3" Width="5" HorizontalAlignment="Stretch" />
 
-        <ItemsControl ItemsSource="{Binding Source={StaticResource Roles}}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+        <ItemsControl ItemsSource="{Binding Source={StaticResource Roles}}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="1"/>
