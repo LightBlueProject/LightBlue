@@ -22,6 +22,7 @@ namespace LightBlue.MultiHost
             _vm = vm;
             DataContext = vm;
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

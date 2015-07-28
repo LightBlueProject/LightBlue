@@ -3,12 +3,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Media;
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.ViewModel;
@@ -202,9 +204,33 @@ namespace LightBlue.MultiHost
         {
             if (VerifiySingleSelection())
             {
-                var role = listView.SelectedItems.Cast<Role>().Single();
-                var service = new RoleConfigurationService();
-                var changed = service.Edit(role.Title, App.MultiHostConfigurationFilePath);
+                var role = (Role)listView.SelectedItem;
+                if (role.Status == RoleStatus.Stopped)
+                {
+                    var service = new RoleConfigurationService();
+                    var changed = service.Edit(role.Title, App.MultiHostConfigurationFilePath);
+                    if (changed != null)
+                    {
+                        changed.EnabledOnStartup = false;
+
+                        var configDir = Path.GetDirectoryName(App.MultiHostConfigurationFilePath);
+                        changed.ConfigurationPath = Path.GetFullPath(Path.Combine(configDir, changed.ConfigurationPath));
+                        changed.Assembly = Path.GetFullPath(Path.Combine(configDir, changed.Assembly));
+
+                        var newRole = new Role(changed);
+                        newRole.Logs = role.Logs;
+                        
+                        var index = listView.SelectedIndex;
+                        Services.RemoveAt(index);
+                        Services.Insert(index, newRole);
+
+                        listView.SelectedIndex = index;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(role.Title + " must be stopped if you want to edit its configuration.");
+                }
             }
         }
 

@@ -2,6 +2,6 @@ namespace LightBlue.MultiHost.Configuration
 {
     public interface IRoleConfiguationService
     {
-        bool Edit(string serviceTitle, string multiHostConfigurationFilePath);
+        RoleConfiguration Edit(string serviceTitle, string multiHostConfigurationFilePath);
     }
 }
