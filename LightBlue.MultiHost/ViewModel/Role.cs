@@ -27,6 +27,7 @@ namespace LightBlue.MultiHost.ViewModel
 
         public string Title { get { return Config.Title; } }
         public string RoleName { get { return Config.RoleName; } }
+        public bool IsIisExpress { get { return !string.IsNullOrWhiteSpace(Config.Hostname); } }
 
         private RoleIsolationMode? _isolationOverride;
         public RoleIsolationMode IsolationMode
@@ -236,15 +237,11 @@ namespace LightBlue.MultiHost.ViewModel
             return _dispatcher.Invoke(a);
         }
 
-        public void Debug()
+        public void DebugIisExpress()
         {
             if (_current != null)
             {
-                _current.Debug();
-            }
-            else
-            {
-                Debugger.Launch();
+                _current.DebugIisExpress();
             }
         }
     }

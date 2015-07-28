@@ -7,65 +7,63 @@
         Icon="{Binding MainIcon}">
     <Grid>
         <StackPanel>
-            <GroupBox Header="Configuration" Margin="10">
-                <Grid Margin="3">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+            <Grid Margin="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="EnabledOnStartup:"/>
-                    <Label Grid.Row="1" Grid.Column="0" Content="Assembly:"/>
-                    <Label Grid.Row="2" Grid.Column="0" Content="RoleName:"/>
-                    <Label Grid.Row="3" Grid.Column="0" Content="Title:"/>
-                    <Label Grid.Row="4" Grid.Column="0" Content="ConfigurationPath:"/>
-                    <Label Grid.Row="5" Grid.Column="0" Content="Port:"/>
-                    <Label Grid.Row="6" Grid.Column="0" Content="UseSsl:"/>
-                    <Label Grid.Row="7" Grid.Column="0" Content="Hostname:"/>
-                    <Label Grid.Row="8" Grid.Column="0" Content="RoleIsolationMode:"/>
+                <Label Grid.Row="0" Grid.Column="0" Content="EnabledOnStartup:"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Assembly:"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="RoleName:"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Title:"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="ConfigurationPath:"/>
+                <Label Grid.Row="5" Grid.Column="0" Content="Port:"/>
+                <Label Grid.Row="6" Grid.Column="0" Content="UseSsl:"/>
+                <Label Grid.Row="7" Grid.Column="0" Content="Hostname:"/>
+                <Label Grid.Row="8" Grid.Column="0" Content="RoleIsolationMode:"/>
 
-                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="3"  IsChecked="{Binding RoleConfiguration.EnabledOnStartup}"/>
+                <CheckBox Grid.Row="0" Grid.Column="1" Margin="3"  IsChecked="{Binding RoleConfiguration.EnabledOnStartup}"/>
 
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Assembly}" />
-                    <Button Grid.Row="1" Grid.Column="2" Margin="3"  Content="Browse" Click="BrowseToAssemblyButton_Click"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Assembly}" />
+                <Button Grid.Row="1" Grid.Column="2" Margin="3"  Content="Browse" Click="BrowseToAssemblyButton_Click"/>
 
-                    <TextBox Grid.Row="2" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.RoleName}"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.RoleName}"/>
 
-                    <TextBox Grid.Row="3" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Title}"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Title}"/>
 
-                    <TextBox Grid.Row="4" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.ConfigurationPath}"/>
-                    <Button Grid.Row="4" Grid.Column="2" Margin="3"  Content="Browse" Click="BrowseToServerConfigurationButton_Click"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.ConfigurationPath}"/>
+                <Button Grid.Row="4" Grid.Column="2" Margin="3"  Content="Browse" Click="BrowseToServerConfigurationButton_Click"/>
 
-                    <TextBox Grid.Row="5" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Port}"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Port}"/>
 
-                    <CheckBox Grid.Row="6" Grid.Column="1" Margin="3"  IsChecked="{Binding RoleConfiguration.UseSsl}"/>
+                <CheckBox Grid.Row="6" Grid.Column="1" Margin="3"  IsChecked="{Binding RoleConfiguration.UseSsl}"/>
 
-                    <TextBox Grid.Row="7" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Hostname}"/>
+                <TextBox Grid.Row="7" Grid.Column="1" Margin="3"  Text="{Binding RoleConfiguration.Hostname}"/>
 
-                    <ComboBox Grid.Row="8" Grid.Column="1" Margin="3" 
+                <ComboBox Grid.Row="8" Grid.Column="1" Margin="3" 
                           DisplayMemberPath="DisplayName" 
                           ItemsSource="{multiHost:EnumToItemsSource {x:Type enums: RoleIsolationMode}}"
                           SelectedValue="{Binding Path=RoleConfiguration.RoleIsolationMode, Mode=TwoWay}"
                           SelectedValuePath="Value"/>
-                </Grid>
-            </GroupBox>
+            </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="BtnOk" Margin="3" Content="Save" Click="OkButton_Click" HorizontalAlignment="Right"/>
-                <Button x:Name="BtnCancel" Margin="3" Content="Cancel" Click="CancelButton_Click" HorizontalAlignment="Right" />
+                <Button x:Name="BtnOk" Margin="3" Content="Save" Width="100" Height="30" Style="{StaticResource AccentedSquareButtonStyle}" Click="OkButton_Click" HorizontalAlignment="Right"/>
+                <Button x:Name="BtnCancel" Margin="3" Content="Cancel" Width="100" Height="30" Style="{StaticResource AccentedSquareButtonStyle}" Click="CancelButton_Click" HorizontalAlignment="Right" />
             </StackPanel>
         </StackPanel>
     </Grid>

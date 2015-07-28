@@ -42,16 +42,11 @@ namespace LightBlue.MultiHost.Runners
             _role = role;
         }
 
-        private bool IsWebSite()
-        {
-            return !string.IsNullOrWhiteSpace(_role.Config.Hostname);
-        }
-
         public IEnumerable<string> RunnerIdentifiers { get { return _resources.Select(r => r.Identifier); }}
 
         public void Start()
         {
-            if (IsWebSite())
+            if (_role.IsIisExpress)
             {
                 var website = RunnerFactory.CreateForWebSite(_role);
                 var role = RunnerFactory.CreateForWebRole(_role, _role.IsolationMode);
@@ -76,17 +71,18 @@ namespace LightBlue.MultiHost.Runners
             }
         }
 
-        public void Debug()
+        public void DebugIisExpress()
         {
-            if (IsWebSite())
+            var iisExpressRunner = _resources.OfType<IisExpressRunner>().FirstOrDefault();
+            if (iisExpressRunner != null)
             {
-                if (_resources.OfType<IisExpressRunner>().First().Debug())
-                {
-                    return;
-                }
+                iisExpressRunner.Debug();
+                
             }
-
-            Debugger.Launch();
+            else
+            {
+                throw new NotSupportedException("Role is not running in IIS Express");
+            }
         }
     }
 }
