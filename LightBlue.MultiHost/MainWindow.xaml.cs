@@ -123,13 +123,6 @@ namespace LightBlue.MultiHost
         {
             await Task.Delay(TimeSpan.FromSeconds(0.2));
             foreach (var r in roles) r.StartAutomatically();
-            //foreach (var r in roles.Take(10))
-            //    r.StartAutomatically();
-            //foreach (var r in roles.Skip(10))
-            //{
-            //    await TaskHelpers.AfterComputeOpportunities(1000000000, 500, CancellationToken.None);
-            //    r.StartAutomatically();
-            //}
         }
 
         void CollectionViewSource_Filter(object sender, FilterEventArgs e)
