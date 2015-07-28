@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 using LightBlue.MultiHost.Configuration;
-using LightBlue.MultiHost.Infrastructure.Controls;
+using LightBlue.MultiHost.Controls;
 using LightBlue.MultiHost.Runners;
 using LightBlue.MultiHost.ViewModel.RoleStates;
 
