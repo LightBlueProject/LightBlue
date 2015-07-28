@@ -6,3 +6,5 @@ Contributors
 * Graeme Foster (Twitter: @graefoster) 
 * James Miles (jamesmiles@gmail.com)
 * Eric Winkler
+* John Dalin
+* Drewan O'Brien
