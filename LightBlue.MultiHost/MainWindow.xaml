@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        Title = "{Binding Version, StringFormat=Steel Blue {0}}" Height="720" Width="1280"
+        Title = "{Binding Version, StringFormat=LightBlue {0}}" Height="720" Width="1280"
         Icon="{Binding MainIcon}">
     
     <Window.Resources>
