@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-
+using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost
@@ -195,6 +196,31 @@ namespace LightBlue.MultiHost
         {
             _searchText = FilterTextBox.Text;
             CollectionViewSource.View.Refresh();
+        }
+
+        private void EditConfiguration_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (VerifiySingleSelection())
+            {
+                var role = listView.SelectedItems.Cast<Role>().Single();
+                var service = new RoleConfigurationService();
+                var changed = service.Edit(role.Title, App.MultiHostConfigurationFilePath);
+            }
+        }
+
+        private bool VerifiySingleSelection()
+        {
+            if (listView.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Can't perform action: you don't have any services selected.");
+                return false;
+            }
+            if (listView.SelectedItems.Count > 1)
+            {
+                MessageBox.Show("Can't perform action: you have more than one service selected.");
+                return false;
+            }
+            return true;
         }
     }
 }
