@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -17,6 +15,8 @@ namespace LightBlue.MultiHost.ViewModel
     public class Role : INotifyPropertyChanged
     {
         private static readonly ConcurrentDictionary<Tuple<string, SolidColorBrush>, ImageSource> ImageCache = new ConcurrentDictionary<Tuple<string, SolidColorBrush>, ImageSource>();
+
+        public event EventHandler<EventArgs> RolePanic;
 
         public RoleStatus Status { get { return State.Status; } }
 
@@ -136,6 +136,15 @@ namespace LightBlue.MultiHost.ViewModel
         public void Crashed()
         {
             State.Crashed();
+            NotificationHub.Notify(Config.Title, "This role has crashed and will be recycled", OnPanic);
+        }
+
+        private void OnPanic()
+        {
+            if (RolePanic != null)
+            {
+                RolePanic(this, EventArgs.Empty);
+            }
         }
 
         public void Stop()
