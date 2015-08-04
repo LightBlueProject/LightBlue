@@ -81,6 +81,11 @@
     </ApplicationDefinition>
     <Compile Include="Configuration\MultiHostConfiguration.cs" />
     <Compile Include="Controls\FifoLog.cs" />
+    <Compile Include="Controls\Notification.xaml.cs">
+      <DependentUpon>Notification.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NotificationAdorner.cs" />
+    <Compile Include="Controls\NotificationHub.cs" />
     <Compile Include="EnumToItemsSource.cs" />
     <Compile Include="IISExpress\IisExpressHelper.cs" />
     <Compile Include="IISExpress\WebConfigHelper.cs" />
@@ -114,6 +119,10 @@
     <Compile Include="ViewModel\RoleStates\Starting.cs" />
     <Compile Include="ViewModel\RoleStates\Stopped.cs" />
     <Compile Include="ViewModel\RoleStates\Stopping.cs" />
+    <Page Include="Controls\Notification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
