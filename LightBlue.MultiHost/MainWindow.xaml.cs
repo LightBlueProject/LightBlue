@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using LightBlue.MultiHost.Configuration;
+using LightBlue.MultiHost.Controls;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost
@@ -96,6 +97,7 @@ namespace LightBlue.MultiHost
             {
                 var r = new Role(h);
                 Services.Add(r);
+                r.RolePanic += OnRolePanicking;
                 r.PropertyChanged += (s, e) =>
                 {
                     if (e.PropertyName == "Status") CollectionViewSource.View.Refresh();
@@ -110,6 +112,23 @@ namespace LightBlue.MultiHost
 
             var autos = Services.Where(x => x.Status == RoleStatus.Sequenced).ToArray();
             BeginAutoStart(autos);
+
+            Loaded += (s, a) =>
+            {
+                NotificationHub.Initialise(this);
+            };
+        }
+
+        private void OnRolePanicking(object sender, EventArgs e)
+        {
+            var roleSender = sender as Role;
+            if (roleSender == null)
+            {
+                return;
+            }
+
+            SelectedItem = roleSender;
+            listView.ScrollIntoView(roleSender);
         }
 
         public string Version
@@ -224,6 +243,8 @@ namespace LightBlue.MultiHost
                         var index = listView.SelectedIndex;
                         Services.RemoveAt(index);
                         Services.Insert(index, newRole);
+
+                        newRole.RolePanic += OnRolePanicking;
 
                         listView.SelectedIndex = index;
                     }
