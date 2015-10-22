@@ -40,8 +40,6 @@ namespace LightBlue.MultiHost.Runners
             _configurationFilePath = configurationFilePath;
             _serviceDefinitionFilePath = serviceDefinitionFilePath;
             _roleName = roleName;
-
-            _assemblyFilePath = Path.Combine(ThreadRunnerAssemblyCache.AssemblyCacheFolder, Path.GetFileName(_assemblyFilePath));
         }
 
         public void Start()
@@ -142,7 +140,6 @@ namespace LightBlue.MultiHost.Runners
         private void StartInternal()
         {
             ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(_configurationFilePath);
-            //CopyStubAssemblyToRoleDirectory(_appDomainSetup.ApplicationBase, _role);
             _hostStub = new HostStub2();
 
             if (LogicalCallContextTraceListener.IsInitialized)
@@ -155,8 +152,6 @@ namespace LightBlue.MultiHost.Runners
             _traceListener.TraceWriteLine += twlh;
 
             Trace.Listeners.Add(_traceListener);
-
-            //AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => TryResolveAssembly(_assemblyFilePath, args);
 
             try
             {

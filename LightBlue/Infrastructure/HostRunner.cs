@@ -76,7 +76,7 @@ namespace LightBlue.Infrastructure
                 ? workerRoleAssembly
                 : Path.Combine(Environment.CurrentDirectory, workerRoleAssembly);
 
-            var roleAssembly = Assembly.LoadFile(roleAssemblyAbsolutePath);
+            var roleAssembly = Assembly.LoadFrom(roleAssemblyAbsolutePath);
             var workerRoleType = roleAssembly.GetTypes()
                 .Single(t => typeof(RoleEntryPoint).IsAssignableFrom(t));
             return workerRoleType;
