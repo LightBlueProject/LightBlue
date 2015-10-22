@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -82,21 +84,16 @@ namespace LightBlue.MultiHost.ViewModel
 
         public string DisplayText { get { return Config.Title; } }
 
-        public ConcurrentDictionary<string, FifoLog> Logs
+        public ObservableCollection<FifoLog> Logs
         {
             get { return _logs; }
-            set
-            {
-                _logs = value;
-                OnPropertyChanged("Logs");
-            }
         }
 
         internal readonly RoleConfiguration Config;
         private readonly Dispatcher _dispatcher;
         private IState _state;
         private RoleRunner _current;
-        private ConcurrentDictionary<string, FifoLog> _logs;
+        private readonly ObservableCollection<FifoLog> _logs;
 
         internal IState State
         {
@@ -113,9 +110,9 @@ namespace LightBlue.MultiHost.ViewModel
         public Role(RoleConfiguration role)
         {
             Config = role;
-            State = Config.EnabledOnStartup ? (IState)new AutoStarting(this) : (IState)new Stopped(this);
+            State = Config.EnabledOnStartup ? new AutoStarting(this) : (IState)new Stopped(this);
             _dispatcher = Dispatcher.CurrentDispatcher;
-            Logs = new ConcurrentDictionary<string, FifoLog>();
+            _logs = new ObservableCollection<FifoLog>();
         }
 
         public void StartAutomatically()
@@ -209,17 +206,28 @@ namespace LightBlue.MultiHost.ViewModel
 
         private FifoLog RunnersLog(string runner)
         {
-            FifoLog logger;
-            if (Logs.TryGetValue(runner, out logger))
+            Func<FifoLog> addNewLoggerOnUiThread = () => EnsureUiThread(() =>
+            {
+                var logger = new FifoLog(runner, 200);
+                Logs.Add(logger);
+                return logger;
+            });
+
+            lock (Logs)
+            {
+                var fifoLog = GetLogger(runner);
+                return fifoLog ?? addNewLoggerOnUiThread();
+            }
+        }
+
+        private FifoLog GetLogger(string runner)
+        {
+            var logger = Logs.SingleOrDefault(x => x.LogName == runner);
+            if (logger != null)
             {
                 return logger;
             }
-            return EnsureUiThread(() =>
-            {
-                var l = Logs.GetOrAdd(runner, s => new FifoLog(200));
-                OnPropertyChanged("Logs");
-                return l;
-            });
+            return null;
         }
 
         public void TraceWriteLine(string runner, string s)
@@ -231,9 +239,12 @@ namespace LightBlue.MultiHost.ViewModel
 
         public void TraceClear()
         {
-            foreach (var log in Logs.Values)
+            lock (Logs)
             {
-                log.Clear();
+                foreach (var log in Logs)
+                {
+                    log.Clear();
+                }
             }
         }
 

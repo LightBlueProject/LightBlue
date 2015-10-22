@@ -92,6 +92,7 @@
     <Compile Include="IISExpress\WebHostArgs.cs" />
     <Compile Include="IOpenFileDialogService.cs" />
     <Compile Include="Configuration\MultiHostConfigurationService.cs" />
+    <Compile Include="ListCollectionViewEx.cs" />
     <Compile Include="OpenFileDialogService.cs" />
     <Compile Include="Configuration\RoleConfigurationService.cs" />
     <Compile Include="ViewModel\EditRole.cs" />

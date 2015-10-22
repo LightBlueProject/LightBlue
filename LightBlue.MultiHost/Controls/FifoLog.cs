@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,15 +7,18 @@ using System.Windows.Threading;
 
 namespace LightBlue.MultiHost.Controls
 {
+    [TemplatePart(Name = HeaderPart, Type = typeof(Label))]
     [TemplatePart(Name = TextBoxTemplatePart, Type = typeof(TextBox))]
     public class FifoLog : Control
     {
+        public string LogName { get; private set; }
         private readonly int _maxLines;
         private readonly object _bufferLock = new object();
         private readonly LinkedList<string> _internalBuffer = new LinkedList<string>(new[] { string.Empty });
         private readonly DispatcherTimer _timer;
         private bool _needsDump;
         private TextBox _textBox;
+        private const string HeaderPart = "PART_HeaderDisplayer";
         private const string TextBoxTemplatePart = "PART_LogContentDisplayer";
         private DateTime _selectionTime;
 
@@ -25,8 +27,9 @@ namespace LightBlue.MultiHost.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FifoLog), new FrameworkPropertyMetadata(typeof(FifoLog)));
         }
 
-        public FifoLog(int maxLines)
+        public FifoLog(string name, int maxLines)
         {
+            LogName = name;
             _maxLines = maxLines;
             _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Normal, OnTimerTick, Dispatcher);
             _timer.Stop();
@@ -35,6 +38,10 @@ namespace LightBlue.MultiHost.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+
+            var label = (Label)GetTemplateChild(HeaderPart);
+            label.Content = LogName;
+
             _textBox = (TextBox)GetTemplateChild(TextBoxTemplatePart);
             _textBox.UndoLimit = 0;
             _textBox.SelectionChanged += TextWasSelected;

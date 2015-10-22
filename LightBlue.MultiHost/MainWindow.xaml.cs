@@ -25,7 +25,7 @@ namespace LightBlue.MultiHost
     {
         private Role _selectedItem;
         private string _searchText;
-        public CollectionViewSource CollectionViewSource { get; set; }
+        public ListCollectionViewEx CollectionViewSource { get; set; }
         public ObservableCollection<Role> Services { get; set; }
         public ImageSource MainIcon { get { return ImageUtil.ColourImage(@"Resources\debug.ico", CustomBrushes.Main); } }
 
@@ -89,9 +89,9 @@ namespace LightBlue.MultiHost
                 }
             };
 
-            CollectionViewSource = new CollectionViewSource();
-
             Services = new ObservableCollection<Role>();
+            CollectionViewSource = new ListCollectionViewEx(Services);
+
 
             foreach (var h in App.Configuration.Roles)
             {
@@ -100,13 +100,11 @@ namespace LightBlue.MultiHost
                 r.RolePanic += OnRolePanicking;
                 r.PropertyChanged += (s, e) =>
                 {
-                    if (e.PropertyName == "Status") CollectionViewSource.View.Refresh();
+                    if (e.PropertyName == "Status") CollectionViewSource.Refresh();
                 };
             }
 
             CollectionViewSource.Filter += CollectionViewSource_Filter;
-
-            CollectionViewSource.Source = Services;
 
             DataContext = this;
 
@@ -127,6 +125,11 @@ namespace LightBlue.MultiHost
                 return;
             }
 
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+                Activate();
+            }
             SelectedItem = roleSender;
             listView.ScrollIntoView(roleSender);
         }
@@ -147,16 +150,15 @@ namespace LightBlue.MultiHost
             foreach (var r in roles) r.StartAutomatically();
         }
 
-        void CollectionViewSource_Filter(object sender, FilterEventArgs e)
+        bool CollectionViewSource_Filter(object item)
         {
-            if (string.IsNullOrWhiteSpace(_searchText)) e.Accepted = true;
-            else
-            {
-                var r = (Role)e.Item;
-                e.Accepted = r.Title.ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
-                             || r.Status.ToString().ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
-                             || r.RoleName.ToLowerInvariant().Contains(_searchText.ToLowerInvariant());
-            }
+            if (string.IsNullOrWhiteSpace(_searchText)) return true;
+            
+            var r = (Role) item;
+            var filter = r.Title.ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
+                         || r.Status.ToString().ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
+                         || r.RoleName.ToLowerInvariant().Contains(_searchText.ToLowerInvariant());
+            return filter;
         }
 
         private void Start_OnClick(object sender, RoutedEventArgs e)
@@ -217,7 +219,7 @@ namespace LightBlue.MultiHost
         private void FilterTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             _searchText = FilterTextBox.Text;
-            CollectionViewSource.View.Refresh();
+            CollectionViewSource.Refresh();
         }
 
         private void EditConfiguration_OnClick(object sender, RoutedEventArgs e)
@@ -238,7 +240,6 @@ namespace LightBlue.MultiHost
                         changed.Assembly = Path.GetFullPath(Path.Combine(configDir, changed.Assembly));
 
                         var newRole = new Role(changed);
-                        newRole.Logs = role.Logs;
                         
                         var index = listView.SelectedIndex;
                         Services.RemoveAt(index);
