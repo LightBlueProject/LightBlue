@@ -11,14 +11,29 @@ namespace LightBlue.MultiHost.Controls
     public partial class Notification
     {
         private readonly TaskCompletionSource<object> _removeTask;
+        private bool _isDisappearing;
 
         public Notification()
         {
             InitializeComponent();
+
+            Loaded += AddHandlers;
+            Unloaded += RemoveHandlers;
+            _removeTask = new TaskCompletionSource<object>();
+        }
+
+        private void AddHandlers(object sender, RoutedEventArgs e)
+        {
             MouseLeave += OnMouseLeave;
             MouseEnter += OnMouseEnter;
-            _removeTask = new TaskCompletionSource<object>();
             PreviewMouseUp += OnMakeVisible;
+        }
+
+        private void RemoveHandlers(object sender, RoutedEventArgs e)
+        {
+            MouseLeave -= OnMouseLeave;
+            MouseEnter -= OnMouseEnter;
+            PreviewMouseUp -= OnMakeVisible;
         }
 
         private void OnMakeVisible(object sender, MouseButtonEventArgs e)
@@ -32,16 +47,19 @@ namespace LightBlue.MultiHost.Controls
 
         private void OnMouseEnter(object sender, MouseEventArgs e)
         {
+            if (_isDisappearing) return;
             VisualStateManager.GoToElementState(this, "MouseEnter", true);
         }
 
         private void OnMouseLeave(object sender, MouseEventArgs e)
         {
+            if (_isDisappearing) return;
             VisualStateManager.GoToElementState(this, "MouseLeave", true);
         }
 
         public Task Disappear()
         {
+            _isDisappearing = true;
             VisualStateManager.GoToElementState(this, "Disappear", true);
             return _removeTask.Task;
         }
