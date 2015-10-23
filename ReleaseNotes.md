@@ -1,6 +1,16 @@
 LightBlue
 ====================
 
+Version 1.1.20
+--------------------
+Features:
+* Toast notifications on crashing roles in multihost
+* Border around multihost window
+
+Implementation:
+* Change how assemblies are loaded to reduce memory footprint
+* Eliminate some WPF leaks
+
 Version 1.1.19
 --------------------
 ###Implementation
