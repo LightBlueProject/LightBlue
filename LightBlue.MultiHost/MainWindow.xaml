@@ -122,19 +122,6 @@
                     <UniformGrid Columns="1"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>BOO</TextBlock>
-                    <!--<Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Margin="0 0 0 2" FontSize="14" FontFamily="Consolas" Text="Boogallo"/>
-                        --><!--<ContentControl Grid.Row="1" Content="{Binding}" />--><!--
-                    </Grid>-->
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
         </ItemsControl>
 
     </Grid>
