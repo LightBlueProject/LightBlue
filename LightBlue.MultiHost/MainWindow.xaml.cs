@@ -2,15 +2,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Interop;
 using System.Windows.Media;
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.Controls;
@@ -23,12 +22,28 @@ namespace LightBlue.MultiHost
     /// </summary>
     public partial class MainWindow :  INotifyPropertyChanged
     {
+        private const UInt32 FLASHW_ALL = 3; //Flash both the window caption and taskbar button.        
+        private const UInt32 FLASHW_TIMER = 4; //Flash continuously, until the FLASHW_STOP flag is set.        
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct FLASHWINFO
+        {
+            public UInt32 cbSize; //The size of the structure in bytes.            
+            public IntPtr hwnd; //A Handle to the Window to be Flashed. The window can be either opened or minimized.
+            public UInt32 dwFlags; //The Flash Status.            
+            public UInt32 uCount; // number of times to flash the window            
+            public UInt32 dwTimeout; //The rate at which the Window is to be flashed, in milliseconds. If Zero, the function uses the default cursor blink rate.        
+        }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
+
         private Role _selectedItem;
         private string _searchText;
         public ListCollectionViewEx CollectionViewSource { get; set; }
         public ObservableCollection<Role> Services { get; set; }
         public ImageSource MainIcon { get { return ImageUtil.ColourImage(@"Resources\debug.ico", CustomBrushes.Main); } }
-
 
         public Role SelectedItem
         {
@@ -92,11 +107,11 @@ namespace LightBlue.MultiHost
             Services = new ObservableCollection<Role>();
             CollectionViewSource = new ListCollectionViewEx(Services);
 
-
             foreach (var h in App.Configuration.Roles)
             {
                 var r = new Role(h);
                 Services.Add(r);
+                r.RoleCrashed += OnRoleCrashed;
                 r.RolePanic += OnRolePanicking;
                 r.PropertyChanged += (s, e) =>
                 {
@@ -115,6 +130,11 @@ namespace LightBlue.MultiHost
             {
                 NotificationHub.Initialise(this);
             };
+        }
+
+        private void OnRoleCrashed(object sender, EventArgs eventArgs)
+        {
+            FlashWindow(5);
         }
 
         private void OnRolePanicking(object sender, EventArgs e)
@@ -270,6 +290,21 @@ namespace LightBlue.MultiHost
                 return false;
             }
             return true;
+        }
+
+        public void FlashWindow(UInt32 count = UInt32.MaxValue)
+        {
+            var h = new WindowInteropHelper(this);
+            var info = new FLASHWINFO
+            {
+                hwnd = h.Handle,
+                dwFlags = FLASHW_ALL | FLASHW_TIMER,
+                uCount = count,
+                dwTimeout = 0
+            };
+
+            info.cbSize = Convert.ToUInt32(Marshal.SizeOf(info));
+            FlashWindowEx(ref info);
         }
     }
 }
