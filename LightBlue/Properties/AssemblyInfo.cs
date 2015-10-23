@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("LightBlue")]
@@ -20,3 +21,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.1.20.0")]
 
 [assembly: CLSCompliant(false)]
+[assembly: InternalsVisibleTo("LightBlue.Testability")]
