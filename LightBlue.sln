@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWindsorRole", "TestWind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.MultiHost", "LightBlue.MultiHost\LightBlue.MultiHost.csproj", "{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Testability", "LightBlue.Testability\LightBlue.Testability.csproj", "{697A6A25-955B-4C17-82F8-F14FD48A5A42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,10 @@ Global
 		{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{697A6A25-955B-4C17-82F8-F14FD48A5A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{697A6A25-955B-4C17-82F8-F14FD48A5A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{697A6A25-955B-4C17-82F8-F14FD48A5A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{697A6A25-955B-4C17-82F8-F14FD48A5A42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
