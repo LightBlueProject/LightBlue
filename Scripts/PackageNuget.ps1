@@ -5,6 +5,7 @@ $coreNuspecPath = join-path $parentDirectory "LightBlue.nuspec"
 $autofacNuspecPath = join-path $parentDirectory "LightBlue.Autofac.nuspec"
 $hostsNuspecPath = join-path $parentDirectory "LightBlue.Hosts.nuspec"
 $windsorNuspecPath = join-path $parentDirectory "LightBlue.Windsor.nuspec"
+$testabilityNuspecPath = join-path $parentDirectory "LightBlue.Testability.nuspec"
 
 $noticePath = join-path $parentDirectory "NOTICE"
 
@@ -14,6 +15,9 @@ $lightBlueAutofacDllPath = join-path $parentDirectory "LightBlue.Autofac\bin\Rel
 $lightBlueAutofacPdbPath = join-path $parentDirectory "LightBlue.Autofac\bin\Release\LightBlue.Autofac.pdb"
 $lightBlueWindsorDllPath = join-path $parentDirectory "LightBlue.Windsor\bin\Release\LightBlue.Windsor.dll"
 $lightBlueWindsorPdbPath = join-path $parentDirectory "LightBlue.Windsor\bin\Release\LightBlue.Windsor.pdb"
+$lightBlueTestabilityDllPath = join-path $parentDirectory "LightBlue.Testability\bin\Release\LightBlue.Testability.dll"
+$lightBlueTestabilityPdbPath = join-path $parentDirectory "LightBlue.Testability\bin\Release\LightBlue.Testability.pdb"
+
 $workerHostExePath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.exe"
 $workerHostPdbPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.pdb"
 $workerHostStubDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.dll"
@@ -43,6 +47,9 @@ $autofacNet45LibPath = join-path $autofacPackagePath -childpath "lib\net45"
 $windsorPackagePath = join-path $packagePath -childpath "windsor"
 $windsorNet45LibPath = join-path $windsorPackagePath -childpath "lib\net45"
 
+$testabilityPackagePath = join-path $packagePath -childpath "testability"
+$testabilityNet45LibPath = join-path $testabilityPackagePath -childpath "lib\net45"
+
 $hostsPackagePath = join-path $packagePath -childpath "host"
 $toolsPath = join-path $hostsPackagePath "tools"
 
@@ -70,6 +77,11 @@ New-Item -ItemType directory -Path $windsorNet45LibPath | Out-Null
 Copy-Item $windsorNuspecPath $windsorPackagePath
 Copy-Item $lightBlueWindsorDllPath $windsorNet45LibPath
 Copy-Item $lightBlueWindsorPdbPath $windsorNet45LibPath
+
+New-Item -ItemType directory -Path $testabilityNet45LibPath | Out-Null
+Copy-Item $testabilityNuspecPath $testabilityPackagePath
+Copy-Item $lightBlueTestabilityDllPath $testabilityNet45LibPath
+Copy-Item $lightBlueTestabilityPdbPath $testabilityNet45LibPath
 
 New-Item -ItemType directory -Path $toolsPath | Out-Null
 Copy-Item $hostsNuspecPath $hostsPackagePath
@@ -110,6 +122,13 @@ Pop-Location
 Push-Location -Path $windsorPackagePath
 
 & '..\..\.nuget\nuget.exe' Pack "LightBlue.Windsor.nuspec"
+Copy-Item "*.nupkg" $outputDirectory
+
+Pop-Location
+
+Push-Location -Path $testabilityPackagePath
+
+& '..\..\.nuget\nuget.exe' Pack "LightBlue.Testability.nuspec"
 Copy-Item "*.nupkg" $outputDirectory
 
 Pop-Location

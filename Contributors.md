@@ -8,3 +8,4 @@ Contributors
 * Eric Winkler
 * John Dalin
 * Drewan O'Brien
+* Dion Foster (dion.foster@gmail.com Twitter: @dionfoster)
