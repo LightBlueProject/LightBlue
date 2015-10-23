@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>LightBlue.Autofac</id>
-    <version>1.1.19-beta</version>
+    <version>1.1.20-beta</version>
 	<title>LightBlue.Autofac</title>
     <authors>Colin David Scott</authors>
     <owners>Colin David Scott</owners>
@@ -13,7 +13,7 @@
     <copyright>Copyright 2014</copyright>
     <tags>azure</tags>
     <dependencies>
-      <dependency id="LightBlue" version="1.1.19-beta" />
+      <dependency id="LightBlue" version="1.1.20-beta" />
       <dependency id="Autofac" version="3.5.2" />
       <dependency id="Microsoft.Data.Edm" version="5.6.3" />
       <dependency id="Microsoft.Data.OData" version="5.6.3" />
