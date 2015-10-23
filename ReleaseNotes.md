@@ -6,6 +6,7 @@ Version 1.1.20
 Features:
 * Toast notifications on crashing roles in multihost
 * Border around multihost window
+* Testability support
 
 Implementation:
 * Change how assemblies are loaded to reduce memory footprint
