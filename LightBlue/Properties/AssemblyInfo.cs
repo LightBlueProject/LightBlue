@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("LightBlue")]
-[assembly: AssemblyCopyright("Copyright © Colin David Scott 2014-2015")]
+[assembly: AssemblyCopyright("Copyright © 2014-2015 LightBlue contributors")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

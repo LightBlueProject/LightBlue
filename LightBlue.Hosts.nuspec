@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/LightBlueProject/LightBlue</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Host executables for the LightBlue lightweight Azure development platform</description>
-    <copyright>Copyright 2014</copyright>
+    <copyright>Copyright 2014-2015 LightBlue contributors</copyright>
     <tags>azure</tags>
   </metadata>
 </package>

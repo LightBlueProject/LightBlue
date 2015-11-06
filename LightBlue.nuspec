@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/LightBlueProject/LightBlue</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>LightBlue is a lightweight Azure development platform designed to replace a subset of the Azure emulator functionality</description>
-    <copyright>Copyright 2014</copyright>
+    <copyright>Copyright 2014-2015 LightBlue contributors</copyright>
     <tags>azure</tags>
     <dependencies>
       <dependency id="Microsoft.Data.Edm" version="5.6.3" />
