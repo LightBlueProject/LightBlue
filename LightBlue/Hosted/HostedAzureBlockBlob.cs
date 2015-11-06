@@ -154,12 +154,12 @@ namespace LightBlue.Hosted
                 throw new ArgumentException("Can only copy between blobs in the same hosting environment");
             }
 
-            return _cloudBlockBlob.StartCopyFromBlob(hostedAzureBlockBlob._cloudBlockBlob);
+            return _cloudBlockBlob.StartCopy(hostedAzureBlockBlob._cloudBlockBlob);
         }
 
         public string StartCopyFromBlob(Uri source)
         {
-            return _cloudBlockBlob.StartCopyFromBlob(source);
+            return _cloudBlockBlob.StartCopy(source);
         }
     }
 }

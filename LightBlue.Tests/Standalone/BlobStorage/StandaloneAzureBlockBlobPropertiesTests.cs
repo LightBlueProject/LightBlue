@@ -10,7 +10,6 @@ using LightBlue.Standalone;
 using Microsoft.WindowsAzure.Storage;
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -24,7 +23,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void WillThrowOnSaveOfPropertiesIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -33,7 +32,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void WillThrowOnAsyncSaveOfPropertiesIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -42,7 +41,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void CanPersistAndRetrieveProperties(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -65,7 +64,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void DefaultsToOctetStreamWhenLoadingPropertiesWhenPreviouslyUnset(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -84,7 +83,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public async Task CanPersistAndRetrievePropertiesAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -107,7 +106,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public async Task DefaultsToOctetStreamWhenLoadingPropertiesWhenPreviouslyUnsetAsync(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -126,7 +125,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void CanPersistPropertiesAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -149,7 +148,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void PropertiesNotPersistedUntilSet(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -170,7 +169,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void PropertiesCanBeSetRepeatedly(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -194,7 +193,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void FetchingAttributesOverwritesAnyUnsavedPropertyValues(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -219,7 +218,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         [Trait("Category", "Slow")]
         public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted(string blobName)
         {

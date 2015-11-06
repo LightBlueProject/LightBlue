@@ -4,7 +4,6 @@ using System.Text;
 using LightBlue.Standalone;
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -15,7 +14,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {}
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void CanDeleteBlob(string blobName)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
@@ -29,7 +28,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void CanDeleteBlobMetadata(string blobName)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
