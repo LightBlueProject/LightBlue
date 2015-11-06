@@ -1,6 +1,11 @@
 LightBlue
 ====================
 
+Version 1.1.21
+--------------------
+###Implementation
+* Update to Azure SDK 2.7
+
 Version 1.1.20
 --------------------
 Features:
