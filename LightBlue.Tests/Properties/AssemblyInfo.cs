@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using Xunit;
+
 [assembly: AssemblyTitle("LightBlue.Tests")]
 [assembly: AssemblyDescription("Tests for the LightBlue Azure development platform.")]
 [assembly: AssemblyConfiguration("")]
@@ -20,3 +22,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.1.21.0")]
 
 [assembly: CLSCompliant(false)]
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]

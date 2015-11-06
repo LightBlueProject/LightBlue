@@ -70,12 +70,12 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void CanParseRoleWithNoResources()
         {
-            Assert.DoesNotThrow(() => new StandaloneAzureLocalResourceSource(new StandaloneConfiguration
+            new StandaloneAzureLocalResourceSource(new StandaloneConfiguration
             {
                 ServiceDefinitionPath = "ServiceDefinition.csdef",
                 RoleName = "TestWorkerRole"
             }, 
-            BasePath));
+            BasePath);
         }
 
         [Fact]

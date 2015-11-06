@@ -8,7 +8,6 @@ using LightBlue.Standalone;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -49,10 +48,10 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Theory]
         [InlineData(BlobListingDetails.Snapshots)]
         [InlineData(BlobListingDetails.All)]
-        public void AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
+        public async Task AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
         {
             var container = new StandaloneAzureBlobContainer(BasePath);
-            Assert.Throws<ArgumentException>(() => container.ListBlobsSegmentedAsync(
+            await Assert.ThrowsAsync<ArgumentException>(() => container.ListBlobsSegmentedAsync(
                 "",
                 BlobListing.Hierarchical,
                 blobListingDetails,

@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 using LightBlue.Standalone;
 
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.QueueStorage
 {
@@ -135,11 +133,11 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillThrowIfDeletingQueueThatDoesNotExist()
+        public async Task WillThrowIfDeletingQueueThatDoesNotExist()
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.Throws<StorageException>(() => queue.DeleteAsync());
+            await Assert.ThrowsAsync<StorageException>(() => queue.DeleteAsync());
         }
 
         [Fact]
@@ -154,11 +152,11 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillNotThrowIfConditionallyDeletingNonExistantQueue()
+        public async Task WillNotThrowIfConditionallyDeletingNonExistantQueue()
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.DoesNotThrow(() => queue.DeleteIfExistsAsync());
+            await queue.DeleteIfExistsAsync();
         }
 
         [Theory]

@@ -10,7 +10,6 @@ using LightBlue.Standalone;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -36,7 +35,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("CopyBlobNames")]
+        [MemberData("CopyBlobNames")]
         public void CanCopyBlob(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
@@ -50,7 +49,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("CopyBlobNames")]
+        [MemberData("CopyBlobNames")]
         public void CanOverwriteBlob(string source, string destination)
         {
             var sourceBuffer = Encoding.UTF8.GetBytes("File content");
@@ -66,7 +65,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("CopyBlobNames")]
+        [MemberData("CopyBlobNames")]
         public void WillNotCopyMetadataWhereItDoesNotExist(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
@@ -80,7 +79,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("CopyBlobNames")]
+        [MemberData("CopyBlobNames")]
         public void WillCopyMetadataFromSourceWherePresent(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
@@ -110,7 +109,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("CopyBlobNames")]
+        [MemberData("CopyBlobNames")]
         public void WillRemoveExistingMetadataWhereSourceDoesNotHaveMetadata(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
@@ -128,7 +127,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public void CopyStateIsNullBeforeCopy(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -137,7 +136,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("CopyBlobNames")]
+        [MemberData("CopyBlobNames")]
         public void CopyStateIsSuccessAfterCopy(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
@@ -151,7 +150,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("CopyBlobNames")]
+        [MemberData("CopyBlobNames")]
         public void CopyStateIsFailedIfBlobLocked(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");

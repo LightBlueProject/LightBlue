@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using LightBlue.Testability;
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Testability
 {
@@ -11,7 +10,7 @@ namespace LightBlue.Tests.Testability
         private static readonly FakeLightBlueContext Context = new FakeLightBlueContext();
 
         [Theory]
-        [PropertyData("ContextActions")]
+        [MemberData("ContextActions")]
         public void TheoryMethodName(Action failingAction)
         {
             try

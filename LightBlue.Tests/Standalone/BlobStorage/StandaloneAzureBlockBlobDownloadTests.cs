@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using LightBlue.Standalone;
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -16,7 +15,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {}
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public async Task CanDownloadBlboToStream(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -35,7 +34,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData("BlobNames")]
         public async Task CanDownloadBlboToStreamAsync(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);

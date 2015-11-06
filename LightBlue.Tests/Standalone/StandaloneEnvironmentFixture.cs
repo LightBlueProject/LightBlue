@@ -6,7 +6,6 @@ using ExpectedObjects;
 using LightBlue.Standalone;
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
