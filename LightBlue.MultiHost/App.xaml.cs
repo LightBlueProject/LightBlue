@@ -7,9 +7,9 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 
 using LightBlue.Infrastructure;
-using LightBlue.MultiHost.Configuration;
-using LightBlue.MultiHost.IISExpress;
-using LightBlue.MultiHost.Runners;
+using LightBlue.MultiHost.Core.Configuration;
+using LightBlue.MultiHost.Core.IISExpress;
+using LightBlue.MultiHost.Core.Runners;
 using LightBlue.Setup;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -21,80 +21,24 @@ namespace LightBlue.MultiHost
     /// </summary>
     public partial class App : Application
     {
-        public static MultiHostConfiguration Configuration { get; private set; }
-
-        public static string MultiHostConfigurationFilePath { get; private set; }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             try
             {
-                MultiHostConfigurationFilePath = null;
+                var filepath = IsMissingConfigurationFilePath(e) 
+                    ? ShowOpenConfigurationFileDialog() 
+                    : e.Args.Single();
 
-                if (e.Args.Length != 1)
+                if (IsRunningDemoMode(filepath))
                 {
-                    var d = new OpenFileDialog();
-                    d.Title = "LightBlue MultiHost: please select multi-host configuration file (.json)";
-                    d.Filter = "MultiHost Configuration Files (.json)|*.json";
-                    d.CheckFileExists = true;
-                    if (d.ShowDialog().GetValueOrDefault())
-                    {
-                        MultiHostConfigurationFilePath = d.FileName;
-
-                    }
+                    var configuration = MultiHostConfiguration.Default;
+                    MultiHostRoot.Configure(configuration);
                 }
                 else
                 {
-                    MultiHostConfigurationFilePath = e.Args.Single();
-                }
-
-                if (string.IsNullOrWhiteSpace(MultiHostConfigurationFilePath))
-                {
-                    Configuration = new MultiHostConfiguration
-                    {
-                        Roles = new[]
-                        {
-                            new RoleConfiguration {Title = "Demo Web Site", RoleName = "WebRole"},
-                            new RoleConfiguration
-                            {
-                                Title = "Demo Web Site 2",
-                                RoleName = "WebRole",
-                                RoleIsolationMode = "AppDomain"
-                            },
-                            new RoleConfiguration {Title = "Demo Domain", RoleName = "CommandProcessor"},
-                            new RoleConfiguration
-                            {
-                                Title = "Demo Domain 2",
-                                RoleName = "ReadModelPopulator",
-                                RoleIsolationMode = "AppDomain"
-                            }
-                        },
-                    };
-                }
-                else
-                {
-                    var configDir = Path.GetDirectoryName(MultiHostConfigurationFilePath);
-                    var json = File.ReadAllText(MultiHostConfigurationFilePath);
-                    Configuration = JsonConvert.DeserializeObject<MultiHostConfiguration>(json);
-
-                    foreach (var c in Configuration.Roles)
-                    {
-                        c.ConfigurationPath = Path.GetFullPath(Path.Combine(configDir, c.ConfigurationPath));
-                        c.Assembly = Path.GetFullPath(Path.Combine(configDir, c.Assembly));
-                    }
-
-                    var query =
-                        from c in Configuration.Roles
-                        let relativePath = c.Assembly.ToLowerInvariant().EndsWith(".dll")
-                            ? Path.GetDirectoryName(c.Assembly)
-                            : c.Assembly
-                        select relativePath;
-
-                    var assemblyLocations = query.ToArray();
-
-                    ThreadRunnerAssemblyCache.Initialise(assemblyLocations);
-                    IisExpressHelper.KillIisExpressProcesses();
-                    LightBlueConfiguration.SetAsMultiHost();
+                    var configuration = MultiHostConfiguration.Load(filepath);
+                    MultiHostRoot.Configure(configuration);
+                    MultiHostRoot.Start();
                 }
 
                 base.OnStartup(e);
@@ -103,6 +47,29 @@ namespace LightBlue.MultiHost
             {
                 MessageBox.Show("Could not start multi-host: " + ex.ToTraceMessage());
             }
+        }
+
+        private static bool IsMissingConfigurationFilePath(StartupEventArgs e)
+        {
+            return e.Args.Length != 1;
+        }
+
+        private static string ShowOpenConfigurationFileDialog()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "LightBlue MultiHost: please select multi-host configuration file (.json)",
+                Filter = "MultiHost Configuration Files (.json)|*.json",
+                CheckFileExists = true
+            };
+            return dialog.ShowDialog().GetValueOrDefault() 
+                ? dialog.FileName 
+                : null;
+        }
+
+        private static bool IsRunningDemoMode(string filepath)
+        {
+            return string.IsNullOrWhiteSpace(filepath);
         }
     }    
 }

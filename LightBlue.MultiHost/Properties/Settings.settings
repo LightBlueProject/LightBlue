@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Demo)">
   <Profiles>
-    <Profile Name="(Default)" />
+    <Profile Name="(Demo)" />
   </Profiles>
   <Settings />
 </SettingsFile>

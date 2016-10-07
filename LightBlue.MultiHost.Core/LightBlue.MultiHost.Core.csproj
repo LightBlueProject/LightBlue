@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A4E40C90-C35F-4DF2-A823-A101A9ABA393}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LightBlue.MultiHost.Core</RootNamespace>
+    <AssemblyName>LightBlue.MultiHost.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\MultiHostRoot.cs" />
+    <Compile Include="Configuration\MultiHostConfiguration.cs" />
+    <Compile Include="Configuration\MultiHostConfigurationService.cs" />
+    <Compile Include="Configuration\RoleConfiguration.cs" />
+    <Compile Include="Controls\FifoLog.cs" />
+    <Compile Include="IISExpress\IisExpressHelper.cs" />
+    <Compile Include="IISExpress\WebConfigHelper.cs" />
+    <Compile Include="IISExpress\WebHostArgs.cs" />
+    <Compile Include="INotificationHub.cs" />
+    <Compile Include="IOpenFileDialogService.cs" />
+    <Compile Include="OpenFileDialogService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="RoleStates\AutoStarting.cs" />
+    <Compile Include="RoleStates\Crashing.cs" />
+    <Compile Include="RoleStates\IState.cs" />
+    <Compile Include="RoleStates\Recycling.cs" />
+    <Compile Include="RoleStates\Running.cs" />
+    <Compile Include="RoleStates\Starting.cs" />
+    <Compile Include="RoleStates\Stopped.cs" />
+    <Compile Include="RoleStates\Stopping.cs" />
+    <Compile Include="RoleStatus.cs" />
+    <Compile Include="Runners\AppDomainRunner.cs" />
+    <Compile Include="Runners\IisExpressRunner.cs" />
+    <Compile Include="Runners\IRunner.cs" />
+    <Compile Include="Runners\RoleIsolationMode.cs" />
+    <Compile Include="Runners\RoleRunner.cs" />
+    <Compile Include="Runners\RunnerFactory.cs" />
+    <Compile Include="Runners\ThreadRunner.cs" />
+    <Compile Include="Runners\ThreadRunnerAssemblyCache.cs" />
+    <Compile Include="ViewModel\CustomBrushes.cs" />
+    <Compile Include="ViewModel\EditRole.cs" />
+    <Compile Include="ViewModel\ImageUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="IISExpress\Configuration.template" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LightBlue.Host.Stub\LightBlue.Host.Stub.csproj">
+      <Project>{0FB3527D-FBCC-468F-91ED-C84E89260791}</Project>
+      <Name>LightBlue.Host.Stub</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LightBlue\LightBlue.csproj">
+      <Project>{28F5B274-4B25-4295-98AE-3E5A60C34D8D}</Project>
+      <Name>LightBlue</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
