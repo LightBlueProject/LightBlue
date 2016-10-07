@@ -2,19 +2,17 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
-using LightBlue.MultiHost.Configuration;
-using LightBlue.MultiHost.Controls;
-using LightBlue.MultiHost.ViewModel;
+using LightBlue.MultiHost.Core;
+using LightBlue.MultiHost.Core.Configuration;
+using LightBlue.MultiHost.Core.Controls;
+using LightBlue.MultiHost.Core.ViewModel;
 
 namespace LightBlue.MultiHost
 {
@@ -93,14 +91,15 @@ namespace LightBlue.MultiHost
             CollectionViewSource = new ListCollectionViewEx(Services);
 
 
-            foreach (var h in App.Configuration.Roles)
+            foreach (var configuration in MultiHostRoot.Configuration.Roles)
             {
-                var r = new Role(h);
-                Services.Add(r);
-                r.RolePanic += OnRolePanicking;
-                r.PropertyChanged += (s, e) =>
+                var role = new Role(configuration, new WpfNotificationHub());
+                Services.Add(role);
+                role.RolePanic += OnRolePanicking;
+                role.PropertyChanged += (s, e) =>
                 {
-                    if (e.PropertyName == "Status") CollectionViewSource.Refresh();
+                    if (e.PropertyName == "Status")
+                        CollectionViewSource.Refresh();
                 };
             }
 
@@ -230,16 +229,17 @@ namespace LightBlue.MultiHost
                 if (role.Status == RoleStatus.Stopped)
                 {
                     var service = new RoleConfigurationService();
-                    var changed = service.Edit(role.Title, App.MultiHostConfigurationFilePath);
+                    var filepath = MultiHostRoot.Configuration.File.FullName;
+                    var changed = service.Edit(role.Title, filepath);
                     if (changed != null)
                     {
                         changed.EnabledOnStartup = false;
 
-                        var configDir = Path.GetDirectoryName(App.MultiHostConfigurationFilePath);
+                        var configDir = Path.GetDirectoryName(filepath);
                         changed.ConfigurationPath = Path.GetFullPath(Path.Combine(configDir, changed.ConfigurationPath));
                         changed.Assembly = Path.GetFullPath(Path.Combine(configDir, changed.Assembly));
 
-                        var newRole = new Role(changed);
+                        var newRole = new Role(changed, new WpfNotificationHub());
                         
                         var index = listView.SelectedIndex;
                         Services.RemoveAt(index);
