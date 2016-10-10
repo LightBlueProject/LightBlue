@@ -3,9 +3,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-using LightBlue.Host.Stub;
-using LightBlue.Infrastructure;
-
 namespace LightBlue.Host
 {
     public static class Program
@@ -25,36 +22,13 @@ namespace LightBlue.Host
 
             SetWindowText(handle, hostArgs.Title);
 
-            var appDomainSetup = new AppDomainSetup
-            {
-                ApplicationBase = hostArgs.ApplicationBase
-            };
+            var host = WorkerHostFactory.Create(hostArgs);
 
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(hostArgs.RoleConfigurationFile);
-            appDomainSetup.ConfigurationFile = hostArgs.RoleConfigurationFile;
-
-            StubManagement.CopyStubAssemblyToRoleDirectory(hostArgs.ApplicationBase);
-
-            var appDomain = AppDomain.CreateDomain(
-                "LightBlue",
-                null,
-                appDomainSetup);
-
-            Trace.Listeners.Add(new ConsoleTraceListener());
-
-            var stub = (HostStub) appDomain.CreateInstanceAndUnwrap(
-                typeof(HostStub).Assembly.FullName,
-                typeof(HostStub).FullName);
-
-            stub.ConfigureTracing(new ConsoleTraceShipper());
-
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionBehaviour.UnhandledExceptionHandler(hostArgs.Title);
-
-            stub.Run(workerRoleAssembly: hostArgs.Assembly,
-                configurationPath: hostArgs.ConfigurationPath,
-                serviceDefinitionPath: hostArgs.ServiceDefinitionPath,
-                roleName: hostArgs.RoleName,
-                useHostedStorage: hostArgs.UseHostedStorage);
+            host.Run(hostArgs.Assembly,
+                hostArgs.ConfigurationPath,
+                hostArgs.ServiceDefinitionPath,
+                hostArgs.RoleName,
+                hostArgs.UseHostedStorage);
 
             if (!hostArgs.AllowSilentFail)
             {

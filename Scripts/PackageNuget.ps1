@@ -24,10 +24,20 @@ $workerHostStubDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\
 $workerHostStubPdbPath = join-path $parentDirectory "LightBlue.Host\bin\Release\LightBlue.Host.Stub.pdb"
 $webHostExePath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.exe"
 $webHostPdbPath = join-path $parentDirectory "LightBlue.WebHost\bin\Release\LightBlue.WebHost.pdb"
+
+
+
 $multiHostExePath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.exe"
 $multiHostDllPath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.dll"
 $multiHostPdbPath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.pdb"
 $multiHostConfigPath = join-path $parentDirectory "LightBlue.MultiHost\bin\Release\*.config"
+
+$webServiceHostExePath = join-path $parentDirectory "LightBlue.WebService\bin\Release\*.exe"
+$webServiceHostPdbPath = join-path $parentDirectory "LightBlue.WebService\bin\Release\*.pdb"
+$webServiceHostDllPath = join-path $parentDirectory "LightBlue.WebService\bin\Release\*.dll"
+$workerServiceHostExePath = join-path $parentDirectory "LightBlue.WorkerService\bin\Release\*.exe"
+$workerServiceHostPdbPath = join-path $parentDirectory "LightBlue.WorkerService\bin\Release\*.pdb"
+$workerServiceHostDllPath = join-path $parentDirectory "LightBlue.WorkerService\bin\Release\*.dll"
 
 $ndeskDllPath = join-path $parentDirectory "LightBlue.Host\bin\Release\NDesk.Options.dll"
 
@@ -63,8 +73,8 @@ New-Item -ItemType directory -Path $outputDirectory | Out-Null
 New-Item -ItemType directory -Path $coreNet45LibPath | Out-Null
 New-Item -ItemType directory -Path $linqpadSamplesPath | Out-Null
 Copy-Item $coreNuspecPath $corePackagePath
-Copy-Item  $lightBlueDllPath $coreNet45LibPath
-Copy-Item  $lightBluePdbPath $coreNet45LibPath
+Copy-Item $lightBlueDllPath $coreNet45LibPath
+Copy-Item $lightBluePdbPath $coreNet45LibPath
 Copy-Item $linqpadEnvironmentTemplatePath $linqpadSamplesPath
 Copy-Item $linqpadIssueTemplatePath $linqpadSamplesPath
 
@@ -97,6 +107,12 @@ Copy-Item $multiHostExePath $toolsPath
 Copy-Item $multiHostDllPath $toolsPath
 Copy-Item $multiHostPdbPath $toolsPath
 Copy-Item $multiHostConfigPath $toolsPath
+Copy-Item $webServiceHostExePath $toolsPath
+Copy-Item $webServiceHostPdbPath $toolsPath
+Copy-Item $webServiceHostDllPath $toolsPath
+Copy-Item $workerServiceHostExePath $toolsPath
+Copy-Item $workerServiceHostPdbPath $toolsPath
+Copy-Item $workerServiceHostDllPath $toolsPath
 
 Push-Location -Path $corePackagePath
 

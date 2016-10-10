@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue", "LightBlue\LightBlue.csproj", "{28F5B274-4B25-4295-98AE-3E5A60C34D8D}"
 EndProject
@@ -37,6 +37,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.MultiHost", "LightBlue.MultiHost\LightBlue.MultiHost.csproj", "{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Testability", "LightBlue.Testability\LightBlue.Testability.csproj", "{697A6A25-955B-4C17-82F8-F14FD48A5A42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WebService", "LightBlue.WebService\LightBlue.WebService.csproj", "{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WorkerService", "LightBlue.WorkerService\LightBlue.WorkerService.csproj", "{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +104,14 @@ Global
 		{697A6A25-955B-4C17-82F8-F14FD48A5A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{697A6A25-955B-4C17-82F8-F14FD48A5A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{697A6A25-955B-4C17-82F8-F14FD48A5A42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
