@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TestWebRole")]
 [assembly: AssemblyDescription("Web role used for testing LightBlue functionality")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Colin David Scott")]
 [assembly: AssemblyProduct("TestWebRole")]
 [assembly: AssemblyCopyright("Copyright © 2014-2015 LightBlue contributors")]
 [assembly: AssemblyTrademark("")]

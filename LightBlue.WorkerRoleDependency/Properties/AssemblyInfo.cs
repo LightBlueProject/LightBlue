@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LightBlue.WorkerRoleDependency")]
 [assembly: AssemblyDescription("Dependent library used by the LightBlue test worker role to verify assembly loading.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Colin David Scott")]
 [assembly: AssemblyProduct("LightBlue.WorkerRoleDependency")]
 [assembly: AssemblyCopyright("Copyright © 2014-2015 LightBlue contributors")]
 [assembly: AssemblyTrademark("")]

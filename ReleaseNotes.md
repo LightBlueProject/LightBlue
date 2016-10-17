@@ -1,6 +1,12 @@
 LightBlue
 ====================
 
+Version 2.0.0
+--------------------
+Features:
+* Worker role windows service hosting
+* Web role windows service hosting
+
 Version 1.1.21
 --------------------
 ###Implementation

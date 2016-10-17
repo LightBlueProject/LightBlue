@@ -181,10 +181,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LightBlue.Autofac\LightBlue.Autofac.csproj">
-      <Project>{74b1f607-28dd-4248-af6a-492b03ad321a}</Project>
-      <Name>LightBlue.Autofac</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LightBlue.Host.Stub\LightBlue.Host.Stub.csproj">
       <Project>{0fb3527d-fbcc-468f-91ed-c84e89260791}</Project>
       <Name>LightBlue.Host.Stub</Name>
@@ -211,6 +207,7 @@
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

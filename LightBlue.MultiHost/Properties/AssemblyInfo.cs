@@ -6,7 +6,7 @@ using System.Windows;
 [assembly: AssemblyTitle("LightBlue.MultiHost")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Colin David Scott")]
 [assembly: AssemblyProduct("LightBlue.MultiHost")]
 [assembly: AssemblyCopyright("Copyright © LightBlue contributors 2015")]
 [assembly: AssemblyTrademark("")]
