@@ -5,7 +5,7 @@
     <version>1.1.21-beta</version>
 	<title>LightBlue.Autofac</title>
     <authors>Colin David Scott</authors>
-    <owners>$author$</owners>
+    <owners>Colin David Scott</owners>
     <licenseUrl>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</licenseUrl>
     <projectUrl>https://github.com/LightBlueProject/LightBlue</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
