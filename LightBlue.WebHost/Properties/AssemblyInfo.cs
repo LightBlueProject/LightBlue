@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LightBlue.WebHost")]
 [assembly: AssemblyDescription("Web role host for the LightBlue Azure development platform.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Colin David Scott")]
 [assembly: AssemblyProduct("LightBlue.WebHost")]
 [assembly: AssemblyCopyright("Copyright © 2014-2015 LightBlue contributors")]
 [assembly: AssemblyTrademark("")]

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LightBlue.Windsor")]
 [assembly: AssemblyDescription("Castle Windsor support for LightBlue")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Colin David Scott")]
 [assembly: AssemblyProduct("LightBlue.Windsor")]
 [assembly: AssemblyCopyright("Copyright © 2014-2015 LightBlue contributors")]
 [assembly: AssemblyTrademark("")]
