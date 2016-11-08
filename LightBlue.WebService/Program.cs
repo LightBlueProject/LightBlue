@@ -1,6 +1,7 @@
-﻿using Formo;
-using LightBlue.WebHost;
+﻿using System.Diagnostics;
+using LightBlue.Hosts;
 using Topshelf;
+using Topshelf.Logging;
 
 namespace LightBlue.WebService
 {
@@ -8,37 +9,25 @@ namespace LightBlue.WebService
     {
         static int Main(string[] args)
         {
-           return (int)HostFactory.Run(x =>
-           {
-               dynamic configuration = new Configuration();
-               WebHostSettings settings = configuration.Bind<WebHostSettings>();
+            return (int) HostFactory.Run(x =>
+            {
+                Trace.Listeners.Add(new TopshelfConsoleTraceListener());
 
-               x.Service<WebHostService>(service =>
-               {
-                   service.ConstructUsing(s =>
-                   {
-                       var hostArgs = WebHostArgs.ParseArgs(new[]
-                       {
-                           "-a:" + settings.Assembly,
-                           "-p:" + settings.Port,
-                           "-n:" + settings.RoleName,
-                           "-t:" + settings.ServiceTitle,
-                           "-c:" + settings.Configuration,
-                           "-s:" + settings.UseSSL,
-                           "-h:" + settings.Host
-                       });
-                       return new WebHostService(hostArgs);
-                   });
-                   service.WhenStarted((s, h) => s.Start(h));
-                   service.WhenStopped((s, h) => s.Stop(h));
-               });
+                var settings = WebHost.Settings.Load();
 
-               x.RunAsLocalSystem();
-               x.SetDescription(string.Format("LightBlue {0} WebRole Windows Service", settings.ServiceTitle));
-               x.SetDisplayName(settings.ServiceTitle + " Service");
-               x.SetServiceName(settings.ServiceTitle);
-               x.StartManually();
-           });
+                x.Service<WebHost>(service =>
+                {
+                    service.ConstructUsing(s => new WebHost(settings));
+                    service.WhenStarted(s => s.Start());
+                    service.WhenStopped(s => s.Stop());
+                });
+
+                x.RunAsLocalSystem();
+                x.SetDescription(string.Format("LightBlue {0} WebRole Windows Service", settings.ServiceTitle));
+                x.SetDisplayName(settings.ServiceTitle + " Service");
+                x.SetServiceName(settings.ServiceTitle);
+                x.StartManually();
+            });
         }
     }
 }

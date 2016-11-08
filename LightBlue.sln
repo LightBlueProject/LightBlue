@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WebService", "Lig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WorkerService", "LightBlue.WorkerService\LightBlue.WorkerService.csproj", "{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebRoleApi", "TestWebRoleApi\TestWebRoleApi.csproj", "{FF4A094E-A6C3-4619-B4AB-892FE3FBECAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,10 @@ Global
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF4A094E-A6C3-4619-B4AB-892FE3FBECAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF4A094E-A6C3-4619-B4AB-892FE3FBECAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF4A094E-A6C3-4619-B4AB-892FE3FBECAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF4A094E-A6C3-4619-B4AB-892FE3FBECAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -51,6 +51,8 @@ namespace LightBlue.Setup
             {
                 throw new InvalidOperationException("LightBlue has already been initialised and cannot be reconfigured");
             }
+            Trace.TraceInformation("Initialise LightBlue Multihost logical call context");
+
             _context = new LightBlueLogicalCallContext();
         }
 
@@ -64,6 +66,7 @@ namespace LightBlue.Setup
             var logicalCallContext = _context as LightBlueLogicalCallContext;
             if (logicalCallContext != null)
             {
+                Trace.TraceInformation("Initialize {0} logical call context with configuration {1}", roleName, configurationPath);
                 logicalCallContext.InitializeLogicalContext(configurationPath, serviceDefinitionPath, roleName, useHostedStorage);
                 return;
             }
@@ -73,6 +76,7 @@ namespace LightBlue.Setup
                 throw new InvalidOperationException("LightBlue has already been initialised and cannot be reconfigured");
             }
 
+            Trace.TraceInformation("Initialize {0} app domain context with configuration {1}", roleName, configurationPath);
             _context = new LightBlueAppDomainContext(configurationPath, serviceDefinitionPath, roleName, useHostedStorage);
 
             if (lightBlueHostType == LightBlueHostType.Direct)
@@ -82,6 +86,8 @@ namespace LightBlue.Setup
                     + Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture);
 
                 var temporaryDirectory = Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, "temp", processId);
+
+                Trace.TraceInformation("Direct host {0} creating environment variables and temp directory at {1}", roleName, temporaryDirectory);
 
                 Directory.CreateDirectory(temporaryDirectory);
 
@@ -94,6 +100,7 @@ namespace LightBlue.Setup
         {
             if (!IsInitialised)
             {
+                Trace.TraceInformation("LightBlue context not intialised trying to load from environment variables or role definiation");
                 LoadDefinitionFromEnvironmentVariablesOrAzureRoleDefinition();
             }
 
@@ -104,6 +111,7 @@ namespace LightBlue.Setup
         {
             if (HasLightBlueEnvironmentFlag())
             {
+                Trace.TraceInformation("LightBlue environment variable detected attempting to load context");
                 SetAsLightBlue(
                     configurationPath: Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
                     serviceDefinitionPath: Environment.GetEnvironmentVariable("LightBlueServiceDefinitionPath"),
@@ -116,6 +124,7 @@ namespace LightBlue.Setup
 
             try
             {
+                Trace.TraceInformation("Initalising LightBlue azure context");
                 _context = new AzureContext();
             }
             catch (InvalidOperationException ex)
@@ -136,6 +145,16 @@ namespace LightBlue.Setup
             }
 
             return isInLightBlueHost;
+        }
+
+        public static bool IsLightBlueAppDomainContextType()
+        {
+            return _context != null && _context.GetType() == typeof(LightBlueAppDomainContext);
+        }
+
+        public static void DestroyLightBlueContext()
+        {
+            _context = null;
         }
     }
 }
