@@ -7,6 +7,7 @@ using System.Linq;
 using System.Xml.Linq;
 
 using LightBlue.Setup;
+using Serilog;
 
 namespace LightBlue.Standalone
 {
@@ -68,6 +69,8 @@ namespace LightBlue.Standalone
                 }
 
                 var localResource = _localResources[index];
+
+                Log.Information("Creating local resource {LocalResource} at {LocalResourcePath}", localResource.Name, localResource.RootPath);
 
                 Directory.CreateDirectory(localResource.RootPath);
 
