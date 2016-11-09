@@ -12,15 +12,6 @@ using Xunit;
 
 namespace LightBlue.Tests.Hosts
 {
-    public class TopshelfTests
-    {
-        [Fact]
-        public void CanInstallTopshelfService()
-        {
-
-        }
-    }
-
     public class StartWebHostTests : IUseFixture<RunningWebHostFixture>
     {
         private RunningWebHostFixture _fixture;
