@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using LightBlue.Infrastructure;
+using LightBlue.Standalone;
 using Serilog;
 
 namespace LightBlue.Hosts
@@ -39,9 +40,9 @@ namespace LightBlue.Hosts
 
         private static DirectoryInfo CreateWorkingDirectory(WebHost.Settings settings)
         {
+            StandaloneEnvironment.LightBlueDataDirectory = @"c:\ProgramData\LightBlue";
             var processId = string.Format("{0}-iisexpress-{1}", settings.ServiceTitle, Process.GetCurrentProcess().Id);
-            var local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var directory = Directory.CreateDirectory(Path.Combine(local, "LightBlue", "temp", processId));
+            var directory = Directory.CreateDirectory(Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, processId));
             Log.Information("IISExpress directory {IISExpressDirectory} created", directory.FullName);
             return directory;
         }
