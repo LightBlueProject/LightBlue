@@ -1,0 +1,1138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="IISExpressTemplate" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!--
+
+    IIS configuration sections.
+
+    For schema documentation, see
+    %IIS_BIN%\config\schema\IIS_schema.xml.
+    
+    Please make a backup of this file before making any changes to it.
+
+    NOTE: The following environment variables are available to be used
+          within this file and are understood by the IIS Express.
+
+          %IIS_USER_HOME% - The IIS Express home directory for the user
+          %IIS_SITES_HOME% - The default home directory for sites
+          %IIS_BIN% - The location of the IIS Express binaries
+          %SYSTEMDRIVE% - The drive letter of %IIS_BIN%
+
+--&gt;
+
+&lt;configuration&gt;
+
+    &lt;!--
+
+        The &lt;configSections&gt; section controls the registration of sections.
+        Section is the basic unit of deployment, locking, searching and
+        containment for configuration settings.
+        
+        Every section belongs to one section group.
+        A section group is a container of logically-related sections.
+        
+        Sections cannot be nested.
+        Section groups may be nested.
+        
+        &lt;section
+            name=""  [Required, Collection Key] [XML name of the section]
+            allowDefinition="Everywhere" [MachineOnly|MachineToApplication|AppHostOnly|Everywhere] [Level where it can be set]
+            overrideModeDefault="Allow"  [Allow|Deny] [Default delegation mode]
+            allowLocation="true"  [true|false] [Allowed in location tags]
+        /&gt;
+        
+        The recommended way to unlock sections is by using a location tag:
+        &lt;location path="Default Web Site" overrideMode="Allow"&gt;
+            &lt;system.webServer&gt;
+                &lt;asp /&gt;
+            &lt;/system.webServer&gt;
+        &lt;/location&gt;
+
+    --&gt;
+    &lt;configSections&gt;
+        &lt;sectionGroup name="system.applicationHost"&gt;
+            &lt;section name="applicationPools" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="configHistory" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="customMetadata" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="listenerAdapters" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="log" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="preloadProviders" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="sites" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="webLimits" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+        &lt;/sectionGroup&gt;
+
+        &lt;sectionGroup name="system.webServer"&gt;
+            &lt;section name="asp" overrideModeDefault="Deny" /&gt;
+            &lt;section name="caching" overrideModeDefault="Allow" /&gt;
+            &lt;section name="cgi" overrideModeDefault="Deny" /&gt;
+            &lt;section name="defaultDocument" overrideModeDefault="Allow" /&gt;
+            &lt;section name="directoryBrowse" overrideModeDefault="Allow" /&gt;
+            &lt;section name="fastCgi" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="globalModules" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="handlers" overrideModeDefault="Deny" /&gt;
+            &lt;section name="httpCompression" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+            &lt;section name="httpErrors" overrideModeDefault="Allow" /&gt;
+            &lt;section name="httpLogging" overrideModeDefault="Deny" /&gt;
+            &lt;section name="httpProtocol" overrideModeDefault="Allow" /&gt;
+            &lt;section name="httpRedirect" overrideModeDefault="Allow" /&gt;
+            &lt;section name="httpTracing" overrideModeDefault="Deny" /&gt;
+            &lt;section name="isapiFilters" allowDefinition="MachineToApplication" overrideModeDefault="Deny" /&gt;
+            &lt;section name="modules" allowDefinition="MachineToApplication" overrideModeDefault="Deny" /&gt;
+            &lt;section name="odbcLogging" overrideModeDefault="Deny" /&gt;
+            &lt;sectionGroup name="security"&gt;
+                &lt;section name="access" overrideModeDefault="Deny" /&gt;
+                &lt;section name="applicationDependencies" overrideModeDefault="Deny" /&gt;
+                &lt;sectionGroup name="authentication"&gt;
+                    &lt;section name="anonymousAuthentication" overrideModeDefault="Deny" /&gt;
+                    &lt;section name="basicAuthentication" overrideModeDefault="Deny" /&gt;
+                    &lt;section name="clientCertificateMappingAuthentication" overrideModeDefault="Deny" /&gt;
+                    &lt;section name="digestAuthentication" overrideModeDefault="Deny" /&gt;
+                    &lt;section name="iisClientCertificateMappingAuthentication" overrideModeDefault="Deny" /&gt;
+                    &lt;section name="windowsAuthentication" overrideModeDefault="Deny" /&gt;
+                &lt;/sectionGroup&gt;
+                &lt;section name="authorization" overrideModeDefault="Allow" /&gt;
+                &lt;section name="ipSecurity" overrideModeDefault="Deny" /&gt;
+                &lt;section name="dynamicIpSecurity" overrideModeDefault="Deny" /&gt;
+                &lt;section name="isapiCgiRestriction" allowDefinition="AppHostOnly" overrideModeDefault="Deny" /&gt;
+                &lt;section name="requestFiltering" overrideModeDefault="Allow" /&gt;
+            &lt;/sectionGroup&gt;
+            &lt;section name="serverRuntime" overrideModeDefault="Deny" /&gt;
+            &lt;section name="serverSideInclude" overrideModeDefault="Deny" /&gt;
+            &lt;section name="staticContent" overrideModeDefault="Allow" /&gt;
+            &lt;sectionGroup name="tracing"&gt;
+                &lt;section name="traceFailedRequests" overrideModeDefault="Allow" /&gt;
+                &lt;section name="traceProviderDefinitions" overrideModeDefault="Deny" /&gt;
+            &lt;/sectionGroup&gt;
+            &lt;section name="urlCompression" overrideModeDefault="Allow" /&gt;
+            &lt;section name="validation" overrideModeDefault="Allow" /&gt;
+            &lt;sectionGroup name="webdav"&gt;
+                &lt;section name="globalSettings" overrideModeDefault="Deny" /&gt;
+                &lt;section name="authoring" overrideModeDefault="Deny" /&gt;
+                &lt;section name="authoringRules" overrideModeDefault="Deny" /&gt;
+            &lt;/sectionGroup&gt;
+            &lt;sectionGroup name="rewrite"&gt;
+                &lt;section name="allowedServerVariables" overrideModeDefault="Deny" /&gt;
+                &lt;section name="rules" overrideModeDefault="Allow" /&gt;
+                &lt;section name="outboundRules" overrideModeDefault="Allow" /&gt;
+                &lt;section name="globalRules" overrideModeDefault="Deny" allowDefinition="AppHostOnly" /&gt;
+                &lt;section name="providers" overrideModeDefault="Allow" /&gt;
+                &lt;section name="rewriteMaps" overrideModeDefault="Allow" /&gt;
+            &lt;/sectionGroup&gt;
+            &lt;section name="applicationInitialization" allowDefinition="MachineToApplication" overrideModeDefault="Allow" /&gt;
+            &lt;section name="webSocket" overrideModeDefault="Deny" /&gt;
+        &lt;/sectionGroup&gt;
+    &lt;/configSections&gt;
+
+    &lt;configProtectedData&gt;
+        &lt;providers&gt;
+            &lt;add name="IISWASOnlyRsaProvider" type="" description="Uses RsaCryptoServiceProvider to encrypt and decrypt" keyContainerName="iisWasKey" cspProviderName="" useMachineContainer="true" useOAEP="false" /&gt;
+            &lt;add name="AesProvider" type="Microsoft.ApplicationHost.AesProtectedConfigurationProvider" description="Uses an AES session key to encrypt and decrypt" keyContainerName="iisConfigurationKey" cspProviderName="" useOAEP="false" useMachineContainer="true" sessionKey="AQIAAA5mAAAApAAAKmFQvWHDEETRz8l2bjZlRxIkwcqTFaCUnCLljn3Q1OkesrhEO9YyLyx4bUhsj1/DyShAv7OAFFhXlrlomaornnk5PLeyO4lIXxaiT33yOFUUgxDx4GSaygkqghVV0tO5yQ/XguUBp2juMfZyztnsNa4pLcz7ZNZQ6p4yn9hxwNs=" /&gt;
+            &lt;add name="IISWASOnlyAesProvider" type="Microsoft.ApplicationHost.AesProtectedConfigurationProvider" description="Uses an AES session key to encrypt and decrypt" keyContainerName="iisWasKey" cspProviderName="" useOAEP="false" useMachineContainer="true" sessionKey="AQIAAA5mAAAApAAA4WoiRJ8KHwzAG8AgejPxEOO4/2Vhkolbwo/8gZeNdUDSD36m55hWv4uC9tr/MlKdnwRLL0NhT50Gccyftqz5xTZ0dg5FtvQhTw/he1NwexTKbV+I4Zrd+sZUqHZTsr7JiEr6OHGXL70qoISW5G2m9U8wKT3caPiDPNj2aAaYPLo=" /&gt;
+        &lt;/providers&gt;
+    &lt;/configProtectedData&gt;
+
+    &lt;system.applicationHost&gt;
+
+        &lt;applicationPools&gt;
+            &lt;add name="Clr4IntegratedAppPool" managedRuntimeVersion="v4.0" managedPipelineMode="Integrated" CLRConfigFile="%IIS_BIN%\config\templates\PersonalWebServer\aspnet.config" autoStart="true" /&gt;
+            &lt;add name="Clr4ClassicAppPool" managedRuntimeVersion="v4.0" managedPipelineMode="Classic" CLRConfigFile="%IIS_BIN%\config\templates\PersonalWebServer\aspnet.config" autoStart="true" /&gt;
+            &lt;add name="Clr2IntegratedAppPool" managedRuntimeVersion="v2.0" managedPipelineMode="Integrated" CLRConfigFile="%IIS_BIN%\config\templates\PersonalWebServer\aspnet.config" autoStart="true" /&gt;
+            &lt;add name="Clr2ClassicAppPool" managedRuntimeVersion="v2.0" managedPipelineMode="Classic" CLRConfigFile="%IIS_BIN%\config\templates\PersonalWebServer\aspnet.config" autoStart="true" /&gt;
+            &lt;add name="UnmanagedClassicAppPool" managedRuntimeVersion="" managedPipelineMode="Classic" autoStart="true" /&gt;
+            &lt;add name="IISExpressAppPool" managedRuntimeVersion="v4.0" managedPipelineMode="Integrated" CLRConfigFile="%IIS_BIN%\config\templates\PersonalWebServer\aspnet.config" autoStart="true" /&gt;
+            &lt;applicationPoolDefaults managedRuntimeLoader="v4.0"&gt;
+                &lt;processModel /&gt;
+            &lt;/applicationPoolDefaults&gt;
+        &lt;/applicationPools&gt;
+
+        &lt;!--
+
+          The &lt;listenerAdapters&gt; section defines the protocols with which the
+          Windows Process Activation Service (WAS) binds.
+
+        --&gt;
+        &lt;listenerAdapters&gt;
+            &lt;add name="http" /&gt;
+        &lt;/listenerAdapters&gt;
+
+        &lt;sites&gt;
+            &lt;site name="LightBlue" id="1" serverAutoStart="true"&gt;
+                &lt;application path="/"&gt;
+                    &lt;virtualDirectory path="/" physicalPath="__SITEPATH__" /&gt;
+                &lt;/application&gt;
+                &lt;bindings&gt;
+                    &lt;binding protocol="__PROTOCOL__" bindingInformation=":__PORT__:__HOSTNAME__" /&gt;
+                &lt;/bindings&gt;
+            &lt;/site&gt;
+            &lt;siteDefaults&gt;
+                &lt;logFile logFormat="W3C" directory="%IIS_USER_HOME%\Logs" /&gt;
+                &lt;traceFailedRequestsLogging directory="%IIS_USER_HOME%\TraceLogFiles" enabled="false" maxLogFileSizeKB="1024" /&gt;
+            &lt;/siteDefaults&gt;
+            &lt;applicationDefaults applicationPool="IISExpressAppPool" /&gt;
+            &lt;virtualDirectoryDefaults allowSubDirConfig="true" /&gt;
+        &lt;/sites&gt;
+
+        &lt;webLimits /&gt;
+
+    &lt;/system.applicationHost&gt;
+
+    &lt;system.webServer&gt;
+
+        &lt;serverRuntime /&gt;
+
+        &lt;asp scriptErrorSentToBrowser="true"&gt;
+            &lt;cache diskTemplateCacheDirectory="%TEMP%\iisexpress\ASP Compiled Templates" /&gt;
+            &lt;limits /&gt;
+        &lt;/asp&gt;
+
+        &lt;caching enabled="true" enableKernelCache="true"&gt;
+        &lt;/caching&gt;
+
+        &lt;cgi /&gt;
+
+        &lt;defaultDocument enabled="true"&gt;
+            &lt;files&gt;
+                &lt;add value="Default.htm" /&gt;
+                &lt;add value="Default.asp" /&gt;
+                &lt;add value="index.htm" /&gt;
+                &lt;add value="index.html" /&gt;
+                &lt;add value="iisstart.htm" /&gt;
+                &lt;add value="default.aspx" /&gt;
+            &lt;/files&gt;
+        &lt;/defaultDocument&gt;
+
+        &lt;directoryBrowse enabled="false" /&gt;
+
+        &lt;fastCgi /&gt;
+
+        &lt;!--
+
+          The &lt;globalModules&gt; section defines all native-code modules.
+          To enable a module, specify it in the &lt;modules&gt; section.
+
+        --&gt;
+        &lt;globalModules&gt;
+            &lt;add name="UriCacheModule" image="%IIS_BIN%\cachuri.dll" /&gt;
+&lt;!--            &lt;add name="FileCacheModule" image="%IIS_BIN%\cachfile.dll" /&gt;  --&gt;
+            &lt;add name="TokenCacheModule" image="%IIS_BIN%\cachtokn.dll" /&gt;
+&lt;!--            &lt;add name="HttpCacheModule" image="%IIS_BIN%\cachhttp.dll" /&gt; --&gt;
+            &lt;add name="DynamicCompressionModule" image="%IIS_BIN%\compdyn.dll" /&gt;
+            &lt;add name="StaticCompressionModule" image="%IIS_BIN%\compstat.dll" /&gt;
+            &lt;add name="DefaultDocumentModule" image="%IIS_BIN%\defdoc.dll" /&gt;
+            &lt;add name="DirectoryListingModule" image="%IIS_BIN%\dirlist.dll" /&gt;
+            &lt;add name="ProtocolSupportModule" image="%IIS_BIN%\protsup.dll" /&gt;
+            &lt;add name="HttpRedirectionModule" image="%IIS_BIN%\redirect.dll" /&gt;
+            &lt;add name="ServerSideIncludeModule" image="%IIS_BIN%\iis_ssi.dll" /&gt;
+            &lt;add name="StaticFileModule" image="%IIS_BIN%\static.dll" /&gt;
+            &lt;add name="AnonymousAuthenticationModule" image="%IIS_BIN%\authanon.dll" /&gt;
+            &lt;add name="CertificateMappingAuthenticationModule" image="%IIS_BIN%\authcert.dll" /&gt;
+            &lt;add name="UrlAuthorizationModule" image="%IIS_BIN%\urlauthz.dll" /&gt;
+            &lt;add name="BasicAuthenticationModule" image="%IIS_BIN%\authbas.dll" /&gt;
+            &lt;add name="WindowsAuthenticationModule" image="%IIS_BIN%\authsspi.dll" /&gt;
+&lt;!--            &lt;add name="DigestAuthenticationModule" image="%IIS_BIN%\authmd5.dll" /&gt; --&gt;
+            &lt;add name="IISCertificateMappingAuthenticationModule" image="%IIS_BIN%\authmap.dll" /&gt;
+            &lt;add name="IpRestrictionModule" image="%IIS_BIN%\iprestr.dll" /&gt;
+            &lt;add name="DynamicIpRestrictionModule" image="%IIS_BIN%\diprestr.dll" /&gt;
+            &lt;add name="RequestFilteringModule" image="%IIS_BIN%\modrqflt.dll" /&gt;
+            &lt;add name="CustomLoggingModule" image="%IIS_BIN%\logcust.dll" /&gt;
+            &lt;add name="CustomErrorModule" image="%IIS_BIN%\custerr.dll" /&gt;
+            &lt;add name="HttpLoggingModule" image="%IIS_BIN%\loghttp.dll" /&gt;
+&lt;!--            &lt;add name="TracingModule" image="%IIS_BIN%\iisetw.dll" /&gt; --&gt;
+            &lt;add name="FailedRequestsTracingModule" image="%IIS_BIN%\iisfreb.dll" /&gt;
+            &lt;add name="RequestMonitorModule" image="%IIS_BIN%\iisreqs.dll" /&gt;
+            &lt;add name="IsapiModule" image="%IIS_BIN%\isapi.dll" /&gt;
+            &lt;add name="IsapiFilterModule" image="%IIS_BIN%\filter.dll" /&gt;
+            &lt;add name="CgiModule" image="%IIS_BIN%\cgi.dll" /&gt;
+            &lt;add name="FastCgiModule" image="%IIS_BIN%\iisfcgi.dll" /&gt;
+&lt;!--            &lt;add name="WebDAVModule" image="%IIS_BIN%\webdav.dll" /&gt; --&gt;
+            &lt;add name="RewriteModule" image="%IIS_BIN%\rewrite.dll" /&gt;
+            &lt;add name="ConfigurationValidationModule" image="%IIS_BIN%\validcfg.dll" /&gt;
+            &lt;add name="ApplicationInitializationModule" image="%IIS_BIN%\warmup.dll" /&gt;
+            &lt;add name="WebSocketModule" image="%IIS_BIN%\iiswsock.dll" /&gt;
+            &lt;add name="WebMatrixSupportModule" image="%IIS_BIN%\webmatrixsup.dll" /&gt;
+            &lt;add name="ManagedEngine" image="%windir%\Microsoft.NET\Framework\v2.0.50727\webengine.dll" preCondition="integratedMode,runtimeVersionv2.0,bitness32" /&gt;
+            &lt;add name="ManagedEngine64" image="%windir%\Microsoft.NET\Framework64\v2.0.50727\webengine.dll" preCondition="integratedMode,runtimeVersionv2.0,bitness64" /&gt;
+            &lt;add name="ManagedEngineV4.0_32bit" image="%windir%\Microsoft.NET\Framework\v4.0.30319\webengine4.dll" preCondition="integratedMode,runtimeVersionv4.0,bitness32" /&gt;
+            &lt;add name="ManagedEngineV4.0_64bit" image="%windir%\Microsoft.NET\Framework64\v4.0.30319\webengine4.dll" preCondition="integratedMode,runtimeVersionv4.0,bitness64" /&gt;
+        &lt;/globalModules&gt;
+
+        &lt;httpCompression directory="%TEMP%\iisexpress\IIS Temporary Compressed Files"&gt;
+            &lt;scheme name="gzip" dll="%IIS_BIN%\gzip.dll" /&gt;
+            &lt;dynamicTypes&gt;
+                &lt;add mimeType="text/*" enabled="true" /&gt;
+                &lt;add mimeType="message/*" enabled="true" /&gt;
+                &lt;add mimeType="application/x-javascript" enabled="true" /&gt;
+                &lt;add mimeType="*/*" enabled="false" /&gt;
+            &lt;/dynamicTypes&gt;
+            &lt;staticTypes&gt;
+                &lt;add mimeType="text/*" enabled="true" /&gt;
+                &lt;add mimeType="message/*" enabled="true" /&gt;
+                &lt;add mimeType="application/x-javascript" enabled="true" /&gt;
+                &lt;add mimeType="application/atom+xml" enabled="true" /&gt;
+                &lt;add mimeType="application/xaml+xml" enabled="true" /&gt;
+                &lt;add mimeType="*/*" enabled="false" /&gt;
+            &lt;/staticTypes&gt;
+        &lt;/httpCompression&gt;
+
+        &lt;httpErrors lockAttributes="allowAbsolutePathsWhenDelegated,defaultPath"&gt;
+            &lt;error statusCode="401" prefixLanguageFilePath="%IIS_BIN%\custerr" path="401.htm" /&gt;
+            &lt;error statusCode="403" prefixLanguageFilePath="%IIS_BIN%\custerr" path="403.htm" /&gt;
+            &lt;error statusCode="404" prefixLanguageFilePath="%IIS_BIN%\custerr" path="404.htm" /&gt;
+            &lt;error statusCode="405" prefixLanguageFilePath="%IIS_BIN%\custerr" path="405.htm" /&gt;
+            &lt;error statusCode="406" prefixLanguageFilePath="%IIS_BIN%\custerr" path="406.htm" /&gt;
+            &lt;error statusCode="412" prefixLanguageFilePath="%IIS_BIN%\custerr" path="412.htm" /&gt;
+            &lt;error statusCode="500" prefixLanguageFilePath="%IIS_BIN%\custerr" path="500.htm" /&gt;
+            &lt;error statusCode="501" prefixLanguageFilePath="%IIS_BIN%\custerr" path="501.htm" /&gt;
+            &lt;error statusCode="502" prefixLanguageFilePath="%IIS_BIN%\custerr" path="502.htm" /&gt;
+        &lt;/httpErrors&gt;
+
+        &lt;httpLogging dontLog="false" /&gt;
+
+        &lt;httpProtocol&gt;
+            &lt;customHeaders&gt;
+                &lt;clear /&gt;
+                &lt;add name="X-Powered-By" value="ASP.NET" /&gt;
+            &lt;/customHeaders&gt;
+            &lt;redirectHeaders&gt;
+                &lt;clear /&gt;
+            &lt;/redirectHeaders&gt;
+        &lt;/httpProtocol&gt;
+
+        &lt;httpRedirect enabled="false" /&gt;
+
+        &lt;httpTracing&gt;
+        &lt;/httpTracing&gt;
+
+        &lt;isapiFilters&gt;
+            &lt;filter name="ASP.Net_2.0.50727-64" path="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_filter.dll" enableCache="true" preCondition="bitness64,runtimeVersionv2.0" /&gt;
+            &lt;filter name="ASP.Net_2.0.50727.0" path="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_filter.dll" enableCache="true" preCondition="bitness32,runtimeVersionv2.0" /&gt;
+            &lt;filter name="ASP.Net_2.0_for_v1.1" path="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_filter.dll" enableCache="true" preCondition="runtimeVersionv1.1" /&gt;
+            &lt;filter name="ASP.Net_4.0_32bit" path="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_filter.dll" enableCache="true" preCondition="bitness32,runtimeVersionv4.0" /&gt;
+            &lt;filter name="ASP.Net_4.0_64bit" path="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_filter.dll" enableCache="true" preCondition="bitness64,runtimeVersionv4.0" /&gt;
+        &lt;/isapiFilters&gt;
+
+        &lt;odbcLogging /&gt;
+
+        &lt;security&gt;
+
+            &lt;access sslFlags="None" /&gt;
+
+            &lt;applicationDependencies&gt;
+                &lt;application name="Active Server Pages" groupId="ASP" /&gt;
+            &lt;/applicationDependencies&gt;
+
+            &lt;authentication&gt;
+
+                &lt;anonymousAuthentication enabled="true" userName="" /&gt;
+
+                &lt;basicAuthentication enabled="false" /&gt;
+
+                &lt;clientCertificateMappingAuthentication enabled="false" /&gt;
+
+                &lt;digestAuthentication enabled="false" /&gt;
+
+                &lt;iisClientCertificateMappingAuthentication enabled="false"&gt;
+                &lt;/iisClientCertificateMappingAuthentication&gt;
+
+                &lt;windowsAuthentication enabled="false"&gt;
+                    &lt;providers&gt;
+                        &lt;add value="Negotiate" /&gt;
+                        &lt;add value="NTLM" /&gt;
+                    &lt;/providers&gt;
+                &lt;/windowsAuthentication&gt;
+
+            &lt;/authentication&gt;
+
+            &lt;authorization&gt;
+                &lt;add accessType="Allow" users="*" /&gt;
+            &lt;/authorization&gt;
+
+            &lt;ipSecurity allowUnlisted="true" /&gt;
+
+            &lt;isapiCgiRestriction notListedIsapisAllowed="true" notListedCgisAllowed="true"&gt;
+                &lt;add path="%windir%\Microsoft.NET\Framework64\v4.0.30319\webengine4.dll" allowed="true" groupId="ASP.NET_v4.0" description="ASP.NET_v4.0" /&gt;
+                &lt;add path="%windir%\Microsoft.NET\Framework\v4.0.30319\webengine4.dll" allowed="true" groupId="ASP.NET_v4.0" description="ASP.NET_v4.0" /&gt;
+                &lt;add path="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll" allowed="true" groupId="ASP.NET v2.0.50727" description="ASP.NET v2.0.50727" /&gt;
+                &lt;add path="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll" allowed="true" groupId="ASP.NET v2.0.50727" description="ASP.NET v2.0.50727" /&gt;
+            &lt;/isapiCgiRestriction&gt;
+
+            &lt;requestFiltering&gt;
+                &lt;fileExtensions allowUnlisted="true" applyToWebDAV="true"&gt;
+                    &lt;add fileExtension=".asa" allowed="false" /&gt;
+                    &lt;add fileExtension=".asax" allowed="false" /&gt;
+                    &lt;add fileExtension=".ascx" allowed="false" /&gt;
+                    &lt;add fileExtension=".master" allowed="false" /&gt;
+                    &lt;add fileExtension=".skin" allowed="false" /&gt;
+                    &lt;add fileExtension=".browser" allowed="false" /&gt;
+                    &lt;add fileExtension=".sitemap" allowed="false" /&gt;
+                    &lt;add fileExtension=".config" allowed="false" /&gt;
+                    &lt;add fileExtension=".cs" allowed="false" /&gt;
+                    &lt;add fileExtension=".csproj" allowed="false" /&gt;
+                    &lt;add fileExtension=".vb" allowed="false" /&gt;
+                    &lt;add fileExtension=".vbproj" allowed="false" /&gt;
+                    &lt;add fileExtension=".webinfo" allowed="false" /&gt;
+                    &lt;add fileExtension=".licx" allowed="false" /&gt;
+                    &lt;add fileExtension=".resx" allowed="false" /&gt;
+                    &lt;add fileExtension=".resources" allowed="false" /&gt;
+                    &lt;add fileExtension=".mdb" allowed="false" /&gt;
+                    &lt;add fileExtension=".vjsproj" allowed="false" /&gt;
+                    &lt;add fileExtension=".java" allowed="false" /&gt;
+                    &lt;add fileExtension=".jsl" allowed="false" /&gt;
+                    &lt;add fileExtension=".ldb" allowed="false" /&gt;
+                    &lt;add fileExtension=".dsdgm" allowed="false" /&gt;
+                    &lt;add fileExtension=".ssdgm" allowed="false" /&gt;
+                    &lt;add fileExtension=".lsad" allowed="false" /&gt;
+                    &lt;add fileExtension=".ssmap" allowed="false" /&gt;
+                    &lt;add fileExtension=".cd" allowed="false" /&gt;
+                    &lt;add fileExtension=".dsprototype" allowed="false" /&gt;
+                    &lt;add fileExtension=".lsaprototype" allowed="false" /&gt;
+                    &lt;add fileExtension=".sdm" allowed="false" /&gt;
+                    &lt;add fileExtension=".sdmDocument" allowed="false" /&gt;
+                    &lt;add fileExtension=".mdf" allowed="false" /&gt;
+                    &lt;add fileExtension=".ldf" allowed="false" /&gt;
+                    &lt;add fileExtension=".ad" allowed="false" /&gt;
+                    &lt;add fileExtension=".dd" allowed="false" /&gt;
+                    &lt;add fileExtension=".ldd" allowed="false" /&gt;
+                    &lt;add fileExtension=".sd" allowed="false" /&gt;
+                    &lt;add fileExtension=".adprototype" allowed="false" /&gt;
+                    &lt;add fileExtension=".lddprototype" allowed="false" /&gt;
+                    &lt;add fileExtension=".exclude" allowed="false" /&gt;
+                    &lt;add fileExtension=".refresh" allowed="false" /&gt;
+                    &lt;add fileExtension=".compiled" allowed="false" /&gt;
+                    &lt;add fileExtension=".msgx" allowed="false" /&gt;
+                    &lt;add fileExtension=".vsdisco" allowed="false" /&gt;
+                    &lt;add fileExtension=".rules" allowed="false" /&gt;
+                &lt;/fileExtensions&gt;
+                &lt;verbs allowUnlisted="true" applyToWebDAV="true" /&gt;
+                &lt;hiddenSegments applyToWebDAV="true"&gt;
+                    &lt;add segment="web.config" /&gt;
+                    &lt;add segment="bin" /&gt;
+                    &lt;add segment="App_code" /&gt;
+                    &lt;add segment="App_GlobalResources" /&gt;
+                    &lt;add segment="App_LocalResources" /&gt;
+                    &lt;add segment="App_WebReferences" /&gt;
+                    &lt;add segment="App_Data" /&gt;
+                    &lt;add segment="App_Browsers" /&gt;
+                &lt;/hiddenSegments&gt;
+            &lt;/requestFiltering&gt;
+
+        &lt;/security&gt;
+
+        &lt;serverSideInclude ssiExecDisable="false" /&gt;
+
+        &lt;staticContent lockAttributes="isDocFooterFileName"&gt;
+            &lt;mimeMap fileExtension=".323" mimeType="text/h323" /&gt;
+            &lt;mimeMap fileExtension=".3g2" mimeType="video/3gpp2" /&gt;
+            &lt;mimeMap fileExtension=".3gp2" mimeType="video/3gpp2" /&gt;
+            &lt;mimeMap fileExtension=".3gp" mimeType="video/3gpp" /&gt;
+            &lt;mimeMap fileExtension=".3gpp" mimeType="video/3gpp" /&gt;
+            &lt;mimeMap fileExtension=".aac" mimeType="audio/aac" /&gt;
+            &lt;mimeMap fileExtension=".aaf" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".aca" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".accdb" mimeType="application/msaccess" /&gt;
+            &lt;mimeMap fileExtension=".accde" mimeType="application/msaccess" /&gt;
+            &lt;mimeMap fileExtension=".accdt" mimeType="application/msaccess" /&gt;
+            &lt;mimeMap fileExtension=".acx" mimeType="application/internet-property-stream" /&gt;
+            &lt;mimeMap fileExtension=".adt" mimeType="audio/vnd.dlna.adts" /&gt;
+            &lt;mimeMap fileExtension=".adts" mimeType="audio/vnd.dlna.adts" /&gt;
+            &lt;mimeMap fileExtension=".afm" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".ai" mimeType="application/postscript" /&gt;
+            &lt;mimeMap fileExtension=".aif" mimeType="audio/x-aiff" /&gt;
+            &lt;mimeMap fileExtension=".aifc" mimeType="audio/aiff" /&gt;
+            &lt;mimeMap fileExtension=".aiff" mimeType="audio/aiff" /&gt;
+            &lt;mimeMap fileExtension=".application" mimeType="application/x-ms-application" /&gt;
+            &lt;mimeMap fileExtension=".art" mimeType="image/x-jg" /&gt;
+            &lt;mimeMap fileExtension=".asd" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".asf" mimeType="video/x-ms-asf" /&gt;
+            &lt;mimeMap fileExtension=".asi" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".asm" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".asr" mimeType="video/x-ms-asf" /&gt;
+            &lt;mimeMap fileExtension=".asx" mimeType="video/x-ms-asf" /&gt;
+            &lt;mimeMap fileExtension=".atom" mimeType="application/atom+xml" /&gt;
+            &lt;mimeMap fileExtension=".au" mimeType="audio/basic" /&gt;
+            &lt;mimeMap fileExtension=".avi" mimeType="video/x-msvideo" /&gt;
+            &lt;mimeMap fileExtension=".axs" mimeType="application/olescript" /&gt;
+            &lt;mimeMap fileExtension=".bas" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".bcpio" mimeType="application/x-bcpio" /&gt;
+            &lt;mimeMap fileExtension=".bin" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".bmp" mimeType="image/bmp" /&gt;
+            &lt;mimeMap fileExtension=".c" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".cab" mimeType="application/vnd.ms-cab-compressed" /&gt;
+            &lt;mimeMap fileExtension=".calx" mimeType="application/vnd.ms-office.calx" /&gt;
+            &lt;mimeMap fileExtension=".cat" mimeType="application/vnd.ms-pki.seccat" /&gt;
+            &lt;mimeMap fileExtension=".cdf" mimeType="application/x-cdf" /&gt;
+            &lt;mimeMap fileExtension=".chm" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".class" mimeType="application/x-java-applet" /&gt;
+            &lt;mimeMap fileExtension=".clp" mimeType="application/x-msclip" /&gt;
+            &lt;mimeMap fileExtension=".cmx" mimeType="image/x-cmx" /&gt;
+            &lt;mimeMap fileExtension=".cnf" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".cod" mimeType="image/cis-cod" /&gt;
+            &lt;mimeMap fileExtension=".cpio" mimeType="application/x-cpio" /&gt;
+            &lt;mimeMap fileExtension=".cpp" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".crd" mimeType="application/x-mscardfile" /&gt;
+            &lt;mimeMap fileExtension=".crl" mimeType="application/pkix-crl" /&gt;
+            &lt;mimeMap fileExtension=".crt" mimeType="application/x-x509-ca-cert" /&gt;
+            &lt;mimeMap fileExtension=".csh" mimeType="application/x-csh" /&gt;
+            &lt;mimeMap fileExtension=".css" mimeType="text/css" /&gt;
+            &lt;mimeMap fileExtension=".csv" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".cur" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".dcr" mimeType="application/x-director" /&gt;
+            &lt;mimeMap fileExtension=".deploy" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".der" mimeType="application/x-x509-ca-cert" /&gt;
+            &lt;mimeMap fileExtension=".dib" mimeType="image/bmp" /&gt;
+            &lt;mimeMap fileExtension=".dir" mimeType="application/x-director" /&gt;
+            &lt;mimeMap fileExtension=".disco" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".dll" mimeType="application/x-msdownload" /&gt;
+            &lt;mimeMap fileExtension=".dll.config" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".dlm" mimeType="text/dlm" /&gt;
+            &lt;mimeMap fileExtension=".doc" mimeType="application/msword" /&gt;
+            &lt;mimeMap fileExtension=".docm" mimeType="application/vnd.ms-word.document.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".docx" mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /&gt;
+            &lt;mimeMap fileExtension=".dot" mimeType="application/msword" /&gt;
+            &lt;mimeMap fileExtension=".dotm" mimeType="application/vnd.ms-word.template.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".dotx" mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.template" /&gt;
+            &lt;mimeMap fileExtension=".dsp" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".dtd" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".dvi" mimeType="application/x-dvi" /&gt;
+            &lt;mimeMap fileExtension=".dvr-ms" mimeType="video/x-ms-dvr" /&gt;
+            &lt;mimeMap fileExtension=".dwf" mimeType="drawing/x-dwf" /&gt;
+            &lt;mimeMap fileExtension=".dwp" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".dxr" mimeType="application/x-director" /&gt;
+            &lt;mimeMap fileExtension=".eml" mimeType="message/rfc822" /&gt;
+            &lt;mimeMap fileExtension=".emz" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".eot" mimeType="application/vnd.ms-fontobject" /&gt;
+            &lt;mimeMap fileExtension=".eps" mimeType="application/postscript" /&gt;
+            &lt;mimeMap fileExtension=".etx" mimeType="text/x-setext" /&gt;
+            &lt;mimeMap fileExtension=".evy" mimeType="application/envoy" /&gt;
+            &lt;mimeMap fileExtension=".exe" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".exe.config" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".fdf" mimeType="application/vnd.fdf" /&gt;
+            &lt;mimeMap fileExtension=".fif" mimeType="application/fractals" /&gt;
+            &lt;mimeMap fileExtension=".fla" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".flr" mimeType="x-world/x-vrml" /&gt;
+            &lt;mimeMap fileExtension=".flv" mimeType="video/x-flv" /&gt;
+            &lt;mimeMap fileExtension=".gif" mimeType="image/gif" /&gt;
+            &lt;mimeMap fileExtension=".gtar" mimeType="application/x-gtar" /&gt;
+            &lt;mimeMap fileExtension=".gz" mimeType="application/x-gzip" /&gt;
+            &lt;mimeMap fileExtension=".h" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".hdf" mimeType="application/x-hdf" /&gt;
+            &lt;mimeMap fileExtension=".hdml" mimeType="text/x-hdml" /&gt;
+            &lt;mimeMap fileExtension=".hhc" mimeType="application/x-oleobject" /&gt;
+            &lt;mimeMap fileExtension=".hhk" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".hhp" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".hlp" mimeType="application/winhlp" /&gt;
+            &lt;mimeMap fileExtension=".hqx" mimeType="application/mac-binhex40" /&gt;
+            &lt;mimeMap fileExtension=".hta" mimeType="application/hta" /&gt;
+            &lt;mimeMap fileExtension=".htc" mimeType="text/x-component" /&gt;
+            &lt;mimeMap fileExtension=".htm" mimeType="text/html" /&gt;
+            &lt;mimeMap fileExtension=".html" mimeType="text/html" /&gt;
+            &lt;mimeMap fileExtension=".htt" mimeType="text/webviewhtml" /&gt;
+            &lt;mimeMap fileExtension=".hxt" mimeType="text/html" /&gt;
+            &lt;mimeMap fileExtension=".ical" mimeType="text/calendar" /&gt;
+            &lt;mimeMap fileExtension=".icalendar" mimeType="text/calendar" /&gt;
+            &lt;mimeMap fileExtension=".ico" mimeType="image/x-icon" /&gt;
+            &lt;mimeMap fileExtension=".ics" mimeType="text/calendar" /&gt;
+            &lt;mimeMap fileExtension=".ief" mimeType="image/ief" /&gt;
+            &lt;mimeMap fileExtension=".ifb" mimeType="text/calendar" /&gt;
+            &lt;mimeMap fileExtension=".iii" mimeType="application/x-iphone" /&gt;
+            &lt;mimeMap fileExtension=".inf" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".ins" mimeType="application/x-internet-signup" /&gt;
+            &lt;mimeMap fileExtension=".isp" mimeType="application/x-internet-signup" /&gt;
+            &lt;mimeMap fileExtension=".IVF" mimeType="video/x-ivf" /&gt;
+            &lt;mimeMap fileExtension=".jar" mimeType="application/java-archive" /&gt;
+            &lt;mimeMap fileExtension=".java" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".jck" mimeType="application/liquidmotion" /&gt;
+            &lt;mimeMap fileExtension=".jcz" mimeType="application/liquidmotion" /&gt;
+            &lt;mimeMap fileExtension=".jfif" mimeType="image/pjpeg" /&gt;
+            &lt;mimeMap fileExtension=".jpb" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".jpe" mimeType="image/jpeg" /&gt;
+            &lt;mimeMap fileExtension=".jpeg" mimeType="image/jpeg" /&gt;
+            &lt;mimeMap fileExtension=".jpg" mimeType="image/jpeg" /&gt;
+            &lt;mimeMap fileExtension=".js" mimeType="application/javascript" /&gt;
+            &lt;mimeMap fileExtension=".jsx" mimeType="text/jscript" /&gt;
+            &lt;mimeMap fileExtension=".latex" mimeType="application/x-latex" /&gt;
+            &lt;mimeMap fileExtension=".lit" mimeType="application/x-ms-reader" /&gt;
+            &lt;mimeMap fileExtension=".lpk" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".lsf" mimeType="video/x-la-asf" /&gt;
+            &lt;mimeMap fileExtension=".lsx" mimeType="video/x-la-asf" /&gt;
+            &lt;mimeMap fileExtension=".lzh" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".m13" mimeType="application/x-msmediaview" /&gt;
+            &lt;mimeMap fileExtension=".m14" mimeType="application/x-msmediaview" /&gt;
+            &lt;mimeMap fileExtension=".m1v" mimeType="video/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".m2ts" mimeType="video/vnd.dlna.mpeg-tts" /&gt;
+            &lt;mimeMap fileExtension=".m3u" mimeType="audio/x-mpegurl" /&gt;
+            &lt;mimeMap fileExtension=".m4a" mimeType="audio/mp4" /&gt;
+            &lt;mimeMap fileExtension=".m4v" mimeType="video/mp4" /&gt;
+            &lt;mimeMap fileExtension=".man" mimeType="application/x-troff-man" /&gt;
+            &lt;mimeMap fileExtension=".manifest" mimeType="application/x-ms-manifest" /&gt;
+            &lt;mimeMap fileExtension=".map" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".mdb" mimeType="application/x-msaccess" /&gt;
+            &lt;mimeMap fileExtension=".mdp" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".me" mimeType="application/x-troff-me" /&gt;
+            &lt;mimeMap fileExtension=".mht" mimeType="message/rfc822" /&gt;
+            &lt;mimeMap fileExtension=".mhtml" mimeType="message/rfc822" /&gt;
+            &lt;mimeMap fileExtension=".mid" mimeType="audio/mid" /&gt;
+            &lt;mimeMap fileExtension=".midi" mimeType="audio/mid" /&gt;
+            &lt;mimeMap fileExtension=".mix" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".mmf" mimeType="application/x-smaf" /&gt;
+            &lt;mimeMap fileExtension=".mno" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".mny" mimeType="application/x-msmoney" /&gt;
+            &lt;mimeMap fileExtension=".mov" mimeType="video/quicktime" /&gt;
+            &lt;mimeMap fileExtension=".movie" mimeType="video/x-sgi-movie" /&gt;
+            &lt;mimeMap fileExtension=".mp2" mimeType="video/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".mp3" mimeType="audio/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".mp4" mimeType="video/mp4" /&gt;
+            &lt;mimeMap fileExtension=".mp4v" mimeType="video/mp4" /&gt;
+            &lt;mimeMap fileExtension=".mpa" mimeType="video/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".mpe" mimeType="video/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".mpeg" mimeType="video/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".mpg" mimeType="video/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".mpp" mimeType="application/vnd.ms-project" /&gt;
+            &lt;mimeMap fileExtension=".mpv2" mimeType="video/mpeg" /&gt;
+            &lt;mimeMap fileExtension=".ms" mimeType="application/x-troff-ms" /&gt;
+            &lt;mimeMap fileExtension=".msi" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".mso" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".mvb" mimeType="application/x-msmediaview" /&gt;
+            &lt;mimeMap fileExtension=".mvc" mimeType="application/x-miva-compiled" /&gt;
+            &lt;mimeMap fileExtension=".nc" mimeType="application/x-netcdf" /&gt;
+            &lt;mimeMap fileExtension=".nsc" mimeType="video/x-ms-asf" /&gt;
+            &lt;mimeMap fileExtension=".nws" mimeType="message/rfc822" /&gt;
+            &lt;mimeMap fileExtension=".ocx" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".oda" mimeType="application/oda" /&gt;
+            &lt;mimeMap fileExtension=".odc" mimeType="text/x-ms-odc" /&gt;
+            &lt;mimeMap fileExtension=".ods" mimeType="application/oleobject" /&gt;
+            &lt;mimeMap fileExtension=".oga" mimeType="audio/ogg" /&gt;
+            &lt;mimeMap fileExtension=".ogg" mimeType="video/ogg" /&gt;
+            &lt;mimeMap fileExtension=".ogv" mimeType="video/ogg" /&gt;
+            &lt;mimeMap fileExtension=".ogx" mimeType="application/ogg" /&gt;
+            &lt;mimeMap fileExtension=".one" mimeType="application/onenote" /&gt;
+            &lt;mimeMap fileExtension=".onea" mimeType="application/onenote" /&gt;
+            &lt;mimeMap fileExtension=".onetoc" mimeType="application/onenote" /&gt;
+            &lt;mimeMap fileExtension=".onetoc2" mimeType="application/onenote" /&gt;
+            &lt;mimeMap fileExtension=".onetmp" mimeType="application/onenote" /&gt;
+            &lt;mimeMap fileExtension=".onepkg" mimeType="application/onenote" /&gt;
+            &lt;mimeMap fileExtension=".osdx" mimeType="application/opensearchdescription+xml" /&gt;
+            &lt;mimeMap fileExtension=".otf" mimeType="font/otf" /&gt;
+            &lt;mimeMap fileExtension=".p10" mimeType="application/pkcs10" /&gt;
+            &lt;mimeMap fileExtension=".p12" mimeType="application/x-pkcs12" /&gt;
+            &lt;mimeMap fileExtension=".p7b" mimeType="application/x-pkcs7-certificates" /&gt;
+            &lt;mimeMap fileExtension=".p7c" mimeType="application/pkcs7-mime" /&gt;
+            &lt;mimeMap fileExtension=".p7m" mimeType="application/pkcs7-mime" /&gt;
+            &lt;mimeMap fileExtension=".p7r" mimeType="application/x-pkcs7-certreqresp" /&gt;
+            &lt;mimeMap fileExtension=".p7s" mimeType="application/pkcs7-signature" /&gt;
+            &lt;mimeMap fileExtension=".pbm" mimeType="image/x-portable-bitmap" /&gt;
+            &lt;mimeMap fileExtension=".pcx" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".pcz" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".pdf" mimeType="application/pdf" /&gt;
+            &lt;mimeMap fileExtension=".pfb" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".pfm" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".pfx" mimeType="application/x-pkcs12" /&gt;
+            &lt;mimeMap fileExtension=".pgm" mimeType="image/x-portable-graymap" /&gt;
+            &lt;mimeMap fileExtension=".pko" mimeType="application/vnd.ms-pki.pko" /&gt;
+            &lt;mimeMap fileExtension=".pma" mimeType="application/x-perfmon" /&gt;
+            &lt;mimeMap fileExtension=".pmc" mimeType="application/x-perfmon" /&gt;
+            &lt;mimeMap fileExtension=".pml" mimeType="application/x-perfmon" /&gt;
+            &lt;mimeMap fileExtension=".pmr" mimeType="application/x-perfmon" /&gt;
+            &lt;mimeMap fileExtension=".pmw" mimeType="application/x-perfmon" /&gt;
+            &lt;mimeMap fileExtension=".png" mimeType="image/png" /&gt;
+            &lt;mimeMap fileExtension=".pnm" mimeType="image/x-portable-anymap" /&gt;
+            &lt;mimeMap fileExtension=".pnz" mimeType="image/png" /&gt;
+            &lt;mimeMap fileExtension=".pot" mimeType="application/vnd.ms-powerpoint" /&gt;
+            &lt;mimeMap fileExtension=".potm" mimeType="application/vnd.ms-powerpoint.template.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".potx" mimeType="application/vnd.openxmlformats-officedocument.presentationml.template" /&gt;
+            &lt;mimeMap fileExtension=".ppam" mimeType="application/vnd.ms-powerpoint.addin.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".ppm" mimeType="image/x-portable-pixmap" /&gt;
+            &lt;mimeMap fileExtension=".pps" mimeType="application/vnd.ms-powerpoint" /&gt;
+            &lt;mimeMap fileExtension=".ppsm" mimeType="application/vnd.ms-powerpoint.slideshow.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".ppsx" mimeType="application/vnd.openxmlformats-officedocument.presentationml.slideshow" /&gt;
+            &lt;mimeMap fileExtension=".ppt" mimeType="application/vnd.ms-powerpoint" /&gt;
+            &lt;mimeMap fileExtension=".pptm" mimeType="application/vnd.ms-powerpoint.presentation.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".pptx" mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" /&gt;
+            &lt;mimeMap fileExtension=".prf" mimeType="application/pics-rules" /&gt;
+            &lt;mimeMap fileExtension=".prm" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".prx" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".ps" mimeType="application/postscript" /&gt;
+            &lt;mimeMap fileExtension=".psd" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".psm" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".psp" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".pub" mimeType="application/x-mspublisher" /&gt;
+            &lt;mimeMap fileExtension=".qt" mimeType="video/quicktime" /&gt;
+            &lt;mimeMap fileExtension=".qtl" mimeType="application/x-quicktimeplayer" /&gt;
+            &lt;mimeMap fileExtension=".qxd" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".ra" mimeType="audio/x-pn-realaudio" /&gt;
+            &lt;mimeMap fileExtension=".ram" mimeType="audio/x-pn-realaudio" /&gt;
+            &lt;mimeMap fileExtension=".rar" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".ras" mimeType="image/x-cmu-raster" /&gt;
+            &lt;mimeMap fileExtension=".rf" mimeType="image/vnd.rn-realflash" /&gt;
+            &lt;mimeMap fileExtension=".rgb" mimeType="image/x-rgb" /&gt;
+            &lt;mimeMap fileExtension=".rm" mimeType="application/vnd.rn-realmedia" /&gt;
+            &lt;mimeMap fileExtension=".rmi" mimeType="audio/mid" /&gt;
+            &lt;mimeMap fileExtension=".roff" mimeType="application/x-troff" /&gt;
+            &lt;mimeMap fileExtension=".rpm" mimeType="audio/x-pn-realaudio-plugin" /&gt;
+            &lt;mimeMap fileExtension=".rtf" mimeType="application/rtf" /&gt;
+            &lt;mimeMap fileExtension=".rtx" mimeType="text/richtext" /&gt;
+            &lt;mimeMap fileExtension=".scd" mimeType="application/x-msschedule" /&gt;
+            &lt;mimeMap fileExtension=".sct" mimeType="text/scriptlet" /&gt;
+            &lt;mimeMap fileExtension=".sea" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".setpay" mimeType="application/set-payment-initiation" /&gt;
+            &lt;mimeMap fileExtension=".setreg" mimeType="application/set-registration-initiation" /&gt;
+            &lt;mimeMap fileExtension=".sgml" mimeType="text/sgml" /&gt;
+            &lt;mimeMap fileExtension=".sh" mimeType="application/x-sh" /&gt;
+            &lt;mimeMap fileExtension=".shar" mimeType="application/x-shar" /&gt;
+            &lt;mimeMap fileExtension=".sit" mimeType="application/x-stuffit" /&gt;
+            &lt;mimeMap fileExtension=".sldm" mimeType="application/vnd.ms-powerpoint.slide.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".sldx" mimeType="application/vnd.openxmlformats-officedocument.presentationml.slide" /&gt;
+            &lt;mimeMap fileExtension=".smd" mimeType="audio/x-smd" /&gt;
+            &lt;mimeMap fileExtension=".smi" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".smx" mimeType="audio/x-smd" /&gt;
+            &lt;mimeMap fileExtension=".smz" mimeType="audio/x-smd" /&gt;
+            &lt;mimeMap fileExtension=".snd" mimeType="audio/basic" /&gt;
+            &lt;mimeMap fileExtension=".snp" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".spc" mimeType="application/x-pkcs7-certificates" /&gt;
+            &lt;mimeMap fileExtension=".spl" mimeType="application/futuresplash" /&gt;
+            &lt;mimeMap fileExtension=".spx" mimeType="audio/ogg" /&gt;
+            &lt;mimeMap fileExtension=".src" mimeType="application/x-wais-source" /&gt;
+            &lt;mimeMap fileExtension=".ssm" mimeType="application/streamingmedia" /&gt;
+            &lt;mimeMap fileExtension=".sst" mimeType="application/vnd.ms-pki.certstore" /&gt;
+            &lt;mimeMap fileExtension=".stl" mimeType="application/vnd.ms-pki.stl" /&gt;
+            &lt;mimeMap fileExtension=".sv4cpio" mimeType="application/x-sv4cpio" /&gt;
+            &lt;mimeMap fileExtension=".sv4crc" mimeType="application/x-sv4crc" /&gt;
+            &lt;mimeMap fileExtension=".svg" mimeType="image/svg+xml" /&gt;
+            &lt;mimeMap fileExtension=".svgz" mimeType="image/svg+xml" /&gt;
+            &lt;mimeMap fileExtension=".swf" mimeType="application/x-shockwave-flash" /&gt;
+            &lt;mimeMap fileExtension=".t" mimeType="application/x-troff" /&gt;
+            &lt;mimeMap fileExtension=".tar" mimeType="application/x-tar" /&gt;
+            &lt;mimeMap fileExtension=".tcl" mimeType="application/x-tcl" /&gt;
+            &lt;mimeMap fileExtension=".tex" mimeType="application/x-tex" /&gt;
+            &lt;mimeMap fileExtension=".texi" mimeType="application/x-texinfo" /&gt;
+            &lt;mimeMap fileExtension=".texinfo" mimeType="application/x-texinfo" /&gt;
+            &lt;mimeMap fileExtension=".tgz" mimeType="application/x-compressed" /&gt;
+            &lt;mimeMap fileExtension=".thmx" mimeType="application/vnd.ms-officetheme" /&gt;
+            &lt;mimeMap fileExtension=".thn" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".tif" mimeType="image/tiff" /&gt;
+            &lt;mimeMap fileExtension=".tiff" mimeType="image/tiff" /&gt;
+            &lt;mimeMap fileExtension=".toc" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".tr" mimeType="application/x-troff" /&gt;
+            &lt;mimeMap fileExtension=".trm" mimeType="application/x-msterminal" /&gt;
+            &lt;mimeMap fileExtension=".ts" mimeType="video/vnd.dlna.mpeg-tts" /&gt;
+            &lt;mimeMap fileExtension=".tsv" mimeType="text/tab-separated-values" /&gt;
+            &lt;mimeMap fileExtension=".ttf" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".tts" mimeType="video/vnd.dlna.mpeg-tts" /&gt;
+            &lt;mimeMap fileExtension=".txt" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".u32" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".uls" mimeType="text/iuls" /&gt;
+            &lt;mimeMap fileExtension=".ustar" mimeType="application/x-ustar" /&gt;
+            &lt;mimeMap fileExtension=".vbs" mimeType="text/vbscript" /&gt;
+            &lt;mimeMap fileExtension=".vcf" mimeType="text/x-vcard" /&gt;
+            &lt;mimeMap fileExtension=".vcs" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".vdx" mimeType="application/vnd.ms-visio.viewer" /&gt;
+            &lt;mimeMap fileExtension=".vml" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".vsd" mimeType="application/vnd.visio" /&gt;
+            &lt;mimeMap fileExtension=".vss" mimeType="application/vnd.visio" /&gt;
+            &lt;mimeMap fileExtension=".vst" mimeType="application/vnd.visio" /&gt;
+            &lt;mimeMap fileExtension=".vsto" mimeType="application/x-ms-vsto" /&gt;
+            &lt;mimeMap fileExtension=".vsw" mimeType="application/vnd.visio" /&gt;
+            &lt;mimeMap fileExtension=".vsx" mimeType="application/vnd.visio" /&gt;
+            &lt;mimeMap fileExtension=".vtx" mimeType="application/vnd.visio" /&gt;
+            &lt;mimeMap fileExtension=".wav" mimeType="audio/wav" /&gt;
+            &lt;mimeMap fileExtension=".wax" mimeType="audio/x-ms-wax" /&gt;
+            &lt;mimeMap fileExtension=".wbmp" mimeType="image/vnd.wap.wbmp" /&gt;
+            &lt;mimeMap fileExtension=".wcm" mimeType="application/vnd.ms-works" /&gt;
+            &lt;mimeMap fileExtension=".wdb" mimeType="application/vnd.ms-works" /&gt;
+            &lt;mimeMap fileExtension=".webm" mimeType="video/webm" /&gt;
+            &lt;mimeMap fileExtension=".wks" mimeType="application/vnd.ms-works" /&gt;
+            &lt;mimeMap fileExtension=".wm" mimeType="video/x-ms-wm" /&gt;
+            &lt;mimeMap fileExtension=".wma" mimeType="audio/x-ms-wma" /&gt;
+            &lt;mimeMap fileExtension=".wmd" mimeType="application/x-ms-wmd" /&gt;
+            &lt;mimeMap fileExtension=".wmf" mimeType="application/x-msmetafile" /&gt;
+            &lt;mimeMap fileExtension=".wml" mimeType="text/vnd.wap.wml" /&gt;
+            &lt;mimeMap fileExtension=".wmlc" mimeType="application/vnd.wap.wmlc" /&gt;
+            &lt;mimeMap fileExtension=".wmls" mimeType="text/vnd.wap.wmlscript" /&gt;
+            &lt;mimeMap fileExtension=".wmlsc" mimeType="application/vnd.wap.wmlscriptc" /&gt;
+            &lt;mimeMap fileExtension=".wmp" mimeType="video/x-ms-wmp" /&gt;
+            &lt;mimeMap fileExtension=".wmv" mimeType="video/x-ms-wmv" /&gt;
+            &lt;mimeMap fileExtension=".wmx" mimeType="video/x-ms-wmx" /&gt;
+            &lt;mimeMap fileExtension=".wmz" mimeType="application/x-ms-wmz" /&gt;
+            &lt;mimeMap fileExtension=".woff" mimeType="font/x-woff" /&gt;
+            &lt;mimeMap fileExtension=".wps" mimeType="application/vnd.ms-works" /&gt;
+            &lt;mimeMap fileExtension=".wri" mimeType="application/x-mswrite" /&gt;
+            &lt;mimeMap fileExtension=".wrl" mimeType="x-world/x-vrml" /&gt;
+            &lt;mimeMap fileExtension=".wrz" mimeType="x-world/x-vrml" /&gt;
+            &lt;mimeMap fileExtension=".wsdl" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".wtv" mimeType="video/x-ms-wtv" /&gt;
+            &lt;mimeMap fileExtension=".wvx" mimeType="video/x-ms-wvx" /&gt;
+            &lt;mimeMap fileExtension=".x" mimeType="application/directx" /&gt;
+            &lt;mimeMap fileExtension=".xaf" mimeType="x-world/x-vrml" /&gt;
+            &lt;mimeMap fileExtension=".xaml" mimeType="application/xaml+xml" /&gt;
+            &lt;mimeMap fileExtension=".xap" mimeType="application/x-silverlight-app" /&gt;
+            &lt;mimeMap fileExtension=".xbap" mimeType="application/x-ms-xbap" /&gt;
+            &lt;mimeMap fileExtension=".xbm" mimeType="image/x-xbitmap" /&gt;
+            &lt;mimeMap fileExtension=".xdr" mimeType="text/plain" /&gt;
+            &lt;mimeMap fileExtension=".xht" mimeType="application/xhtml+xml" /&gt;
+            &lt;mimeMap fileExtension=".xhtml" mimeType="application/xhtml+xml" /&gt;
+            &lt;mimeMap fileExtension=".xla" mimeType="application/vnd.ms-excel" /&gt;
+            &lt;mimeMap fileExtension=".xlam" mimeType="application/vnd.ms-excel.addin.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".xlc" mimeType="application/vnd.ms-excel" /&gt;
+            &lt;mimeMap fileExtension=".xlm" mimeType="application/vnd.ms-excel" /&gt;
+            &lt;mimeMap fileExtension=".xls" mimeType="application/vnd.ms-excel" /&gt;
+            &lt;mimeMap fileExtension=".xlsb" mimeType="application/vnd.ms-excel.sheet.binary.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".xlsm" mimeType="application/vnd.ms-excel.sheet.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".xlsx" mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /&gt;
+            &lt;mimeMap fileExtension=".xlt" mimeType="application/vnd.ms-excel" /&gt;
+            &lt;mimeMap fileExtension=".xltm" mimeType="application/vnd.ms-excel.template.macroEnabled.12" /&gt;
+            &lt;mimeMap fileExtension=".xltx" mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.template" /&gt;
+            &lt;mimeMap fileExtension=".xlw" mimeType="application/vnd.ms-excel" /&gt;
+            &lt;mimeMap fileExtension=".xml" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".xof" mimeType="x-world/x-vrml" /&gt;
+            &lt;mimeMap fileExtension=".xpm" mimeType="image/x-xpixmap" /&gt;
+            &lt;mimeMap fileExtension=".xps" mimeType="application/vnd.ms-xpsdocument" /&gt;
+            &lt;mimeMap fileExtension=".xsd" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".xsf" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".xsl" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".xslt" mimeType="text/xml" /&gt;
+            &lt;mimeMap fileExtension=".xsn" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".xtp" mimeType="application/octet-stream" /&gt;
+            &lt;mimeMap fileExtension=".xwd" mimeType="image/x-xwindowdump" /&gt;
+            &lt;mimeMap fileExtension=".z" mimeType="application/x-compress" /&gt;
+            &lt;mimeMap fileExtension=".zip" mimeType="application/x-zip-compressed" /&gt;
+        &lt;/staticContent&gt;
+
+        &lt;tracing&gt;
+
+             &lt;traceProviderDefinitions&gt;
+                &lt;add name="WWW Server" guid="{3a2a4e84-4c21-4981-ae10-3fda0d9b0f83}"&gt;
+                    &lt;areas&gt;
+                        &lt;clear /&gt;
+                        &lt;add name="Authentication" value="2" /&gt;
+                        &lt;add name="Security" value="4" /&gt;
+                        &lt;add name="Filter" value="8" /&gt;
+                        &lt;add name="StaticFile" value="16" /&gt;
+                        &lt;add name="CGI" value="32" /&gt;
+                        &lt;add name="Compression" value="64" /&gt;
+                        &lt;add name="Cache" value="128" /&gt;
+                        &lt;add name="RequestNotifications" value="256" /&gt;
+                        &lt;add name="Module" value="512" /&gt;
+                        &lt;add name="Rewrite" value="1024" /&gt;
+                        &lt;add name="FastCGI" value="4096" /&gt;
+                        &lt;add name="WebSocket" value="16384" /&gt;
+                    &lt;/areas&gt;
+                &lt;/add&gt;
+                &lt;add name="ASP" guid="{06b94d9a-b15e-456e-a4ef-37c984a2cb4b}"&gt;
+                    &lt;areas&gt;
+                        &lt;clear /&gt;
+                    &lt;/areas&gt;
+                &lt;/add&gt;
+                &lt;add name="ISAPI Extension" guid="{a1c2040e-8840-4c31-ba11-9871031a19ea}"&gt;
+                    &lt;areas&gt;
+                        &lt;clear /&gt;
+                    &lt;/areas&gt;
+                &lt;/add&gt;
+                &lt;add name="ASPNET" guid="{AFF081FE-0247-4275-9C4E-021F3DC1DA35}"&gt;
+                    &lt;areas&gt;
+                        &lt;add name="Infrastructure" value="1" /&gt;
+                        &lt;add name="Module" value="2" /&gt;
+                        &lt;add name="Page" value="4" /&gt;
+                        &lt;add name="AppServices" value="8" /&gt;
+                    &lt;/areas&gt;
+                &lt;/add&gt;
+            &lt;/traceProviderDefinitions&gt;
+
+            &lt;traceFailedRequests&gt;
+                &lt;add path="*"&gt;
+                    &lt;traceAreas&gt;
+                        &lt;add provider="ASP" verbosity="Verbose" /&gt;
+                        &lt;add provider="ASPNET" areas="Infrastructure,Module,Page,AppServices" verbosity="Verbose" /&gt;
+                        &lt;add provider="ISAPI Extension" verbosity="Verbose" /&gt;
+                        &lt;add provider="WWW Server" areas="Authentication,Security,Filter,StaticFile,CGI,Compression,Cache,RequestNotifications,Module,Rewrite,WebSocket" verbosity="Verbose" /&gt;
+                    &lt;/traceAreas&gt;
+                    &lt;failureDefinitions statusCodes="200-999" /&gt;
+                &lt;/add&gt;
+            &lt;/traceFailedRequests&gt;
+
+        &lt;/tracing&gt;
+
+        &lt;urlCompression /&gt;
+
+        &lt;validation /&gt;
+        &lt;webdav&gt;
+            &lt;globalSettings&gt;
+                &lt;propertyStores&gt;
+                    &lt;add name="webdav_simple_prop" image="%IIS_BIN%\webdav_simple_prop.dll" image32="%IIS_BIN%\webdav_simple_prop.dll" /&gt;
+                &lt;/propertyStores&gt;
+                &lt;lockStores&gt;
+                    &lt;add name="webdav_simple_lock" image="%IIS_BIN%\webdav_simple_lock.dll" image32="%IIS_BIN%\webdav_simple_lock.dll" /&gt;
+                &lt;/lockStores&gt;
+
+            &lt;/globalSettings&gt;
+            &lt;authoring&gt;
+                &lt;locks enabled="true" lockStore="webdav_simple_lock" /&gt;
+            &lt;/authoring&gt;
+            &lt;authoringRules /&gt;
+        &lt;/webdav&gt;
+        &lt;applicationInitialization /&gt;
+        &lt;webSocket /&gt;
+
+    &lt;/system.webServer&gt;
+    &lt;location path="" overrideMode="Allow"&gt;
+        &lt;system.webServer&gt;
+            &lt;modules&gt;
+                &lt;!--
+                &lt;add name="HttpCacheModule" lockItem="true" /&gt;
+--&gt;
+                &lt;add name="DynamicCompressionModule" lockItem="true" /&gt;
+                &lt;add name="StaticCompressionModule" lockItem="true" /&gt;
+                &lt;add name="DefaultDocumentModule" lockItem="true" /&gt;
+                &lt;add name="DirectoryListingModule" lockItem="true" /&gt;
+                &lt;add name="IsapiFilterModule" lockItem="true" /&gt;
+                &lt;add name="ProtocolSupportModule" lockItem="true" /&gt;
+                &lt;add name="HttpRedirectionModule" lockItem="true" /&gt;
+                &lt;add name="ServerSideIncludeModule" lockItem="true" /&gt;
+                &lt;add name="StaticFileModule" lockItem="true" /&gt;
+                &lt;add name="AnonymousAuthenticationModule" lockItem="true" /&gt;
+                &lt;add name="CertificateMappingAuthenticationModule" lockItem="true" /&gt;
+                &lt;add name="UrlAuthorizationModule" lockItem="true" /&gt;
+                &lt;add name="BasicAuthenticationModule" lockItem="true" /&gt;
+                &lt;add name="WindowsAuthenticationModule" lockItem="true" /&gt;
+                &lt;!--
+                &lt;add name="DigestAuthenticationModule" lockItem="true" /&gt;
+--&gt;
+                &lt;add name="IISCertificateMappingAuthenticationModule" lockItem="true" /&gt;
+                &lt;add name="WebMatrixSupportModule" lockItem="true" /&gt;
+                &lt;add name="IpRestrictionModule" lockItem="true" /&gt;
+                &lt;add name="DynamicIpRestrictionModule" lockItem="true" /&gt;
+                &lt;add name="RequestFilteringModule" lockItem="true" /&gt;
+                &lt;add name="CustomLoggingModule" lockItem="true" /&gt;
+                &lt;add name="CustomErrorModule" lockItem="true" /&gt;
+                &lt;add name="IsapiModule" lockItem="true" /&gt;
+                &lt;add name="HttpLoggingModule" lockItem="true" /&gt;
+                &lt;add name="FailedRequestsTracingModule" lockItem="true" /&gt;
+                &lt;add name="CgiModule" lockItem="true" /&gt;
+                &lt;add name="FastCgiModule" lockItem="true" /&gt;
+                &lt;!--                &lt;add name="WebDAVModule" /&gt; --&gt;
+                &lt;add name="RewriteModule" /&gt;
+                &lt;add name="OutputCache" type="System.Web.Caching.OutputCacheModule" preCondition="managedHandler" /&gt;
+                &lt;add name="Session" type="System.Web.SessionState.SessionStateModule" preCondition="managedHandler" /&gt;
+                &lt;add name="WindowsAuthentication" type="System.Web.Security.WindowsAuthenticationModule" preCondition="managedHandler" /&gt;
+                &lt;add name="FormsAuthentication" type="System.Web.Security.FormsAuthenticationModule" preCondition="managedHandler" /&gt;
+                &lt;add name="DefaultAuthentication" type="System.Web.Security.DefaultAuthenticationModule" preCondition="managedHandler" /&gt;
+                &lt;add name="RoleManager" type="System.Web.Security.RoleManagerModule" preCondition="managedHandler" /&gt;
+                &lt;add name="UrlAuthorization" type="System.Web.Security.UrlAuthorizationModule" preCondition="managedHandler" /&gt;
+                &lt;add name="FileAuthorization" type="System.Web.Security.FileAuthorizationModule" preCondition="managedHandler" /&gt;
+                &lt;add name="AnonymousIdentification" type="System.Web.Security.AnonymousIdentificationModule" preCondition="managedHandler" /&gt;
+                &lt;add name="Profile" type="System.Web.Profile.ProfileModule" preCondition="managedHandler" /&gt;
+                &lt;add name="UrlMappingsModule" type="System.Web.UrlMappingsModule" preCondition="managedHandler" /&gt;
+                &lt;add name="ApplicationInitializationModule" lockItem="true" /&gt;
+                &lt;add name="WebSocketModule" lockItem="true" /&gt;
+                &lt;add name="ServiceModel-4.0" type="System.ServiceModel.Activation.ServiceHttpModule,System.ServiceModel.Activation,Version=4.0.0.0,Culture=neutral,PublicKeyToken=31bf3856ad364e35" preCondition="managedHandler,runtimeVersionv4.0" /&gt;
+                &lt;add name="ConfigurationValidationModule" lockItem="true" /&gt;
+                &lt;add name="UrlRoutingModule-4.0" type="System.Web.Routing.UrlRoutingModule" preCondition="managedHandler,runtimeVersionv4.0" /&gt;
+                &lt;add name="ScriptModule-4.0" type="System.Web.Handlers.ScriptModule, System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" preCondition="managedHandler,runtimeVersionv4.0" /&gt;
+            &lt;/modules&gt;
+            &lt;handlers accessPolicy="Read, Script"&gt;
+                &lt;!--                &lt;add name="WebDAV" path="*" verb="PROPFIND,PROPPATCH,MKCOL,PUT,COPY,DELETE,MOVE,LOCK,UNLOCK" modules="WebDAVModule" resourceType="Unspecified" requireAccess="None" /&gt; --&gt;
+                &lt;add name="AXD-ISAPI-4.0_64bit" path="*.axd" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="PageHandlerFactory-ISAPI-4.0_64bit" path="*.aspx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="SimpleHandlerFactory-ISAPI-4.0_64bit" path="*.ashx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="WebServiceHandlerFactory-ISAPI-4.0_64bit" path="*.asmx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-rem-ISAPI-4.0_64bit" path="*.rem" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-soap-ISAPI-4.0_64bit" path="*.soap" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="svc-ISAPI-4.0_64bit" path="*.svc" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" /&gt;
+                &lt;add name="rules-ISAPI-4.0_64bit" path="*.rules" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" /&gt;
+                &lt;add name="xoml-ISAPI-4.0_64bit" path="*.xoml" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" /&gt;
+                &lt;add name="xamlx-ISAPI-4.0_64bit" path="*.xamlx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" /&gt;
+                &lt;add name="aspq-ISAPI-4.0_64bit" path="*.aspq" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="cshtm-ISAPI-4.0_64bit" path="*.cshtm" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="cshtml-ISAPI-4.0_64bit" path="*.cshtml" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="vbhtm-ISAPI-4.0_64bit" path="*.vbhtm" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="vbhtml-ISAPI-4.0_64bit" path="*.vbhtml" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="AXD-ISAPI-4.0_32bit" path="*.axd" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="PageHandlerFactory-ISAPI-4.0_32bit" path="*.aspx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="SimpleHandlerFactory-ISAPI-4.0_32bit" path="*.ashx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="WebServiceHandlerFactory-ISAPI-4.0_32bit" path="*.asmx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-rem-ISAPI-4.0_32bit" path="*.rem" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-soap-ISAPI-4.0_32bit" path="*.soap" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="svc-ISAPI-4.0_32bit" path="*.svc" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" /&gt;
+                &lt;add name="rules-ISAPI-4.0_32bit" path="*.rules" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" /&gt;
+                &lt;add name="xoml-ISAPI-4.0_32bit" path="*.xoml" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" /&gt;
+                &lt;add name="xamlx-ISAPI-4.0_32bit" path="*.xamlx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" /&gt;
+                &lt;add name="aspq-ISAPI-4.0_32bit" path="*.aspq" verb="*" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="cshtm-ISAPI-4.0_32bit" path="*.cshtm" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="cshtml-ISAPI-4.0_32bit" path="*.cshtml" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="vbhtm-ISAPI-4.0_32bit" path="*.vbhtm" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="vbhtml-ISAPI-4.0_32bit" path="*.vbhtml" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="TraceHandler-Integrated-4.0" path="trace.axd" verb="GET,HEAD,POST,DEBUG" type="System.Web.Handlers.TraceHandler" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="WebAdminHandler-Integrated-4.0" path="WebAdmin.axd" verb="GET,DEBUG" type="System.Web.Handlers.WebAdminHandler" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="AssemblyResourceLoader-Integrated-4.0" path="WebResource.axd" verb="GET,DEBUG" type="System.Web.Handlers.AssemblyResourceLoader" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="PageHandlerFactory-Integrated-4.0" path="*.aspx" verb="GET,HEAD,POST,DEBUG" type="System.Web.UI.PageHandlerFactory" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="SimpleHandlerFactory-Integrated-4.0" path="*.ashx" verb="GET,HEAD,POST,DEBUG" type="System.Web.UI.SimpleHandlerFactory" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="WebServiceHandlerFactory-Integrated-4.0" path="*.asmx" verb="GET,HEAD,POST,DEBUG" type="System.Web.Script.Services.ScriptHandlerFactory, System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-rem-Integrated-4.0" path="*.rem" verb="GET,HEAD,POST,DEBUG" type="System.Runtime.Remoting.Channels.Http.HttpRemotingHandlerFactory, System.Runtime.Remoting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-soap-Integrated-4.0" path="*.soap" verb="GET,HEAD,POST,DEBUG" type="System.Runtime.Remoting.Channels.Http.HttpRemotingHandlerFactory, System.Runtime.Remoting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="svc-Integrated-4.0" path="*.svc" verb="*" type="System.ServiceModel.Activation.ServiceHttpHandlerFactory, System.ServiceModel.Activation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="rules-Integrated-4.0" path="*.rules" verb="*" type="System.ServiceModel.Activation.ServiceHttpHandlerFactory, System.ServiceModel.Activation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="xoml-Integrated-4.0" path="*.xoml" verb="*" type="System.ServiceModel.Activation.ServiceHttpHandlerFactory, System.ServiceModel.Activation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="xamlx-Integrated-4.0" path="*.xamlx" verb="GET,HEAD,POST,DEBUG" type="System.Xaml.Hosting.XamlHttpHandlerFactory, System.Xaml.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="aspq-Integrated-4.0" path="*.aspq" verb="GET,HEAD,POST,DEBUG" type="System.Web.HttpForbiddenHandler" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="cshtm-Integrated-4.0" path="*.cshtm" verb="GET,HEAD,POST,DEBUG" type="System.Web.HttpForbiddenHandler" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="cshtml-Integrated-4.0" path="*.cshtml" verb="GET,HEAD,POST,DEBUG" type="System.Web.HttpForbiddenHandler" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="vbhtm-Integrated-4.0" path="*.vbhtm" verb="GET,HEAD,POST,DEBUG" type="System.Web.HttpForbiddenHandler" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="vbhtml-Integrated-4.0" path="*.vbhtml" verb="GET,HEAD,POST,DEBUG" type="System.Web.HttpForbiddenHandler" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="ScriptHandlerFactoryAppServices-Integrated-4.0" path="*_AppService.axd" verb="*" type="System.Web.Script.Services.ScriptHandlerFactory, System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="ScriptResourceIntegrated-4.0" path="*ScriptResource.axd" verb="GET,HEAD" type="System.Web.Handlers.ScriptResourceHandler, System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" preCondition="integratedMode,runtimeVersionv4.0" /&gt;
+                &lt;add name="ASPClassic" path="*.asp" verb="GET,HEAD,POST" modules="IsapiModule" scriptProcessor="%IIS_BIN%\asp.dll" resourceType="File" /&gt;
+                &lt;add name="SecurityCertificate" path="*.cer" verb="GET,HEAD,POST" modules="IsapiModule" scriptProcessor="%IIS_BIN%\asp.dll" resourceType="File" /&gt;
+                &lt;add name="ISAPI-dll" path="*.dll" verb="*" modules="IsapiModule" resourceType="File" requireAccess="Execute" allowPathInfo="true" /&gt;
+                &lt;add name="TraceHandler-Integrated" path="trace.axd" verb="GET,HEAD,POST,DEBUG" type="System.Web.Handlers.TraceHandler" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="WebAdminHandler-Integrated" path="WebAdmin.axd" verb="GET,DEBUG" type="System.Web.Handlers.WebAdminHandler" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="AssemblyResourceLoader-Integrated" path="WebResource.axd" verb="GET,DEBUG" type="System.Web.Handlers.AssemblyResourceLoader" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="PageHandlerFactory-Integrated" path="*.aspx" verb="GET,HEAD,POST,DEBUG" type="System.Web.UI.PageHandlerFactory" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="SimpleHandlerFactory-Integrated" path="*.ashx" verb="GET,HEAD,POST,DEBUG" type="System.Web.UI.SimpleHandlerFactory" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="WebServiceHandlerFactory-Integrated" path="*.asmx" verb="GET,HEAD,POST,DEBUG" type="System.Web.Services.Protocols.WebServiceHandlerFactory,System.Web.Services,Version=2.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-rem-Integrated" path="*.rem" verb="GET,HEAD,POST,DEBUG" type="System.Runtime.Remoting.Channels.Http.HttpRemotingHandlerFactory,System.Runtime.Remoting,Version=2.0.0.0,Culture=neutral,PublicKeyToken=b77a5c561934e089" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-soap-Integrated" path="*.soap" verb="GET,HEAD,POST,DEBUG" type="System.Runtime.Remoting.Channels.Http.HttpRemotingHandlerFactory,System.Runtime.Remoting,Version=2.0.0.0,Culture=neutral,PublicKeyToken=b77a5c561934e089" preCondition="integratedMode,runtimeVersionv2.0" /&gt;
+                &lt;add name="AXD-ISAPI-2.0" path="*.axd" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="PageHandlerFactory-ISAPI-2.0" path="*.aspx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="SimpleHandlerFactory-ISAPI-2.0" path="*.ashx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="WebServiceHandlerFactory-ISAPI-2.0" path="*.asmx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-rem-ISAPI-2.0" path="*.rem" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-soap-ISAPI-2.0" path="*.soap" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="AXD-ISAPI-2.0-64" path="*.axd" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="PageHandlerFactory-ISAPI-2.0-64" path="*.aspx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="SimpleHandlerFactory-ISAPI-2.0-64" path="*.ashx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="WebServiceHandlerFactory-ISAPI-2.0-64" path="*.asmx" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-rem-ISAPI-2.0-64" path="*.rem" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="HttpRemotingHandlerFactory-soap-ISAPI-2.0-64" path="*.soap" verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv2.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="CGI-exe" path="*.exe" verb="*" modules="CgiModule" resourceType="File" requireAccess="Execute" allowPathInfo="true" /&gt;
+                &lt;add name="SSINC-stm" path="*.stm" verb="GET,HEAD,POST" modules="ServerSideIncludeModule" resourceType="File" /&gt;
+                &lt;add name="SSINC-shtm" path="*.shtm" verb="GET,HEAD,POST" modules="ServerSideIncludeModule" resourceType="File" /&gt;
+                &lt;add name="SSINC-shtml" path="*.shtml" verb="GET,HEAD,POST" modules="ServerSideIncludeModule" resourceType="File" /&gt;
+                &lt;add name="TRACEVerbHandler" path="*" verb="TRACE" modules="ProtocolSupportModule" requireAccess="None" /&gt;
+                &lt;add name="OPTIONSVerbHandler" path="*" verb="OPTIONS" modules="ProtocolSupportModule" requireAccess="None" /&gt;
+                &lt;add name="ExtensionlessUrl-ISAPI-4.0_32bit" path="*." verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" /&gt;
+                &lt;add name="ExtensionlessUrlHandler-ISAPI-4.0_64bit" path="*." verb="GET,HEAD,POST,DEBUG" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" /&gt;
+                &lt;add name="ExtensionlessUrl-Integrated-4.0" path="*." verb="GET,HEAD,POST,DEBUG" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" responseBufferLimit="0" /&gt;
+                &lt;add name="StaticFile" path="*" verb="*" modules="StaticFileModule,DefaultDocumentModule,DirectoryListingModule" resourceType="Either" requireAccess="Read" /&gt;
+            &lt;/handlers&gt;
+        &lt;/system.webServer&gt;
+    &lt;/location&gt;
+&lt;/configuration&gt;</value>
+  </data>
+</root>

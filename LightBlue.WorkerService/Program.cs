@@ -1,6 +1,7 @@
-﻿using Formo;
-using LightBlue.Host;
+﻿using System.Diagnostics;
+using LightBlue.Hosts;
 using Topshelf;
+using Topshelf.Logging;
 
 namespace LightBlue.WorkerService
 {
@@ -10,25 +11,15 @@ namespace LightBlue.WorkerService
         {
             return (int)HostFactory.Run(x =>
             {
-                dynamic configuration = new Configuration();
-                WorkerHostSettings settings = configuration.Bind<WorkerHostSettings>();
+                Trace.Listeners.Add(new TopshelfConsoleTraceListener());
 
-                x.Service<WorkerHostService>(service =>
+                var settings = WorkerHost.Settings.Load();
+
+                x.Service<WorkerHost>(service =>
                 {
-                    service.ConstructUsing(s =>
-                    {
-                        var hostArgs = HostArgs.ParseArgs(new[]
-                        {
-                            "-a:" + settings.Assembly,
-                            "-n:" + settings.RoleName,
-                            "-t:" + settings.ServiceTitle,
-                            "-c:" + settings.Configuration
-                        });
-                        return new WorkerHostService(hostArgs);
-                    });
-
-                    service.WhenStarted((s, h) => s.Start(h));
-                    service.WhenStopped((s, h) => s.Stop(h));
+                    service.ConstructUsing(s => new WorkerHost(settings));
+                    service.WhenStarted(s => s.Start());
+                    service.WhenStopped(s => s.Stop());
                 });
 
                 x.RunAsLocalSystem();

@@ -51,7 +51,19 @@ namespace LightBlue.Setup
             {
                 throw new InvalidOperationException("LightBlue has already been initialised and cannot be reconfigured");
             }
+
             _context = new LightBlueLogicalCallContext();
+        }
+
+        public static string SetAsWindowsHost(string service, string cscfg, string csdef, string roleName)
+        {
+            _context = new LightBlueAppDomainContext(cscfg, csdef, roleName, false);
+            var processId = string.Format("{0}-azurerole-{1}", service, Process.GetCurrentProcess().Id);
+            var path = Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, "temp", processId);
+            var directory = Directory.CreateDirectory(path);
+            Environment.SetEnvironmentVariable("TMP", directory.FullName);
+            Environment.SetEnvironmentVariable("TEMP", directory.FullName);
+            return directory.FullName;
         }
 
         public static void SetAsLightBlue(
