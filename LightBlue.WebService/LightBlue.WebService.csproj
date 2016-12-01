@@ -34,11 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Formo, Version=1.4.4.40853, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Formo.1.4.4.40853\lib\net40\Formo.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,21 +51,15 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebHostService.cs" />
-    <Compile Include="WebHostSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LightBlue.Host.Stub\LightBlue.Host.Stub.csproj">
-      <Project>{0FB3527D-FBCC-468F-91ED-C84E89260791}</Project>
-      <Name>LightBlue.Host.Stub</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LightBlue.WebHost\LightBlue.WebHost.csproj">
-      <Project>{871c2b31-fb84-499f-a1b7-901ddabda8d4}</Project>
-      <Name>LightBlue.WebHost</Name>
+    <ProjectReference Include="..\LightBlue\LightBlue.csproj">
+      <Project>{28F5B274-4B25-4295-98AE-3E5A60C34D8D}</Project>
+      <Name>LightBlue</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

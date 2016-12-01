@@ -61,6 +61,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Spatial, Version=5.6.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -94,6 +95,8 @@
     <Compile Include="Hosted\HostedAzureRoleInformation.cs" />
     <Compile Include="Hosted\HostedAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureStorage.cs" />
+    <Compile Include="Hosts\WebHostProcessFactory.cs" />
+    <Compile Include="Hosts\WebHostProcess.cs" />
     <Compile Include="IAzureBlobContainer.cs" />
     <Compile Include="IAzureBlobDirectory.cs" />
     <Compile Include="IAzureBlobProperties.cs" />
@@ -123,6 +126,11 @@
     <Compile Include="LightBlueContext.cs" />
     <Compile Include="LightBlueThreadControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Hosts\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Setup\Contexts\AzureContext.cs" />
     <Compile Include="Setup\Contexts\AzureContextBase.cs" />
     <Compile Include="Setup\Contexts\LightBlueLogicalCallContext.cs" />
@@ -156,8 +164,16 @@
     <Compile Include="Standalone\StandaloneMetadataStore.cs" />
     <Compile Include="Standalone\UriExtensions.cs" />
     <Compile Include="Standalone\FileLockExtensions.cs" />
+    <Compile Include="Hosts\WebHost.cs" />
+    <Compile Include="Hosts\WorkerHost.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Hosts\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config">
