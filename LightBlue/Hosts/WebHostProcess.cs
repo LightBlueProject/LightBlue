@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Serilog;
 
 namespace LightBlue.Hosts
 {
@@ -30,8 +29,6 @@ namespace LightBlue.Hosts
 
             _name = Path.GetFileName(_start.FileName);
 
-            Log.Information("{Process} start info with arguments {ProcessArguments}", _name, _start.Arguments);
-
             foreach (var ev in environmentVariables)
             {
                 if (_start.EnvironmentVariables.ContainsKey(ev.Key))
@@ -53,7 +50,7 @@ namespace LightBlue.Hosts
                         
                     if (!string.IsNullOrWhiteSpace(line))
                     {
-                        Log.Information("{Process} logged {Line}", _name, line);
+                        Trace.TraceInformation("{0} logged {1}", _name, line);
                     }
                 }
             });
@@ -67,7 +64,7 @@ namespace LightBlue.Hosts
             _process.Kill();
             _process.WaitForExit();
 
-            Log.Information("{Process}:{ProcessId} killed and disposed", _process.Id, _name);
+            Trace.TraceInformation("{0}:{1} killed and disposed", _process.Id, _name);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using LightBlue.Setup;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Serilog;
 
 namespace LightBlue.Hosts
 {
@@ -25,19 +25,12 @@ namespace LightBlue.Hosts
         {
             try
             {
-                Log.Logger = new LoggerConfiguration()
-                    .WriteTo.LiterateConsole()
-                    .WriteTo.RollingFile(@"c:\LightBlueLogs\" + _settings.ServiceTitle + "-{Date}.txt")
-                    .CreateLogger();
-
-                Log.Information("Worker host service current directory {CurrentDirectory}", Directory.GetCurrentDirectory());
-
                 var hostDirectory = LightBlueConfiguration.SetAsWindowsHost(_settings.ServiceTitle,
                     _settings.Cscfg,
                     _settings.Csdef,
                     _settings.RoleName);
 
-                Log.Information("Worker host service LightBlue context created at directory {HostDirectory}", hostDirectory);
+                Trace.TraceInformation("Worker host service LightBlue context created at directory {0}", hostDirectory);
 
                 var assemblyPath = Path.IsPathRooted(_settings.Assembly)
                     ? _settings.Assembly
@@ -47,23 +40,21 @@ namespace LightBlue.Hosts
                     .Single(t => typeof(RoleEntryPoint).IsAssignableFrom(t));
                 _role = (RoleEntryPoint)Activator.CreateInstance(entryPoint);
 
-                Log.Information("Worker host service role entry point {RoleEntryPoint} located at {AssemblyPath}", entryPoint.FullName, assemblyPath);
+                Trace.TraceInformation("Worker host service role entry point {0} located at {1}", entryPoint.FullName, assemblyPath);
 
                 if (!_role.OnStart())
                 {
-                    Log.Error("Worker host service role entry point {EntryPoint} start failed", entryPoint.FullName);
+                    Trace.TraceError("Worker host service role entry point {0} start failed", entryPoint.FullName);
                     throw new InvalidOperationException("Failed to start role entry point " + entryPoint.FullName);
                 }
 
-                Log.Information("Worker host service role entry point {EntryPoint} started", entryPoint.FullName);
-
                 _task = Task.Run(() => _role.Run());
 
-                Log.Information("Worker host service role entry point {EntryPoint} running", entryPoint.FullName);
+                Trace.TraceInformation("Worker host service role entry point {0} running", entryPoint.FullName);
             }
             catch (Exception ex)
             {
-                Log.Information("Worker host service errored with exception: ", ex.Message);
+                Trace.TraceError("Worker host service errored with exception: {0}", ex.Message);
                 throw;
             }
         }
@@ -72,7 +63,7 @@ namespace LightBlue.Hosts
         {
             _role.OnStop();
             _task.Dispose();
-            Log.Information("Worker host service disposed");
+            Trace.TraceInformation("Worker host service disposed");
         }
 
         public class Settings

@@ -28,6 +28,11 @@ namespace LightBlue.Standalone
             _lightBlueDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LightBlue" + Path.DirectorySeparatorChar);;
         }
 
+        public static void SetLightBlueDataDirectoryToProgramData()
+        {
+            LightBlueDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "LightBlue");
+        }
+
         public static BlobLocationParts SeparateBlobUri(Uri blobUri)
         {
             if (blobUri == null)

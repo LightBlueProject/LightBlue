@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using LightBlue.Infrastructure;
 using LightBlue.Standalone;
-using Serilog;
 
 namespace LightBlue.Hosts
 {
@@ -35,7 +34,7 @@ namespace LightBlue.Hosts
 
             ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(webConfig.FullName);
 
-            Log.Information("IISExpress removed azure trace listeners from web.config {WebConfig}", webConfig.FullName);
+            Trace.TraceInformation("IISExpress removed azure trace listeners from web.config {0}", webConfig.FullName);
         }
 
         private static DirectoryInfo CreateWorkingDirectory(WebHost.Settings settings)
@@ -43,7 +42,7 @@ namespace LightBlue.Hosts
             StandaloneEnvironment.LightBlueDataDirectory = @"c:\ProgramData\LightBlue";
             var processId = string.Format("{0}-iisexpress-{1}", settings.ServiceTitle, Process.GetCurrentProcess().Id);
             var directory = Directory.CreateDirectory(Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, processId));
-            Log.Information("IISExpress directory {IISExpressDirectory} created", directory.FullName);
+            Trace.TraceInformation("IISExpress directory {0} created", directory.FullName);
             return directory;
         }
 
@@ -57,7 +56,7 @@ namespace LightBlue.Hosts
             var applicationHost = Path.Combine(directory.FullName, "applicationhost.config");
             File.WriteAllText(applicationHost, template);
 
-            Log.Information("IISExpress Application host config file created {ApplicationHost}", applicationHost);
+            Trace.TraceInformation("IISExpress Application host config file created {0}", applicationHost);
 
             return applicationHost;
         }
@@ -83,7 +82,7 @@ namespace LightBlue.Hosts
 
             foreach (var env in environment)
             {
-                Log.Information("IISExpress environment variable {Name}={Variable}", env.Key, env.Value);
+                Trace.TraceInformation("IISExpress environment variable {0}={1}", env.Key, env.Value);
             }
             return environment;
         }

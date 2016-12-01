@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using Serilog;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace LightBlue.Hosts
 {
@@ -16,12 +16,7 @@ namespace LightBlue.Hosts
 
         public void Start()
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.LiterateConsole()
-                .WriteTo.RollingFile(@"c:\LightBlueLogs\" + _settings.ServiceTitle + "-{Date}.txt")
-                .CreateLogger();
-
-            Log.Information("Web host service directory {Directory}", Directory.GetCurrentDirectory());
+            Trace.TraceInformation("Web host service directory {0}", Directory.GetCurrentDirectory());
 
             try
             {
@@ -30,7 +25,7 @@ namespace LightBlue.Hosts
             }
             catch (Exception ex)
             {
-                Log.Information("Web host service errored with exception: ", ex.Message);
+                Trace.TraceError("Web host service errored with exception: {0}", ex.Message);
                 throw;
             }
         }
@@ -39,7 +34,7 @@ namespace LightBlue.Hosts
         {
             _iis.Dispose();
 
-            Log.Information("Web host service disposed");
+            Trace.TraceInformation("Web host service disposed");
         }
 
         public class Settings

@@ -57,11 +57,10 @@ namespace LightBlue.Setup
 
         public static string SetAsWindowsHost(string service, string cscfg, string csdef, string roleName)
         {
-            StandaloneEnvironment.LightBlueDataDirectory = @"c:\ProgramData\LightBlue";
-           
+            StandaloneEnvironment.SetLightBlueDataDirectoryToProgramData();
+
             var processId = string.Format("{0}-azurerole-{1}", service, Process.GetCurrentProcess().Id);
-            var path = Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, processId);
-            var directory = Directory.CreateDirectory(path);
+            var directory = Directory.CreateDirectory(Path.Combine(StandaloneEnvironment.LightBlueDataDirectory, processId));
             Environment.SetEnvironmentVariable("TMP", directory.FullName);
             Environment.SetEnvironmentVariable("TEMP", directory.FullName);
 
