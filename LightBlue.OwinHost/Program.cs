@@ -21,11 +21,11 @@ namespace LightBlue.OwinHost
 
                 var settings = WebHost.Settings.Load();
 
-                c.Service<OwinService>(s =>
+                c.Service<OwinService>(x =>
                 {
-                    s.ConstructUsing(() => new OwinService(settings));
-                    s.WhenStarted((service, control) => service.Start());
-                    s.WhenStopped((service, control) => service.Stop());
+                    x.ConstructUsing(() => new OwinService(settings));
+                    x.WhenStarted((sc, hc) => sc.Start());
+                    x.WhenStopped((sc, hc) => sc.Stop());
                 });
 
                 c.RunAsNetworkService();
@@ -40,16 +40,20 @@ namespace LightBlue.OwinHost
     internal class OwinService
     {
         private readonly WebHost.Settings _settings;
-        private IDisposable _host;
+        private readonly Uri _uri;
+        private IDisposable _server;
         private IContainer _container;
 
         public OwinService(WebHost.Settings settings)
         {
             _settings = settings;
+            _uri = new Uri(string.Format("https://{0}:{1}/", _settings.Host, _settings.Port));
         }
 
         public bool Start()
         {
+            Netsh.AddUrlAcl(_uri);
+
             Environment.SetEnvironmentVariable("LightBlueHost", "true");
             Environment.SetEnvironmentVariable("LightBlueConfigurationPath", _settings.Cscfg);
             Environment.SetEnvironmentVariable("LightBlueServiceDefinitionPath", _settings.Csdef);
@@ -58,28 +62,47 @@ namespace LightBlue.OwinHost
 
             Directory.SetCurrentDirectory(_settings.SiteDirectory);
 
-            var options = new StartOptions
-            {
-                Port = int.Parse(_settings.Port)
-            };
-
-            options.Urls.Add(new Uri(string.Format("https://{0}:{1}/", _settings.Host, options.Port)).AbsoluteUri);
-
             _container = CompositionRoot.CreateContainer();
 
             var starterFactory = _container.Resolve<IHostingStarterFactory>();
             var starter = starterFactory.Create("Domain");
-
-            _host = starter.Start(options);
+            var options = new StartOptions
+            {
+                Port = int.Parse(_settings.Port)
+            };
+            options.Urls.Add(_uri.AbsoluteUri);
+            _server = starter.Start(options);
 
             return true;
         }
 
         public bool Stop()
         {
-            _host.Dispose();
+            Netsh.DeleteUrlAcl(_uri);
+
+            _server.Dispose();
             _container.Dispose();
+
             return true;
+        }
+    }
+
+    internal class Netsh
+    {
+        public static void AddUrlAcl(Uri uri)
+        {
+            var netsh = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32\\netsh.exe");
+            var process = Process.Start(netsh, string.Format("http add urlacl url={0} user=\"NT AUTHORITY\\NetworkService\"", uri.OriginalString));
+            process.WaitForExit();
+            Trace.TraceInformation("Deleted Url ACL for Network Service {0} with exit code {1}", uri.AbsoluteUri, process.ExitCode);
+        }
+
+        public static void DeleteUrlAcl(Uri uri)
+        {
+            var netsh = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32\\netsh.exe");
+            var process = Process.Start(netsh, string.Format("http delete urlacl url={0}", uri.AbsoluteUri));
+            process.WaitForExit();
+            Trace.TraceInformation("Deleted Url ACL for Network Service {0} with exit code {1}", uri.AbsoluteUri, process.ExitCode);
         }
     }
 
