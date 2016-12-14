@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Autofac;
 using LightBlue.Hosts;
 using Microsoft.Owin.Hosting;
 using Microsoft.Owin.Hosting.Services;
 using Microsoft.Owin.Hosting.Starter;
-using Microsoft.Owin.Logging;
 using Topshelf;
 using Topshelf.Logging;
 
@@ -15,15 +13,13 @@ namespace LightBlue.OwinHost
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            var settings = WebHost.Settings.Load();
-
-            HostFactory.Run(c =>
+            return (int)HostFactory.Run(c =>
             {
                 Trace.Listeners.Add(new TopshelfConsoleTraceListener());
 
-                c.RunAsNetworkService();
+                var settings = WebHost.Settings.Load();
 
                 c.Service<OwinService>(s =>
                 {
@@ -31,6 +27,12 @@ namespace LightBlue.OwinHost
                     s.WhenStarted((service, control) => service.Start());
                     s.WhenStopped((service, control) => service.Stop());
                 });
+
+                c.RunAsNetworkService();
+                c.SetDescription(string.Format("LightBlue {0} Owin Host Windows Service", settings.ServiceTitle));
+                c.SetDisplayName(settings.ServiceTitle + " Service");
+                c.SetServiceName(settings.ServiceTitle);
+                c.StartManually();
             });
         }
     }
@@ -40,7 +42,6 @@ namespace LightBlue.OwinHost
         private readonly WebHost.Settings _settings;
         private IDisposable _host;
         private IContainer _container;
-        private Uri _uri;
 
         public OwinService(WebHost.Settings settings)
         {
@@ -49,15 +50,6 @@ namespace LightBlue.OwinHost
 
         public bool Start()
         {
-            var port = int.Parse(_settings.Port);
-            var range = Enumerable.Range(44300, 44399);
-            if (range.All(x => x != port))
-            {
-                throw new InvalidOperationException("Port number outside of SSL range");
-            }
-
-            _uri = new Uri(string.Format("https://{0}:{1}/", _settings.Host, port));
-
             Environment.SetEnvironmentVariable("LightBlueHost", "true");
             Environment.SetEnvironmentVariable("LightBlueConfigurationPath", _settings.Cscfg);
             Environment.SetEnvironmentVariable("LightBlueServiceDefinitionPath", _settings.Csdef);
@@ -68,10 +60,10 @@ namespace LightBlue.OwinHost
 
             var options = new StartOptions
             {
-                Port = port
+                Port = int.Parse(_settings.Port)
             };
 
-            options.Urls.Add(_uri.AbsoluteUri);
+            options.Urls.Add(new Uri(string.Format("https://{0}:{1}/", _settings.Host, options.Port)).AbsoluteUri);
 
             _container = CompositionRoot.CreateContainer();
 
@@ -103,7 +95,7 @@ namespace LightBlue.OwinHost
         }
     }
 
-    public class ServiceProvider : IServiceProvider
+    internal class ServiceProvider : IServiceProvider
     {
         private readonly IComponentContext _componentContext;
 
