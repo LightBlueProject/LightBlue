@@ -92,9 +92,9 @@ namespace LightBlue.OwinHost
         public static void AddUrlAcl(Uri uri)
         {
             var netsh = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32\\netsh.exe");
-            var process = Process.Start(netsh, string.Format("http add urlacl url={0} user=\"NT AUTHORITY\\NetworkService\"", uri.OriginalString));
+            var process = Process.Start(netsh, string.Format("http add urlacl url={0} user=Everyone", uri.OriginalString));
             process.WaitForExit();
-            Trace.TraceInformation("Added Url ACL for Network Service {0} with exit code {1}", uri.AbsoluteUri, process.ExitCode);
+            Trace.TraceInformation("Added Url ACL for Everyone {0} with exit code {1}", uri.AbsoluteUri, process.ExitCode);
         }
 
         public static void DeleteUrlAcl(Uri uri)
@@ -102,7 +102,7 @@ namespace LightBlue.OwinHost
             var netsh = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32\\netsh.exe");
             var process = Process.Start(netsh, string.Format("http delete urlacl url={0}", uri.AbsoluteUri));
             process.WaitForExit();
-            Trace.TraceInformation("Deleted Url ACL for Network Service {0} with exit code {1}", uri.AbsoluteUri, process.ExitCode);
+            Trace.TraceInformation("Deleted Url ACL for Everyone {0} with exit code {1}", uri.AbsoluteUri, process.ExitCode);
         }
     }
 
