@@ -26,7 +26,12 @@ namespace LightBlue.WebService
                 x.SetDescription(string.Format("LightBlue {0} WebRole Windows Service", settings.ServiceTitle));
                 x.SetDisplayName(settings.ServiceTitle + " Service");
                 x.SetServiceName(settings.ServiceTitle);
-                x.StartManually();
+                x.StartAutomatically();
+                x.EnableShutdown();
+                x.EnableServiceRecovery(rc =>
+                {
+                    rc.RestartService(1);
+                });
             });
         }
     }
