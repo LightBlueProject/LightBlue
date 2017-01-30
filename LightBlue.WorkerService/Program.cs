@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using LightBlue.Hosts;
 using Topshelf;
 using Topshelf.Logging;
 
@@ -13,12 +12,12 @@ namespace LightBlue.WorkerService
             {
                 Trace.Listeners.Add(new TopshelfConsoleTraceListener());
 
-                var settings = WorkerHost.Settings.Load();
+                var settings = Settings.Load();
 
                 x.Service<WorkerHost>(service =>
                 {
                     service.ConstructUsing(s => new WorkerHost(settings));
-                    service.WhenStarted(s => s.Start());
+                    service.WhenStarted((s, hc) => s.Start(hc));
                     service.WhenStopped(s => s.Stop());
                 });
 
@@ -26,7 +25,12 @@ namespace LightBlue.WorkerService
                 x.SetDescription(string.Format("LightBlue {0} WorkerRole Windows Service", settings.ServiceTitle));
                 x.SetDisplayName(settings.ServiceTitle + " Service");
                 x.SetServiceName(settings.ServiceTitle);
-                x.StartManually();
+                x.StartAutomatically();
+                x.EnableShutdown();
+                x.EnableServiceRecovery(rc =>
+                {
+                    rc.RestartService(1);
+                });
             });
         }
     }

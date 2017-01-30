@@ -165,7 +165,6 @@
     <Compile Include="Standalone\UriExtensions.cs" />
     <Compile Include="Standalone\FileLockExtensions.cs" />
     <Compile Include="Hosts\WebHost.cs" />
-    <Compile Include="Hosts\WorkerHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Hosts\Resources.resx">
