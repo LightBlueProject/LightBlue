@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.ServiceRuntime;
+﻿using Microsoft.WindowsAzure;
+
 
 namespace LightBlue.Hosted
 {
@@ -6,7 +7,7 @@ namespace LightBlue.Hosted
     {
         public string this[string index]
         {
-            get { return RoleEnvironment.GetConfigurationSettingValue(index); }
+            get { return CloudConfigurationManager.GetSetting(index); }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.ServiceRuntime;
+﻿using LightBlue.Standalone;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Hosted
 {
@@ -6,7 +7,10 @@ namespace LightBlue.Hosted
     {
         public IAzureLocalResource this[string index]
         {
-            get { return new HostedAzureLocalResource(RoleEnvironment.GetLocalResource(index)); }
+            get
+            {
+             return new HostedAzureLocalResource(RoleEnvironment.GetLocalResource(index));
+            }
         }
     }
 }

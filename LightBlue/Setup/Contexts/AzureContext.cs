@@ -1,4 +1,5 @@
-﻿using LightBlue.Hosted;
+﻿using System;
+using LightBlue.Hosted;
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Setup.Contexts
@@ -10,11 +11,11 @@ namespace LightBlue.Setup.Contexts
         private readonly HostedAzureLocalResourceSource _localResources;
 
         public AzureContext()
-            : base(RoleEnvironment.IsEmulated
+            : base(RoleEnvironment.IsAvailable && RoleEnvironment.IsEmulated
                 ? AzureEnvironment.Emulator
                 : AzureEnvironment.ActualAzure)
         {
-            _roleName = RoleEnvironment.CurrentRoleInstance.Role.Name;
+            _roleName = (RoleEnvironment.IsAvailable) ? RoleEnvironment.CurrentRoleInstance.Role.Name : String.Empty;
             _settings = new HostedAzureSettings();
             _localResources = new HostedAzureLocalResourceSource();
         }
