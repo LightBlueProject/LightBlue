@@ -9,13 +9,7 @@ namespace LightBlue.Hosted
         {
             get
             {
-                if (RoleEnvironment.IsAvailable)
-                {
-                    return new HostedAzureLocalResource(RoleEnvironment.GetLocalResource(index));
-                }
-            
-                return new StandaloneAzureLocalResource();
-             
+             return new HostedAzureLocalResource(RoleEnvironment.GetLocalResource(index));
             }
         }
     }
