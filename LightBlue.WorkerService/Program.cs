@@ -29,7 +29,9 @@ namespace LightBlue.WorkerService
                 x.EnableShutdown();
                 x.EnableServiceRecovery(rc =>
                 {
-                    rc.RestartService(1);
+                    rc.RestartService(0); // first failure
+                    rc.RestartService(0); // second failure
+                    rc.RestartService(0); // subsequent failures
                 });
             });
         }
