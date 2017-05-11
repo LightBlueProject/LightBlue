@@ -54,11 +54,11 @@ namespace LightBlue.WorkerService
                 try
                 {
                     _role.Run();
+                    Environment.Exit(0);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Trace.TraceError("Worker host service errored with exception: {0}", ex);
-                    _hostControl.Restart();
+                    Environment.Exit(1);
                 }
             });
 
