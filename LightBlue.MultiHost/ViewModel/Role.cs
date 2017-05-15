@@ -18,6 +18,7 @@ namespace LightBlue.MultiHost.ViewModel
     {
         private static readonly ConcurrentDictionary<Tuple<string, SolidColorBrush>, ImageSource> ImageCache = new ConcurrentDictionary<Tuple<string, SolidColorBrush>, ImageSource>();
 
+        public event EventHandler<EventArgs> RoleCrashed;
         public event EventHandler<EventArgs> RolePanic;
 
         public RoleStatus Status { get { return State.Status; } }
@@ -133,7 +134,16 @@ namespace LightBlue.MultiHost.ViewModel
         public void Crashed()
         {
             State.Crashed();
+            OnCrashed();
             NotificationHub.Notify(Config.Title, "This role has crashed and will be recycled", OnPanic);
+        }
+
+        private void OnCrashed()
+        {
+            if (RoleCrashed != null)
+            {
+                RoleCrashed(this, EventArgs.Empty);
+            }
         }
 
         private void OnPanic()
