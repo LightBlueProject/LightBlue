@@ -13,10 +13,6 @@ namespace LightBlue.Standalone
             {
                 throw new ArgumentNullException("results");
             }
-            if (continuationToken == null)
-            {
-                throw new ArgumentNullException("continuationToken");
-            }
             Results = results;
             ContinuationToken = continuationToken;
         }

@@ -59,10 +59,12 @@ namespace LightBlue.Standalone
 
             var resultSegment = new StandaloneAzureBlobResultSegment(
                 files,
-                new BlobContinuationToken
-                {
-                    NextMarker = DetermineNextMarker(numberToSkip, files.Count)
-                });
+                files.Any() 
+                    ? new BlobContinuationToken
+                    {
+                        NextMarker = DetermineNextMarker(numberToSkip, files.Count)
+                    }
+                    : null);
             return resultSegment;
         }
 
@@ -90,10 +92,12 @@ namespace LightBlue.Standalone
 
             var resultSegment = new StandaloneAzureBlobResultSegment(
                 combined,
-                new BlobContinuationToken
-                {
-                    NextMarker = DetermineNextMarker(numberToSkip, combined.Count)
-                });
+                combined.Any()
+                    ? new BlobContinuationToken
+                    {
+                        NextMarker = DetermineNextMarker(numberToSkip, combined.Count)
+                    }
+                    : null);
             return resultSegment;
         }
 
