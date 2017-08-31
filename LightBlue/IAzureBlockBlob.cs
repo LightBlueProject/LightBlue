@@ -20,6 +20,7 @@ namespace LightBlue
         Task<bool> ExistsAsync();
         void FetchAttributes();
         Task FetchAttributesAsync();
+        Stream OpenRead();
         void SetMetadata();
         Task SetMetadataAsync();
         void SetProperties();

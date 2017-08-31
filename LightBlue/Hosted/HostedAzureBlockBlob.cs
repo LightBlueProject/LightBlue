@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -89,6 +88,11 @@ namespace LightBlue.Hosted
         public Task FetchAttributesAsync()
         {
             return _cloudBlockBlob.FetchAttributesAsync();
+        }
+
+        public Stream OpenRead()
+        {
+            return _cloudBlockBlob.OpenRead();
         }
 
         public void SetMetadata()
