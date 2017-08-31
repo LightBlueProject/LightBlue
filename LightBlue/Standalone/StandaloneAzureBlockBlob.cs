@@ -120,6 +120,11 @@ namespace LightBlue.Standalone
             return Task.FromResult(new object());
         }
 
+        public Stream OpenRead()
+        {
+            return new FileStream(_blobPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, BufferSize, true);
+        }
+
         public void SetMetadata()
         {
             EnsureBlobFileExists();
