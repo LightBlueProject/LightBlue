@@ -37,6 +37,14 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TestWebRoleApi\TestWebRoleApi.csproj">
+      <Name>TestWebRoleApi</Name>
+      <Project>{977bc078-6c67-4036-9934-f76ba3f257bf}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>TestWebRoleApi</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\TestWebRole\TestWebRole.csproj">
       <Name>TestWebRole</Name>
       <Project>{20aaaca5-ff0d-4a4f-b6b7-5dfd1f950c47}</Project>
@@ -63,11 +71,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="TestWebRoleApiContent\" />
     <Folder Include="TestWebRoleContent\" />
     <Folder Include="TestWindsorRoleContent\" />
     <Folder Include="TestWorkerRoleContent\" />
   </ItemGroup>
   <ItemGroup>
+    <DiagnosticsConfiguration Include="TestWebRoleApiContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="TestWebRoleContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="TestWindsorRoleContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="TestWorkerRoleContent\diagnostics.wadcfgx" />

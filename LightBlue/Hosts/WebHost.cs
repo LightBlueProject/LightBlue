@@ -57,12 +57,12 @@ namespace LightBlue.Hosts
             {
                 var settings = new Settings
                 {
-                    Assembly = ConfigurationManager.AppSettings["Assembly"],
+                    Assembly = ToAbsolutePath(ConfigurationManager.AppSettings["Assembly"]),
                     Port = ConfigurationManager.AppSettings["Port"],
                     RoleName = ConfigurationManager.AppSettings["RoleName"],
                     ServiceTitle = ConfigurationManager.AppSettings["ServiceTitle"],
-                    Cscfg = ConfigurationManager.AppSettings["Cscfg"],
-                    Csdef = ConfigurationManager.AppSettings["Csdef"],
+                    Cscfg = ToAbsolutePath(ConfigurationManager.AppSettings["Cscfg"]),
+                    Csdef = ToAbsolutePath(ConfigurationManager.AppSettings["Csdef"]),
                     UseSSL = bool.Parse(ConfigurationManager.AppSettings["UseSSL"]),
                     Host = ConfigurationManager.AppSettings["Host"]
                 };
@@ -79,16 +79,17 @@ namespace LightBlue.Hosts
                 if (string.IsNullOrWhiteSpace(settings.Host))
                     throw new InvalidOperationException("The hostname cannot be blank. Do not specify this option if you wish to use the default (localhost).");
 
-                var absoluteAssemblyPath = Path.IsPathRooted(settings.Assembly)
-                    ? settings.Assembly
-                    : Path.Combine(Environment.CurrentDirectory, settings.Assembly);
-
-                if (!File.Exists(absoluteAssemblyPath))
-                    throw new InvalidOperationException("The specified site assembly cannot be found.");
-
-                settings.Assembly = absoluteAssemblyPath;
-
                 return settings;
+            }
+
+            private static string ToAbsolutePath(string path)
+            {
+                var absolutePath = Path.IsPathRooted(path)
+                    ? path
+                    : Path.Combine(Environment.CurrentDirectory, path);
+                if (!File.Exists(absolutePath))
+                    throw new FileNotFoundException("File not found at path " + absolutePath);
+                return absolutePath;
             }
         }
     }
