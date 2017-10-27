@@ -44,7 +44,6 @@ namespace LightBlue.Hosts
             public string RoleName { get; set; }
             public string ServiceTitle { get; set; }
             public string ConfigurationPath { get; set; }
-            public string Csdef { get; set; }
             public bool UseSSL { get; set; }
             public string Host { get; set; }
 
@@ -61,8 +60,7 @@ namespace LightBlue.Hosts
                     Port = ConfigurationManager.AppSettings["Port"],
                     RoleName = ConfigurationManager.AppSettings["RoleName"],
                     ServiceTitle = ConfigurationManager.AppSettings["ServiceTitle"],
-                    ConfigurationPath = ConfigurationManager.AppSettings["ConfigurationPath"], // prob want to update this
-                    Csdef = ConfigurationManager.AppSettings["Csdef"],
+                    ConfigurationPath = ConfigurationManager.AppSettings["ConfigurationPath"],
                     UseSSL = bool.Parse(ConfigurationManager.AppSettings["UseSSL"]),
                     Host = ConfigurationManager.AppSettings["Host"]
                 };

@@ -51,9 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LightBlue\Infrastructure\ConfigurationLocator.cs">
-      <Link>ConfigurationLocator.cs</Link>
-    </Compile>
     <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs">
       <Link>ExceptionExtensions.cs</Link>
     </Compile>

@@ -64,14 +64,9 @@ namespace LightBlue.Hosts
                 ? settings.ConfigurationPath
                 : Path.Combine(Environment.CurrentDirectory, settings.ConfigurationPath);
 
-            var csdef = Path.IsPathRooted(settings.Csdef)
-                ? settings.Csdef
-                : Path.Combine(Environment.CurrentDirectory, settings.Csdef);
-
             var environment = new Dictionary<string, string>();
             environment.Add("LightBlueHost", "true");
             environment.Add("LightBlueConfigurationPath", configurationPath);
-            environment.Add("LightBlueServiceDefinitionPath", csdef);
             environment.Add("LightBlueRoleName", settings.RoleName);
             environment.Add("LightBlueUseHostedStorage", "false");
             environment.Add("TMP", directory.FullName);

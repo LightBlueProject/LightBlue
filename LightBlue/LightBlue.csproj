@@ -116,7 +116,6 @@
     <Compile Include="IAzureStorage.cs" />
     <Compile Include="ILightBlueContext.cs" />
     <Compile Include="Infrastructure\CloudQueueMessageAccessorFactory.cs" />
-    <Compile Include="Infrastructure\ConfigurationLocator.cs" />
     <Compile Include="Infrastructure\ExceptionExtensions.cs" />
     <Compile Include="Infrastructure\HostRunner.cs" />
     <Compile Include="Infrastructure\NameValidation.cs" />

@@ -9,7 +9,6 @@ namespace LightBlue.MultiHost.IISExpress
         public string RoleName { get; set; }
         public string Title { get; set; }
         public string ConfigurationPath { get; set; }
-        public string ServiceDefinitionPath { get; set; }
         public bool UseSsl { get; set; }
         public string Hostname { get; set; }
         public bool UseHostedStorage { get; set; }

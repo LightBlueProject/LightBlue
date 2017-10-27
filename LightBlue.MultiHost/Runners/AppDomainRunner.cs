@@ -15,7 +15,6 @@ namespace LightBlue.MultiHost.Runners
         private readonly AppDomainSetup _appDomainSetup;
         private readonly string _assemblyFilePath;
         private readonly string _configurationFilePath;
-        private readonly string _serviceDefinitionFilePath;
         private readonly string _roleName;
         private readonly TaskCompletionSource<object> _started = new TaskCompletionSource<object>();
         private readonly TaskCompletionSource<object> _completed = new TaskCompletionSource<object>();
@@ -30,14 +29,12 @@ namespace LightBlue.MultiHost.Runners
             AppDomainSetup appDomainSetup,
             string assemblyPath,
             string configurationFilePath,
-            string serviceDefinitionFilePath,
             string roleName)
         {
             _role = role;
             _appDomainSetup = appDomainSetup;
             _assemblyFilePath = assemblyPath;
             _configurationFilePath = configurationFilePath;
-            _serviceDefinitionFilePath = serviceDefinitionFilePath;
             _roleName = roleName;
         }
 
@@ -69,7 +66,7 @@ namespace LightBlue.MultiHost.Runners
             {
                 _started.SetResult(new object());
                 _role.TraceWriteLine(Identifier, "Role started in app domain: " + _appDomain.Id + " by " + Thread.CurrentThread.Name);
-                _hostStub.Run(_assemblyFilePath, _configurationFilePath, _serviceDefinitionFilePath, _roleName, false);
+                _hostStub.Run(_assemblyFilePath, _configurationFilePath, _roleName, false);
             }
             catch (Exception ex)
             {

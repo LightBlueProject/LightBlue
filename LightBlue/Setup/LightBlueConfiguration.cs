@@ -55,7 +55,7 @@ namespace LightBlue.Setup
             _context = new LightBlueLogicalCallContext();
         }
 
-        public static string SetAsWindowsHost(string service, string configurationPath, string csdef, string roleName)
+        public static string SetAsWindowsHost(string service, string configurationPath, string roleName)
         {
             StandaloneEnvironment.SetLightBlueDataDirectoryToProgramData();
 
@@ -64,14 +64,13 @@ namespace LightBlue.Setup
             Environment.SetEnvironmentVariable("TMP", directory.FullName);
             Environment.SetEnvironmentVariable("TEMP", directory.FullName);
 
-            _context = new LightBlueAppDomainContext(configurationPath, csdef, roleName, false);
+            _context = new LightBlueAppDomainContext(configurationPath, roleName, false);
 
             return directory.FullName;
         }
 
         public static void SetAsLightBlue(
             string configurationPath,
-            string serviceDefinitionPath,
             string roleName,
             LightBlueHostType lightBlueHostType,
             bool useHostedStorage)
@@ -79,7 +78,7 @@ namespace LightBlue.Setup
             var logicalCallContext = _context as LightBlueLogicalCallContext;
             if (logicalCallContext != null)
             {
-                logicalCallContext.InitializeLogicalContext(configurationPath, serviceDefinitionPath, roleName, useHostedStorage);
+                logicalCallContext.InitializeLogicalContext(configurationPath, roleName, useHostedStorage);
                 return;
             }
 
@@ -88,7 +87,7 @@ namespace LightBlue.Setup
                 throw new InvalidOperationException("LightBlue has already been initialised and cannot be reconfigured");
             }
 
-            _context = new LightBlueAppDomainContext(configurationPath, serviceDefinitionPath, roleName, useHostedStorage);
+            _context = new LightBlueAppDomainContext(configurationPath, roleName, useHostedStorage);
 
             if (lightBlueHostType == LightBlueHostType.Direct)
             {
@@ -121,7 +120,6 @@ namespace LightBlue.Setup
             {
                 SetAsLightBlue(
                     configurationPath: Environment.GetEnvironmentVariable("LightBlueConfigurationPath"),
-                    serviceDefinitionPath: Environment.GetEnvironmentVariable("LightBlueServiceDefinitionPath"),
                     roleName: Environment.GetEnvironmentVariable("LightBlueRoleName"),
                     lightBlueHostType: LightBlueHostType.Indirect,
                     useHostedStorage: Boolean.Parse(Environment.GetEnvironmentVariable("LightBlueUseHostedStorage")));

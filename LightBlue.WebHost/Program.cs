@@ -29,7 +29,6 @@ namespace LightBlue.WebHost
 
                 host.Run(webHostArgs.Assembly,
                     webHostArgs.ConfigurationPath,
-                    webHostArgs.ServiceDefinitionPath,
                     webHostArgs.RoleName,
                     webHostArgs.UseHostedStorage);
             }

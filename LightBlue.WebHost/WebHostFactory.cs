@@ -132,7 +132,6 @@ namespace LightBlue.WebHost
 
             processStartInfo.EnvironmentVariables.Add("LightBlueHost", "true");
             processStartInfo.EnvironmentVariables.Add("LightBlueConfigurationPath", webHostArgs.ConfigurationPath);
-            processStartInfo.EnvironmentVariables.Add("LightBlueServiceDefinitionPath", webHostArgs.ServiceDefinitionPath);
             processStartInfo.EnvironmentVariables.Add("LightBlueRoleName", webHostArgs.RoleName);
             processStartInfo.EnvironmentVariables.Add("LightBlueUseHostedStorage", webHostArgs.UseHostedStorage.ToString());
 

@@ -16,7 +16,6 @@ namespace LightBlue.MultiHost.Runners
         private readonly Role _role;
         private readonly string _assemblyFilePath;
         private readonly string _configurationFilePath;
-        private readonly string _serviceDefinitionFilePath;
         private readonly string _roleName;
         private readonly TaskCompletionSource<object> _started = new TaskCompletionSource<object>();
         private readonly TaskCompletionSource<object> _completed = new TaskCompletionSource<object>();
@@ -32,13 +31,11 @@ namespace LightBlue.MultiHost.Runners
         public ThreadRunner(Role role,
             string assemblyPath,
             string configurationFilePath,
-            string serviceDefinitionFilePath,
             string roleName)
         {
             _role = role;
             _assemblyFilePath = assemblyPath;
             _configurationFilePath = configurationFilePath;
-            _serviceDefinitionFilePath = serviceDefinitionFilePath;
             _roleName = roleName;
         }
 
@@ -93,7 +90,6 @@ namespace LightBlue.MultiHost.Runners
             public void Run(
                 string workerRoleAssembly,
                 string configurationPath,
-                string serviceDefinitionPath,
                 string roleName,
                 bool useHostedStorage)
             {
@@ -117,7 +113,7 @@ namespace LightBlue.MultiHost.Runners
                 }
 
                 var runner = new HostRunner();
-                runner.Run(workerRoleAssembly, configurationPath, serviceDefinitionPath, roleName, useHostedStorage);
+                runner.Run(workerRoleAssembly, configurationPath, roleName, useHostedStorage);
             }
 
             public void RequestShutdown()
@@ -156,7 +152,7 @@ namespace LightBlue.MultiHost.Runners
             {
                 _started.SetResult(new object());
                 _role.TraceWriteLine(Identifier, "Role started in thread: " + Thread.CurrentThread.ManagedThreadId + " : " + Thread.CurrentThread.Name);
-                _hostStub.Run(_assemblyFilePath, _configurationFilePath, _serviceDefinitionFilePath, _roleName, false);
+                _hostStub.Run(_assemblyFilePath, _configurationFilePath, _roleName, false);
             }
             catch (Exception ex)
             {

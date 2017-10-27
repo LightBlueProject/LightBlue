@@ -21,7 +21,7 @@ namespace LightBlue.Tests.Standalone
         {
             _standaloneConfiguration = new StandaloneConfiguration
             {
-                ServiceDefinitionPath = "ServiceDefinition.csdef",
+                //ServiceDefinitionPath = "ServiceDefinition.csdef",
                 RoleName = "TestWebRole"
             };
         }
@@ -72,7 +72,7 @@ namespace LightBlue.Tests.Standalone
         {
             Assert.DoesNotThrow(() => new StandaloneAzureLocalResourceSource(new StandaloneConfiguration
             {
-                ServiceDefinitionPath = "ServiceDefinition.csdef",
+                //ServiceDefinitionPath = "ServiceDefinition.csdef",
                 RoleName = "TestWorkerRole"
             }, 
             BasePath));

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
-using LightBlue.Infrastructure;
-
 using NDesk.Options;
 
 namespace LightBlue.Host
@@ -15,7 +12,6 @@ namespace LightBlue.Host
         public string Title { get; private set; }
         public string RoleConfigurationFile { get; private set; }
         public string ConfigurationPath { get; private set; }
-        public string ServiceDefinitionPath { get; private set; }
         public bool UseHostedStorage { get; private set; }
         public bool AllowSilentFail { get; private set; }
         public string ApplicationBase { get { return Path.GetDirectoryName(Assembly); } }
@@ -126,7 +122,6 @@ namespace LightBlue.Host
                     ? roleName
                     : title,
                 ConfigurationPath = roleConfigurationFile,
-                ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
                 UseHostedStorage = useHostedStorage,
                 AllowSilentFail = allowSilentFail,
                 RoleConfigurationFile = roleConfigurationFile

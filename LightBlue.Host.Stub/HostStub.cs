@@ -2,9 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace LightBlue.Host.Stub
 {
@@ -28,7 +26,6 @@ namespace LightBlue.Host.Stub
         public void Run(
             string workerRoleAssembly,
             string configurationPath,
-            string serviceDefinitionPath,
             string roleName,
             bool useHostedStorage)
         {
@@ -56,7 +53,7 @@ namespace LightBlue.Host.Stub
             }
 
             var runner = Activator.CreateInstance(runnerType);
-            runMethod.Invoke(runner, new object[] { workerRoleAssembly, configurationPath, serviceDefinitionPath, roleName, useHostedStorage });
+            runMethod.Invoke(runner, new object[] { workerRoleAssembly, configurationPath, roleName, useHostedStorage });
         }
         
         public void RequestShutdown()

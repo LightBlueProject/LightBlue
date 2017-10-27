@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LightBlue.Infrastructure;
 using LightBlue.MultiHost.IISExpress;
 using LightBlue.MultiHost.ViewModel;
 
@@ -67,14 +66,14 @@ namespace LightBlue.MultiHost.Runners
             switch (isolation)
             {
                 case RoleIsolationMode.Thread:
-                    return new ThreadRunner(role, args.Assembly, args.ConfigurationPath, args.ServiceDefinitionPath, args.RoleName);
+                    return new ThreadRunner(role, args.Assembly, args.ConfigurationPath, args.RoleName);
                 case RoleIsolationMode.AppDomain:
                     var setup = new AppDomainSetup
                     {
                         ApplicationBase = args.SiteBinDirectory,
                         ConfigurationFile = WebConfigHelper.DetermineWebConfigPath(args.Assembly)
                     };
-                    return new AppDomainRunner(role, setup, args.Assembly, args.ConfigurationPath, args.ServiceDefinitionPath, args.RoleName);
+                    return new AppDomainRunner(role, setup, args.Assembly, args.ConfigurationPath, args.RoleName);
                 default:
                     throw new NotSupportedException();
             }
@@ -83,9 +82,6 @@ namespace LightBlue.MultiHost.Runners
         public static IRunner CreateForWorkerRole(Role role, RoleIsolationMode isolation)
         {
             var config = role.Config;
-            var configurationPath = config.ConfigurationPath;
-            var configurationFilePath = ConfigurationLocator.LocateConfigurationFile(configurationPath);
-            var serviceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath);
 
             var assemblyFilePath = config.Assembly;
             var assemblyPath = Path.GetDirectoryName(assemblyFilePath);
@@ -99,14 +95,14 @@ namespace LightBlue.MultiHost.Runners
             switch (isolation)
             {
                 case RoleIsolationMode.Thread:
-                    return new ThreadRunner(role, assemblyFilePath, configurationFilePath, serviceDefinitionPath, role.RoleName);
+                    return new ThreadRunner(role, assemblyFilePath, config.ConfigurationPath, role.RoleName);
                 case RoleIsolationMode.AppDomain:
                     var setup = new AppDomainSetup
                     {
                         ApplicationBase = assemblyPath,
                         ConfigurationFile = config.Assembly + ".config",
                     };
-                    return new AppDomainRunner(role, setup, assemblyFilePath, configurationFilePath, serviceDefinitionPath, role.RoleName);
+                    return new AppDomainRunner(role, setup, assemblyFilePath, config.ConfigurationPath, role.RoleName);
                 default:
                     throw new NotSupportedException();
             }

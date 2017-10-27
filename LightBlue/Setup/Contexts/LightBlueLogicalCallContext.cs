@@ -24,14 +24,13 @@ namespace LightBlue.Setup.Contexts
             set { CallContext.LogicalSetData(Key, value); }
         }
 
-        public void InitializeLogicalContext(string configurationPath, string serviceDefinitionPath, string roleName, bool useHostedStorage)
+        public void InitializeLogicalContext(string configurationPath, string roleName, bool useHostedStorage)
         {
             if (IsInitialized()) throw new InvalidOperationException("Logical call context has already been initialized for this thread.");
 
             Config = new StandaloneConfiguration
             {
                 ConfigurationPath = configurationPath,
-                ServiceDefinitionPath = serviceDefinitionPath,
                 RoleName = roleName,
                 UseHostedStorage = useHostedStorage,
             };
