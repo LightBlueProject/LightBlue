@@ -139,7 +139,6 @@ namespace LightBlue.MultiHost.Runners
 
         private void StartInternal()
         {
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(_configurationFilePath);
             _hostStub = new HostStub2();
 
             if (LogicalCallContextTraceListener.IsInitialized)
@@ -200,8 +199,6 @@ namespace LightBlue.MultiHost.Runners
                     _role.TraceWriteLine(Identifier, "Could not abort thread: " + ex.Message);
                 }
             }
-
-            //Trace.Listeners.Remove(_traceListener);
         }
 
         public void CopyStubAssemblyToRoleDirectory(string applicationBase, Role role)

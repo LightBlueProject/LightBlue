@@ -26,7 +26,7 @@ namespace LightBlue.WorkerService
             _hostControl = hc;
 
             var hostDirectory = LightBlueConfiguration.SetAsWindowsHost(_settings.ServiceTitle,
-                _settings.Cscfg,
+                _settings.ConfigurationPath,
                 _settings.Csdef,
                 _settings.RoleName);
 

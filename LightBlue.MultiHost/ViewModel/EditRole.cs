@@ -46,8 +46,8 @@ namespace LightBlue.MultiHost.ViewModel
         {
             IOpenFileDialogService service = new OpenFileDialogService();
             RoleConfiguration.ConfigurationPath = service.OpenFileDialog(RoleConfiguration.ConfigurationPath,
-                "Choose service configuration",
-                "Service Configuration Files (.cscfg)|*.cscfg");
+                "Choose configuration file",
+                "Configuration Files (.config)|*.config");
         }
 
         public void SaveRoleConfiguration()

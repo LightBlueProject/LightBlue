@@ -55,7 +55,7 @@ namespace LightBlue.Setup
             _context = new LightBlueLogicalCallContext();
         }
 
-        public static string SetAsWindowsHost(string service, string cscfg, string csdef, string roleName)
+        public static string SetAsWindowsHost(string service, string configurationPath, string csdef, string roleName)
         {
             StandaloneEnvironment.SetLightBlueDataDirectoryToProgramData();
 
@@ -64,7 +64,7 @@ namespace LightBlue.Setup
             Environment.SetEnvironmentVariable("TMP", directory.FullName);
             Environment.SetEnvironmentVariable("TEMP", directory.FullName);
 
-            _context = new LightBlueAppDomainContext(cscfg, csdef, roleName, false);
+            _context = new LightBlueAppDomainContext(configurationPath, csdef, roleName, false);
 
             return directory.FullName;
         }

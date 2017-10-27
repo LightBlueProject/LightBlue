@@ -54,9 +54,6 @@
     <Compile Include="..\LightBlue\Infrastructure\ConfigurationLocator.cs">
       <Link>ConfigurationLocator.cs</Link>
     </Compile>
-    <Compile Include="..\LightBlue\Infrastructure\ConfigurationManipulation.cs">
-      <Link>ConfigurationManipulation.cs</Link>
-    </Compile>
     <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs">
       <Link>ExceptionExtensions.cs</Link>
     </Compile>

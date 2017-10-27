@@ -9,7 +9,7 @@ namespace LightBlue.WorkerService
         public string Assembly { get; set; }
         public string RoleName { get; set; }
         public string ServiceTitle { get; set; }
-        public string Cscfg { get; set; }
+        public string ConfigurationPath { get; set; }
         public string Csdef { get; set; }
 
         public static Settings Load()
@@ -19,7 +19,7 @@ namespace LightBlue.WorkerService
                 Assembly = ConfigurationManager.AppSettings["Assembly"],
                 RoleName = ConfigurationManager.AppSettings["RoleName"],
                 ServiceTitle = ConfigurationManager.AppSettings["ServiceTitle"],
-                Cscfg = ConfigurationManager.AppSettings["Cscfg"],
+                ConfigurationPath = ConfigurationManager.AppSettings["ConfigurationPath"],
                 Csdef = ConfigurationManager.AppSettings["Csdef"]
             };
 
@@ -29,8 +29,8 @@ namespace LightBlue.WorkerService
             if (String.IsNullOrWhiteSpace(settings.RoleName))
                 throw new InvalidOperationException("Role Name must be specified.");
 
-            if (String.IsNullOrWhiteSpace(settings.Cscfg))
-                throw new InvalidOperationException("Cscfg path must be specified.");
+            if (String.IsNullOrWhiteSpace(settings.ConfigurationPath))
+                throw new InvalidOperationException("Configuration path must be specified.");
 
             if (String.IsNullOrWhiteSpace(settings.Csdef))
                 throw new InvalidOperationException("Csdef path must be specified.");

@@ -49,7 +49,7 @@ namespace LightBlue.Host
                 },
                 {
                     "c|configurationPath=",
-                    "The {PATH} to the configuration file. Either the directory containing ServiceConfiguration.Local.cscfg or the path to a specific alternate .cscfg file.",
+                    "The {PATH} to the configuration file. Usually '<assemblyname>.dll.config'.",
                     v => configurationPath = v
                 },
                 {
@@ -125,7 +125,7 @@ namespace LightBlue.Host
                 Title = string.IsNullOrWhiteSpace(title)
                     ? roleName
                     : title,
-                ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
+                ConfigurationPath = roleConfigurationFile,
                 ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
                 UseHostedStorage = useHostedStorage,
                 AllowSilentFail = allowSilentFail,

@@ -36,8 +36,6 @@ namespace LightBlue.MultiHost.IISExpress
             {
                 throw new ArgumentException("No web.config could be located for the site");
             }
-
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(webConfigFilePath);
         }
 
         public static string DetermineWebConfigPath(string assemblyPath)

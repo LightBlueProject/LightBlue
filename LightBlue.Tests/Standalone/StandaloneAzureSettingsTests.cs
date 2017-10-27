@@ -14,8 +14,7 @@ namespace LightBlue.Tests.Standalone
         {
             _settings = new StandaloneAzureSettings(new StandaloneConfiguration
             {
-                ConfigurationPath = "ServiceConfiguration.Local.cscfg",
-                RoleName = "TestWorkerRole"
+                ConfigurationPath = "testservice.dll.config"
             });
         }
 
@@ -24,8 +23,7 @@ namespace LightBlue.Tests.Standalone
         {
             var settings = new StandaloneAzureSettings(new StandaloneConfiguration
             {
-                ConfigurationPath = "ServiceConfiguration.Local.cscfg",
-                RoleName = "TestWorkerRole"
+                ConfigurationPath = "testservice.dll.config"
             });
 
             Assert.Equal("Running locally", settings["RandomSetting"]);

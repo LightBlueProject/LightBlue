@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using LightBlue.Infrastructure;
 using LightBlue.Standalone;
 
 namespace LightBlue.Hosts
@@ -31,8 +30,6 @@ namespace LightBlue.Hosts
             var webConfig = new FileInfo(Path.Combine(settings.SiteDirectory, "web.config"));
             if (!webConfig.Exists)
                 throw new FileNotFoundException("Web.config file not found at " + webConfig.FullName);
-
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(webConfig.FullName);
 
             Trace.TraceInformation("IISExpress removed azure trace listeners from web.config {0}", webConfig.FullName);
         }
@@ -63,9 +60,9 @@ namespace LightBlue.Hosts
 
         private static Dictionary<string, string> CreateEnvironmentVariables(WebHost.Settings settings, DirectoryInfo directory)
         {
-            var cscfg = Path.IsPathRooted(settings.Cscfg)
-                ? settings.Cscfg
-                : Path.Combine(Environment.CurrentDirectory, settings.Cscfg);
+            var configurationPath = Path.IsPathRooted(settings.ConfigurationPath)
+                ? settings.ConfigurationPath
+                : Path.Combine(Environment.CurrentDirectory, settings.ConfigurationPath);
 
             var csdef = Path.IsPathRooted(settings.Csdef)
                 ? settings.Csdef
@@ -73,7 +70,7 @@ namespace LightBlue.Hosts
 
             var environment = new Dictionary<string, string>();
             environment.Add("LightBlueHost", "true");
-            environment.Add("LightBlueConfigurationPath", cscfg);
+            environment.Add("LightBlueConfigurationPath", configurationPath);
             environment.Add("LightBlueServiceDefinitionPath", csdef);
             environment.Add("LightBlueRoleName", settings.RoleName);
             environment.Add("LightBlueUseHostedStorage", "false");

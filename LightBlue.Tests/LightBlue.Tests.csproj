@@ -129,6 +129,9 @@
     </None>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="testservice.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LightBlue.Testability\LightBlue.Testability.csproj">

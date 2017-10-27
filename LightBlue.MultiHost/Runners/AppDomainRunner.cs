@@ -5,7 +5,6 @@ using System.Runtime.Remoting;
 using System.Threading;
 using System.Threading.Tasks;
 using LightBlue.Host.Stub;
-using LightBlue.Infrastructure;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost.Runners
@@ -52,7 +51,6 @@ namespace LightBlue.MultiHost.Runners
 
         private void StartInternal()
         {
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(_configurationFilePath);
             CopyStubAssemblyToRoleDirectory(_appDomainSetup.ApplicationBase, _role);
             _appDomain = AppDomain.CreateDomain("LightBlue", null, _appDomainSetup);
             _hostStub = (HostStub)_appDomain.CreateInstanceAndUnwrap(typeof(HostStub).Assembly.FullName, typeof(HostStub).FullName);
