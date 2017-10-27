@@ -118,14 +118,6 @@
     <Compile Include="Standalone\StandaloneEnvironmentFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\TestCloudService\ServiceConfiguration.Local.cscfg">
-      <Link>ServiceConfiguration.Local.cscfg</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\TestCloudService\ServiceDefinition.csdef">
-      <Link>ServiceDefinition.csdef</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="testservice.dll.config">
