@@ -13,9 +13,6 @@ namespace LightBlue.Autofac
             builder.RegisterInstance(LightBlueContext.AzureSettings)
                 .As<IAzureSettings>();
 
-            builder.RegisterInstance(LightBlueContext.AzureLocalResources)
-                .As<IAzureLocalResourceSource>();
-
             builder.RegisterInstance((Func<string, IAzureStorage>)LightBlueContext.GetStorageAccount)
                 .As<Func<string, IAzureStorage>>();
 

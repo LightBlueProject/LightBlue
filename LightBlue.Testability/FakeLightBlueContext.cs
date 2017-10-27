@@ -16,7 +16,6 @@ namespace LightBlue.Testability
 
         public string RoleName { get; set; }
         public IAzureSettings Settings { get; set; }
-        public IAzureLocalResourceSource LocalResources { get; set; }
         public AzureEnvironment AzureEnvironment { get; set; }
 
         public IAzureStorage GetStorageAccount(string connectionString)

@@ -45,10 +45,5 @@ namespace LightBlue.Setup.Contexts
         {
             get { return new StandaloneAzureSettings(Config); }
         }
-
-        public override IAzureLocalResourceSource LocalResources
-        {
-            get { return new StandaloneAzureLocalResourceSource(Config, StandaloneEnvironment.LightBlueDataDirectory); }
-        }
     }
 }

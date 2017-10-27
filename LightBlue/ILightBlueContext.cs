@@ -7,7 +7,6 @@ namespace LightBlue
     {
         string RoleName { get; }
         IAzureSettings Settings { get; }
-        IAzureLocalResourceSource LocalResources { get; }
         AzureEnvironment AzureEnvironment { get; }
         IAzureStorage GetStorageAccount(string connectionString);
         IAzureBlobContainer GetBlobContainer(Uri containerUri);
