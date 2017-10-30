@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using LightBlue.Infrastructure;
 using LightBlue.MultiHost.Configuration;
 
 namespace LightBlue.MultiHost.IISExpress
@@ -9,9 +8,6 @@ namespace LightBlue.MultiHost.IISExpress
     {
         public static WebHostArgs Create(RoleConfiguration config)
         {
-            var configurationPath = config.ConfigurationPath;
-            var configurationFilePath = ConfigurationLocator.LocateConfigurationFile(configurationPath);
-            var serviceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath);
             var assembly = config.Assembly;
             var args = new WebHostArgs
             {
@@ -19,8 +15,7 @@ namespace LightBlue.MultiHost.IISExpress
                 Port = int.Parse(config.Port),
                 RoleName = config.RoleName,
                 Title = config.Title,
-                ConfigurationPath = configurationFilePath,
-                ServiceDefinitionPath = serviceDefinitionPath,
+                ConfigurationPath = config.ConfigurationPath,
                 UseSsl = bool.Parse(config.UseSsl),
                 Hostname = config.Hostname,
                 UseHostedStorage = false,
@@ -36,8 +31,6 @@ namespace LightBlue.MultiHost.IISExpress
             {
                 throw new ArgumentException("No web.config could be located for the site");
             }
-
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(webConfigFilePath);
         }
 
         public static string DetermineWebConfigPath(string assemblyPath)

@@ -8,7 +8,6 @@ namespace LightBlue.Setup.Contexts
     {
         private readonly string _roleName;
         private readonly HostedAzureSettings _settings;
-        private readonly HostedAzureLocalResourceSource _localResources;
 
         public AzureContext()
             : base(RoleEnvironment.IsAvailable && RoleEnvironment.IsEmulated
@@ -17,7 +16,6 @@ namespace LightBlue.Setup.Contexts
         {
             _roleName = (RoleEnvironment.IsAvailable) ? RoleEnvironment.CurrentRoleInstance.Role.Name : String.Empty;
             _settings = new HostedAzureSettings();
-            _localResources = new HostedAzureLocalResourceSource();
         }
 
         public override string RoleName
@@ -28,11 +26,6 @@ namespace LightBlue.Setup.Contexts
         public override IAzureSettings Settings
         {
             get { return _settings; }
-        }
-
-        public override IAzureLocalResourceSource LocalResources
-        {
-            get { return _localResources; }
         }
     }
 }

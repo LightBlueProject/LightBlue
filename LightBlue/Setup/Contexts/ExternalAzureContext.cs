@@ -17,10 +17,5 @@ namespace LightBlue.Setup.Contexts
         {
             get { throw new NotSupportedException("Azure Settings are not supported in an external (non-hosted or emulated) environment."); }
         }
-
-        public override IAzureLocalResourceSource LocalResources
-        {
-            get { throw new NotSupportedException("Azure Local Resources are not supported in an external (non-hosted or emulated) environment."); }
-        }
     }
 }

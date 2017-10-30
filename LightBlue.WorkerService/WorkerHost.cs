@@ -26,8 +26,7 @@ namespace LightBlue.WorkerService
             _hostControl = hc;
 
             var hostDirectory = LightBlueConfiguration.SetAsWindowsHost(_settings.ServiceTitle,
-                _settings.Cscfg,
-                _settings.Csdef,
+                _settings.ConfigurationPath,
                 _settings.RoleName);
 
             Trace.TraceInformation("Worker host service LightBlue context created at directory {0}", hostDirectory);

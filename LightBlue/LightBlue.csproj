@@ -78,7 +78,6 @@
     <Compile Include="AzureEnvironment.cs" />
     <Compile Include="AzureEnvironmentSource.cs" />
     <Compile Include="BlobListing.cs" />
-    <Compile Include="External\ExternalAzureLocalResourceSource.cs" />
     <Compile Include="External\ExternalAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureBlobContainer.cs" />
     <Compile Include="Hosted\HostedAzureBlobDirectory.cs" />
@@ -87,8 +86,6 @@
     <Compile Include="Hosted\HostedAzureBlobStorageClient.cs" />
     <Compile Include="Hosted\HostedAzureBlockBlob.cs" />
     <Compile Include="Hosted\HostedAzureCopyState.cs" />
-    <Compile Include="Hosted\HostedAzureLocalResource.cs" />
-    <Compile Include="Hosted\HostedAzureLocalResourceSource.cs" />
     <Compile Include="Hosted\HostedAzurePageBlob.cs" />
     <Compile Include="Hosted\HostedAzureQueue.cs" />
     <Compile Include="Hosted\HostedAzureQueueStorageClient.cs" />
@@ -106,8 +103,6 @@
     <Compile Include="IAzureCopyState.cs" />
     <Compile Include="IAzureEnvironmentSource.cs" />
     <Compile Include="IAzureListBlobItem.cs" />
-    <Compile Include="IAzureLocalResource.cs" />
-    <Compile Include="IAzureLocalResourceSource.cs" />
     <Compile Include="IAzurePageBlob.cs" />
     <Compile Include="IAzureQueue.cs" />
     <Compile Include="IAzureQueueStorageClient.cs" />
@@ -116,8 +111,6 @@
     <Compile Include="IAzureStorage.cs" />
     <Compile Include="ILightBlueContext.cs" />
     <Compile Include="Infrastructure\CloudQueueMessageAccessorFactory.cs" />
-    <Compile Include="Infrastructure\ConfigurationLocator.cs" />
-    <Compile Include="Infrastructure\ConfigurationManipulation.cs" />
     <Compile Include="Infrastructure\ExceptionExtensions.cs" />
     <Compile Include="Infrastructure\HostRunner.cs" />
     <Compile Include="Infrastructure\NameValidation.cs" />
@@ -145,13 +138,11 @@
     <Compile Include="Standalone\BlobLocationParts.cs" />
     <Compile Include="Standalone\SharedAccessBlobPermissionsExtensions.cs" />
     <Compile Include="Standalone\StandaloneAzureCopyState.cs" />
-    <Compile Include="Standalone\StandaloneAzureLocalResource.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobContainer.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobDirectory.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobProperties.cs" />
     <Compile Include="Standalone\StandaloneAzureBlobResultSegment.cs" />
     <Compile Include="Standalone\StandaloneAzureBlockBlob.cs" />
-    <Compile Include="Standalone\StandaloneAzureLocalResourceSource.cs" />
     <Compile Include="Standalone\StandaloneAzureQueue.cs" />
     <Compile Include="Standalone\StandaloneAzureQueueStorageClient.cs" />
     <Compile Include="Standalone\StandaloneAzureRoleInformation.cs" />

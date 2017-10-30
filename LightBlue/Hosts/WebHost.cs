@@ -43,8 +43,7 @@ namespace LightBlue.Hosts
             public string Port { get; set; }
             public string RoleName { get; set; }
             public string ServiceTitle { get; set; }
-            public string Cscfg { get; set; }
-            public string Csdef { get; set; }
+            public string ConfigurationPath { get; set; }
             public bool UseSSL { get; set; }
             public string Host { get; set; }
 
@@ -61,8 +60,7 @@ namespace LightBlue.Hosts
                     Port = ConfigurationManager.AppSettings["Port"],
                     RoleName = ConfigurationManager.AppSettings["RoleName"],
                     ServiceTitle = ConfigurationManager.AppSettings["ServiceTitle"],
-                    Cscfg = ConfigurationManager.AppSettings["Cscfg"],
-                    Csdef = ConfigurationManager.AppSettings["Csdef"],
+                    ConfigurationPath = ConfigurationManager.AppSettings["ConfigurationPath"],
                     UseSSL = bool.Parse(ConfigurationManager.AppSettings["UseSSL"]),
                     Host = ConfigurationManager.AppSettings["Host"]
                 };
@@ -73,7 +71,7 @@ namespace LightBlue.Hosts
                 if (string.IsNullOrWhiteSpace(settings.RoleName))
                     throw new InvalidOperationException("Role Name must be specified.");
 
-                if (string.IsNullOrWhiteSpace(settings.Cscfg))
+                if (string.IsNullOrWhiteSpace(settings.ConfigurationPath))
                     throw new InvalidOperationException("Configuration path must be specified.");
 
                 if (string.IsNullOrWhiteSpace(settings.Host))

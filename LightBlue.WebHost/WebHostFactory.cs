@@ -5,7 +5,6 @@ using System.IO;
 using System.Reflection;
 using LightBlue.Host;
 using LightBlue.Host.Stub;
-using LightBlue.Infrastructure;
 
 namespace LightBlue.WebHost
 {
@@ -25,8 +24,6 @@ namespace LightBlue.WebHost
             {
                 throw new ArgumentException("No web.config could be located for the site");
             }
-
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(webConfigFilePath);
         }
 
         private static void RunWebSite(WebHostArgs webHostArgs)
@@ -135,7 +132,6 @@ namespace LightBlue.WebHost
 
             processStartInfo.EnvironmentVariables.Add("LightBlueHost", "true");
             processStartInfo.EnvironmentVariables.Add("LightBlueConfigurationPath", webHostArgs.ConfigurationPath);
-            processStartInfo.EnvironmentVariables.Add("LightBlueServiceDefinitionPath", webHostArgs.ServiceDefinitionPath);
             processStartInfo.EnvironmentVariables.Add("LightBlueRoleName", webHostArgs.RoleName);
             processStartInfo.EnvironmentVariables.Add("LightBlueUseHostedStorage", webHostArgs.UseHostedStorage.ToString());
 

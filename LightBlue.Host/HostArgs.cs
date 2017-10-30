@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
-using LightBlue.Infrastructure;
-
 using NDesk.Options;
 
 namespace LightBlue.Host
@@ -15,7 +12,6 @@ namespace LightBlue.Host
         public string Title { get; private set; }
         public string RoleConfigurationFile { get; private set; }
         public string ConfigurationPath { get; private set; }
-        public string ServiceDefinitionPath { get; private set; }
         public bool UseHostedStorage { get; private set; }
         public bool AllowSilentFail { get; private set; }
         public string ApplicationBase { get { return Path.GetDirectoryName(Assembly); } }
@@ -49,7 +45,7 @@ namespace LightBlue.Host
                 },
                 {
                     "c|configurationPath=",
-                    "The {PATH} to the configuration file. Either the directory containing ServiceConfiguration.Local.cscfg or the path to a specific alternate .cscfg file.",
+                    "The {PATH} to the configuration file. Usually '<assemblyname>.dll.config'.",
                     v => configurationPath = v
                 },
                 {
@@ -125,8 +121,7 @@ namespace LightBlue.Host
                 Title = string.IsNullOrWhiteSpace(title)
                     ? roleName
                     : title,
-                ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
-                ServiceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath),
+                ConfigurationPath = roleConfigurationFile,
                 UseHostedStorage = useHostedStorage,
                 AllowSilentFail = allowSilentFail,
                 RoleConfigurationFile = roleConfigurationFile

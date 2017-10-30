@@ -17,10 +17,6 @@ namespace LightBlue.Windsor
                     .Instance(LightBlueContext.AzureSettings));
 
             container.Register(
-                Component.For<IAzureLocalResourceSource>()
-                    .Instance(LightBlueContext.AzureLocalResources));
-
-            container.Register(
                 Component.For<Func<string, IAzureStorage>>()
                     .Instance(LightBlueContext.GetStorageAccount));
 

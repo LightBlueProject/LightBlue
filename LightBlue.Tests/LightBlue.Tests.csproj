@@ -111,7 +111,6 @@
     <Compile Include="Standalone\QueueStorage\GetMessageTests.cs" />
     <Compile Include="Standalone\QueueStorage\StandaloneAzureQueueStorageClientListTests.cs" />
     <Compile Include="Standalone\QueueStorage\StandaloneAzureQueueTests.cs" />
-    <Compile Include="Standalone\StandaloneAzureLocalResourceSourceTests.cs" />
     <Compile Include="Standalone\QueueStorage\StandaloneAzureQueueStorageClientTests.cs" />
     <Compile Include="Standalone\StandaloneAzureSettingsTests.cs" />
     <Compile Include="Standalone\StandaloneAzureTestsBase.cs" />
@@ -119,16 +118,11 @@
     <Compile Include="Standalone\StandaloneEnvironmentFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\TestCloudService\ServiceConfiguration.Local.cscfg">
-      <Link>ServiceConfiguration.Local.cscfg</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\TestCloudService\ServiceDefinition.csdef">
-      <Link>ServiceDefinition.csdef</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="testservice.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LightBlue.Testability\LightBlue.Testability.csproj">

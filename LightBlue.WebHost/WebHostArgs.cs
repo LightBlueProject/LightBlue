@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using LightBlue.Infrastructure;
 using NDesk.Options;
 
 namespace LightBlue.WebHost
@@ -16,7 +12,6 @@ namespace LightBlue.WebHost
         public string RoleName { get; private set; }
         public string Title { get; private set; }
         public string ConfigurationPath { get; private set; }
-        public string ServiceDefinitionPath { get; private set; }
         public bool UseSsl { get; private set; }
         public string Hostname { get; private set; }
         public bool UseHostedStorage { get; private set; }
@@ -73,7 +68,7 @@ namespace LightBlue.WebHost
                 },
                 {
                     "c|configurationPath=",
-                    "The {PATH} to the configuration file. Either the directory containing ServiceConfiguration.Local.cscfg or the path to a specific alternate .cscfg file.",
+                    "The {PATH} to the configuration file. Usually '<assemblyname>.dll.config'.",
                     v => configurationPath = v
                 },
                 {
@@ -167,22 +162,6 @@ namespace LightBlue.WebHost
                 return null;
             }
 
-            var serviceDefinitionPath = ConfigurationLocator.LocateServiceDefinition(configurationPath);
-
-            if (!port.HasValue)
-            {
-                var endpoint = GetEndpoint(serviceDefinitionPath, roleName);
-                if (endpoint == null)
-                {
-                    DisplayErrorMessage(
-                        "Cannot locate endpoint in ServiceDefinition.csdef. Verify that an endpoint is defined.");
-                    return null;
-                }
-
-                port = endpoint.Item1;
-                useSsl = endpoint.Item2;
-            }
-
             if (!string.IsNullOrWhiteSpace(iisExpressTemplate) && !File.Exists(iisExpressTemplate))
             {
                 DisplayErrorMessage("The specified IIS Express template cannot be located.");
@@ -203,8 +182,7 @@ namespace LightBlue.WebHost
                 Title = string.IsNullOrWhiteSpace(title)
                     ? roleName
                     : title,
-                ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
-                ServiceDefinitionPath = serviceDefinitionPath,
+                ConfigurationPath = configurationPath,
                 UseSsl = useSsl.Value,
                 Hostname = hostname,
                 UseHostedStorage = useHostedStorage,
@@ -212,57 +190,6 @@ namespace LightBlue.WebHost
                 IisExpressTemplate = iisExpressTemplate,
                 Use64Bit = use64Bit
             };
-        }
-
-        private static Tuple<int, bool> GetEndpoint(string serviceDefinitionPath, string roleName)
-        {
-            var xDocument = XDocument.Load(serviceDefinitionPath);
-
-            XNamespace serviceDefinitionNamespace = xDocument.Root
-                .Attributes()
-                .Where(a => a.IsNamespaceDeclaration)
-                .First(a => a.Value.Contains("ServiceDefinition"))
-                .Value;
-
-            var roleElement = xDocument.Root.Elements()
-                .FirstOrDefault(e => e.Attribute("name").Value == roleName);
-
-            if (roleElement == null)
-            {
-                return null;
-            }
-
-            var endpointsElement = roleElement.Descendants(serviceDefinitionNamespace + "Endpoints")
-                .FirstOrDefault();
-
-            if (endpointsElement == null)
-            {
-                return null;
-            }
-
-            var endpointElement = endpointsElement.Descendants(serviceDefinitionNamespace + "InputEndpoint")
-                .FirstOrDefault();
-
-            if (endpointElement == null)
-            {
-                return null;
-            }
-
-            var portAttribute = endpointElement.Attribute("port");
-            var protocolAttribute = endpointElement.Attribute("protocol");
-            if (portAttribute == null || protocolAttribute == null)
-            {
-                return null;
-            }
-
-            int port;
-
-            if (!Int32.TryParse(portAttribute.Value, out port) || string.IsNullOrWhiteSpace(protocolAttribute.Value))
-            {
-                return null;
-            }
-
-            return Tuple.Create(port, protocolAttribute.Value.ToLowerInvariant() == "https");
         }
 
         private static void DisplayErrorMessage(string message)

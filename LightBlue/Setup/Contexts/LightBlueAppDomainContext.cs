@@ -6,22 +6,19 @@ namespace LightBlue.Setup.Contexts
     {
         private readonly string _roleName;
         private readonly StandaloneAzureSettings _settings;
-        private readonly StandaloneAzureLocalResourceSource _localResources;
 
-        public LightBlueAppDomainContext(string configurationPath, string serviceDefinitionPath, string roleName, bool useHostedStorage)
+        public LightBlueAppDomainContext(string configurationPath, string roleName, bool useHostedStorage)
         {
             _roleName = roleName;
 
             var configuration = new StandaloneConfiguration
             {
                 ConfigurationPath = configurationPath,
-                ServiceDefinitionPath = serviceDefinitionPath,
                 RoleName = roleName,
                 UseHostedStorage = useHostedStorage,
             };
 
             _settings = new StandaloneAzureSettings(configuration);
-            _localResources = new StandaloneAzureLocalResourceSource(configuration, StandaloneEnvironment.LightBlueDataDirectory);
         }
 
         public override string RoleName
@@ -32,11 +29,6 @@ namespace LightBlue.Setup.Contexts
         public override IAzureSettings Settings
         {
             get { return _settings; }
-        }
-
-        public override IAzureLocalResourceSource LocalResources
-        {
-            get { return _localResources; }
         }
     }
 }

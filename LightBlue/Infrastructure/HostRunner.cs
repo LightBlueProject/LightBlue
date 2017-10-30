@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using LightBlue.Setup;
 
@@ -18,13 +17,11 @@ namespace LightBlue.Infrastructure
         public void Run(
             string workerRoleAssembly,
             string configurationPath,
-            string serviceDefinitionPath,
             string roleName,
             bool useHostedStorage)
         {
             LightBlueConfiguration.SetAsLightBlue(
                 configurationPath: configurationPath,
-                serviceDefinitionPath: serviceDefinitionPath,
                 roleName: roleName,
                 lightBlueHostType: LightBlueHostType.Direct,
                 useHostedStorage: useHostedStorage);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using LightBlue.Host.Stub;
-using LightBlue.Infrastructure;
 
 namespace LightBlue.Host
 {
@@ -14,7 +13,6 @@ namespace LightBlue.Host
                 ApplicationBase = hostArgs.ApplicationBase
             };
 
-            ConfigurationManipulation.RemoveAzureTraceListenerFromConfiguration(hostArgs.RoleConfigurationFile);
             appDomainSetup.ConfigurationFile = hostArgs.RoleConfigurationFile;
 
             StubManagement.CopyStubAssemblyToRoleDirectory(hostArgs.ApplicationBase);

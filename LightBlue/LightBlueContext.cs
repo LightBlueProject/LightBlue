@@ -26,15 +26,6 @@ namespace LightBlue
             }
         }
 
-        public static IAzureLocalResourceSource AzureLocalResources
-        {
-            get
-            {
-                Initialise();
-                return _context.LocalResources;
-            }
-        }
-
         public static AzureEnvironment AzureEnvironment
         {
             get

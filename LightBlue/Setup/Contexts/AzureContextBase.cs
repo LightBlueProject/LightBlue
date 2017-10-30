@@ -17,7 +17,6 @@ namespace LightBlue.Setup.Contexts
 
         public abstract string RoleName { get; }
         public abstract IAzureSettings Settings { get; }
-        public abstract IAzureLocalResourceSource LocalResources { get; }
 
         public AzureEnvironment AzureEnvironment
         {
