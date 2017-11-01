@@ -182,7 +182,7 @@ namespace LightBlue.WebHost
                 Title = string.IsNullOrWhiteSpace(title)
                     ? roleName
                     : title,
-                ConfigurationPath = configurationPath,
+                ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(configurationPath),
                 UseSsl = useSsl.Value,
                 Hostname = hostname,
                 UseHostedStorage = useHostedStorage,

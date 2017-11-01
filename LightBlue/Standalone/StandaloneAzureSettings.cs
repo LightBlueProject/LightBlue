@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
@@ -15,9 +16,37 @@ namespace LightBlue.Standalone
         {
             var xDocument = XDocument.Load(standaloneConfiguration.ConfigurationPath);
 
-            _settings = xDocument
-                .XPathSelectElements("./configuration/appSettings/add")
-                .ToDictionary(s => s.Attribute("key").Value, s => s.Attribute("value").Value);
+            if (!xDocument.Root.Attributes().Any(x => x.Value.Contains("ServiceConfiguration")))
+            {
+                _settings = xDocument
+                    .XPathSelectElements("./configuration/appSettings/add")
+                    .ToDictionary(s => s.Attribute("key").Value, s => s.Attribute("value").Value);
+            }
+            else
+            {
+                XNamespace serviceConfigurationNamespace = xDocument.Root
+                    .Attributes()
+                    .Where(a => a.IsNamespaceDeclaration)
+                    .First(a => a.Value.Contains("ServiceConfiguration"))
+                    .Value;
+
+                var roleElement = xDocument.Descendants(serviceConfigurationNamespace + "Role")
+                    .FirstOrDefault(r => r.Attribute("name").Value == standaloneConfiguration.RoleName);
+
+                if (roleElement == null)
+                {
+                    throw new InvalidOperationException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Cannot find configuration for the role '{0}' in '{1}'",
+                            standaloneConfiguration.RoleName,
+                            standaloneConfiguration.ConfigurationPath));
+                }
+
+                _settings = roleElement.Descendants(serviceConfigurationNamespace + "ConfigurationSettings")
+                    .Descendants(serviceConfigurationNamespace + "Setting")
+                    .ToDictionary(s => s.Attribute("name").Value, s => s.Attribute("value").Value);
+            }
         }
 
         public string this[string index]

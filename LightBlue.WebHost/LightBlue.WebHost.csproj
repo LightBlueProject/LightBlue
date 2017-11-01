@@ -52,6 +52,9 @@
     <Compile Include="..\LightBlue.Host\UnhandledExceptionBehaviour.cs">
       <Link>UnhandledExceptionBehaviour.cs</Link>
     </Compile>
+    <Compile Include="..\LightBlue\ConfigurationLocator.cs">
+      <Link>ConfigurationLocator.cs</Link>
+    </Compile>
     <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs">
       <Link>ExceptionExtensions.cs</Link>
     </Compile>
