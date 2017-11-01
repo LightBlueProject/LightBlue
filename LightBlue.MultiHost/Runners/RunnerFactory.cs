@@ -95,14 +95,14 @@ namespace LightBlue.MultiHost.Runners
             switch (isolation)
             {
                 case RoleIsolationMode.Thread:
-                    return new ThreadRunner(role, assemblyFilePath, config.ConfigurationPath, role.RoleName);
+                    return new ThreadRunner(role, assemblyFilePath, ConfigurationLocator.LocateConfigurationFile(config.ConfigurationPath), role.RoleName);
                 case RoleIsolationMode.AppDomain:
                     var setup = new AppDomainSetup
                     {
                         ApplicationBase = assemblyPath,
                         ConfigurationFile = config.Assembly + ".config",
                     };
-                    return new AppDomainRunner(role, setup, assemblyFilePath, config.ConfigurationPath, role.RoleName);
+                    return new AppDomainRunner(role, setup, assemblyFilePath, ConfigurationLocator.LocateConfigurationFile(config.ConfigurationPath), role.RoleName);
                 default:
                     throw new NotSupportedException();
             }

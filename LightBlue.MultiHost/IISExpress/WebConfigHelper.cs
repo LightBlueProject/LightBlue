@@ -15,7 +15,7 @@ namespace LightBlue.MultiHost.IISExpress
                 Port = int.Parse(config.Port),
                 RoleName = config.RoleName,
                 Title = config.Title,
-                ConfigurationPath = config.ConfigurationPath,
+                ConfigurationPath = ConfigurationLocator.LocateConfigurationFile(config.ConfigurationPath),
                 UseSsl = bool.Parse(config.UseSsl),
                 Hostname = config.Hostname,
                 UseHostedStorage = false,

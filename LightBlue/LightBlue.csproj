@@ -78,6 +78,7 @@
     <Compile Include="AzureEnvironment.cs" />
     <Compile Include="AzureEnvironmentSource.cs" />
     <Compile Include="BlobListing.cs" />
+    <Compile Include="ConfigurationLocator.cs" />
     <Compile Include="External\ExternalAzureSettings.cs" />
     <Compile Include="Hosted\HostedAzureBlobContainer.cs" />
     <Compile Include="Hosted\HostedAzureBlobDirectory.cs" />
