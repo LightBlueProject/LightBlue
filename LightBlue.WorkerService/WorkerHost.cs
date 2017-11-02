@@ -74,14 +74,12 @@ namespace LightBlue.WorkerService
 
         private bool RunProgramMain(string assemblyPath)
         {
-            var assembly = Assembly.LoadFrom(assemblyPath);
-            var mainMethod = assembly.GetType("Program").GetMethod("Main");
-
             Task.Run(() =>
             {
                 try
                 {
-                    mainMethod.Invoke(null, new object[] {null});
+                    var assembly = Assembly.LoadFrom(assemblyPath);
+                    assembly.EntryPoint.Invoke(null, new object[] {null});
                     Environment.Exit(0);
                 }
                 catch (Exception)
