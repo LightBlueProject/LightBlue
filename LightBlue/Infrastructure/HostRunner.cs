@@ -32,6 +32,12 @@ namespace LightBlue.Infrastructure
 
         private void RunRole(Type workerRoleType)
         {
+            if (workerRoleType.Name == "Program")
+            {
+                workerRoleType.GetMethod("Main").Invoke(null, new object[]{null});
+                return;
+            }
+
             _workerRole = (RoleEntryPoint)Activator.CreateInstance(workerRoleType);
             if (!_workerRole.OnStart())
             {
@@ -72,6 +78,13 @@ namespace LightBlue.Infrastructure
             var roleAssemblyAbsolutePath = Path.IsPathRooted(workerRoleAssembly)
                 ? workerRoleAssembly
                 : Path.Combine(Environment.CurrentDirectory, workerRoleAssembly);
+
+            if (roleAssemblyAbsolutePath.EndsWith(".exe"))
+            {
+                var assembly = Assembly.LoadFrom(roleAssemblyAbsolutePath);
+                var programType = assembly.GetTypes().Single(t => t.Name == "Program");
+                return programType;
+            }
 
             var roleAssembly = Assembly.LoadFrom(roleAssemblyAbsolutePath);
             var workerRoleType = roleAssembly.GetTypes()
