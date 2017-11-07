@@ -26,12 +26,21 @@ namespace LightBlue.Infrastructure
                 lightBlueHostType: LightBlueHostType.Direct,
                 useHostedStorage: useHostedStorage);
 
-            var workerRoleType = LoadWorkerRoleType(workerRoleAssembly);
-            RunRole(workerRoleType);
+            if (workerRoleAssembly.EndsWith(".exe"))
+                RunConsoleApplication(workerRoleAssembly);
+            else
+                RunAzureRole(workerRoleAssembly);
         }
 
-        private void RunRole(Type workerRoleType)
+        private static void RunConsoleApplication(string workerRoleAssembly)
         {
+            var assembly = Assembly.LoadFrom(workerRoleAssembly);
+            assembly.EntryPoint.Invoke(null, new object[] {null});
+        }
+
+        private void RunAzureRole(string workerRoleAssembly)
+        {
+            var workerRoleType = LoadWorkerRoleType(workerRoleAssembly);
             _workerRole = (RoleEntryPoint)Activator.CreateInstance(workerRoleType);
             if (!_workerRole.OnStart())
             {
