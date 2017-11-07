@@ -34,6 +34,38 @@ namespace LightBlue.WorkerService
             var assemblyPath = Path.IsPathRooted(_settings.Assembly)
                 ? _settings.Assembly
                 : Path.Combine(Environment.CurrentDirectory, _settings.Assembly);
+
+            return assemblyPath.EndsWith(".exe")
+                ? RunConsoleApplication(assemblyPath)
+                : RunAzureRole(assemblyPath);
+        }
+
+        private static bool RunConsoleApplication(string assemblyPath)
+        {
+            var entryPoint = Assembly.LoadFrom(assemblyPath).EntryPoint;
+
+            Trace.TraceInformation("Worker host service entry point {0} located at {1}", entryPoint.Name, assemblyPath);
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    entryPoint.Invoke(null, new object[] {null});
+                    Environment.Exit(0);
+                }
+                catch (Exception)
+                {
+                    Environment.Exit(1);
+                }
+            });
+
+            Trace.TraceInformation("Worker host service entry point {0} running", entryPoint.Name);
+
+            return true;
+        }
+
+        private bool RunAzureRole(string assemblyPath)
+        {
             var entryPoint = Assembly.LoadFrom(assemblyPath)
                 .GetTypes()
                 .Single(t => typeof(RoleEntryPoint).IsAssignableFrom(t));

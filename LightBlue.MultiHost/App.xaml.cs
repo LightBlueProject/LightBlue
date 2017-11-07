@@ -86,6 +86,7 @@ namespace LightBlue.MultiHost
                     var query =
                         from c in Configuration.Roles
                         let relativePath = c.Assembly.ToLowerInvariant().EndsWith(".dll")
+                                        || c.Assembly.ToLowerInvariant().EndsWith(".exe")
                             ? Path.GetDirectoryName(c.Assembly)
                             : c.Assembly
                         select relativePath;
