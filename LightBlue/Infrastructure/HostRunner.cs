@@ -26,6 +26,12 @@ namespace LightBlue.Infrastructure
                 lightBlueHostType: LightBlueHostType.Direct,
                 useHostedStorage: useHostedStorage);
 
+            if (workerRoleAssembly.EndsWith(".exe"))
+            {
+                var assembly = Assembly.LoadFrom(workerRoleAssembly);
+                assembly.EntryPoint.Invoke(null, new object[] {null});
+            }
+
             var workerRoleType = LoadWorkerRoleType(workerRoleAssembly);
             RunRole(workerRoleType);
         }

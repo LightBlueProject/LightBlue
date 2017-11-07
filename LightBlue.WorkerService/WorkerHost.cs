@@ -34,6 +34,12 @@ namespace LightBlue.WorkerService
             var assemblyPath = Path.IsPathRooted(_settings.Assembly)
                 ? _settings.Assembly
                 : Path.Combine(Environment.CurrentDirectory, _settings.Assembly);
+
+            if (assemblyPath.EndsWith(".exe"))
+            {
+                return RunProgramMain(assemblyPath);
+            }
+
             var entryPoint = Assembly.LoadFrom(assemblyPath)
                 .GetTypes()
                 .Single(t => typeof(RoleEntryPoint).IsAssignableFrom(t));
@@ -62,6 +68,25 @@ namespace LightBlue.WorkerService
             });
 
             Trace.TraceInformation("Worker host service role entry point {0} running", entryPoint.FullName);
+
+            return true;
+        }
+
+        private bool RunProgramMain(string assemblyPath)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    var assembly = Assembly.LoadFrom(assemblyPath);
+                    assembly.EntryPoint.Invoke(null, new object[] {null});
+                    Environment.Exit(0);
+                }
+                catch (Exception)
+                {
+                    Environment.Exit(1);
+                }
+            });
 
             return true;
         }
