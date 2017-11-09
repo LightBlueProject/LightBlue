@@ -15,7 +15,7 @@ namespace LightBlue.Autofac
                 return;
             }
 
-            if (LightBlueContext.AzureEnvironment == AzureEnvironment.ActualAzure || LightBlueContext.AzureEnvironment == AzureEnvironment.Emulator)
+            if (LightBlueContext.AzureEnvironment == AzureEnvironment.Azure)
             {
                 builder.RegisterModule<LightBlueHostedModule>();
                 builder.RegisterModule<LightBlueCommonModule>();

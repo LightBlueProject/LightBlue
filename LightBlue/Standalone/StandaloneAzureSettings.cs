@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using LightBlue.Setup;
 
 namespace LightBlue.Standalone
 {
@@ -55,10 +54,8 @@ namespace LightBlue.Standalone
             {
                 if (!_settings.ContainsKey(index))
                 {
-                    throw  LightBlueConfiguration.RoleEnvironmentExceptionCreator(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Unknown setting '{0}'",
-                        index));
+                    // copy behavior from ConfigurationManager reading AppSettings
+                    return null;
                 }
 
                 return _settings[index];

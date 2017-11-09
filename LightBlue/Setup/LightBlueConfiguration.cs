@@ -2,25 +2,15 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-
-using LightBlue.Infrastructure;
 using LightBlue.Setup.Contexts;
 using LightBlue.Standalone;
 
-using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Setup
 {
     public static class LightBlueConfiguration
     {
         private static ILightBlueContext _context;
-        private static readonly Func<string, RoleEnvironmentException> _roleEnvironmentExceptionCreator
-            = RoleEnvironmentExceptionCreatorFactory.BuildRoleEnvironmentExceptionCreator();
-
-        public static Func<string, RoleEnvironmentException> RoleEnvironmentExceptionCreator
-        {
-            get { return _roleEnvironmentExceptionCreator; }
-        }
 
         public static bool IsInitialised
         {

@@ -10,7 +10,7 @@ namespace LightBlue.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            if (LightBlueContext.AzureEnvironment != AzureEnvironment.ActualAzure && LightBlueContext.AzureEnvironment != AzureEnvironment.Emulator)
+            if (LightBlueContext.AzureEnvironment != AzureEnvironment.Azure)
             {
                 throw new InvalidOperationException("Can only use the LightBlue Hosted module when running in actual Azure or the Azure emulator.");
             }

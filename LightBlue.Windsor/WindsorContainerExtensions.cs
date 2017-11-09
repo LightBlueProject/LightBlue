@@ -16,7 +16,7 @@ namespace LightBlue.Windsor
                 return;
             }
 
-            if (LightBlueContext.AzureEnvironment == AzureEnvironment.ActualAzure || LightBlueContext.AzureEnvironment == AzureEnvironment.Emulator)
+            if (LightBlueContext.AzureEnvironment == AzureEnvironment.Azure)
             {
                 container.Install(
                     new LightBlueHostedInstaller(),
