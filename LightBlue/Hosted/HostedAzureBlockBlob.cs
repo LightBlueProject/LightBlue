@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -137,7 +138,7 @@ namespace LightBlue.Hosted
 
         public Task UploadFromFileAsync(string path)
         {
-            return _cloudBlockBlob.UploadFromFileAsync(path, FileMode.Open);
+            return _cloudBlockBlob.UploadFromFileAsync(path);
         }
 
         public Task UploadFromByteArrayAsync(byte[] buffer)
@@ -158,12 +159,12 @@ namespace LightBlue.Hosted
                 throw new ArgumentException("Can only copy between blobs in the same hosting environment");
             }
 
-            return _cloudBlockBlob.StartCopyFromBlob(hostedAzureBlockBlob._cloudBlockBlob);
+            return _cloudBlockBlob.StartCopy(hostedAzureBlockBlob._cloudBlockBlob);
         }
 
         public string StartCopyFromBlob(Uri source)
         {
-            return _cloudBlockBlob.StartCopyFromBlob(source);
+            return _cloudBlockBlob.StartCopy(source);
         }
     }
 }
