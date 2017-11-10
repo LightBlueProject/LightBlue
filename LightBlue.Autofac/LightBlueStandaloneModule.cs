@@ -1,11 +1,6 @@
 using System;
-
 using Autofac;
-
-using LightBlue.Setup;
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace LightBlue.Autofac
 {
@@ -24,10 +19,6 @@ namespace LightBlue.Autofac
 
             builder.RegisterInstance(new AzureEnvironmentSource(AzureEnvironment.LightBlue))
                 .As<IAzureEnvironmentSource>();
-
-            builder.RegisterInstance(LightBlueConfiguration.RoleEnvironmentExceptionCreator)
-                .SingleInstance()
-                .As<Func<string, RoleEnvironmentException>>();
 
             builder.RegisterType<StandaloneAzureRoleInformation>()
                 .WithParameter("roleName", LightBlueContext.RoleName)

@@ -1,12 +1,9 @@
-﻿using Microsoft.WindowsAzure.ServiceRuntime;
+﻿using System.Diagnostics;
 
 namespace LightBlue.Hosted
 {
     public class HostedAzureRoleInformation : IAzureRoleInformation
     {
-        public string Name
-        {
-            get { return RoleEnvironment.CurrentRoleInstance.Role.Name; }
-        }
+        public string Name => Process.GetCurrentProcess().ProcessName;
     }
 }

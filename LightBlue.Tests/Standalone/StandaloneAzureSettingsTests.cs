@@ -1,7 +1,4 @@
 ﻿using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.ServiceRuntime;
-
 using Xunit;
 
 namespace LightBlue.Tests.Standalone
@@ -30,9 +27,9 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Fact]
-        public void WillThrowOnUnknownKey()
+        public void WillReturnNullOnUnknownKey()
         {
-            Assert.Throws<RoleEnvironmentException>(() => _settings["Unknown"]);
+            Assert.Equal(null, _settings["Unknown"]);
         }
     }
 }
