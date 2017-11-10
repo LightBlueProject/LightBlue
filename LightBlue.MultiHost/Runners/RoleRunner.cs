@@ -49,11 +49,8 @@ namespace LightBlue.MultiHost.Runners
             if (_role.IsIisExpress)
             {
                 var website = RunnerFactory.CreateForWebSite(_role);
-                var role = RunnerFactory.CreateForWebRole(_role, _role.IsolationMode);
-                _resources.Add(role);
                 _resources.Add(website);
                 website.Start();
-                role.Start();
             }
             else
             {
