@@ -51,34 +51,6 @@ namespace LightBlue.MultiHost.Runners
             return new IisExpressRunner(role);
         }
 
-        public static IRunner CreateForWebRole(Role role, RoleIsolationMode isolation)
-        {
-            var args = WebConfigHelper.Create(role.Config);
-
-
-            var assemblyPath = Path.GetDirectoryName(args.Assembly);
-            if (HasBeenReBuilt(assemblyPath) && isolation == RoleIsolationMode.Thread)
-            {
-                isolation = RoleIsolationMode.AppDomain;
-                role.IsolationMode = isolation;
-            }
-
-            switch (isolation)
-            {
-                case RoleIsolationMode.Thread:
-                    return new ThreadRunner(role, args.Assembly, args.ConfigurationPath, args.RoleName);
-                case RoleIsolationMode.AppDomain:
-                    var setup = new AppDomainSetup
-                    {
-                        ApplicationBase = args.SiteBinDirectory,
-                        ConfigurationFile = WebConfigHelper.DetermineWebConfigPath(args.Assembly)
-                    };
-                    return new AppDomainRunner(role, setup, args.Assembly, args.ConfigurationPath, args.RoleName);
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
         public static IRunner CreateForWorkerRole(Role role, RoleIsolationMode isolation)
         {
             var config = role.Config;
