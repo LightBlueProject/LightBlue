@@ -18,6 +18,7 @@ namespace LightBlue.WorkerService
                 {
                     service.ConstructUsing(s => new WorkerHost(settings));
                     service.WhenStarted((s, hc) => s.Start(hc));
+                    service.WhenStopped(s => { });
                 });
 
                 x.RunAsLocalSystem();
