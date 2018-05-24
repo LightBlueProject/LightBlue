@@ -121,14 +121,14 @@ namespace LightBlue.Hosted
             return _cloudBlockBlob.GetSharedAccessSignature(policy);
         }
 
-        public void DownloadToStream(Stream target)
+        public void DownloadToStream(Stream target, OperationContext operationContext = null)
         {
-            _cloudBlockBlob.DownloadToStream(target);
+            _cloudBlockBlob.DownloadToStream(target, operationContext: operationContext);
         }
 
-        public Task DownloadToStreamAsync(Stream target)
+        public Task DownloadToStreamAsync(Stream target, OperationContext operationContext = null)
         {
-            return _cloudBlockBlob.DownloadToStreamAsync(target);
+            return _cloudBlockBlob.DownloadToStreamAsync(target, null, null, operationContext);
         }
 
         public Task UploadFromStreamAsync(Stream source)

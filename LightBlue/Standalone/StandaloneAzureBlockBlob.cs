@@ -221,7 +221,7 @@ namespace LightBlue.Standalone
                 policy.Permissions.DeterminePermissionsString());
         }
 
-        public void DownloadToStream(Stream target)
+        public void DownloadToStream(Stream target, OperationContext operationContext = null)
         {
             if (target == null)
             {
@@ -253,7 +253,7 @@ namespace LightBlue.Standalone
             }
         }
 
-        public async Task DownloadToStreamAsync(Stream target)
+        public async Task DownloadToStreamAsync(Stream target, OperationContext operationContext = null)
         {
             if (target == null)
             {
