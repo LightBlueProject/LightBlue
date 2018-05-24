@@ -26,8 +26,8 @@ namespace LightBlue
         void SetProperties();
         Task SetPropertiesAsync();
         string GetSharedAccessSignature(SharedAccessBlobPolicy policy);
-        void DownloadToStream(Stream target, OperationContext operationContext = null);
-        Task DownloadToStreamAsync(Stream target, OperationContext operationContext = null);
+        void DownloadToStream(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null);
+        Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null);
         Task UploadFromStreamAsync(Stream source);
         Task UploadFromFileAsync(string path);
         Task UploadFromByteArrayAsync(byte[] buffer);
