@@ -56,6 +56,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -94,6 +95,10 @@
     <Compile Include="ListCollectionViewEx.cs" />
     <Compile Include="OpenFileDialogService.cs" />
     <Compile Include="Configuration\RoleConfigurationService.cs" />
+    <Compile Include="Runners\ConsoleRunner.cs" />
+    <Compile Include="Runners\DotNetCoreRunner.cs" />
+    <Compile Include="Runners\NpmRunner.cs" />
+    <Compile Include="Runners\ProcessExtensions.cs" />
     <Compile Include="ViewModel\EditRole.cs" />
     <Compile Include="Runners\RoleIsolationMode.cs" />
     <Compile Include="Runners\RunnerFactory.cs" />

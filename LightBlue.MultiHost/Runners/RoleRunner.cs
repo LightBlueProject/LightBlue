@@ -46,6 +46,30 @@ namespace LightBlue.MultiHost.Runners
 
         public void Start()
         {
+            if (_role.RoleName == "DotNetCore")
+            {
+                var role = RunnerFactory.CreateDotNetCoreRunner(_role);
+                _resources.Add(role);
+                role.Start();
+                return;
+            }
+
+            if (_role.RoleName == "Console")
+            {
+                var role = RunnerFactory.CreateConsoleRunner(_role);
+                _resources.Add(role);
+                role.Start();
+                return;
+            }
+
+            if (_role.RoleName == "Npm")
+            {
+                var role = RunnerFactory.CreateNpmRunner(_role);
+                _resources.Add(role);
+                role.Start();
+                return;
+            }
+
             if (_role.IsIisExpress)
             {
                 var website = RunnerFactory.CreateForWebSite(_role);
