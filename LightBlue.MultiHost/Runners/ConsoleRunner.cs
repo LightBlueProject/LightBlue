@@ -55,13 +55,13 @@ namespace LightBlue.MultiHost.Runners
                 _completed.SetResult(new object());
             };
 
-            _role.TraceWriteLine(Identifier, $"Start process {_parent.Id} {_parent.ProcessName} {_parent.StartInfo.Arguments} {_parent.StartInfo.WorkingDirectory}");
-
             _parent.Start();
             _parent.BeginOutputReadLine();
             _parent.BeginErrorReadLine();
 
             _started.SetResult(new object());
+
+            _role.TraceWriteLine(Identifier, $"Process {_parent.Id} {_parent.ProcessName} {_parent.StartInfo.Arguments} {_parent.StartInfo.WorkingDirectory} started");
         }
 
         public void Dispose()

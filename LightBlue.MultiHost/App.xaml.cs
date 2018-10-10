@@ -105,5 +105,25 @@ namespace LightBlue.MultiHost
                 MessageBox.Show("Could not start multi-host: " + ex.ToTraceMessage());
             }
         }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            var parent = Process.GetCurrentProcess();
+            var children = parent.GetChildren();
+            foreach (var c in children)
+            {
+                foreach (var p in c.GetChildren())
+                {
+                    if (!p.HasExited)
+                    {
+                        p.Kill();
+                    }
+                }
+                if (!c.HasExited)
+                {
+                    c.Kill();
+                }
+            }
+        }
     }    
 }
