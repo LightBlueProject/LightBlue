@@ -85,10 +85,9 @@ namespace LightBlue.MultiHost.Runners
             return new DotNetCoreRunner(role);
         }
 
-
-        public static IRunner CreateConsoleRunner(Role role)
+        public static IRunner CreateDotNetFrameworkRunner(Role role)
         {
-            return new ConsoleRunner(role);
+            return new DotNetFrameworkRunner(role);
         }
 
         public static IRunner CreateNpmRunner(Role role)

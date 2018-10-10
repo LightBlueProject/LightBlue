@@ -54,9 +54,9 @@ namespace LightBlue.MultiHost.Runners
                 return;
             }
 
-            if (_role.RoleName == "Console")
+            if (_role.RoleName == "DotNetFramework")
             {
-                var role = RunnerFactory.CreateConsoleRunner(_role);
+                var role = RunnerFactory.CreateDotNetFrameworkRunner(_role);
                 _resources.Add(role);
                 role.Start();
                 return;

@@ -5,7 +5,7 @@ using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost.Runners
 {
-    public class ConsoleRunner : IRunner
+    public class DotNetFrameworkRunner : IRunner
     {
         private readonly Role _role;
 
@@ -18,7 +18,7 @@ namespace LightBlue.MultiHost.Runners
         private readonly TaskCompletionSource<object> _completed = new TaskCompletionSource<object>();
         private Process _parent;
 
-        public ConsoleRunner(Role role)
+        public DotNetFrameworkRunner(Role role)
         {
             Identifier = role.RoleName;
 

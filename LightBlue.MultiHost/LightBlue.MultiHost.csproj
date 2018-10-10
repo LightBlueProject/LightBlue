@@ -95,7 +95,7 @@
     <Compile Include="ListCollectionViewEx.cs" />
     <Compile Include="OpenFileDialogService.cs" />
     <Compile Include="Configuration\RoleConfigurationService.cs" />
-    <Compile Include="Runners\ConsoleRunner.cs" />
+    <Compile Include="Runners\DotNetFrameworkRunner.cs" />
     <Compile Include="Runners\DotNetCoreRunner.cs" />
     <Compile Include="Runners\NpmRunner.cs" />
     <Compile Include="Runners\ProcessExtensions.cs" />
