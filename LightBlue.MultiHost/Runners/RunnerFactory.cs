@@ -79,5 +79,20 @@ namespace LightBlue.MultiHost.Runners
                     throw new NotSupportedException();
             }
         }
+
+        public static IRunner CreateDotNetCoreRunner(Role role)
+        {
+            return new DotNetCoreRunner(role);
+        }
+
+        public static IRunner CreateDotNetFrameworkRunner(Role role)
+        {
+            return new DotNetFrameworkRunner(role);
+        }
+
+        public static IRunner CreateNpmRunner(Role role)
+        {
+            return new NpmRunner(role);
+        }
     }
 }
