@@ -63,7 +63,7 @@ namespace LightBlue.Hosted
 
         public void Delete()
         {
-            _cloudBlockBlob.Delete();
+            _cloudBlockBlob.DeleteAsync().GetAwaiter().GetResult();
         }
 
         public Task DeleteAsync()
@@ -73,7 +73,7 @@ namespace LightBlue.Hosted
 
         public bool Exists()
         {
-            return _cloudBlockBlob.Exists();
+            return _cloudBlockBlob.ExistsAsync().GetAwaiter().GetResult();
         }
 
         public Task<bool> ExistsAsync()
@@ -83,7 +83,7 @@ namespace LightBlue.Hosted
 
         public void FetchAttributes()
         {
-            _cloudBlockBlob.FetchAttributes();
+            _cloudBlockBlob.FetchAttributesAsync().GetAwaiter().GetResult();
         }
 
         public Task FetchAttributesAsync()
@@ -93,12 +93,12 @@ namespace LightBlue.Hosted
 
         public Stream OpenRead()
         {
-            return _cloudBlockBlob.OpenRead();
+            return _cloudBlockBlob.OpenReadAsync().GetAwaiter().GetResult();
         }
 
         public void SetMetadata()
         {
-            _cloudBlockBlob.SetMetadata();
+            _cloudBlockBlob.SetMetadataAsync().GetAwaiter().GetResult();
         }
 
         public Task SetMetadataAsync()
@@ -108,7 +108,7 @@ namespace LightBlue.Hosted
 
         public void SetProperties()
         {
-            _cloudBlockBlob.SetProperties();
+            _cloudBlockBlob.SetPropertiesAsync().GetAwaiter().GetResult();
         }
 
         public Task SetPropertiesAsync()
@@ -123,7 +123,7 @@ namespace LightBlue.Hosted
 
         public void DownloadToStream(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null,OperationContext operationContext = null)
         {
-            _cloudBlockBlob.DownloadToStream(target, accessCondition, options, operationContext);
+            _cloudBlockBlob.DownloadToStreamAsync(target, accessCondition, options, operationContext).GetAwaiter().GetResult();
         }
 
         public Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
@@ -159,12 +159,12 @@ namespace LightBlue.Hosted
                 throw new ArgumentException("Can only copy between blobs in the same hosting environment");
             }
 
-            return _cloudBlockBlob.StartCopy(hostedAzureBlockBlob._cloudBlockBlob);
+            return _cloudBlockBlob.StartCopyAsync(hostedAzureBlockBlob._cloudBlockBlob).GetAwaiter().GetResult();
         }
 
         public string StartCopyFromBlob(Uri source)
         {
-            return _cloudBlockBlob.StartCopy(source);
+            return _cloudBlockBlob.StartCopyAsync(source).GetAwaiter().GetResult();
         }
     }
 }

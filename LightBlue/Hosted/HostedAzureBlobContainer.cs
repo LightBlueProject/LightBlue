@@ -32,7 +32,7 @@ namespace LightBlue.Hosted
 
         public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
         {
-            return _cloudBlobContainer.CreateIfNotExists(accessType);
+            return _cloudBlobContainer.CreateIfNotExistsAsync(accessType, null, null).GetAwaiter().GetResult();
         }
 
         public Task<bool> CreateIfNotExistsAsync(BlobContainerPublicAccessType accessType)
@@ -42,7 +42,7 @@ namespace LightBlue.Hosted
 
         public bool Exists()
         {
-            return _cloudBlobContainer.Exists();
+            return _cloudBlobContainer.ExistsAsync().GetAwaiter().GetResult();
         }
 
         public Task<bool> ExistsAsync()

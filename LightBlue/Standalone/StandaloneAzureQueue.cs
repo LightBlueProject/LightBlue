@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -139,13 +140,13 @@ namespace LightBlue.Standalone
 
                     fileStream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Delete);
 
-                    var messageLength = (int) fileStream.Length;
+                    var messageLength = (int)fileStream.Length;
 
                     var buffer = new byte[messageLength];
-                    
+
                     await fileStream.ReadAsync(buffer, 0, messageLength);
 
-                    var cloudQueueMessage = new CloudQueueMessage(buffer);
+                   var cloudQueueMessage = new CloudQueueMessage(Encoding.UTF8.GetString(buffer));
 
                     _idAssigner(cloudQueueMessage, messageId);
 
