@@ -6,7 +6,6 @@ namespace LightBlue.Setup.Contexts
 {
     class LightBlueLogicalCallContext : LightBlueContextBase
     {
-        private const string Key = "LightBlueLogicalCallContext";
         private readonly AsyncLocal<StandaloneConfiguration> _value = new AsyncLocal<StandaloneConfiguration>();
         
         public bool IsInitialized()
