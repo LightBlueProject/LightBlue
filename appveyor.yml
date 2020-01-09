@@ -12,8 +12,8 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 nuget:
-  account_feed: true
-  project_feed: true
+  account_feed: false
+  project_feed: false
 before_build:
 - cmd: nuget restore
 build:
