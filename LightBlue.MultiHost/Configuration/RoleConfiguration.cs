@@ -16,5 +16,17 @@
 
         // optional for all roles
         public string RoleIsolationMode { get; set; }
+        public IconLocations IconLocations { get; set; }
+    }
+
+    public class IconLocations
+    {
+        public string Stopped { get; set; }
+        public string Crashing { get; set; }
+        public string Recycling { get; set; }
+        public string Starting { get; set; }
+        public string Stopping { get; set; }
+        public string Running { get; set; }
+        public string Sequenced { get; set; }
     }
 }

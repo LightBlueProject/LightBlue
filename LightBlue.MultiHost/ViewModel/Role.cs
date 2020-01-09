@@ -5,18 +5,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.Controls;
 using LightBlue.MultiHost.Runners;
 using LightBlue.MultiHost.ViewModel.RoleStates;
+using Brush = System.Windows.Media.Brush;
 
 namespace LightBlue.MultiHost.ViewModel
 {
     public class Role : INotifyPropertyChanged
     {
-        private static readonly ConcurrentDictionary<Tuple<string, SolidColorBrush>, ImageSource> ImageCache = new ConcurrentDictionary<Tuple<string, SolidColorBrush>, ImageSource>();
+        private static readonly ConcurrentDictionary<RoleStatus, ImageSource> ImageCache = new ConcurrentDictionary<RoleStatus, ImageSource>();
 
         public event EventHandler<EventArgs> RolePanic;
 
@@ -54,7 +55,6 @@ namespace LightBlue.MultiHost.ViewModel
         {
             get
             {
-                // TODO: drive this from configuration
                 switch (Config.RoleName)
                 {
                     case "ReadModelPopulator":
@@ -73,14 +73,7 @@ namespace LightBlue.MultiHost.ViewModel
             }
         }
 
-        public ImageSource Image
-        {
-            get
-            {
-                var brush = CustomBrushes.GetStatusColour(Status, IsolationMode);
-                return ImageCache.GetOrAdd(Tuple.Create(ImageSource, brush), t => ImageUtil.ColourImage(t.Item1, t.Item2));
-            }
-        }
+        public ImageSource Image => ImageCache[Status];
 
         public string DisplayText { get { return Config.Title; } }
 
@@ -113,6 +106,80 @@ namespace LightBlue.MultiHost.ViewModel
             State = Config.EnabledOnStartup ? new AutoStarting(this) : (IState)new Stopped(this);
             _dispatcher = Dispatcher.CurrentDispatcher;
             _logs = new ObservableCollection<FifoLog>();
+
+            var iconSelector = GetIconSelector();
+            foreach (var status in Enum.GetValues(typeof(RoleStatus)).Cast<RoleStatus>())
+            {
+                var brush = CustomBrushes.GetStatusColour(status, IsolationMode);
+                ImageCache.AddOrUpdate(
+                    status,
+                    s => iconSelector(s, Config),
+                    (s, source) => iconSelector(s, Config));
+            }
+        }
+
+        private Func<RoleStatus, RoleConfiguration, ImageSource> GetIconSelector()
+        {
+            return (status, configuration) =>
+            {
+                string icon;
+
+                switch (status)
+                {
+                    case RoleStatus.Starting:
+                        icon = configuration?.IconLocations?.Starting;
+                        break;
+                    case RoleStatus.Running:
+                        icon = configuration?.IconLocations?.Running;
+                        break;
+                    case RoleStatus.Stopped:
+                        icon = configuration?.IconLocations?.Stopped;
+                        break;
+                    case RoleStatus.Stopping:
+                        icon = configuration?.IconLocations?.Stopping;
+                        break;
+                    case RoleStatus.Recycling:
+                        icon = configuration?.IconLocations?.Recycling;
+                        break;
+                    case RoleStatus.Sequenced:
+                        icon = configuration?.IconLocations?.Sequenced;
+                        break;
+                    case RoleStatus.Crashing:
+                        icon = configuration?.IconLocations?.Crashing;
+                        break;
+                    default:
+                        icon = null;
+                        break;
+                }
+
+                if (icon == null)
+                {
+                    switch (configuration?.RoleName)
+                    {
+                        case "ReadModelPopulator":
+                            icon = @"Resources\readmodelpopulator.ico";
+                            break;
+                        case "CommandProcessor":
+                            icon = @"Resources\domainservice.ico";
+                            break;
+                        case "ProcessManager":
+                            icon = @"Resources\processmanager.ico";
+                            break;
+                        case "WebRole":
+                            icon = configuration.Title.Contains("Hub")
+                                ? @"Resources\messagehub.ico"
+                                : @"Resources\website.ico";
+                            break;
+                        default:
+                            icon = @"Resources\worker.ico";
+                            break;
+                    }
+
+                    return ImageUtil.ColourImage(icon, CustomBrushes.GetStatusColour(status, IsolationMode));
+                }
+
+                return new BitmapImage(new Uri(icon));
+            };
         }
 
         public void StartAutomatically()
