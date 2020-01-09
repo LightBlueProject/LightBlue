@@ -51,28 +51,6 @@ namespace LightBlue.MultiHost.ViewModel
             }
         }
 
-        public string ImageSource
-        {
-            get
-            {
-                switch (Config.RoleName)
-                {
-                    case "ReadModelPopulator":
-                        return @"Resources\readmodelpopulator.ico";
-                    case "CommandProcessor":
-                        return @"Resources\domainservice.ico";
-                    case "ProcessManager":
-                        return @"Resources\processmanager.ico";
-                    case "WebRole":
-                        return Config.Title.Contains("Hub")
-                            ? @"Resources\messagehub.ico"
-                            : @"Resources\website.ico";
-                    default:
-                        return @"Resources\worker.ico";
-                }
-            }
-        }
-
         public ImageSource Image => ImageCache[Status];
 
         public string DisplayText { get { return Config.Title; } }

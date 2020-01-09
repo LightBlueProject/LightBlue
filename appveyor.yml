@@ -1,6 +1,8 @@
 version: 3.0.{build}
 pull_requests:
   do_not_increment_build_number: true
+image:
+  - Visual Studio 2019
 configuration: Release
 shallow_clone: true
 assembly_info:
