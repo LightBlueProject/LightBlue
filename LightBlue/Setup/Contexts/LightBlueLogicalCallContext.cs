@@ -11,16 +11,14 @@ namespace LightBlue.Setup.Contexts
         
         public bool IsInitialized()
         {
-            return _value != null;
-            //return CallContext.LogicalGetData(Key) != null;
+            return _value.Value != null;
         }
 
         public StandaloneConfiguration Config
         {
             get
             {
-                //var value = (StandaloneConfiguration)CallContext.LogicalGetData(Key); 
-                if (_value == null) throw new InvalidOperationException("Logical call context has not been initialized for this thread.");
+                if (_value.Value == null) throw new InvalidOperationException("Logical call context has not been initialized for this thread.");
                 return _value.Value;
             }
             set => _value.Value = value;

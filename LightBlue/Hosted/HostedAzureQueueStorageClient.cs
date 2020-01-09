@@ -21,11 +21,8 @@ namespace LightBlue.Hosted
 
         public IEnumerable<IAzureQueue> ListQueues()
         {
-            //var segment = _cloudQueueClient.ListQueuesSegmentedAsync(null).GetAwaiter().GetResult();
             QueueContinuationToken token = null;
             var result = new List<CloudQueue>();
-            //var contToken = segment.ContinuationToken;
-            //result.AddRange(segment.Results);
             do
             {
                 var segment = _cloudQueueClient
@@ -37,9 +34,6 @@ namespace LightBlue.Hosted
             } while (token != null);
 
             return result.Select(q => new HostedAzureQueue(q));
-            //return _cloudQueueClient.ListQueues()
-            //    .Select(q => new HostedAzureQueue(q))
-            //    .ToArray();
         }
     }
 }
