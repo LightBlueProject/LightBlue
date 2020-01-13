@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WebService", "Lig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Windsor", "LightBlue.Windsor\LightBlue.Windsor.csproj", "{113A1879-2F36-4183-B7D4-21F866F89D6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WorkerRoleDependency", "LightBlue.WorkerRoleDependency\LightBlue.WorkerRoleDependency.csproj", "{CAA9DE06-B035-45BC-A757-D1C2CB8D22F4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WorkerService", "LightBlue.WorkerService\LightBlue.WorkerService.csproj", "{36919040-8858-4B0A-A60D-09894716C78E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Host", "LightBlue.Host\LightBlue.Host.csproj", "{19405F20-092E-4E02-8ECC-5EB59523EDC4}"
@@ -65,10 +63,6 @@ Global
 		{113A1879-2F36-4183-B7D4-21F866F89D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{113A1879-2F36-4183-B7D4-21F866F89D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{113A1879-2F36-4183-B7D4-21F866F89D6C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CAA9DE06-B035-45BC-A757-D1C2CB8D22F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAA9DE06-B035-45BC-A757-D1C2CB8D22F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAA9DE06-B035-45BC-A757-D1C2CB8D22F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAA9DE06-B035-45BC-A757-D1C2CB8D22F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36919040-8858-4B0A-A60D-09894716C78E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36919040-8858-4B0A-A60D-09894716C78E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36919040-8858-4B0A-A60D-09894716C78E}.Release|Any CPU.ActiveCfg = Release|Any CPU
