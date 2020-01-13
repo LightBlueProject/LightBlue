@@ -6,8 +6,8 @@
 
     <IsPackable>true</IsPackable>
     <PackageVersion>1.0.0.0</PackageVersion>
-    <PackageId>LightBlue</PackageId>
-    <Title>LightBlue</Title>
+    <PackageId>LightBlue.Testability</PackageId>
+    <Title>LightBlue.Testability</Title>
     <Authors>Colin David Scott</Authors>
     <PackageLicenseFile>LICENCE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/LightBlueProject/LightBlue</RepositoryUrl>
