@@ -3,6 +3,20 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>true</IsPackable>
+    <PackageVersion>1.0.0.0</PackageVersion>
+    <PackageId>LightBlue.Host.Stub</PackageId>
+    <Title>LightBlue.Host.Stub</Title>
+    <Authors>Colin David Scott</Authors>
+    <PackageLicenseFile>LICENCE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/LightBlueProject/LightBlue</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageDescription>Stub assembly used by LightBlue to load worker roles.</PackageDescription>
+    <Copyright>Copyright 2014-2015 LightBlue contributors</Copyright>
+    <PackageTags>azure</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="..\LICENCE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 </Project>
