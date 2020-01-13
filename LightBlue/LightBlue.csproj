@@ -1,8 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>true</IsPackable>
+    <PackageVersion>1.0.0.0</PackageVersion>
+    <PackageId>LightBlue</PackageId>
+    <Title>LightBlue</Title>
+    <Authors>Colin David Scott</Authors>
+    <PackageLicenseFile>LICENCE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/LightBlueProject/LightBlue</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageDescription>LightBlue is a lightweight Azure development platform designed to replace a subset of the Azure emulator functionality</PackageDescription>
+    <Copyright>Copyright 2014-2015 LightBlue contributors</Copyright>
+    <PackageTags>azure</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +29,9 @@
     <PackageReference Include="System.Linq.Queryable" version="4.3.0" />
     <PackageReference Include="System.Net.Requests" version="4.3.0" />
     <PackageReference Include="System.Spatial" version="5.8.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENCE" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>

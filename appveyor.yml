@@ -11,11 +11,19 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+dotnet_csproj:
+    patch: true
+    file: '**\*.csproj'
+    package_version: '{version}'
 nuget:
   account_feed: false
   project_feed: false
 before_build:
 - cmd: nuget restore
+- ps: >-
+    ls C:\projects\lightblue
+    
+    dotnet restore
 build:
   publish_nuget: true
   include_nuget_references: true
