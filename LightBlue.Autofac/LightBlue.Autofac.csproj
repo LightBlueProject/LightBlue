@@ -3,6 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>true</IsPackable>
+    <PackageVersion>1.0.0.0</PackageVersion>
+    <PackageId>LightBlue.Autofac</PackageId>
+    <Title>LightBlue.Autofac</Title>
+    <Authors>Colin David Scott</Authors>
+    <PackageLicenseFile>LICENCE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/LightBlueProject/LightBlue</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageDescription>Provides Autofac support for the LightBlue Azure development platform</PackageDescription>
+    <Copyright>Copyright 2014-2015 LightBlue contributors</Copyright>
+    <PackageTags>azure</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,5 +29,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LightBlue\LightBlue.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENCE" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>
