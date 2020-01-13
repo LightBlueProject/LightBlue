@@ -4,6 +4,17 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>true</IsPackable>
+    <PackageVersion>1.0.0.0</PackageVersion>
+    <PackageId>LightBlue.Host</PackageId>
+    <Title>LightBlue.Host</Title>
+    <Authors>Colin David Scott</Authors>
+    <PackageLicenseFile>LICENCE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/LightBlueProject/LightBlue</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageDescription>Host executables for the LightBlue lightweight Azure development platform</PackageDescription>
+    <Copyright>Copyright 2014-2015 LightBlue contributors</Copyright>
+    <PackageTags>azure</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\LightBlue.Host.Stub\LightBlue.Host.Stub.csproj" />
     <ProjectReference Include="..\LightBlue\LightBlue.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENCE" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>
