@@ -1,81 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{871C2B31-FB84-499F-A1B7-901DDABDA8D4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightBlue.WebHost</RootNamespace>
-    <AssemblyName>LightBlue.WebHost</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net48</TargetFramework>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
+    <AssemblyTitle>LightBlue.WebHost</AssemblyTitle>
+    <Company>Colin David Scott</Company>
+    <Product>LightBlue.WebHost</Product>
+    <Description>WebHost executables for the LightBlue lightweight Azure development platform</Description>
+    <Copyright>Copyright 2014-2015 LightBlue contributors</Copyright>
+    <Version>1.1.21.0</Version>
+    <AssemblyVersion>1.1.21.0</AssemblyVersion>
+    <FileVersion>1.1.21.0</FileVersion>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <Authors>Colin David Scott</Authors>
+    <PackageLicenseUrl>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/LightBlueProject/LightBlue</PackageProjectUrl>
+    <PackageTags>azure</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="NDesk.Options">
-      <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\LightBlue.Host\StubManagement.cs">
-      <Link>StubManagement.cs</Link>
-    </Compile>
-    <Compile Include="..\LightBlue.Host\UnhandledExceptionBehaviour.cs">
-      <Link>UnhandledExceptionBehaviour.cs</Link>
-    </Compile>
-    <Compile Include="..\LightBlue\ConfigurationLocator.cs">
-      <Link>ConfigurationLocator.cs</Link>
-    </Compile>
-    <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs">
-      <Link>ExceptionExtensions.cs</Link>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebHostArgs.cs" />
-    <Compile Include="WebHostFactory.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <EmbeddedResource Include="IISExpressConfiguration.template" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LightBlue.Host.Stub\LightBlue.Host.Stub.csproj">
-      <Project>{0fb3527d-fbcc-468f-91ed-c84e89260791}</Project>
-      <Name>LightBlue.Host.Stub</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -83,11 +31,23 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="NDesk.Options" Version="0.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\LightBlue.Host\StubManagement.cs" Link="StubManagement.cs" />
+    <Compile Include="..\LightBlue.Host\UnhandledExceptionBehaviour.cs" Link="UnhandledExceptionBehaviour.cs" />
+    <Compile Include="..\LightBlue\ConfigurationLocator.cs" Link="ConfigurationLocator.cs" />
+    <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs" Link="ExceptionExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="IISExpressConfiguration.template" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LightBlue.Host.Stub\LightBlue.Host.Stub.csproj" />
+  </ItemGroup>
 </Project>
