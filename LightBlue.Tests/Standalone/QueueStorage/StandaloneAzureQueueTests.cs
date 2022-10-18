@@ -135,11 +135,11 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillThrowIfDeletingQueueThatDoesNotExist()
+        public async Task WillThrowIfDeletingQueueThatDoesNotExist()
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.Throws<StorageException>(() => queue.DeleteAsync());
+            await Assert.ThrowsAsync<StorageException>(() => queue.DeleteAsync());
         }
 
         [Fact]
@@ -154,11 +154,12 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillNotThrowIfConditionallyDeletingNonExistantQueue()
+        public async Task WillNotThrowIfConditionallyDeletingNonExistantQueue()
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.DoesNotThrow(() => queue.DeleteIfExistsAsync());
+            var exception = await Record.ExceptionAsync(() => queue.DeleteIfExistsAsync());
+            Assert.Null(exception);
         }
 
         [Theory]

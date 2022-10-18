@@ -49,10 +49,10 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Theory]
         [InlineData(BlobListingDetails.Snapshots)]
         [InlineData(BlobListingDetails.All)]
-        public void AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
+        public async Task AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
         {
             var container = new StandaloneAzureBlobContainer(BasePath);
-            Assert.Throws<ArgumentException>(() => container.ListBlobsSegmentedAsync(
+            await Assert.ThrowsAsync<ArgumentException>(() => container.ListBlobsSegmentedAsync(
                 "",
                 BlobListing.Hierarchical,
                 blobListingDetails,
@@ -108,7 +108,8 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedUri = new Uri(Path.Combine(BasePath, directoryName, fileName));
 
-            Assert.True(results.Results.OfType<IAzureBlockBlob>().Any(b => b.Uri == expectedUri));
+
+            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
         }
 
         [Fact]
@@ -159,7 +160,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedUri = new Uri(Path.Combine(BasePath, directoryName));
 
-            Assert.True(results.Results.OfType<IAzureBlobDirectory>().Any(d => d.Uri == expectedUri));
+            Assert.Contains(results.Results.OfType<IAzureBlobDirectory>(), d => d.Uri == expectedUri);
         }
 
         [Theory]
@@ -179,7 +180,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedUri = new Uri(Path.Combine(BasePath, fileName));
 
-            Assert.True(results.Results.OfType<IAzureBlockBlob>().Any(b => b.Uri == expectedUri));
+            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
         }
 
         [Fact]
@@ -209,7 +210,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedUri = new Uri(Path.Combine(BasePath, directoryName, fileName));
 
-            Assert.True(results.Results.Any(b => b.Uri == expectedUri));
+            Assert.Contains(results.Results, b => b.Uri == expectedUri);
         }
 
         [Fact]
@@ -242,7 +243,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedUri = new Uri(Path.Combine(BasePath, directoryName));
 
-            Assert.True(results.Results.OfType<IAzureBlobDirectory>().Any(d => d.Uri == expectedUri));
+            Assert.Contains(results.Results.OfType<IAzureBlobDirectory>(), d => d.Uri == expectedUri);
         }
 
         [Fact]
@@ -257,7 +258,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedUri = new Uri(Path.Combine(BasePath, "1"));
 
-            Assert.True(results.Results.OfType<IAzureBlockBlob>().Any(b => b.Uri == expectedUri));
+            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
         }
 
         [Fact]
@@ -306,7 +307,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedUri = new Uri(Path.Combine(BasePath, directoryName, fileName));
 
-            Assert.True(results.Results.OfType<IAzureBlockBlob>().Any(b => b.Uri == expectedUri));
+            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
         }
 
         [Fact]

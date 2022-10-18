@@ -79,7 +79,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithoutMetadata")]
+        [MemberData(nameof(DetailsWithoutMetadata))]
         public async Task ContainerWillNotLoadMetadataIfNotSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobContainer(BasePath)
@@ -94,7 +94,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithMetadata")]
+        [MemberData(nameof(DetailsWithMetadata))]
         public async Task ContainerWillLoadMetadataIfSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobContainer(BasePath)
@@ -111,7 +111,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithoutMetadataNoSnapshots")]
+        [MemberData(nameof(DetailsWithoutMetadataNoSnapshots))]
         public async Task ContainerWillNotLoadMetadataIfNotSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobContainer(BasePath)
@@ -126,7 +126,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithMetadataNoSnapshots")]
+        [MemberData(nameof(DetailsWithMetadataNoSnapshots))]
         public async Task ContainerWillLoadMetadataIfSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobContainer(BasePath)
@@ -143,7 +143,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithoutMetadata")]
+        [MemberData(nameof(DetailsWithoutMetadata))]
         public async Task DirectoryWillNotLoadMetadataIfNotSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))
@@ -157,7 +157,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithMetadata")]
+        [MemberData(nameof(DetailsWithMetadata))]
         public async Task DirectoryWillLoadMetadataIfSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))
@@ -173,7 +173,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithoutMetadataNoSnapshots")]
+        [MemberData(nameof(DetailsWithoutMetadataNoSnapshots))]
         public async Task DirectoryWillNotLoadMetadataIfNotSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))
@@ -187,7 +187,7 @@ namespace LightBlue.Tests.Standalone
         }
 
         [Theory]
-        [PropertyData("DetailsWithMetadataNoSnapshots")]
+        [MemberData(nameof(DetailsWithMetadataNoSnapshots))]
         public async Task DirectoryWillLoadMetadataIfSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
         {
             var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))

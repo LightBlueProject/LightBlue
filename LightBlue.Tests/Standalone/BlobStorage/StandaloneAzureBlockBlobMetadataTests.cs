@@ -29,7 +29,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void WillThrowOnFetchOfAttributesIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -38,7 +38,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void WillThrowOnSaveOfMetadataIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -47,7 +47,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void WillThrowOnAsyncSaveOfMetadataIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -56,7 +56,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void DefaultsToEmptyMetadataOnFetchWithNoSavedMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -71,7 +71,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanPersistAndRetrieveMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -93,7 +93,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public async Task CanPersistAndRetrieveMetadataAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -115,7 +115,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanAppendToExistingPersistedMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -141,7 +141,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanPersistMetadataAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -163,7 +163,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void MetadataNotPersistedUntilSet(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -181,7 +181,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void FetchingPropertiesOverwritesAnyUnsavedMetadataValues(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -205,7 +205,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         [Trait("Category", "Slow")]
         public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted(string blobName)
         {
@@ -227,7 +227,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void SavingPreservesUnknownMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);

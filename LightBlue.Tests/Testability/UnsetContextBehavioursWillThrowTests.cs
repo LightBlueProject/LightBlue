@@ -11,7 +11,7 @@ namespace LightBlue.Tests.Testability
         private static readonly FakeLightBlueContext Context = new FakeLightBlueContext();
 
         [Theory]
-        [PropertyData("ContextActions")]
+        [MemberData(nameof(ContextActions))]
         public void TheoryMethodName(Action failingAction)
         {
             try
@@ -20,7 +20,7 @@ namespace LightBlue.Tests.Testability
             }
             catch (NotSupportedException ex)
             {
-                Assert.True(ex.Message.Contains("not set, if you want to use this, set the property first"));
+                Assert.Contains("not set, if you want to use this, set the property first", ex.Message);
             }
         }
 

@@ -16,7 +16,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {}
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public async Task CanDownloadBlboToStream(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -35,7 +35,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public async Task CanDownloadBlboToStreamAsync(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);

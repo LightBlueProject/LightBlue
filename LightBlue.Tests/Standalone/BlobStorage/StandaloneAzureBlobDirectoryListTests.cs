@@ -58,7 +58,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedPath = Path.Combine(_directory.Uri.LocalPath, subDirectory);
 
-            Assert.True(directories.Any(d => d.Uri.LocalPath == expectedPath));
+            Assert.Contains(directories, d => d.Uri.LocalPath == expectedPath);
         }
 
         [Theory]
@@ -79,7 +79,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedPath = Path.Combine(_directory.Uri.LocalPath, file);
 
-            Assert.True(directories.Any(d => d.Uri.LocalPath == expectedPath));
+            Assert.Contains(directories, d => d.Uri.LocalPath == expectedPath);
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedPath = Path.Combine(_directory.Uri.LocalPath, file);
 
-            Assert.True(directories.Any(d => d.Uri.LocalPath == expectedPath));
+            Assert.Contains(directories, d => d.Uri.LocalPath == expectedPath);
         }
 
         [Theory]
@@ -130,7 +130,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedPath = Path.Combine(_directory.Uri.LocalPath, subDirectory);
 
-            Assert.True(result.Results.Any(d => d.Uri.LocalPath == expectedPath));
+            Assert.Contains(result.Results, d => d.Uri.LocalPath == expectedPath);
         }
 
         [Theory]
@@ -146,7 +146,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedPath = Path.Combine(_directory.Uri.LocalPath, file);
 
-            Assert.True(result.Results.Any(d => d.Uri.LocalPath == expectedPath));
+            Assert.Contains(result.Results, d => d.Uri.LocalPath == expectedPath);
         }
 
         [Theory]
@@ -168,7 +168,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedPath = Path.Combine(_directory.Uri.LocalPath, subDirectory);
 
-            Assert.True(result.Results.Any(d => d.Uri.LocalPath == expectedPath));
+            Assert.Contains(result.Results, d => d.Uri.LocalPath == expectedPath);
         }
 
         [Theory]
@@ -190,7 +190,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
             var expectedPath = Path.Combine(_directory.Uri.LocalPath, file);
 
-            Assert.True(result.Results.Any(d => d.Uri.LocalPath == expectedPath));
+            Assert.Contains(result.Results, d => d.Uri.LocalPath == expectedPath);
         }
     }
 }
