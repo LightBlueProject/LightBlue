@@ -13,13 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Tests", "LightBlu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WebHost", "LightBlue.WebHost\LightBlue.WebHost.csproj", "{871C2B31-FB84-499F-A1B7-901DDABDA8D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D3EFB959-1B2A-4314-A4C2-2486DDF9AEAF}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WorkerRoleDependency", "LightBlue.WorkerRoleDependency\LightBlue.WorkerRoleDependency.csproj", "{54607C4C-10F5-4C25-BB66-C5A51178C7C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Host.Stub", "LightBlue.Host.Stub\LightBlue.Host.Stub.csproj", "{0FB3527D-FBCC-468F-91ED-C84E89260791}"
@@ -33,8 +26,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WebService", "LightBlue.WebService\LightBlue.WebService.csproj", "{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WorkerService", "LightBlue.WorkerService\LightBlue.WorkerService.csproj", "{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebRole_old", "TestWebRole_old\TestWebRole_old.csproj", "{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebRole", "TestWebRole\TestWebRole.csproj", "{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}"
 EndProject
@@ -92,10 +83,6 @@ Global
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}.Release|Any CPU.ActiveCfg = Release|Any CPU
