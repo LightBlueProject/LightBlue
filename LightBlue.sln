@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue", "LightBlue\LightBlue.csproj", "{28F5B274-4B25-4295-98AE-3E5A60C34D8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue", "LightBlue\LightBlue.csproj", "{28F5B274-4B25-4295-98AE-3E5A60C34D8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWorkerRole", "TestWorkerRole\TestWorkerRole.csproj", "{8DDA4190-8288-4BE4-AD3C-F73B2F81DD0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Host", "LightBlue.Host\LightBlue.Host.csproj", "{D6110338-D945-4E32-8A72-840C44EDA2B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Host", "LightBlue.Host\LightBlue.Host.csproj", "{D6110338-D945-4E32-8A72-840C44EDA2B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Tests", "LightBlue.Tests\LightBlue.Tests.csproj", "{E2389413-A0A3-4753-8379-2FDA0AAC6A12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Tests", "LightBlue.Tests\LightBlue.Tests.csproj", "{E2389413-A0A3-4753-8379-2FDA0AAC6A12}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebRole", "TestWebRole\TestWebRole.csproj", "{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WebHost", "LightBlue.WebHost\LightBlue.WebHost.csproj", "{871C2B31-FB84-499F-A1B7-901DDABDA8D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WebHost", "LightBlue.WebHost\LightBlue.WebHost.csproj", "{871C2B31-FB84-499F-A1B7-901DDABDA8D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D3EFB959-1B2A-4314-A4C2-2486DDF9AEAF}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,23 +22,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D3EFB9
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WorkerRoleDependency", "LightBlue.WorkerRoleDependency\LightBlue.WorkerRoleDependency.csproj", "{54607C4C-10F5-4C25-BB66-C5A51178C7C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WorkerRoleDependency", "LightBlue.WorkerRoleDependency\LightBlue.WorkerRoleDependency.csproj", "{54607C4C-10F5-4C25-BB66-C5A51178C7C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Host.Stub", "LightBlue.Host.Stub\LightBlue.Host.Stub.csproj", "{0FB3527D-FBCC-468F-91ED-C84E89260791}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Host.Stub", "LightBlue.Host.Stub\LightBlue.Host.Stub.csproj", "{0FB3527D-FBCC-468F-91ED-C84E89260791}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Autofac", "LightBlue.Autofac\LightBlue.Autofac.csproj", "{74B1F607-28DD-4248-AF6A-492B03AD321A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Autofac", "LightBlue.Autofac\LightBlue.Autofac.csproj", "{74B1F607-28DD-4248-AF6A-492B03AD321A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Windsor", "LightBlue.Windsor\LightBlue.Windsor.csproj", "{3CD6CA86-2F50-4A1C-8912-56DD96C1ED67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.MultiHost", "LightBlue.MultiHost\LightBlue.MultiHost.csproj", "{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWindsorRole", "TestWindsorRole\TestWindsorRole.csproj", "{6D9B78CD-717E-4764-BD29-93007089343F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Testability", "LightBlue.Testability\LightBlue.Testability.csproj", "{697A6A25-955B-4C17-82F8-F14FD48A5A42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.MultiHost", "LightBlue.MultiHost\LightBlue.MultiHost.csproj", "{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WebService", "LightBlue.WebService\LightBlue.WebService.csproj", "{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.Testability", "LightBlue.Testability\LightBlue.Testability.csproj", "{697A6A25-955B-4C17-82F8-F14FD48A5A42}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WebService", "LightBlue.WebService\LightBlue.WebService.csproj", "{0BCCB2BA-430B-41AA-BA5E-A9C9EF88D301}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightBlue.WorkerService", "LightBlue.WorkerService\LightBlue.WorkerService.csproj", "{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WorkerService", "LightBlue.WorkerService\LightBlue.WorkerService.csproj", "{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,14 +78,6 @@ Global
 		{74B1F607-28DD-4248-AF6A-492B03AD321A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74B1F607-28DD-4248-AF6A-492B03AD321A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74B1F607-28DD-4248-AF6A-492B03AD321A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CD6CA86-2F50-4A1C-8912-56DD96C1ED67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CD6CA86-2F50-4A1C-8912-56DD96C1ED67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CD6CA86-2F50-4A1C-8912-56DD96C1ED67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CD6CA86-2F50-4A1C-8912-56DD96C1ED67}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D9B78CD-717E-4764-BD29-93007089343F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D9B78CD-717E-4764-BD29-93007089343F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D9B78CD-717E-4764-BD29-93007089343F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D9B78CD-717E-4764-BD29-93007089343F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF7E48CD-46B5-4552-9149-FCCF51CB7AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
