@@ -3,12 +3,14 @@ pull_requests:
   do_not_increment_build_number: true
 configuration: Release
 shallow_clone: true
-assembly_info:
+dotnet_csproj:
   patch: true
-  file: '**\AssemblyInfo.*'
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
   assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
 nuget:
   account_feed: true
   project_feed: true
