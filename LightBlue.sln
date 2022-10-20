@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Host", "LightBlue
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.Tests", "LightBlue.Tests\LightBlue.Tests.csproj", "{E2389413-A0A3-4753-8379-2FDA0AAC6A12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebRole", "TestWebRole\TestWebRole.csproj", "{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WebHost", "LightBlue.WebHost\LightBlue.WebHost.csproj", "{871C2B31-FB84-499F-A1B7-901DDABDA8D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D3EFB959-1B2A-4314-A4C2-2486DDF9AEAF}"
@@ -36,6 +34,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WebService", "Lig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightBlue.WorkerService", "LightBlue.WorkerService\LightBlue.WorkerService.csproj", "{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebRole_old", "TestWebRole_old\TestWebRole_old.csproj", "{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebRole", "TestWebRole\TestWebRole.csproj", "{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,10 +60,6 @@ Global
 		{E2389413-A0A3-4753-8379-2FDA0AAC6A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2389413-A0A3-4753-8379-2FDA0AAC6A12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2389413-A0A3-4753-8379-2FDA0AAC6A12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Release|Any CPU.Build.0 = Release|Any CPU
 		{871C2B31-FB84-499F-A1B7-901DDABDA8D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{871C2B31-FB84-499F-A1B7-901DDABDA8D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{871C2B31-FB84-499F-A1B7-901DDABDA8D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,6 +92,14 @@ Global
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEF47CD4-2AAF-4EC0-8982-7C748AA0E3BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20AAACA5-FF0D-4A4F-B6B7-5DFD1F950C47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C7A77A7-8AD2-48BB-BFAA-8858F0AAF064}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
