@@ -7,7 +7,7 @@
     <Company>Colin David Scott</Company>
     <Product>LightBlue</Product>
     <Description>LightBlue is a lightweight Azure development platform designed to replace a subset of the Azure emulator functionality</Description>
-    <Copyright>Copyright 2014-2015 LightBlue contributors</Copyright>
+    <Copyright>Copyright 2014-2022 LightBlue contributors</Copyright>
     <Version>1.1.21.0</Version>
     <AssemblyVersion>1.1.21.0</AssemblyVersion>
     <FileVersion>1.1.21.0</FileVersion>

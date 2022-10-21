@@ -8,7 +8,7 @@
     <Company>Colin David Scott</Company>
     <Product>LightBlue.WebService</Product>
     <Description>Windows service web role support for the LightBlue Azure development platform</Description>
-    <Copyright>Copyright 2014-2015 LightBlue contributors</Copyright>
+    <Copyright>Copyright 2014-2022 LightBlue contributors</Copyright>
     <Version>1.0.0.0</Version>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <Authors>Colin David Scott</Authors>
