@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage;
+using Azure.Storage.Sas;
 
 namespace LightBlue
 {
@@ -23,11 +25,10 @@ namespace LightBlue
         Stream OpenRead();
         void SetMetadata();
         Task SetMetadataAsync();
-        void SetProperties();
-        Task SetPropertiesAsync();
-        string GetSharedAccessSignature(SharedAccessBlobPolicy policy);
-        void DownloadToStream(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null);
-        Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null);
+        Task SetContentTypeAsync(string contentType);
+        string GetSharedAccessSignature(BlobSasPermissions permissions, DateTimeOffset expiresOn);
+        void DownloadToStream(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default);
+        Task DownloadToStreamAsync(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default);
         Task UploadFromStreamAsync(Stream source);
         Task UploadFromFileAsync(string path);
         Task UploadFromByteArrayAsync(byte[] buffer);

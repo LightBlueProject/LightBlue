@@ -1,14 +1,13 @@
 ﻿using System;
-
-using Microsoft.WindowsAzure.Storage.Blob;
+using Azure.Storage.Blobs.Specialized;
 
 namespace LightBlue.Hosted
 {
     public class HostedAzurePageBlob : IAzurePageBlob
     {
-        private readonly CloudPageBlob _cloudPageBlob;
+        private readonly PageBlobClient _cloudPageBlob;
 
-        public HostedAzurePageBlob(CloudPageBlob cloudPageBlob)
+        public HostedAzurePageBlob(PageBlobClient cloudPageBlob)
         {
             _cloudPageBlob = cloudPageBlob;
         }

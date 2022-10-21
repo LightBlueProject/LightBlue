@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.WindowsAzure.Storage.Auth;
+﻿using Azure.Storage;
+using System;
 
 namespace LightBlue
 {
@@ -10,9 +10,9 @@ namespace LightBlue
         AzureEnvironment AzureEnvironment { get; }
         IAzureStorage GetStorageAccount(string connectionString);
         IAzureBlobContainer GetBlobContainer(Uri containerUri);
-        IAzureBlobContainer GetBlobContainer(Uri containerUri, StorageCredentials storageCredentials);
+        IAzureBlobContainer GetBlobContainer(Uri containerUri, StorageSharedKeyCredential storageCredentials);
         IAzureBlockBlob GetBlockBlob(Uri blobUri);
-        IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageCredentials storageCredentials);
+        IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageSharedKeyCredential storageCredentials);
         IAzureQueue GetQueue(Uri queueUri);
     }
 }

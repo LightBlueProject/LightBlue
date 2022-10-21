@@ -1,23 +1,24 @@
-﻿using System;
+﻿using Azure.Storage.Queues;
+using Azure.Storage.Queues.Models;
+using Azure.Storage.Sas;
+using System;
 using System.Threading.Tasks;
-
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace LightBlue.Hosted
 {
     public class HostedAzureQueue : IAzureQueue
     {
-        private readonly CloudQueue _cloudQueue;
+        private readonly QueueClient _cloudQueue;
 
-        public HostedAzureQueue(CloudQueue cloudQueue)
+        public HostedAzureQueue(QueueClient cloudQueue)
         {
             _cloudQueue = cloudQueue;
         }
 
         public HostedAzureQueue(Uri queueUri)
         {
-            _cloudQueue = new CloudQueue(queueUri);
+            _cloudQueue = new QueueClient(queueUri,
+                options: new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 }); // for backwards compatability with v11 storage library defaults
         }
 
         public Uri Uri
@@ -45,24 +46,24 @@ namespace LightBlue.Hosted
             return _cloudQueue.DeleteIfExistsAsync();
         }
 
-        public Task AddMessageAsync(CloudQueueMessage message)
+        public Task AddMessageAsync(string message)
         {
-            return _cloudQueue.AddMessageAsync(message);
+            return _cloudQueue.SendMessageAsync(message);
         }
 
-        public Task<CloudQueueMessage> GetMessageAsync()
+        public async Task<QueueMessage> GetMessageAsync()
         {
-            return _cloudQueue.GetMessageAsync();
+            return await _cloudQueue.ReceiveMessageAsync().ConfigureAwait(false);
         }
 
-        public Task DeleteMessageAsync(CloudQueueMessage message)
+        public Task DeleteMessageAsync(string messageId, string popReceipt)
         {
-            return _cloudQueue.DeleteMessageAsync(message);
+            return _cloudQueue.DeleteMessageAsync(messageId, popReceipt);
         }
 
-        public string GetSharedAccessSignature(SharedAccessQueuePolicy policy)
+        public string GetSharedAccessSignature(QueueSasPermissions permissions, DateTimeOffset expiresOn)
         {
-            return _cloudQueue.GetSharedAccessSignature(policy);
+            return _cloudQueue.GenerateSasUri(permissions, expiresOn).Query;
         }
     }
 }

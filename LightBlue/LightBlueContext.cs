@@ -1,6 +1,6 @@
 ﻿using System;
+using Azure.Storage;
 using LightBlue.Setup;
-using Microsoft.WindowsAzure.Storage.Auth;
 
 namespace LightBlue
 {
@@ -47,7 +47,7 @@ namespace LightBlue
             return _context.GetBlobContainer(containerUri);
         }
 
-        public static IAzureBlobContainer GetBlobContainer(Uri containerUri, StorageCredentials storageCredentials)
+        public static IAzureBlobContainer GetBlobContainer(Uri containerUri, StorageSharedKeyCredential storageCredentials)
         {
             Initialise();
             return _context.GetBlobContainer(containerUri, storageCredentials);
@@ -59,7 +59,7 @@ namespace LightBlue
             return _context.GetBlockBlob(blobUri);
         }
 
-        public static IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageCredentials storageCredentials)
+        public static IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageSharedKeyCredential storageCredentials)
         {
             Initialise();
             return _context.GetBlockBlob(blobUri, storageCredentials);

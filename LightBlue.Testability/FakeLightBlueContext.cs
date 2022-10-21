@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.WindowsAzure.Storage.Auth;
+using Azure.Storage;
 
 namespace LightBlue.Testability
 {
@@ -9,9 +9,9 @@ namespace LightBlue.Testability
     {
         public Func<string, IAzureStorage> StorageProvider { get; set; }
         public Func<Uri, IAzureBlobContainer> BlobContainerProvider { get; set; }
-        public Func<Uri, StorageCredentials, IAzureBlobContainer> BlobContainerProviderWithCredentials { get; set; }
+        public Func<Uri, StorageSharedKeyCredential, IAzureBlobContainer> BlobContainerProviderWithCredentials { get; set; }
         public Func<Uri, IAzureBlockBlob> BlockBlobProvider { get; set; }
-        public Func<Uri, StorageCredentials, IAzureBlockBlob> BlockBlobWithCredentials { get; set; }
+        public Func<Uri, StorageSharedKeyCredential, IAzureBlockBlob> BlockBlobWithCredentials { get; set; }
         public Func<Uri, IAzureQueue> QueueProvider { get; set; }
 
         public string RoleName { get; set; }
@@ -32,7 +32,7 @@ namespace LightBlue.Testability
             return BlobContainerProvider(containerUri);
         }
 
-        public IAzureBlobContainer GetBlobContainer(Uri containerUri, StorageCredentials storageCredentials)
+        public IAzureBlobContainer GetBlobContainer(Uri containerUri, StorageSharedKeyCredential storageCredentials)
         {
             CheckPropertyIsSet(() => BlobContainerProviderWithCredentials);
 
@@ -46,7 +46,7 @@ namespace LightBlue.Testability
             return BlockBlobProvider(blobUri);
         }
 
-        public IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageCredentials storageCredentials)
+        public IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageSharedKeyCredential storageCredentials)
         {
             CheckPropertyIsSet(() => BlockBlobWithCredentials);
 

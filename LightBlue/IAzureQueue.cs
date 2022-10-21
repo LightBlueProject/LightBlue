@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage.Queue;
+using Azure.Storage.Queues.Models;
+using Azure.Storage.Sas;
 
 namespace LightBlue
 {
@@ -15,10 +14,10 @@ namespace LightBlue
         Task DeleteAsync();
         Task DeleteIfExistsAsync();
 
-        Task AddMessageAsync(CloudQueueMessage message);
-        Task<CloudQueueMessage> GetMessageAsync();
-        Task DeleteMessageAsync(CloudQueueMessage message);
+        Task AddMessageAsync(string message);
+        Task<QueueMessage> GetMessageAsync();
+        Task DeleteMessageAsync(string messageId, string popReceipt);
 
-        string GetSharedAccessSignature(SharedAccessQueuePolicy policy);
+        string GetSharedAccessSignature(QueueSasPermissions permissions, DateTimeOffset expiresOn);
     }
 }

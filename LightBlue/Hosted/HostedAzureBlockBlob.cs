@@ -1,30 +1,47 @@
-﻿using System;
+﻿using Azure;
+using Azure.Storage;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.Sas;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Hosted
 {
     public class HostedAzureBlockBlob : IAzureBlockBlob
     {
-        private readonly CloudBlockBlob _cloudBlockBlob;
+        private readonly BlockBlobClient _cloudBlockBlob;
+        private BlobProperties _properties;
 
-        public HostedAzureBlockBlob(CloudBlockBlob cloudBlockBlob)
+        public HostedAzureBlockBlob(BlockBlobClient cloudBlockBlob, IDictionary<string, string> metadata = null)
         {
             _cloudBlockBlob = cloudBlockBlob;
+            
+            if(metadata?.Any() == true)
+            {
+                _properties = new BlobProperties();
+                foreach(var m in metadata)
+                    _properties.Metadata[m.Key] = m.Value;
+            }
         }
 
         public HostedAzureBlockBlob(Uri blobUri)
         {
-            _cloudBlockBlob = new CloudBlockBlob(blobUri);
+            _cloudBlockBlob = new BlockBlobClient(blobUri);
         }
 
-        public HostedAzureBlockBlob(Uri blobUri, StorageCredentials storageCredentials)
+        public HostedAzureBlockBlob(Uri blobUri, StorageSharedKeyCredential storageCredentials)
         {
-            _cloudBlockBlob = new CloudBlockBlob(blobUri, storageCredentials);
+            _cloudBlockBlob = new BlockBlobClient(blobUri, storageCredentials);
+        }
+
+        public HostedAzureBlockBlob(Uri blobUri, AzureSasCredential storageCredentials)
+        {
+            _cloudBlockBlob = new BlockBlobClient(blobUri, storageCredentials);
         }
 
         public Uri Uri
@@ -41,7 +58,7 @@ namespace LightBlue.Hosted
         {
             get
             {
-                return new HostedAzureBlobProperties(_cloudBlockBlob.Properties);
+                return new HostedAzureBlobProperties(_properties);
             }
         }
 
@@ -49,16 +66,15 @@ namespace LightBlue.Hosted
         {
             get
             {
-                var copyState = _cloudBlockBlob.CopyState;
-                return copyState != null
-                    ? new HostedAzureCopyState(copyState)
+                return _properties.BlobCopyStatus != null
+                    ? new HostedAzureCopyState(_properties.BlobCopyStatus, _properties.CopyStatusDescription)
                     : null;
             }
         }
 
         public IDictionary<string, string> Metadata
         {
-            get { return _cloudBlockBlob.Metadata; }
+            get { return _properties.Metadata; }
         }
 
         public void Delete()
@@ -76,19 +92,19 @@ namespace LightBlue.Hosted
             return _cloudBlockBlob.Exists();
         }
 
-        public Task<bool> ExistsAsync()
+        public async Task<bool> ExistsAsync()
         {
-            return _cloudBlockBlob.ExistsAsync();
+            return (await _cloudBlockBlob.ExistsAsync().ConfigureAwait(false)).Value;
         }
 
         public void FetchAttributes()
         {
-            _cloudBlockBlob.FetchAttributes();
+            _properties = _cloudBlockBlob.GetProperties().Value;
         }
 
-        public Task FetchAttributesAsync()
+        public async Task FetchAttributesAsync()
         {
-            return _cloudBlockBlob.FetchAttributesAsync();
+            _properties = await _cloudBlockBlob.GetPropertiesAsync().ConfigureAwait(false);
         }
 
         public Stream OpenRead()
@@ -98,73 +114,83 @@ namespace LightBlue.Hosted
 
         public void SetMetadata()
         {
-            _cloudBlockBlob.SetMetadata();
+            _cloudBlockBlob.SetMetadata(_properties.Metadata);
         }
 
         public Task SetMetadataAsync()
         {
-            return _cloudBlockBlob.SetMetadataAsync();
+            return _cloudBlockBlob.SetMetadataAsync(_properties.Metadata);
         }
 
-        public void SetProperties()
+        public Task SetContentTypeAsync(string contentType)
         {
-            _cloudBlockBlob.SetProperties();
+            return _cloudBlockBlob.SetHttpHeadersAsync(new BlobHttpHeaders {  ContentType = contentType });
         }
 
-        public Task SetPropertiesAsync()
+        public string GetSharedAccessSignature(BlobSasPermissions permissions, DateTimeOffset expiresOn)
         {
-            return _cloudBlockBlob.SetPropertiesAsync();
+            return _cloudBlockBlob.GenerateSasUri(permissions, expiresOn).Query;
         }
 
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
+        public void DownloadToStream(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default)
         {
-            return _cloudBlockBlob.GetSharedAccessSignature(policy);
+            var downloadToOptions = new BlobDownloadToOptions
+            {
+                Conditions = conditions,
+                TransferOptions = options
+            };
+            _cloudBlockBlob.DownloadTo(target, downloadToOptions, cancellationToken);
         }
 
-        public void DownloadToStream(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null,OperationContext operationContext = null)
+        public Task DownloadToStreamAsync(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default)
         {
-            _cloudBlockBlob.DownloadToStream(target, accessCondition, options, operationContext);
-        }
-
-        public Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
-        {
-            return _cloudBlockBlob.DownloadToStreamAsync(target, accessCondition, options, operationContext);
+            var downloadToOptions = new BlobDownloadToOptions
+            {
+                Conditions = conditions,
+                TransferOptions = options
+            };
+            return _cloudBlockBlob.DownloadToAsync(target, downloadToOptions, cancellationToken);
         }
 
         public Task UploadFromStreamAsync(Stream source)
         {
-            return _cloudBlockBlob.UploadFromStreamAsync(source);
+            return _cloudBlockBlob.UploadAsync(source);
         }
 
-        public Task UploadFromFileAsync(string path)
+        public async Task UploadFromFileAsync(string path)
         {
-            return _cloudBlockBlob.UploadFromFileAsync(path);
+            using (var source = File.OpenRead(path))
+            {
+                await _cloudBlockBlob.UploadAsync(source).ConfigureAwait(false);
+            }
         }
 
-        public Task UploadFromByteArrayAsync(byte[] buffer)
+        public async Task UploadFromByteArrayAsync(byte[] buffer)
         {
-            return _cloudBlockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length);
+            using(var source = new MemoryStream(buffer))
+            {
+                await _cloudBlockBlob.UploadAsync(source).ConfigureAwait(false);
+            }
         }
 
         public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
         {
-            return _cloudBlockBlob.UploadFromByteArrayAsync(buffer, index, count);
+            return UploadFromByteArrayAsync(buffer.Skip(index).Take(count).ToArray());
         }
 
         public string StartCopyFromBlob(IAzureBlockBlob source)
         {
-            var hostedAzureBlockBlob = source as HostedAzureBlockBlob;
-            if (hostedAzureBlockBlob == null)
+            if (!(source is HostedAzureBlockBlob hostedAzureBlockBlob))
             {
                 throw new ArgumentException("Can only copy between blobs in the same hosting environment");
             }
 
-            return _cloudBlockBlob.StartCopy(hostedAzureBlockBlob._cloudBlockBlob);
+            return _cloudBlockBlob.StartCopyFromUri(hostedAzureBlockBlob.Uri).Id;
         }
 
         public string StartCopyFromBlob(Uri source)
         {
-            return _cloudBlockBlob.StartCopy(source);
+            return _cloudBlockBlob.StartCopyFromUri(source).Id;
         }
     }
 }

@@ -1,8 +1,6 @@
 using System;
-
 using Autofac;
-
-using Microsoft.WindowsAzure.Storage.Auth;
+using Azure.Storage;
 
 namespace LightBlue.Autofac
 {
@@ -19,14 +17,14 @@ namespace LightBlue.Autofac
             builder.RegisterInstance((Func<Uri, IAzureBlobContainer>) LightBlueContext.GetBlobContainer)
                 .As<Func<Uri, IAzureBlobContainer>>();
 
-            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlobContainer>) LightBlueContext.GetBlobContainer)
-                .As<Func<Uri, StorageCredentials, IAzureBlobContainer>>();
+            builder.RegisterInstance((Func<Uri, StorageSharedKeyCredential, IAzureBlobContainer>) LightBlueContext.GetBlobContainer)
+                .As<Func<Uri, StorageSharedKeyCredential, IAzureBlobContainer>>();
 
             builder.RegisterInstance((Func<Uri, IAzureBlockBlob>) LightBlueContext.GetBlockBlob)
                 .As<Func<Uri, IAzureBlockBlob>>();
 
-            builder.RegisterInstance((Func<Uri, StorageCredentials, IAzureBlockBlob>) LightBlueContext.GetBlockBlob)
-                .As<Func<Uri, StorageCredentials, IAzureBlockBlob>>();
+            builder.RegisterInstance((Func<Uri, StorageSharedKeyCredential, IAzureBlockBlob>) LightBlueContext.GetBlockBlob)
+                .As<Func<Uri, StorageSharedKeyCredential, IAzureBlockBlob>>();
 
             builder.RegisterInstance((Func<Uri, IAzureQueue>) LightBlueContext.GetQueue)
                 .As<Func<Uri, IAzureQueue>>();
