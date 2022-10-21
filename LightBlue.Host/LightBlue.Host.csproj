@@ -15,7 +15,7 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Authors>Colin David Scott</Authors>
-    <PackageLicenseUrl>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</PackageLicense>
     <PackageProjectUrl>https://github.com/LightBlueProject/LightBlue</PackageProjectUrl>
     <PackageTags>azure</PackageTags>
   </PropertyGroup>

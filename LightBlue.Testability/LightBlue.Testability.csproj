@@ -12,7 +12,7 @@
     <FileVersion>1.1.21.0</FileVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <Authors>Colin David Scott</Authors>
-    <PackageLicenseUrl>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</PackageLicense>
     <PackageProjectUrl>https://github.com/LightBlueProject/LightBlue</PackageProjectUrl>
     <PackageTags>azure</PackageTags>
   </PropertyGroup>
