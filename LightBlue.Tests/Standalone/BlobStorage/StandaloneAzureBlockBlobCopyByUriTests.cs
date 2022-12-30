@@ -1,16 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
+using System.Threading.Tasks;
+using Azure.Storage.Blobs.Models;
 using ExpectedObjects;
 using ExpectedObjects.Comparisons;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage.Blob;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -81,15 +77,14 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
         [Theory]
         [MemberData(nameof(CopyBlobNames))]
-        public void WillCopyMetadataFromSourceWherePresent(string source, string destination)
+        public async Task WillCopyMetadataFromSourceWherePresent(string source, string destination)
         {
             var buffer = Encoding.UTF8.GetBytes("File content");
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, source);
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
             sourceBlob.Metadata["thing"] = "something";
-            sourceBlob.Properties.ContentType = "whatever";
             sourceBlob.SetMetadata();
-            sourceBlob.SetProperties();
+            await sourceBlob.SetContentTypeAsync("whatever");
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.StartCopyFromBlob(sourceBlob.Uri);

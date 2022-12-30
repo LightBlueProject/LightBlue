@@ -1,15 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Sas;
 using ExpectedObjects;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage.Blob;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -36,7 +32,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillCreateContainerPathOnCreateIfNotExists()
         {
-            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(PublicAccessType.None);
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -44,7 +40,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillCreateMetadataPathOnCreateIfNotExists()
         {
-            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(PublicAccessType.None);
 
             Assert.True(Directory.Exists(Path.Combine(_containerPath, MetadataDirectory)));
         }
@@ -52,7 +48,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillUseCorrectContainerPathWhenGivenBasePathAndContainerName()
         {
-            new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExists(PublicAccessType.None);
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -60,7 +56,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public async Task WillCreateContainerPathOnCreateIfNotExistsAsync()
         {
-            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(BlobContainerPublicAccessType.Off);
+            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(PublicAccessType.None);
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -68,7 +64,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public async Task WillCreateMetadataPathOnCreateIfNotExistsAsync()
         {
-            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(BlobContainerPublicAccessType.Off);
+            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(PublicAccessType.None);
 
             Assert.True(Directory.Exists(Path.Combine(_containerPath, MetadataDirectory)));
         }
@@ -76,7 +72,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public async Task WillUseCorrectContainerPathWhenGivenBasePathAndContainerNameAsync()
         {
-            await new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExistsAsync(BlobContainerPublicAccessType.Off);
+            await new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExistsAsync(PublicAccessType.None);
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -85,7 +81,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         public void WillUseCorrectContainerPathWhenGiveUri()
         {
             new StandaloneAzureBlobContainer(new Uri(_containerPath))
-                .CreateIfNotExists(BlobContainerPublicAccessType.Off);
+                .CreateIfNotExists(PublicAccessType.None);
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -135,7 +131,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
 
-            container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            container.CreateIfNotExists(PublicAccessType.None);
 
             Assert.True(container.Exists());
         }
@@ -153,7 +149,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
 
-            container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            container.CreateIfNotExists(PublicAccessType.None);
 
             Assert.True(await container.ExistsAsync());
         }
@@ -162,7 +158,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         public void CanGetBlobInstance()
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
-            container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            container.CreateIfNotExists(PublicAccessType.None);
 
             var blob = container.GetBlockBlobReference("testblob");
 
@@ -190,21 +186,18 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [InlineData(SharedAccessBlobPermissions.Delete, "sp=d")]
-        [InlineData(SharedAccessBlobPermissions.List, "sp=l")]
-        [InlineData(SharedAccessBlobPermissions.Read, "sp=r")]
-        [InlineData(SharedAccessBlobPermissions.Write, "sp=w")]
-        [InlineData(SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.Write, "sp=rw")]
+        [InlineData(BlobContainerSasPermissions.Delete, "sp=d")]
+        [InlineData(BlobContainerSasPermissions.List, "sp=l")]
+        [InlineData(BlobContainerSasPermissions.Read, "sp=r")]
+        [InlineData(BlobContainerSasPermissions.Write, "sp=w")]
+        [InlineData(BlobContainerSasPermissions.Read | BlobContainerSasPermissions.Write, "sp=rw")]
         public void WillReturnParseableSharedAccessSignature(
-            SharedAccessBlobPermissions permissions, 
+            BlobContainerSasPermissions permissions, 
             string expectedPermissions)
         {
             var container = new StandaloneAzureBlobContainer(new Uri(_containerPath));
 
-            Assert.Contains(expectedPermissions, container.GetSharedAccessSignature(new SharedAccessBlobPolicy
-            {
-                Permissions = permissions
-            }));
+            Assert.Contains(expectedPermissions, container.GetSharedAccessSignature(permissions, DateTimeOffset.Now));
         }
 
         [Fact]

@@ -2,13 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Azure.Storage.Blobs.Models;
 using LightBlue.Standalone;
 
-using Microsoft.WindowsAzure.Storage.Blob;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -20,7 +17,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             : base(DirectoryType.Container)
         {
             _container = new StandaloneAzureBlobContainer(BasePath);
-            _container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
+            _container.CreateIfNotExists(PublicAccessType.None);
 
             Directory.CreateDirectory(Path.Combine(BasePath, "1a"));
             Directory.CreateDirectory(Path.Combine(BasePath, "1b"));
@@ -46,44 +43,14 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             File.WriteAllText(Path.Combine(BasePath, "1a", "5"), "Test File");
         }
 
-        [Theory]
-        [InlineData(BlobListingDetails.Snapshots)]
-        [InlineData(BlobListingDetails.All)]
-        public async Task AllowsSnapshotsOnlyInFlatMode(BlobListingDetails blobListingDetails)
-        {
-            var container = new StandaloneAzureBlobContainer(BasePath);
-            await Assert.ThrowsAsync<ArgumentException>(() => container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Hierarchical,
-                blobListingDetails,
-                500,
-                null));
-        }
-
         [Fact]
         public async Task WillGetExpectedNumberOfResultsForFlatListing()
         {
-            var results = await _container.ListBlobsSegmentedAsync(
+            var results = await _container.GetBlobs(
                 "",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                null,
-                null);
+                blobStates: BlobStates.None);
 
-            Assert.Equal(10, results.Results.Count());
-        }
-
-        [Fact]
-        public async Task FlatListingExcludesDirectories()
-        {
-            var results = await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                null,
-                null);
-
-            Assert.Empty(results.Results.OfType<IAzureBlobDirectory>());
+            Assert.Equal(10, results.Count());
         }
 
         [Theory]
@@ -99,68 +66,13 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [InlineData("5", "1a")]
         public async Task FlatListingContainsExpectedItems(string fileName, string directoryName)
         {
-            var results = await _container.ListBlobsSegmentedAsync(
+            var results = await _container.GetBlobs(
                 "",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                null,
-                null);
+                blobStates: BlobStates.None);
 
             var expectedUri = new Uri(Path.Combine(BasePath, directoryName, fileName));
 
-
-            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
-        }
-
-        [Fact]
-        public async Task WillGetExpectedNumberOfResultsForHierarchicalListing()
-        {
-            var results = await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                null);
-
-            Assert.Equal(15, results.Results.Count());
-        }
-
-        [Fact]
-        public async Task HierarchicalListingWillContainExpectedNumberOfDirectories()
-        {
-            var results = await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                null);
-
-            Assert.Equal(10, results.Results.OfType<IAzureBlobDirectory>().Count());
-        }
-
-        [Theory]
-        [InlineData("1a")]
-        [InlineData("1b")]
-        [InlineData("1c")]
-        [InlineData("1d")]
-        [InlineData("1e")]
-        [InlineData("2a")]
-        [InlineData("2b")]
-        [InlineData("2c")]
-        [InlineData("2d")]
-        [InlineData("2e")]
-        public async Task HierarchicalListingWillContainExpectedDirectories(string directoryName)
-        {
-            var results = await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                null);
-
-            var expectedUri = new Uri(Path.Combine(BasePath, directoryName));
-
-            Assert.Contains(results.Results.OfType<IAzureBlobDirectory>(), d => d.Uri == expectedUri);
+            Assert.Contains(results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
         }
 
         [Theory]
@@ -169,31 +81,25 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [InlineData("3")]
         [InlineData("4")]
         [InlineData("5")]
-        public async Task HierarchicalListingWillContainExpectedFiles(string fileName)
+        public async Task ListingWillContainExpectedFiles(string fileName)
         {
-            var results = await _container.ListBlobsSegmentedAsync(
+            var results = await _container.GetBlobs(
                 "",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                null);
+                blobStates: BlobStates.None);
 
             var expectedUri = new Uri(Path.Combine(BasePath, fileName));
 
-            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
+            Assert.Contains(results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
         }
 
         [Fact]
         public async Task WillHaveExpectedNumberOfItemsWithFlatListingAndPrefix()
         {
-            var results = await _container.ListBlobsSegmentedAsync(
+            var results = await _container.GetBlobs(
                 "1",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                null,
-                null);
+                blobStates: BlobStates.None);
 
-            Assert.Equal(2, results.Results.Count());
+            Assert.Equal(2, results.Count());
         }
 
         [Theory]
@@ -201,133 +107,13 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [InlineData("1", "1a")]
         public async Task FlatListingContainsExpectedItemsWithPrefix(string fileName, string directoryName)
         {
-            var results = await _container.ListBlobsSegmentedAsync(
+            var results = await _container.GetBlobs(
                 "1",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                null,
-                null);
+                blobStates: BlobStates.None);
 
             var expectedUri = new Uri(Path.Combine(BasePath, directoryName, fileName));
 
-            Assert.Contains(results.Results, b => b.Uri == expectedUri);
-        }
-
-        [Fact]
-        public async Task WillHaveExpectedNumberOfItemsWithHierarchicalListingAndPrefix()
-        {
-            var results = await _container.ListBlobsSegmentedAsync(
-                "1",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                null);
-
-            Assert.Equal(6, results.Results.Count());
-        }
-
-        [Theory]
-        [InlineData("1a")]
-        [InlineData("1b")]
-        [InlineData("1c")]
-        [InlineData("1d")]
-        [InlineData("1e")]
-        public async Task HierarchicalListingWillContainExpectedDirectoriesWithPrefix(string directoryName)
-        {
-            var results = await _container.ListBlobsSegmentedAsync(
-                "1",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                null);
-
-            var expectedUri = new Uri(Path.Combine(BasePath, directoryName));
-
-            Assert.Contains(results.Results.OfType<IAzureBlobDirectory>(), d => d.Uri == expectedUri);
-        }
-
-        [Fact]
-        public async Task HierarchicalListingWillContainExpectedFileWithPrefix()
-        {
-            var results = await _container.ListBlobsSegmentedAsync(
-                "1",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                null);
-
-            var expectedUri = new Uri(Path.Combine(BasePath, "1"));
-
-            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
-        }
-
-        [Fact]
-        public async Task WillHaveExpectedNumberOfFilesWhenContinuingWithFlatListing()
-        {
-            var token = (await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                4,
-                null)).ContinuationToken;
-
-            var results = await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                null,
-                token);
-
-            Assert.Equal(6, results.Results.Count());
-        }
-
-        [Theory]
-        [InlineData("4", "")]
-        [InlineData("5", "")]
-        [InlineData("1", "1a")]
-        [InlineData("2", "1a")]
-        [InlineData("3", "1a")]
-        [InlineData("4", "1a")]
-        [InlineData("5", "1a")]
-        public async Task WillHaveExpectedFilesWhenContinuingWithFlatListing(string fileName, string directoryName)
-        {
-            var token = (await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                3,
-                null)).ContinuationToken;
-
-            var results = await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Flat,
-                BlobListingDetails.None,
-                null,
-                token);
-
-            var expectedUri = new Uri(Path.Combine(BasePath, directoryName, fileName));
-
-            Assert.Contains(results.Results.OfType<IAzureBlockBlob>(), b => b.Uri == expectedUri);
-        }
-
-        [Fact]
-        public async Task WillHaveExpectedNumberOfItemsWhenContinuingWithHierarchicalListing()
-        {
-            var token = (await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                9,
-                null)).ContinuationToken;
-
-            var results = await _container.ListBlobsSegmentedAsync(
-                "",
-                BlobListing.Hierarchical,
-                BlobListingDetails.None,
-                null,
-                token);
-
-            Assert.Equal(6, results.Results.Count());
+            Assert.Contains(results, b => b.Uri == expectedUri);
         }
     }
 }

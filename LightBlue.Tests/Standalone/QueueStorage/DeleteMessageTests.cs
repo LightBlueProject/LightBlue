@@ -1,10 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage.Queue;
-
 using Xunit;
 
 namespace LightBlue.Tests.Standalone.QueueStorage
@@ -22,11 +18,11 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         [Fact]
         public async Task DeleteWillRemoveFile()
         {
-            await _queue.AddMessageAsync(new CloudQueueMessage("First test message"));
+            await _queue.AddMessageAsync("First test message");
 
             var message = await _queue.GetMessageAsync();
 
-            await _queue.DeleteMessageAsync(message);
+            await _queue.DeleteMessageAsync(message.MessageId, message.PopReceipt);
 
             var files = Directory.GetFiles(BasePath);
             Assert.Empty(files);

@@ -2,20 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 using AssertExLib;
-
+using Azure;
 using ExpectedObjects;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -34,7 +27,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            Assert.Throws<StorageException>(() => blob.FetchAttributes());
+            Assert.Throws<RequestFailedException>(() => blob.FetchAttributes());
         }
 
         [Theory]
@@ -43,7 +36,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            Assert.Throws<StorageException>(() => blob.SetMetadata());
+            Assert.Throws<RequestFailedException>(() => blob.SetMetadata());
         }
 
         [Theory]
@@ -52,7 +45,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            AssertEx.Throws<StorageException>(() => blob.SetMetadataAsync());
+            AssertEx.Throws<RequestFailedException>(() => blob.SetMetadataAsync());
         }
 
         [Theory]
@@ -222,7 +215,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             
             using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-                Assert.Throws<StorageException>(() => loadedBlob.SetMetadata());
+                Assert.Throws<RequestFailedException>(() => loadedBlob.SetMetadata());
             }
         }
 
@@ -236,12 +229,6 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             sourceBlob.SetMetadata();
 
             var metadataPath = Path.Combine(BasePath, ".meta", blobName);
-            var expectedProperties = new Dictionary<string, string>
-            {
-                {"foo", "bar"}, {"couci-couça","svo-svo"}
-            };
-            WriteJsonPropertiesToFile(metadataPath, expectedProperties);
-
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
             loadedBlob.Metadata["another thing"] = "whatever else";
@@ -253,26 +240,6 @@ namespace LightBlue.Tests.Standalone.BlobStorage
                 var actualMetadata = loaded["Metadata"];
                 Assert.Equal("something", actualMetadata["thing"]);
                 Assert.Equal("whatever else", actualMetadata["another thing"]);
-                expectedProperties.ToList().ForEach(kvp =>
-                    Assert.Equal(kvp.Value, loaded[kvp.Key])
-                );
-            }
-        }
-        
-        private static void WriteJsonPropertiesToFile(string metadataPath, IEnumerable<KeyValuePair<string, string>> properties)
-        {
-            JObject jObject;
-            using (var reader = new StreamReader(metadataPath))
-            {
-                jObject = JObject.Load(new JsonTextReader(reader));
-                foreach (var pair in properties)
-                {
-                    jObject[pair.Key] = pair.Value;
-                }
-            }
-            using (var writer = new JsonTextWriter(new StreamWriter(metadataPath)))
-            {
-                new JsonSerializer().Serialize(writer, jObject);
             }
         }
     }

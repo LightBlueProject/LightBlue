@@ -1,15 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-
+using Azure;
+using Azure.Storage.Sas;
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage.Queue;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.QueueStorage
 {
@@ -139,7 +134,7 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            await Assert.ThrowsAsync<StorageException>(() => queue.DeleteAsync());
+            await Assert.ThrowsAsync<RequestFailedException>(() => queue.DeleteAsync());
         }
 
         [Fact]
@@ -163,21 +158,18 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Theory]
-        [InlineData(SharedAccessQueuePermissions.Read, "sp=r")]
-        [InlineData(SharedAccessQueuePermissions.Add, "sp=a")]
-        [InlineData(SharedAccessQueuePermissions.Update, "sp=u")]
-        [InlineData(SharedAccessQueuePermissions.ProcessMessages, "sp=p")]
-        [InlineData(SharedAccessQueuePermissions.Read | SharedAccessQueuePermissions.Add, "sp=ra")]
+        [InlineData(QueueSasPermissions.Read, "sp=r")]
+        [InlineData(QueueSasPermissions.Add, "sp=a")]
+        [InlineData(QueueSasPermissions.Update, "sp=u")]
+        [InlineData(QueueSasPermissions.Process, "sp=p")]
+        [InlineData(QueueSasPermissions.Read | QueueSasPermissions.Add, "sp=ra")]
         public void WillReturnParseableSharedAccessSignature(
-            SharedAccessQueuePermissions permissions,
+            QueueSasPermissions permissions,
             string expectedPermissions)
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.Contains(expectedPermissions, queue.GetSharedAccessSignature(new SharedAccessQueuePolicy
-            {
-                Permissions = permissions
-            }));
+            Assert.Contains(expectedPermissions, queue.GetSharedAccessSignature(permissions, DateTimeOffset.Now));
         }
 
     }
