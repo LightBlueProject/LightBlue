@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{74B1F607-28DD-4248-AF6A-492B03AD321A}</ProjectGuid>
-    <TargetFramework>net48</TargetFramework>
+	<TargetFramework>netstandard2.0</TargetFramework>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <AssemblyTitle>LightBlue.Autofac</AssemblyTitle>
     <Company>Colin David Scott</Company>
@@ -25,7 +25,7 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="3.5.2" />
+    <PackageReference Include="Autofac" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LightBlue\LightBlue.csproj" />
