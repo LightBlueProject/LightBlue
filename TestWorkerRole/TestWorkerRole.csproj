@@ -15,9 +15,7 @@
     <FileVersion>1.1.21.0</FileVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <PreBuildEvent />
-    <PreBuildEvent />
-    <PreBuildEvent />
+	<IsPackable>false</IsPackable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>

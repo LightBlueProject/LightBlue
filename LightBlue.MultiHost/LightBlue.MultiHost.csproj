@@ -20,13 +20,23 @@
     <PackageLicense>https://github.com/LightBlueProject/LightBlue/blob/master/LICENCE</PackageLicense>
     <PackageProjectUrl>https://github.com/LightBlueProject/LightBlue</PackageProjectUrl>
     <PackageTags>azure</PackageTags>
-    <PreBuildEvent />
-    <PostBuildEvent />
-    <PreBuildEvent />
-    <PostBuildEvent />
-    <PreBuildEvent />
-    <PostBuildEvent />
   </PropertyGroup>
+    <PropertyGroup>
+        <!--Package as a 'tool', rather than a libary-->
+        <IsTool>true</IsTool>
+        <!--Ensure the tools package doesn't require any other packages as dependencies-->
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <!--Include the references\dependencies in the package so the tool can run stand alone-->  
+        <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludeReferencesAsContent</TargetsForTfmSpecificContentInPackage>
+    </PropertyGroup>
+    <Target Name="IncludeReferencesAsContent">
+	    <ItemGroup>
+		    <TfmSpecificPackageFile Include="$(OutputPath)\**\*.dll">
+			    <!--Ensure the references are also placed in the tools folder, instead of the content folder-->
+			    <PackagePath>tools</PackagePath>
+		    </TfmSpecificPackageFile>
+	    </ItemGroup>
+    </Target>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
   </PropertyGroup>
@@ -38,12 +48,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>LightBlue.MultiHost.App</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent />
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent />
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="1.1.2.0" />
