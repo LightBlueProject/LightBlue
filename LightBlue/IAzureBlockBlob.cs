@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs.Models;
-using Azure.Storage;
-using Azure.Storage.Sas;
 
 namespace LightBlue
 {
@@ -15,7 +12,7 @@ namespace LightBlue
         IAzureBlobProperties Properties { get; }
         IAzureCopyState CopyState { get; }
         IDictionary<string, string> Metadata { get; }
-        
+
         void Delete();
         Task DeleteAsync();
         bool Exists();
@@ -26,9 +23,11 @@ namespace LightBlue
         void SetMetadata();
         Task SetMetadataAsync();
         Task SetContentTypeAsync(string contentType);
-        string GetSharedAccessSignature(BlobSasPermissions permissions, DateTimeOffset expiresOn);
-        void DownloadToStream(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default);
-        Task DownloadToStreamAsync(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default);
+        string GetSharedAccessReadSignature(DateTimeOffset expiresOn);
+        string GetSharedAccessWriteSignature(DateTimeOffset expiresOn);
+        string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn);
+        void DownloadToStream(Stream target, CancellationToken cancellationToken = default);
+        Task DownloadToStreamAsync(Stream target, CancellationToken cancellationToken = default);
         Task UploadFromStreamAsync(Stream source);
         Task UploadFromFileAsync(string path);
         Task UploadFromByteArrayAsync(byte[] buffer);

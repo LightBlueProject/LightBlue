@@ -1,5 +1,6 @@
-﻿using Azure.Storage;
-using System;
+﻿using System;
+using Azure;
+using Azure.Storage;
 
 namespace LightBlue
 {
@@ -13,6 +14,7 @@ namespace LightBlue
         IAzureBlobContainer GetBlobContainer(Uri containerUri, StorageSharedKeyCredential storageCredentials);
         IAzureBlockBlob GetBlockBlob(Uri blobUri);
         IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageSharedKeyCredential storageCredentials);
+        IAzureBlockBlob GetBlockBlob(Uri blobUri, AzureSasCredential storageCredentials);
         IAzureQueue GetQueue(Uri queueUri);
     }
 }

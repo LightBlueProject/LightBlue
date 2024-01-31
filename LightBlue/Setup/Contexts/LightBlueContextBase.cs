@@ -1,4 +1,5 @@
 using System;
+using Azure;
 using Azure.Storage;
 using LightBlue.Standalone;
 
@@ -36,6 +37,12 @@ namespace LightBlue.Setup.Contexts
         }
 
         public IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageSharedKeyCredential storageCredentials)
+        {
+            var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
+            return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);
+        }
+
+        public IAzureBlockBlob GetBlockBlob(Uri blobUri, AzureSasCredential storageCredentials)
         {
             var locationParts = StandaloneEnvironment.SeparateBlobUri(blobUri);
             return new StandaloneAzureBlockBlob(locationParts.ContainerPath, locationParts.BlobPath);

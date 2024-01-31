@@ -1,14 +1,14 @@
-﻿using Azure;
-using Azure.Storage;
-using Azure.Storage.Blobs.Models;
-using Azure.Storage.Blobs.Specialized;
-using Azure.Storage.Sas;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Storage;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.Sas;
 
 namespace LightBlue.Hosted
 {
@@ -20,11 +20,11 @@ namespace LightBlue.Hosted
         public HostedAzureBlockBlob(BlockBlobClient cloudBlockBlob, IDictionary<string, string> metadata = null)
         {
             _cloudBlockBlob = cloudBlockBlob;
-            
-            if(metadata?.Any() == true)
+
+            if (metadata?.Any() == true)
             {
                 _properties = new BlobProperties();
-                foreach(var m in metadata)
+                foreach (var m in metadata)
                     _properties.Metadata[m.Key] = m.Value;
             }
         }
@@ -124,32 +124,32 @@ namespace LightBlue.Hosted
 
         public Task SetContentTypeAsync(string contentType)
         {
-            return _cloudBlockBlob.SetHttpHeadersAsync(new BlobHttpHeaders {  ContentType = contentType });
+            return _cloudBlockBlob.SetHttpHeadersAsync(new BlobHttpHeaders { ContentType = contentType });
         }
 
-        public string GetSharedAccessSignature(BlobSasPermissions permissions, DateTimeOffset expiresOn)
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
         {
-            return _cloudBlockBlob.GenerateSasUri(permissions, expiresOn).Query;
+            return _cloudBlockBlob.GenerateSasUri(BlobSasPermissions.Read, expiresOn).Query;
         }
 
-        public void DownloadToStream(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default)
+        public string GetSharedAccessWriteSignature(DateTimeOffset expiresOn)
         {
-            var downloadToOptions = new BlobDownloadToOptions
-            {
-                Conditions = conditions,
-                TransferOptions = options
-            };
-            _cloudBlockBlob.DownloadTo(target, downloadToOptions, cancellationToken);
+            return _cloudBlockBlob.GenerateSasUri(BlobSasPermissions.Write, expiresOn).Query;
         }
 
-        public Task DownloadToStreamAsync(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default)
+        public string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn)
         {
-            var downloadToOptions = new BlobDownloadToOptions
-            {
-                Conditions = conditions,
-                TransferOptions = options
-            };
-            return _cloudBlockBlob.DownloadToAsync(target, downloadToOptions, cancellationToken);
+            return _cloudBlockBlob.GenerateSasUri(BlobSasPermissions.Read | BlobSasPermissions.Write, expiresOn).Query;
+        }
+
+        public void DownloadToStream(Stream target, CancellationToken cancellationToken = default)
+        {
+            _cloudBlockBlob.DownloadTo(target, new BlobDownloadToOptions(), cancellationToken);
+        }
+
+        public Task DownloadToStreamAsync(Stream target, CancellationToken cancellationToken = default)
+        {
+            return _cloudBlockBlob.DownloadToAsync(target, new BlobDownloadToOptions(), cancellationToken);
         }
 
         public Task UploadFromStreamAsync(Stream source)
@@ -167,7 +167,7 @@ namespace LightBlue.Hosted
 
         public async Task UploadFromByteArrayAsync(byte[] buffer)
         {
-            using(var source = new MemoryStream(buffer))
+            using (var source = new MemoryStream(buffer))
             {
                 await _cloudBlockBlob.UploadAsync(source).ConfigureAwait(false);
             }

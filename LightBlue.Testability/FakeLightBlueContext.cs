@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Azure;
 using Azure.Storage;
 
 namespace LightBlue.Testability
@@ -12,6 +13,7 @@ namespace LightBlue.Testability
         public Func<Uri, StorageSharedKeyCredential, IAzureBlobContainer> BlobContainerProviderWithCredentials { get; set; }
         public Func<Uri, IAzureBlockBlob> BlockBlobProvider { get; set; }
         public Func<Uri, StorageSharedKeyCredential, IAzureBlockBlob> BlockBlobWithCredentials { get; set; }
+        public Func<Uri, AzureSasCredential, IAzureBlockBlob> BlockBlobWithSasCredentials { get; set; }
         public Func<Uri, IAzureQueue> QueueProvider { get; set; }
 
         public string RoleName { get; set; }
@@ -21,7 +23,7 @@ namespace LightBlue.Testability
         public IAzureStorage GetStorageAccount(string connectionString)
         {
             CheckPropertyIsSet(() => StorageProvider);
-            
+
             return StorageProvider(connectionString);
         }
 
@@ -51,6 +53,13 @@ namespace LightBlue.Testability
             CheckPropertyIsSet(() => BlockBlobWithCredentials);
 
             return BlockBlobWithCredentials(blobUri, storageCredentials);
+        }
+
+        public IAzureBlockBlob GetBlockBlob(Uri blobUri, AzureSasCredential storageCredentials)
+        {
+            CheckPropertyIsSet(() => BlockBlobWithSasCredentials);
+
+            return BlockBlobWithSasCredentials(blobUri, storageCredentials);
         }
 
         public IAzureQueue GetQueue(Uri queueUri)
@@ -85,5 +94,7 @@ namespace LightBlue.Testability
 
             return body.Member.Name;
         }
+
+
     }
 }

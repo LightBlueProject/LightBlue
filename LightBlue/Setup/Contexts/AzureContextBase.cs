@@ -1,4 +1,5 @@
 ﻿using System;
+using Azure;
 using Azure.Storage;
 using LightBlue.Hosted;
 
@@ -42,6 +43,11 @@ namespace LightBlue.Setup.Contexts
         }
 
         public IAzureBlockBlob GetBlockBlob(Uri blobUri, StorageSharedKeyCredential storageCredentials)
+        {
+            return new HostedAzureBlockBlob(blobUri, storageCredentials);
+        }
+
+        public IAzureBlockBlob GetBlockBlob(Uri blobUri, AzureSasCredential storageCredentials)
         {
             return new HostedAzureBlockBlob(blobUri, storageCredentials);
         }
