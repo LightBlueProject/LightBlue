@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Azure;
+using Azure.Storage;
 using LightBlue.Testability;
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Testability
 {
@@ -34,7 +35,8 @@ namespace LightBlue.Tests.Testability
                     new object[] { new Action(() => Context.GetBlobContainer(null)) },
                     new object[] { new Action(() => Context.GetBlobContainer(null, null)) },
                     new object[] { new Action(() => Context.GetBlockBlob(null)) },
-                    new object[] { new Action(() => Context.GetBlockBlob(null, null)) },
+                    new object[] { new Action(() => Context.GetBlockBlob(null, (AzureSasCredential)null)) },
+                    new object[] { new Action(() => Context.GetBlockBlob(null, (StorageSharedKeyCredential)null)) },
                     new object[] { new Action(() => Context.GetQueue(null)) }
                 };
             }

@@ -4,11 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
 using Azure.Storage.Blobs.Models;
-using Azure.Storage;
 using Azure.Storage.Sas;
 using LightBlue.Infrastructure;
-using Azure;
 
 namespace LightBlue.Standalone
 {
@@ -153,7 +152,7 @@ namespace LightBlue.Standalone
 
                 foreach (var key in _metadata.Keys)
                 {
-                   metadataStore.Metadata[key] = _metadata[key];
+                    metadataStore.Metadata[key] = _metadata[key];
                 }
 
                 fileStream.SetLength(0);
@@ -198,8 +197,9 @@ namespace LightBlue.Standalone
             return Task.FromResult(new object());
         }
 
-        public string GetSharedAccessSignature(BlobSasPermissions permissions, DateTimeOffset expiresOn)
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
         {
+            var permissions = BlobSasPermissions.Read;
             return string.Format(
                 CultureInfo.InvariantCulture,
                 "?sv={0:yyyy-MM-dd}&sr=b&sig=s&sp={1}",
@@ -207,7 +207,27 @@ namespace LightBlue.Standalone
                 permissions.DeterminePermissionsString());
         }
 
-        public void DownloadToStream(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default)
+        public string GetSharedAccessWriteSignature(DateTimeOffset expiresOn)
+        {
+            var permissions = BlobSasPermissions.Write;
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "?sv={0:yyyy-MM-dd}&sr=b&sig=s&sp={1}",
+                DateTime.Today,
+                permissions.DeterminePermissionsString());
+        }
+
+        public string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn)
+        {
+            var permissions = BlobSasPermissions.Read | BlobSasPermissions.Write;
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "?sv={0:yyyy-MM-dd}&sr=b&sig=s&sp={1}",
+                DateTime.Today,
+                permissions.DeterminePermissionsString());
+        }
+
+        public void DownloadToStream(Stream target, CancellationToken cancellationToken = default)
         {
             if (target == null)
             {
@@ -236,7 +256,7 @@ namespace LightBlue.Standalone
             }
         }
 
-        public Task DownloadToStreamAsync(Stream target, BlobRequestConditions conditions = default, StorageTransferOptions options = default, CancellationToken cancellationToken = default)
+        public Task DownloadToStreamAsync(Stream target, CancellationToken cancellationToken = default)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
@@ -314,7 +334,7 @@ namespace LightBlue.Standalone
             if (index < 0 || index >= buffer.Length)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            if(count < 0 || index + count > buffer.Length)
+            if (count < 0 || index + count > buffer.Length)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             EnsureBlobDirectoryExists();
