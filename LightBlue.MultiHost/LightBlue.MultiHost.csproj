@@ -52,7 +52,6 @@
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="1.1.2.0" />
     <PackageReference Include="MahApps.Metro.Resources" Version="0.4.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Management" />
