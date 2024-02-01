@@ -315,7 +315,6 @@ namespace LightBlue.Standalone
         public Task UploadFromFileAsync(string path)
         {
             EnsureBlobDirectoryExists();
-
             File.Copy(path, _blobPath, true);
 
             return Task.FromResult(new object());
@@ -338,7 +337,6 @@ namespace LightBlue.Standalone
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             EnsureBlobDirectoryExists();
-
             return UploadFromByteArrayInternalAsync(buffer, index, count);
         }
 
@@ -428,7 +426,7 @@ namespace LightBlue.Standalone
             }
 
             using (var fileStream = new FileStream(_metadataPath, FileMode.Open, FileAccess.Read,
-                    FileShare.None, BufferSize, true))
+                    FileShare.Read, BufferSize, true))
             {
                 return StandaloneMetadataStore.ReadFromStream(fileStream);
             }
