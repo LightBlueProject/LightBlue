@@ -35,11 +35,11 @@ namespace LightBlue.Hosted
             get { return _cloudBlobContainer.Uri; }
         }
 
-        public bool CreateIfNotExists(PublicAccessType accessType)
+        public bool CreateIfNotExists()
         {
             try
             {
-                var createResponse = _cloudBlobContainer.CreateIfNotExists(accessType);
+                var createResponse = _cloudBlobContainer.CreateIfNotExists(PublicAccessType.None);
                 if (createResponse == null)
                     return false; // ref https://github.com/Azure/azure-sdk-for-net/issues/9758#issuecomment-755779972
             }
@@ -52,16 +52,16 @@ namespace LightBlue.Hosted
             return true;
         }
 
-        public async Task<bool> CreateIfNotExistsAsync(PublicAccessType accessType)
+        public async Task<bool> CreateIfNotExistsAsync()
         {
             try
             {
-                var createResponse = await _cloudBlobContainer.CreateIfNotExistsAsync(accessType, null, null).ConfigureAwait(false);
+                var createResponse = await _cloudBlobContainer.CreateIfNotExistsAsync(PublicAccessType.None, null, null).ConfigureAwait(false);
                 if (createResponse == null)
                     return false; // ref https://github.com/Azure/azure-sdk-for-net/issues/9758#issuecomment-755779972
             }
-            catch(RequestFailedException requestFailedException)
-            when(requestFailedException.ErrorCode == BlobErrorCode.ContainerAlreadyExists)
+            catch (RequestFailedException requestFailedException)
+            when (requestFailedException.ErrorCode == BlobErrorCode.ContainerAlreadyExists)
             {
                 return false; // can occur due to concurrency
             }
@@ -95,10 +95,25 @@ namespace LightBlue.Hosted
                 .Where(i => i.Properties.BlobType == BlobType.Block || i.Properties.BlobType == BlobType.Page)
                 .Take(maxResults)
                 .Select(i => i.Properties.BlobType == BlobType.Block
-                    ? (IAzureListBlobItem) new HostedAzureBlockBlob(_cloudBlobContainer.GetBlockBlobClient(i.Name), i.Metadata)
+                    ? (IAzureListBlobItem)new HostedAzureBlockBlob(_cloudBlobContainer.GetBlockBlobClient(i.Name), i.Metadata)
                     : new HostedAzurePageBlob(_cloudBlobContainer.GetPageBlobClient(i.Name)))
                 .ToArrayAsync()
                 .ConfigureAwait(false);
+        }
+
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read, expiresOn);
+        }
+
+        public string GetSharedAccessWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Write, expiresOn);
+        }
+
+        public string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read | BlobContainerSasPermissions.Write, expiresOn);
         }
     }
 }

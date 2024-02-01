@@ -8,17 +8,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
-using Azure.Storage.Queues.Models;
 using Azure.Storage.Sas;
-using LightBlue.Infrastructure;
 
 
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureQueue : IAzureQueue
     {
-        private static readonly Action<QueueMessage, string> _idAssigner = CloudQueueMessageAccessorFactory.BuildIdAssigner();
-        private static readonly Func<string, QueueMessage> _queueMessageFactory = CloudQueueMessageAccessorFactory.BuildFactory();
         private static readonly ConcurrentDictionary<string, FileStream> _fileLocks = new ConcurrentDictionary<string, FileStream>();
         private static readonly int _processId = Process.GetCurrentProcess().Id;
 
@@ -119,7 +115,7 @@ namespace LightBlue.Standalone
             }
         }
 
-        public async Task<QueueMessage> GetMessageAsync()
+        public async Task<LightBlueQueueMessage> GetMessageAsync()
         {
             var files = Directory.GetFiles(_queueDirectory).OrderBy(f => f);
 
@@ -140,16 +136,20 @@ namespace LightBlue.Standalone
 
                     fileStream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Delete);
 
-                    var messageLength = (int) fileStream.Length;
+                    var messageLength = (int)fileStream.Length;
                     var buffer = new byte[messageLength];
                     await fileStream.ReadAsync(buffer, 0, messageLength);
 
-                    var cloudQueueMessage = _queueMessageFactory(Convert.ToBase64String(buffer)); // base64 to provide experience consistent with cloud
-                    _idAssigner(cloudQueueMessage, messageId);
+                    var queueMessage = new LightBlueQueueMessage
+                    {
+                        MessageId = messageId,
+                        Body = new BinaryData(Convert.ToBase64String(buffer)),
+                        PopReceipt = string.Empty
+                    };
 
                     _fileLocks.AddOrUpdate(messageId, fileStream, (s, stream) => fileStream);
 
-                    return cloudQueueMessage;
+                    return queueMessage;
                 }
                 catch (IOException)
                 {
@@ -194,6 +194,11 @@ namespace LightBlue.Standalone
                 permissions.DeterminePermissionsString());
         }
 
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(QueueSasPermissions.Read, expiresOn);
+        }
+
         private string DetermineFileName()
         {
             return Path.Combine(
@@ -205,5 +210,7 @@ namespace LightBlue.Standalone
                     Interlocked.Increment(ref _messageIncrement),
                     _processId));
         }
+
+
     }
 }

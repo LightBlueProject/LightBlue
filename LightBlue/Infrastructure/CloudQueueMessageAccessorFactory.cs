@@ -1,7 +1,7 @@
-using Azure.Storage.Queues.Models;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Azure.Storage.Queues.Models;
 
 namespace LightBlue.Infrastructure
 {

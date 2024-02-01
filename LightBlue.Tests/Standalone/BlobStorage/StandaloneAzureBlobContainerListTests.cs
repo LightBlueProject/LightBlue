@@ -17,7 +17,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             : base(DirectoryType.Container)
         {
             _container = new StandaloneAzureBlobContainer(BasePath);
-            _container.CreateIfNotExists(PublicAccessType.None);
+            _container.CreateIfNotExists();
 
             Directory.CreateDirectory(Path.Combine(BasePath, "1a"));
             Directory.CreateDirectory(Path.Combine(BasePath, "1b"));
