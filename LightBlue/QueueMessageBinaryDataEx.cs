@@ -7,5 +7,6 @@ namespace LightBlue
     public static class QueueMessageBinaryDataEx
     {
         public static string FromBase64Body(this QueueMessage queueMessage) => Encoding.UTF8.GetString(Convert.FromBase64String(queueMessage.Body.ToString()));
+        public static string FromBase64Body(this LightBlueQueueMessage queueMessage) => Encoding.UTF8.GetString(Convert.FromBase64String(queueMessage.Body.ToString()));
     }
 }

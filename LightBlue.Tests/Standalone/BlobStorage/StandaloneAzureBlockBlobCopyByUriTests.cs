@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs.Models;
 using ExpectedObjects;
 using ExpectedObjects.Comparisons;
 using LightBlue.Standalone;
@@ -14,7 +13,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
     {
         public StandaloneAzureBlockBlobCopyByUriTests()
             : base(DirectoryType.Container)
-        {}
+        { }
 
         public static IEnumerable<object[]> CopyBlobNames
         {
@@ -99,7 +98,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
                 Properties = new
                 {
                     ContentType = "whatever",
-                    Length = (long) 12
+                    Length = (long)12
                 }
             }.ToExpectedObject().ShouldMatch(destinationBlob);
         }
@@ -142,7 +141,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.StartCopyFromBlob(sourceBlob.Uri);
 
-            Assert.Equal(CopyStatus.Success, destinationBlob.CopyState.Status);
+            Assert.Equal(LightBlueBlobCopyStatus.Success, destinationBlob.CopyState.Status);
         }
 
         [Theory]
@@ -160,7 +159,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
                 new
                 {
-                    Status = CopyStatus.Failed,
+                    Status = LightBlueBlobCopyStatus.Failed,
                     StatusDescription = new NotNullComparison()
                 }.ToExpectedObject().ShouldMatch(destinationBlob.CopyState);
             }

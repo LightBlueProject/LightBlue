@@ -48,16 +48,16 @@ namespace LightBlue.Standalone
             get { return new Uri(_containerDirectory); }
         }
 
-        public bool CreateIfNotExists(PublicAccessType accessType)
+        public bool CreateIfNotExists()
         {
             Directory.CreateDirectory(_containerDirectory);
             Directory.CreateDirectory(MetadataDirectory);
             return true;
         }
 
-        public Task<bool> CreateIfNotExistsAsync(PublicAccessType accessType)
+        public Task<bool> CreateIfNotExistsAsync()
         {
-            CreateIfNotExists(accessType);
+            CreateIfNotExists();
             return Task.FromResult(true);
         }
 
@@ -87,6 +87,21 @@ namespace LightBlue.Standalone
                 permissions.DeterminePermissionsString());
         }
 
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read, expiresOn);
+        }
+
+        public string GetSharedAccessWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Write, expiresOn);
+        }
+
+        public string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read | BlobContainerSasPermissions.Write, expiresOn);
+        }
+
         public Task<IAzureListBlobItem[]> GetBlobs(string prefix, BlobTraits blobTraits = BlobTraits.None, BlobStates blobStates = BlobStates.None, int maxResults = int.MaxValue)
         {
             return Task.FromResult(StandaloneList.ListBlobsSegmentedAsync(
@@ -97,5 +112,7 @@ namespace LightBlue.Standalone
                         .OfType<IAzureListBlobItem>()
                         .ToArray());
         }
+
+
     }
 }

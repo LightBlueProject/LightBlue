@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
-using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using LightBlue.Infrastructure;
 
@@ -370,11 +369,11 @@ namespace LightBlue.Standalone
                     RetryFileOperation(() => File.Delete(_metadataPath));
                 }
 
-                CopyState = new StandaloneAzureCopyState(CopyStatus.Success, null);
+                CopyState = new StandaloneAzureCopyState(LightBlueBlobCopyStatus.Success, null);
             }
             catch (IOException ex)
             {
-                CopyState = new StandaloneAzureCopyState(CopyStatus.Failed, ex.ToTraceMessage());
+                CopyState = new StandaloneAzureCopyState(LightBlueBlobCopyStatus.Failed, ex.ToTraceMessage());
             }
             return Guid.NewGuid().ToString();
         }

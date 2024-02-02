@@ -1,8 +1,7 @@
-﻿using Azure.Storage.Queues;
-using Azure.Storage.Queues.Models;
-using Azure.Storage.Sas;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Azure.Storage.Queues;
+using Azure.Storage.Sas;
 
 namespace LightBlue.Hosted
 {
@@ -51,9 +50,16 @@ namespace LightBlue.Hosted
             return _cloudQueue.SendMessageAsync(message);
         }
 
-        public async Task<QueueMessage> GetMessageAsync()
+        public async Task<LightBlueQueueMessage> GetMessageAsync()
         {
-            return await _cloudQueue.ReceiveMessageAsync().ConfigureAwait(false);
+            var response = await _cloudQueue.ReceiveMessageAsync();
+            var cloudMessage = response.Value;
+            return new LightBlueQueueMessage
+            {
+                MessageId = cloudMessage.MessageId,
+                Body = cloudMessage.Body,
+                PopReceipt = cloudMessage.PopReceipt
+            };
         }
 
         public Task DeleteMessageAsync(string messageId, string popReceipt)
@@ -61,9 +67,9 @@ namespace LightBlue.Hosted
             return _cloudQueue.DeleteMessageAsync(messageId, popReceipt);
         }
 
-        public string GetSharedAccessSignature(QueueSasPermissions permissions, DateTimeOffset expiresOn)
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
         {
-            return _cloudQueue.GenerateSasUri(permissions, expiresOn).Query;
+            return _cloudQueue.GenerateSasUri(QueueSasPermissions.Read, expiresOn).Query;
         }
     }
 }

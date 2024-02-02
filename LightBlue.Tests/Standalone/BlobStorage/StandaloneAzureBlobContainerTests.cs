@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using ExpectedObjects;
 using LightBlue.Standalone;
@@ -32,7 +31,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillCreateContainerPathOnCreateIfNotExists()
         {
-            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(PublicAccessType.None);
+            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists();
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -40,7 +39,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillCreateMetadataPathOnCreateIfNotExists()
         {
-            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists(PublicAccessType.None);
+            new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExists();
 
             Assert.True(Directory.Exists(Path.Combine(_containerPath, MetadataDirectory)));
         }
@@ -48,7 +47,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillUseCorrectContainerPathWhenGivenBasePathAndContainerName()
         {
-            new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExists(PublicAccessType.None);
+            new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExists();
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -56,7 +55,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public async Task WillCreateContainerPathOnCreateIfNotExistsAsync()
         {
-            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(PublicAccessType.None);
+            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync();
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -64,7 +63,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public async Task WillCreateMetadataPathOnCreateIfNotExistsAsync()
         {
-            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync(PublicAccessType.None);
+            await new StandaloneAzureBlobContainer(_containerPath).CreateIfNotExistsAsync();
 
             Assert.True(Directory.Exists(Path.Combine(_containerPath, MetadataDirectory)));
         }
@@ -72,7 +71,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public async Task WillUseCorrectContainerPathWhenGivenBasePathAndContainerNameAsync()
         {
-            await new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExistsAsync(PublicAccessType.None);
+            await new StandaloneAzureBlobContainer(BasePath, ContainerName).CreateIfNotExistsAsync();
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -81,7 +80,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         public void WillUseCorrectContainerPathWhenGiveUri()
         {
             new StandaloneAzureBlobContainer(new Uri(_containerPath))
-                .CreateIfNotExists(PublicAccessType.None);
+                .CreateIfNotExists();
 
             Assert.True(Directory.Exists(_containerPath));
         }
@@ -131,7 +130,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
 
-            container.CreateIfNotExists(PublicAccessType.None);
+            container.CreateIfNotExists();
 
             Assert.True(container.Exists());
         }
@@ -149,7 +148,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
 
-            container.CreateIfNotExists(PublicAccessType.None);
+            container.CreateIfNotExists();
 
             Assert.True(await container.ExistsAsync());
         }
@@ -158,7 +157,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         public void CanGetBlobInstance()
         {
             var container = new StandaloneAzureBlobContainer(_containerPath);
-            container.CreateIfNotExists(PublicAccessType.None);
+            container.CreateIfNotExists();
 
             var blob = container.GetBlockBlobReference("testblob");
 
@@ -192,7 +191,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [InlineData(BlobContainerSasPermissions.Write, "sp=w")]
         [InlineData(BlobContainerSasPermissions.Read | BlobContainerSasPermissions.Write, "sp=rw")]
         public void WillReturnParseableSharedAccessSignature(
-            BlobContainerSasPermissions permissions, 
+            BlobContainerSasPermissions permissions,
             string expectedPermissions)
         {
             var container = new StandaloneAzureBlobContainer(new Uri(_containerPath));
@@ -231,7 +230,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillThrowIfConstructorContainerDirectoryIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer((string) null));
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer((string)null));
         }
 
         [Theory]
@@ -245,7 +244,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         [Fact]
         public void WillThrowIfConstructorContainerUriIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer((Uri) null));
+            Assert.Throws<ArgumentNullException>(() => new StandaloneAzureBlobContainer((Uri)null));
         }
     }
 }
