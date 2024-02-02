@@ -67,7 +67,7 @@ namespace LightBlue.Hosted
             get
             {
                 return _properties.BlobCopyStatus != null
-                    ? new HostedAzureCopyState(_properties.BlobCopyStatus, _properties.CopyStatusDescription)
+                    ? new HostedAzureCopyState((LightBlueBlobCopyStatus)_properties.BlobCopyStatus, _properties.CopyStatusDescription)
                     : null;
             }
         }

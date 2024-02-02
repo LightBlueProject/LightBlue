@@ -1,13 +1,11 @@
-using Azure.Storage.Blobs.Models;
-
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureCopyState : IAzureCopyState
     {
-        private readonly CopyStatus _copyStatus;
+        private readonly LightBlueBlobCopyStatus _copyStatus;
         private readonly string _statusDescription;
 
-        public StandaloneAzureCopyState(CopyStatus copyStatus, string statusDescription)
+        public StandaloneAzureCopyState(LightBlueBlobCopyStatus copyStatus, string statusDescription)
         {
             _copyStatus = copyStatus;
             _statusDescription = statusDescription;
@@ -18,9 +16,9 @@ namespace LightBlue.Standalone
             get { return _statusDescription; }
         }
 
-        public CopyStatus Status
+        public LightBlueBlobCopyStatus Status
         {
-            get {  return _copyStatus; }
+            get { return _copyStatus; }
         }
     }
 }
