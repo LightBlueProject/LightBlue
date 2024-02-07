@@ -1,4 +1,4 @@
-﻿using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Azure.Storage.Blobs.Models;
 
 namespace LightBlue.Hosted
 {
@@ -11,12 +11,11 @@ namespace LightBlue.Hosted
             _blobProperties = blobProperties;
         }
 
-        public long Length { get { return _blobProperties.Length; } }
+        public long Length { get { return _blobProperties.ContentLength; } }
 
         public string ContentType
         {
             get { return _blobProperties.ContentType; }
-            set { _blobProperties.ContentType = value; }
         }
     }
 }

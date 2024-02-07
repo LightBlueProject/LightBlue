@@ -1,28 +1,33 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Azure;
+using Azure.Storage;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.Sas;
 
 namespace LightBlue.Hosted
 {
     public class HostedAzureBlobContainer : IAzureBlobContainer
     {
-        private readonly CloudBlobContainer _cloudBlobContainer;
+        private readonly BlobContainerClient _cloudBlobContainer;
 
-        public HostedAzureBlobContainer(CloudBlobContainer cloudBlobContainer)
+        public HostedAzureBlobContainer(BlobContainerClient cloudBlobContainer)
         {
             _cloudBlobContainer = cloudBlobContainer;
         }
 
         public HostedAzureBlobContainer(Uri containerUri)
         {
-            _cloudBlobContainer = new CloudBlobContainer(containerUri);
+            _cloudBlobContainer = new BlobContainerClient(containerUri);
         }
 
-        public HostedAzureBlobContainer(Uri containerUri, StorageCredentials credentials)
+        public HostedAzureBlobContainer(Uri containerUri, StorageSharedKeyCredential credentials)
         {
-            _cloudBlobContainer = new CloudBlobContainer(containerUri, credentials);
+            _cloudBlobContainer = new BlobContainerClient(containerUri, credentials);
         }
 
         public Uri Uri
@@ -30,14 +35,38 @@ namespace LightBlue.Hosted
             get { return _cloudBlobContainer.Uri; }
         }
 
-        public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
+        public bool CreateIfNotExists()
         {
-            return _cloudBlobContainer.CreateIfNotExists(accessType);
+            try
+            {
+                var createResponse = _cloudBlobContainer.CreateIfNotExists(PublicAccessType.None);
+                if (createResponse == null)
+                    return false; // ref https://github.com/Azure/azure-sdk-for-net/issues/9758#issuecomment-755779972
+            }
+            catch (RequestFailedException requestFailedException)
+            when (requestFailedException.ErrorCode == BlobErrorCode.ContainerAlreadyExists)
+            {
+                return false; // can occur due to concurrency
+            }
+
+            return true;
         }
 
-        public Task<bool> CreateIfNotExistsAsync(BlobContainerPublicAccessType accessType)
+        public async Task<bool> CreateIfNotExistsAsync()
         {
-            return _cloudBlobContainer.CreateIfNotExistsAsync(accessType, null, null);
+            try
+            {
+                var createResponse = await _cloudBlobContainer.CreateIfNotExistsAsync(PublicAccessType.None, null, null).ConfigureAwait(false);
+                if (createResponse == null)
+                    return false; // ref https://github.com/Azure/azure-sdk-for-net/issues/9758#issuecomment-755779972
+            }
+            catch (RequestFailedException requestFailedException)
+            when (requestFailedException.ErrorCode == BlobErrorCode.ContainerAlreadyExists)
+            {
+                return false; // can occur due to concurrency
+            }
+
+            return true;
         }
 
         public bool Exists()
@@ -45,31 +74,46 @@ namespace LightBlue.Hosted
             return _cloudBlobContainer.Exists();
         }
 
-        public Task<bool> ExistsAsync()
+        public async Task<bool> ExistsAsync()
         {
-            return _cloudBlobContainer.ExistsAsync();
+            return (await _cloudBlobContainer.ExistsAsync().ConfigureAwait(false)).Value;
         }
 
         public IAzureBlockBlob GetBlockBlobReference(string blobName)
         {
-            return new HostedAzureBlockBlob(_cloudBlobContainer.GetBlockBlobReference(blobName));
+            return new HostedAzureBlockBlob(_cloudBlobContainer.GetBlockBlobClient(blobName));
         }
 
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
+        public string GetSharedAccessSignature(BlobContainerSasPermissions permissions, DateTimeOffset expiresOn)
         {
-            return _cloudBlobContainer.GetSharedAccessSignature(policy);
+            return _cloudBlobContainer.GenerateSasUri(permissions, expiresOn).Query;
         }
 
-        public async Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(string prefix, BlobListing blobListing, BlobListingDetails blobListingDetails, int? maxResults, BlobContinuationToken currentToken)
+        public async Task<IAzureListBlobItem[]> GetBlobs(string prefix, BlobTraits blobTraits = BlobTraits.None, BlobStates blobStates = BlobStates.None, int maxResults = int.MaxValue)
         {
-            return new HostedAzureBlobResultSegment(await _cloudBlobContainer.ListBlobsSegmentedAsync(
-                prefix,
-                blobListing == BlobListing.Flat,
-                blobListingDetails,
-                maxResults,
-                currentToken,
-                null,
-                null));
+            return await _cloudBlobContainer.GetBlobsAsync(blobTraits, blobStates, prefix, CancellationToken.None)
+                .Where(i => i.Properties.BlobType == BlobType.Block || i.Properties.BlobType == BlobType.Page)
+                .Take(maxResults)
+                .Select(i => i.Properties.BlobType == BlobType.Block
+                    ? (IAzureListBlobItem)new HostedAzureBlockBlob(_cloudBlobContainer.GetBlockBlobClient(i.Name), i.Metadata)
+                    : new HostedAzurePageBlob(_cloudBlobContainer.GetPageBlobClient(i.Name)))
+                .ToArrayAsync()
+                .ConfigureAwait(false);
+        }
+
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read, expiresOn);
+        }
+
+        public string GetSharedAccessWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Write, expiresOn);
+        }
+
+        public string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read | BlobContainerSasPermissions.Write, expiresOn);
         }
     }
 }

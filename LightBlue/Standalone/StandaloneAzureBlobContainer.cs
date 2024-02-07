@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Sas;
 using LightBlue.Infrastructure;
-
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Standalone
 {
@@ -48,16 +48,16 @@ namespace LightBlue.Standalone
             get { return new Uri(_containerDirectory); }
         }
 
-        public bool CreateIfNotExists(BlobContainerPublicAccessType accessType)
+        public bool CreateIfNotExists()
         {
             Directory.CreateDirectory(_containerDirectory);
             Directory.CreateDirectory(MetadataDirectory);
             return true;
         }
 
-        public Task<bool> CreateIfNotExistsAsync(BlobContainerPublicAccessType accessType)
+        public Task<bool> CreateIfNotExistsAsync()
         {
-            CreateIfNotExists(accessType);
+            CreateIfNotExists();
             return Task.FromResult(true);
         }
 
@@ -78,35 +78,41 @@ namespace LightBlue.Standalone
             return new StandaloneAzureBlockBlob(_containerDirectory, blobName);
         }
 
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
+        public string GetSharedAccessSignature(BlobContainerSasPermissions permissions, DateTimeOffset expiresOn)
         {
-            if (policy == null)
-            {
-                throw new ArgumentNullException("policy");
-            }
-
             return string.Format(
                 CultureInfo.InvariantCulture,
                 "?sv={0:yyyy-MM-dd}&sr=c&sig=s&sp={1}",
                 DateTime.Today,
-                policy.Permissions.DeterminePermissionsString());
+                permissions.DeterminePermissionsString());
         }
 
-        public Task<IAzureBlobResultSegment> ListBlobsSegmentedAsync(
-            string prefix,
-            BlobListing blobListing,
-            BlobListingDetails blobListingDetails,
-            int? maxResults,
-            BlobContinuationToken currentToken)
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read, expiresOn);
+        }
+
+        public string GetSharedAccessWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Write, expiresOn);
+        }
+
+        public string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(BlobContainerSasPermissions.Read | BlobContainerSasPermissions.Write, expiresOn);
+        }
+
+        public Task<IAzureListBlobItem[]> GetBlobs(string prefix, BlobTraits blobTraits = BlobTraits.None, BlobStates blobStates = BlobStates.None, int maxResults = int.MaxValue)
         {
             return Task.FromResult(StandaloneList.ListBlobsSegmentedAsync(
-                _containerDirectory,
-                null,
-                prefix,
-                blobListing,
-                blobListingDetails,
-                maxResults,
-                currentToken));
+                        _containerDirectory,
+                        prefix,
+                        blobTraits,
+                        maxResults)
+                        .OfType<IAzureListBlobItem>()
+                        .ToArray());
         }
+
+
     }
 }

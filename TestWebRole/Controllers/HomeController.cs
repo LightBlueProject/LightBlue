@@ -1,7 +1,6 @@
-﻿using System.IO;
+﻿using LightBlue;
+using System.IO;
 using System.Web.Mvc;
-
-using LightBlue;
 
 namespace TestWebRole.Controllers
 {

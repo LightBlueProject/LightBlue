@@ -1,14 +1,17 @@
-version: 3.0.{build}
+image: Visual Studio 2022
+version: 4.0.{build}.0  # check assembly_version adn file_version below when changing
 pull_requests:
   do_not_increment_build_number: true
 configuration: Release
 shallow_clone: true
-assembly_info:
+dotnet_csproj:
   patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '4.0.{build}.0'
+  file_version: '4.0.{build}.0'
+  informational_version: '{version}'
 nuget:
   account_feed: true
   project_feed: true

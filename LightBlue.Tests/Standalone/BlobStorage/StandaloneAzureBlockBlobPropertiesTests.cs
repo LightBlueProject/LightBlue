@@ -1,16 +1,9 @@
 using System.IO;
 using System.Threading.Tasks;
-
-using AssertExLib;
-
+using Azure;
 using ExpectedObjects;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -24,32 +17,22 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
-        public void WillThrowOnSaveOfPropertiesIfBlobDoesNotExist(string blobName)
+        [MemberData(nameof(BlobNames))]
+        public async Task WillThrowOnSaveOfContentTypeIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            Assert.Throws<StorageException>(() => blob.SetProperties());
+            await Assert.ThrowsAsync<RequestFailedException>(() => blob.SetContentTypeAsync("something"));
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
-        public void WillThrowOnAsyncSaveOfPropertiesIfBlobDoesNotExist(string blobName)
-        {
-            var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
-
-            AssertEx.Throws<StorageException>(() => blob.SetPropertiesAsync());
-        }
-
-        [Theory]
-        [PropertyData("BlobNames")]
-        public void CanPersistAndRetrieveProperties(string blobName)
+        [MemberData(nameof(BlobNames))]
+        public async Task CanPersistAndRetrieveContentType(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            sourceBlob.Properties.ContentType = "something";
-            sourceBlob.SetProperties();
+            await sourceBlob.SetContentTypeAsync("something");
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
@@ -65,7 +48,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void DefaultsToOctetStreamWhenLoadingPropertiesWhenPreviouslyUnset(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -84,14 +67,13 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
-        public async Task CanPersistAndRetrievePropertiesAsync(string blobName)
+        [MemberData(nameof(BlobNames))]
+        public async Task CanPersistAndRetrieveContentTypeAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            sourceBlob.Properties.ContentType = "something";
-            sourceBlob.SetProperties();
+            await sourceBlob.SetContentTypeAsync("something");
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             await loadedBlob.FetchAttributesAsync();
@@ -107,7 +89,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public async Task DefaultsToOctetStreamWhenLoadingPropertiesWhenPreviouslyUnsetAsync(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -126,14 +108,13 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
-        public void CanPersistPropertiesAsync(string blobName)
+        [MemberData(nameof(BlobNames))]
+        public void CanPersistContentTypeAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            sourceBlob.Properties.ContentType = "something";
-            sourceBlob.SetPropertiesAsync().Wait();
+            sourceBlob.SetContentTypeAsync("something").Wait();
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
@@ -149,37 +130,14 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
-        public void PropertiesNotPersistedUntilSet(string blobName)
+        [MemberData(nameof(BlobNames))]
+        public void ContentTypeCanBeSetRepeatedly(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            sourceBlob.Properties.ContentType = "something";
-
-            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
-            loadedBlob.FetchAttributes();
-
-            new
-            {
-                Properties = new
-                {
-                    ContentType = "application/octet-stream",
-                }
-            }.ToExpectedObject().ShouldMatch(loadedBlob);
-        }
-
-        [Theory]
-        [PropertyData("BlobNames")]
-        public void PropertiesCanBeSetRepeatedly(string blobName)
-        {
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
-            CreateBlobContent(sourceBlob);
-
-            sourceBlob.Properties.ContentType = "something";
-            sourceBlob.SetProperties();
-            sourceBlob.Properties.ContentType = "something else";
-            sourceBlob.SetProperties();
+            sourceBlob.SetContentTypeAsync("something").Wait();
+            sourceBlob.SetContentTypeAsync("something else").Wait();
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
@@ -194,49 +152,22 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
-        public void FetchingAttributesOverwritesAnyUnsavedPropertyValues(string blobName)
-        {
-            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
-            CreateBlobContent(sourceBlob);
-
-            sourceBlob.Properties.ContentType = "something";
-            sourceBlob.SetProperties();
-
-            var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
-            loadedBlob.FetchAttributes();
-            sourceBlob.Properties.ContentType = "something else";
-            loadedBlob.FetchAttributes();
-
-            new
-            {
-                Properties = new
-                {
-                    ContentType = "something",
-                    Length = (long)12
-                }
-            }.ToExpectedObject().ShouldMatch(loadedBlob);
-        }
-
-        [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         [Trait("Category", "Slow")]
-        public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted(string blobName)
+        public async Task WillThrowOnSaveOfContentTypeWhenFileWriteRetriesExhausted(string blobName)
         {
             var metadataPath = Path.Combine(BasePath, ".meta", blobName);
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            sourceBlob.Properties.ContentType = "thing";
-            sourceBlob.SetProperties();
+            await sourceBlob.SetContentTypeAsync("thing");
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
-            loadedBlob.Properties.ContentType = "otherthing";
 
             using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-                Assert.Throws<StorageException>(() => loadedBlob.SetProperties());
+                await Assert.ThrowsAsync<RequestFailedException>(() => loadedBlob.SetContentTypeAsync("otherthing"));
             }
         }
     }

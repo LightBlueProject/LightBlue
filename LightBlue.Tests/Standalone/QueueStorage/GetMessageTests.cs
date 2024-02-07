@@ -1,11 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage.Queue;
-
 using Xunit;
 
 namespace LightBlue.Tests.Standalone.QueueStorage
@@ -23,11 +19,11 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         [Fact]
         public async Task CanGetWrittenMessage()
         {
-            await _queue.AddMessageAsync(new CloudQueueMessage("Test message"));
+            await _queue.AddMessageAsync("Test message");
 
             var message = await _queue.GetMessageAsync();
 
-            Assert.Equal("Test message", message.AsString);
+            Assert.Equal("Test message", message.FromBase64Body());
         }
 
         [Fact]
@@ -39,36 +35,36 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         [Fact]
         public async Task WillGetFirstMessageWritten()
         {
-            await _queue.AddMessageAsync(new CloudQueueMessage("First test message"));
-            await _queue.AddMessageAsync(new CloudQueueMessage("Second test message"));
+            await _queue.AddMessageAsync("First test message");
+            await _queue.AddMessageAsync("Second test message");
 
             var message = await _queue.GetMessageAsync();
 
-            Assert.Equal("First test message", message.AsString);
+            Assert.Equal("First test message", message.FromBase64Body());
         }
 
         [Fact]
         public async Task WillGetSecondMessageIfFirstLocked()
-        {
-            await _queue.AddMessageAsync(new CloudQueueMessage("First test message"));
-            await _queue.AddMessageAsync(new CloudQueueMessage("Second test message"));
+       {
+           await _queue.AddMessageAsync("First test message");
+            await _queue.AddMessageAsync("Second test message");
 
             await _queue.GetMessageAsync();
             var message = await _queue.GetMessageAsync();
 
-            Assert.Equal("Second test message", message.AsString);
+            Assert.Equal("Second test message", message.FromBase64Body());
         }
 
         [Fact]
         public async Task WillAssignFilenameAsMessageId()
         {
-            await _queue.AddMessageAsync(new CloudQueueMessage("First test message"));
+            await _queue.AddMessageAsync("First test message");
 
             var fileName = Path.GetFileName(Directory.GetFiles(BasePath).OrderBy(f => f).First());
 
             var message = await _queue.GetMessageAsync();
 
-            Assert.Equal(fileName, message.Id);
+            Assert.Equal(fileName, message.MessageId);
         }
     }
 }

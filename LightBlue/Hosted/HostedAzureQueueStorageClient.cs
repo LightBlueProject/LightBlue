@@ -1,28 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using Azure.Storage.Queues;
+using System.Collections.Generic;
 using System.Linq;
-
-using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace LightBlue.Hosted
 {
     public class HostedAzureQueueStorageClient : IAzureQueueStorageClient
     {
-        private readonly CloudQueueClient _cloudQueueClient;
+        private readonly QueueServiceClient _cloudQueueClient;
 
-        public HostedAzureQueueStorageClient(CloudQueueClient cloudQueueClient)
+        public HostedAzureQueueStorageClient(QueueServiceClient cloudQueueClient)
         {
             _cloudQueueClient = cloudQueueClient;
         }
 
         public IAzureQueue GetQueueReference(string queueName)
         {
-            return new HostedAzureQueue(_cloudQueueClient.GetQueueReference(queueName));
+            return new HostedAzureQueue(_cloudQueueClient.GetQueueClient(queueName));
         }
 
         public IEnumerable<IAzureQueue> ListQueues()
         {
-            return _cloudQueueClient.ListQueues()
-                .Select(q => new HostedAzureQueue(q))
+            return _cloudQueueClient.GetQueues()
+                .Select(q => new HostedAzureQueue(_cloudQueueClient.GetQueueClient(q.Name)))
                 .ToArray();
         }
     }

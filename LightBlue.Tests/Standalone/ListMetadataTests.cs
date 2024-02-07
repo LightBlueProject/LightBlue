@@ -1,15 +1,10 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Azure.Storage.Blobs.Models;
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage.Blob;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone
 {
@@ -33,25 +28,14 @@ namespace LightBlue.Tests.Standalone
         {
             get
             {
-                yield return new object[] {BlobListingDetails.None};
-                yield return new object[] {BlobListingDetails.Snapshots};
-                yield return new object[] {BlobListingDetails.UncommittedBlobs};
-                yield return new object[] {BlobListingDetails.Copy};
-                yield return new object[] {BlobListingDetails.Snapshots | BlobListingDetails.UncommittedBlobs};
-                yield return new object[] {BlobListingDetails.Snapshots | BlobListingDetails.Copy};
-                yield return new object[] {BlobListingDetails.UncommittedBlobs | BlobListingDetails.Copy};
-                yield return new object[] {BlobListingDetails.UncommittedBlobs | BlobListingDetails.Copy | BlobListingDetails.Snapshots};
-            }
-        }
-
-        public static IEnumerable<object[]> DetailsWithoutMetadataNoSnapshots
-        {
-            get
-            {
-                yield return new object[] {BlobListingDetails.None};
-                yield return new object[] {BlobListingDetails.UncommittedBlobs};
-                yield return new object[] {BlobListingDetails.Copy};
-                yield return new object[] {BlobListingDetails.UncommittedBlobs | BlobListingDetails.Copy};
+                yield return new object[] {BlobTraits.None};
+                yield return new object[] {BlobTraits.ImmutabilityPolicy};
+                yield return new object[] {BlobTraits.LegalHold};
+                yield return new object[] {BlobTraits.CopyStatus };
+                yield return new object[] {BlobTraits.ImmutabilityPolicy | BlobTraits.LegalHold};
+                yield return new object[] {BlobTraits.ImmutabilityPolicy | BlobTraits.CopyStatus};
+                yield return new object[] {BlobTraits.LegalHold | BlobTraits.CopyStatus};
+                yield return new object[] { BlobTraits.LegalHold | BlobTraits.CopyStatus | BlobTraits.ImmutabilityPolicy};
             }
         }
 
@@ -59,147 +43,38 @@ namespace LightBlue.Tests.Standalone
         {
             get
             {
-                yield return new object[] {BlobListingDetails.Metadata};
-                yield return new object[] {BlobListingDetails.Metadata | BlobListingDetails.Snapshots};
-                yield return new object[] {BlobListingDetails.Metadata | BlobListingDetails.Copy};
-                yield return new object[] {BlobListingDetails.Metadata | BlobListingDetails.UncommittedBlobs};
-                yield return new object[] {BlobListingDetails.All};
-            }
-        }
-
-        public static IEnumerable<object[]> DetailsWithMetadataNoSnapshots
-        {
-            get
-            {
-                yield return new object[] {BlobListingDetails.Metadata};
-                yield return new object[] {BlobListingDetails.Metadata | BlobListingDetails.Copy};
-                yield return new object[] {BlobListingDetails.Metadata | BlobListingDetails.UncommittedBlobs};
-                yield return new object[] {BlobListingDetails.Metadata | BlobListingDetails.UncommittedBlobs | BlobListingDetails.Copy};
+                yield return new object[] {BlobTraits.Metadata};
+                yield return new object[] {BlobTraits.Metadata | BlobTraits.ImmutabilityPolicy};
+                yield return new object[] {BlobTraits.Metadata | BlobTraits.CopyStatus};
+                yield return new object[] {BlobTraits.Metadata | BlobTraits.LegalHold};
+                yield return new object[] { BlobTraits.All};
             }
         }
 
         [Theory]
-        [PropertyData("DetailsWithoutMetadata")]
-        public async Task ContainerWillNotLoadMetadataIfNotSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
+        [MemberData(nameof(DetailsWithoutMetadata))]
+        public async Task ContainerWillNotLoadMetadataIfNotSpecified(BlobTraits blobTraits)
         {
             var results = await new StandaloneAzureBlobContainer(BasePath)
-                .ListBlobsSegmentedAsync(
+                .GetBlobs(
                     "",
-                    BlobListing.Flat,
-                    blobListingDetails,
-                    null,
-                    null);
+                    blobTraits: blobTraits);
 
-            Assert.Empty(results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == "flat").Metadata);
+            Assert.Empty(results.OfType<IAzureBlockBlob>().First(r => r.Name == "flat").Metadata);
         }
 
         [Theory]
-        [PropertyData("DetailsWithMetadata")]
-        public async Task ContainerWillLoadMetadataIfSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
+        [MemberData(nameof(DetailsWithMetadata))]
+        public async Task ContainerWillLoadMetadataIfSpecified(BlobTraits blobTraits)
         {
             var results = await new StandaloneAzureBlobContainer(BasePath)
-                .ListBlobsSegmentedAsync(
+                .GetBlobs(
                     "",
-                    BlobListing.Flat,
-                    blobListingDetails,
-                    null,
-                    null);
+                    blobTraits: blobTraits);
 
-            var blob = results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == "flat");
+            var blob = results.OfType<IAzureBlockBlob>().First(r => r.Name == "flat");
 
             Assert.Equal("flat", blob.Metadata["thing"]);
-        }
-
-        [Theory]
-        [PropertyData("DetailsWithoutMetadataNoSnapshots")]
-        public async Task ContainerWillNotLoadMetadataIfNotSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
-        {
-            var results = await new StandaloneAzureBlobContainer(BasePath)
-                .ListBlobsSegmentedAsync(
-                    "",
-                    BlobListing.Hierarchical,
-                    blobListingDetails,
-                    null,
-                    null);
-
-            Assert.Empty(results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == "flat").Metadata);
-        }
-
-        [Theory]
-        [PropertyData("DetailsWithMetadataNoSnapshots")]
-        public async Task ContainerWillLoadMetadataIfSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
-        {
-            var results = await new StandaloneAzureBlobContainer(BasePath)
-                .ListBlobsSegmentedAsync(
-                    "",
-                    BlobListing.Hierarchical,
-                    blobListingDetails,
-                    null,
-                    null);
-
-            var blob = results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == "flat");
-
-            Assert.Equal("flat", blob.Metadata["thing"]);
-        }
-
-        [Theory]
-        [PropertyData("DetailsWithoutMetadata")]
-        public async Task DirectoryWillNotLoadMetadataIfNotSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
-        {
-            var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))
-                .ListBlobsSegmentedAsync(
-                    BlobListing.Flat,
-                    blobListingDetails,
-                    null,
-                    null);
-
-            Assert.Empty(results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == @"random\path\blob").Metadata);
-        }
-
-        [Theory]
-        [PropertyData("DetailsWithMetadata")]
-        public async Task DirectoryWillLoadMetadataIfSpecifiedForFlatListing(BlobListingDetails blobListingDetails)
-        {
-            var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))
-                .ListBlobsSegmentedAsync(
-                    BlobListing.Flat,
-                    blobListingDetails,
-                    null,
-                    null);
-
-            var blob = results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == @"random\path\blob");
-
-            Assert.Equal("withPath", blob.Metadata["thing"]);
-        }
-
-        [Theory]
-        [PropertyData("DetailsWithoutMetadataNoSnapshots")]
-        public async Task DirectoryWillNotLoadMetadataIfNotSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
-        {
-            var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))
-                .ListBlobsSegmentedAsync(
-                    BlobListing.Hierarchical,
-                    blobListingDetails,
-                    null,
-                    null);
-
-            Assert.Empty(results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == @"random\path\blob").Metadata);
-        }
-
-        [Theory]
-        [PropertyData("DetailsWithMetadataNoSnapshots")]
-        public async Task DirectoryWillLoadMetadataIfSpecifiedForHierarchicalListing(BlobListingDetails blobListingDetails)
-        {
-            var results = await new StandaloneAzureBlobDirectory(BasePath, Path.Combine(BasePath, @"random\path"))
-                .ListBlobsSegmentedAsync(
-                    BlobListing.Hierarchical,
-                    blobListingDetails,
-                    null,
-                    null);
-
-            var blob = results.Results.OfType<IAzureBlockBlob>().First(r => r.Name == @"random\path\blob");
-
-            Assert.Equal("withPath", blob.Metadata["thing"]);
         }
     }
 }

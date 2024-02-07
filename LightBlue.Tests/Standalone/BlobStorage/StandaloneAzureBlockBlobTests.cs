@@ -19,7 +19,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {}
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void WillHaveCorrectValuesWhenGivenContainerDirectoryAndBlobName(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -38,7 +38,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanUploadContentFromFullByteArray(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -65,7 +65,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanUploadContentFromFile(string blobName)
         {
             var sourceFilePath = Path.Combine(BasePath, "source");
@@ -78,7 +78,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanUploadContentFromStream(string blobName)
         {
             using (var memoryStream = new MemoryStream())

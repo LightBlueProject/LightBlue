@@ -1,26 +1,25 @@
-﻿using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage.Queue;
+﻿using Azure.Storage.Sas;
 
 namespace LightBlue.Standalone
 {
     internal static class SharedAccessBlobPermissionsExtensions
     {
-        public static string DeterminePermissionsString(this SharedAccessBlobPermissions permissions)
+        public static string DeterminePermissionsString(this BlobContainerSasPermissions permissions)
         {
             var permissionsString = "sp=";
-            if ((permissions & SharedAccessBlobPermissions.Delete) == SharedAccessBlobPermissions.Delete)
+            if ((permissions & BlobContainerSasPermissions.Delete) == BlobContainerSasPermissions.Delete)
             {
                 permissionsString += "d";
             }
-            if ((permissions & SharedAccessBlobPermissions.List) == SharedAccessBlobPermissions.List)
+            if ((permissions & BlobContainerSasPermissions.List) == BlobContainerSasPermissions.List)
             {
                 permissionsString += "l";
             }
-            if ((permissions & SharedAccessBlobPermissions.Read) == SharedAccessBlobPermissions.Read)
+            if ((permissions & BlobContainerSasPermissions.Read) == BlobContainerSasPermissions.Read)
             {
                 permissionsString += "r";
             }
-            if ((permissions & SharedAccessBlobPermissions.Write) == SharedAccessBlobPermissions.Write)
+            if ((permissions & BlobContainerSasPermissions.Write) == BlobContainerSasPermissions.Write)
             {
                 permissionsString += "w";
             }
@@ -28,22 +27,45 @@ namespace LightBlue.Standalone
             return permissionsString;
         }
 
-        public static string DeterminePermissionsString(this SharedAccessQueuePermissions permissions)
+        public static string DeterminePermissionsString(this BlobSasPermissions permissions)
         {
             var permissionsString = "sp=";
-            if ((permissions & SharedAccessQueuePermissions.Read) == SharedAccessQueuePermissions.Read)
+            if ((permissions & BlobSasPermissions.Delete) == BlobSasPermissions.Delete)
+            {
+                permissionsString += "d";
+            }
+            if ((permissions & BlobSasPermissions.List) == BlobSasPermissions.List)
+            {
+                permissionsString += "l";
+            }
+            if ((permissions & BlobSasPermissions.Read) == BlobSasPermissions.Read)
             {
                 permissionsString += "r";
             }
-            if ((permissions & SharedAccessQueuePermissions.Add) == SharedAccessQueuePermissions.Add)
+            if ((permissions & BlobSasPermissions.Write) == BlobSasPermissions.Write)
+            {
+                permissionsString += "w";
+            }
+
+            return permissionsString;
+        }
+
+        public static string DeterminePermissionsString(this QueueSasPermissions permissions)
+        {
+            var permissionsString = "sp=";
+            if ((permissions & QueueSasPermissions.Read) == QueueSasPermissions.Read)
+            {
+                permissionsString += "r";
+            }
+            if ((permissions & QueueSasPermissions.Add) == QueueSasPermissions.Add)
             {
                 permissionsString += "a";
             }
-            if ((permissions & SharedAccessQueuePermissions.Update) == SharedAccessQueuePermissions.Update)
+            if ((permissions & QueueSasPermissions.Update) == QueueSasPermissions.Update)
             {
                 permissionsString += "u";
             }
-            if ((permissions & SharedAccessQueuePermissions.ProcessMessages) == SharedAccessQueuePermissions.ProcessMessages)
+            if ((permissions & QueueSasPermissions.Process) == QueueSasPermissions.Process)
             {
                 permissionsString += "p";
             }

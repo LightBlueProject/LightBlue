@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text.Json;
 using System.Windows;
 
 using LightBlue.Infrastructure;
@@ -12,7 +13,6 @@ using LightBlue.MultiHost.IISExpress;
 using LightBlue.MultiHost.Runners;
 using LightBlue.Setup;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 
 namespace LightBlue.MultiHost
 {
@@ -75,7 +75,7 @@ namespace LightBlue.MultiHost
                 {
                     var configDir = Path.GetDirectoryName(MultiHostConfigurationFilePath);
                     var json = File.ReadAllText(MultiHostConfigurationFilePath);
-                    Configuration = JsonConvert.DeserializeObject<MultiHostConfiguration>(json);
+                    Configuration = JsonSerializer.Deserialize<MultiHostConfiguration>(json);
 
                     foreach (var c in Configuration.Roles)
                     {
