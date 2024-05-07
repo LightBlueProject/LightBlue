@@ -12,7 +12,7 @@ namespace LightBlue.Standalone
 {
     public class StandaloneAzureBlockBlob : IAzureBlockBlob
     {
-        private const int BufferSize = 4096;
+        internal const int BufferSize = 4096;
         private const int MaxFileLockRetryAttempts = 5;
         private const string DefaultContentType = "application/octet-stream";
 
@@ -112,10 +112,13 @@ namespace LightBlue.Standalone
             _metadata = metadataStore.Metadata;
         }
 
-        public Task FetchAttributesAsync()
+        public async Task FetchAttributesAsync()
         {
-            FetchAttributes();
-            return Task.FromResult(new object());
+            var fileInfo = EnsureBlobFileExists();
+            var metadataStore = await LoadMetadataStoreAsync();
+            _properties.ContentType = metadataStore.ContentType;
+            _properties.Length = fileInfo.Length;
+            _metadata = metadataStore.Metadata;
         }
 
         public Stream OpenRead()
@@ -428,6 +431,20 @@ namespace LightBlue.Standalone
                     FileShare.Read, BufferSize, true))
             {
                 return StandaloneMetadataStore.ReadFromStream(fileStream);
+            }
+        }
+
+        private async Task<StandaloneMetadataStore> LoadMetadataStoreAsync()
+        {
+            if (!File.Exists(_metadataPath))
+            {
+                return CreateStandaloneMetadataStore();
+            }
+
+            using (var fileStream = new FileStream(_metadataPath, FileMode.Open, FileAccess.Read,
+                    FileShare.Read, BufferSize, true))
+            {
+                return await StandaloneMetadataStore.ReadFromStreamAsync(fileStream);
             }
         }
 
