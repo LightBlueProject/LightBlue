@@ -15,7 +15,7 @@ namespace LightBlue.Hosted
     public class HostedAzureBlockBlob : IAzureBlockBlob
     {
         private readonly BlockBlobClient _cloudBlockBlob;
-        private BlobProperties _properties;
+        private BlobProperties _properties = new BlobProperties();
 
         public HostedAzureBlockBlob(BlockBlobClient cloudBlockBlob, IDictionary<string, string> metadata = null)
         {
@@ -23,7 +23,6 @@ namespace LightBlue.Hosted
 
             if (metadata?.Any() == true)
             {
-                _properties = new BlobProperties();
                 foreach (var m in metadata)
                     _properties.Metadata[m.Key] = m.Value;
             }
@@ -154,14 +153,14 @@ namespace LightBlue.Hosted
 
         public Task UploadFromStreamAsync(Stream source)
         {
-            return _cloudBlockBlob.UploadAsync(source);
+            return _cloudBlockBlob.UploadAsync(source, GenerateBlobUploadOptions());
         }
 
         public async Task UploadFromFileAsync(string path)
         {
             using (var source = File.OpenRead(path))
             {
-                await _cloudBlockBlob.UploadAsync(source).ConfigureAwait(false);
+                await _cloudBlockBlob.UploadAsync(source, GenerateBlobUploadOptions()).ConfigureAwait(false);
             }
         }
 
@@ -169,7 +168,7 @@ namespace LightBlue.Hosted
         {
             using (var source = new MemoryStream(buffer))
             {
-                await _cloudBlockBlob.UploadAsync(source).ConfigureAwait(false);
+                await _cloudBlockBlob.UploadAsync(source, GenerateBlobUploadOptions()).ConfigureAwait(false);
             }
         }
 
@@ -191,6 +190,18 @@ namespace LightBlue.Hosted
         public string StartCopyFromBlob(Uri source)
         {
             return _cloudBlockBlob.StartCopyFromUri(source).Id;
+        }
+
+        private BlobUploadOptions GenerateBlobUploadOptions()
+        {
+            return new BlobUploadOptions()
+            {
+                HttpHeaders = new BlobHttpHeaders()
+                {
+                    ContentType = _properties.ContentType
+                },
+                Metadata = _properties.Metadata
+            };
         }
     }
 }
