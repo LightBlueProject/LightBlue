@@ -31,6 +31,12 @@
 				<PackagePath>tools</PackagePath>
 			</TfmSpecificPackageFile>
 		</ItemGroup>
+		<ItemGroup>
+			<TfmSpecificPackageFile Include="$(OutputPath)\**\*.exe.config">
+				<!-- Ensure the appconfig is included in the tools folder -->
+				<PackagePath>tools</PackagePath>
+			</TfmSpecificPackageFile>
+		</ItemGroup>
 	</Target>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
