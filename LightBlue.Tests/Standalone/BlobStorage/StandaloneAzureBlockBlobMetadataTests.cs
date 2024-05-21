@@ -212,7 +212,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
             loadedBlob.Metadata["other thing"] = "whatever";
-            
+
             using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
                 Assert.Throws<RequestFailedException>(() => loadedBlob.SetMetadata());
@@ -240,6 +240,23 @@ namespace LightBlue.Tests.Standalone.BlobStorage
                 var actualMetadata = loaded["Metadata"];
                 Assert.Equal("something", actualMetadata["thing"]);
                 Assert.Equal("whatever else", actualMetadata["another thing"]);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(BlobNames))]
+        public void CanUploadEmptyBlob(string blobName)
+        {
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+
+            sourceBlob.UploadFromByteArrayAsync(new byte[0]).Wait();
+
+            var checkBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            Assert.True(checkBlob.Exists());
+            using (var ms = new MemoryStream())
+            {
+                sourceBlob.DownloadToStream(ms);
+                Assert.Empty(ms.ToArray());
             }
         }
     }

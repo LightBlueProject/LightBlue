@@ -332,7 +332,7 @@ namespace LightBlue.Standalone
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));
 
-            if (index < 0 || index >= buffer.Length)
+            if (index < 0 || (buffer.Length > 0 && index >= buffer.Length))
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             if (count < 0 || index + count > buffer.Length)
