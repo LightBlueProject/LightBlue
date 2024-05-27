@@ -54,6 +54,9 @@ namespace LightBlue.Hosted
         {
             var response = await _cloudQueue.ReceiveMessageAsync();
             var cloudMessage = response.Value;
+
+            if (cloudMessage == null) return null;
+
             return new LightBlueQueueMessage
             {
                 MessageId = cloudMessage.MessageId,
