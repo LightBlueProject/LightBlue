@@ -15,7 +15,7 @@ namespace LightBlue.Hosted
     public class HostedAzureBlockBlob : IAzureBlockBlob
     {
         private readonly BlockBlobClient _cloudBlockBlob;
-        private BlobProperties _properties = new BlobProperties();
+        private HostedAzureBlobProperties _properties = new HostedAzureBlobProperties();
 
         public HostedAzureBlockBlob(BlockBlobClient cloudBlockBlob, IDictionary<string, string> metadata = null)
         {
@@ -43,38 +43,11 @@ namespace LightBlue.Hosted
             _cloudBlockBlob = new BlockBlobClient(blobUri, storageCredentials);
         }
 
-        public Uri Uri
-        {
-            get { return _cloudBlockBlob.Uri; }
-        }
-
-        public string Name
-        {
-            get { return _cloudBlockBlob.Name; }
-        }
-
-        public IAzureBlobProperties Properties
-        {
-            get
-            {
-                return new HostedAzureBlobProperties(_properties);
-            }
-        }
-
-        public IAzureCopyState CopyState
-        {
-            get
-            {
-                return _properties.BlobCopyStatus != null
-                    ? new HostedAzureCopyState((LightBlueBlobCopyStatus)_properties.BlobCopyStatus, _properties.CopyStatusDescription)
-                    : null;
-            }
-        }
-
-        public IDictionary<string, string> Metadata
-        {
-            get { return _properties.Metadata; }
-        }
+        public Uri Uri => _cloudBlockBlob.Uri;
+        public string Name => _cloudBlockBlob.Name;
+        public IAzureBlobProperties Properties => _properties;
+        public IAzureCopyState CopyState => _properties.CopyState;
+        public IDictionary<string, string> Metadata => _properties.Metadata;
 
         public void Delete()
         {
@@ -98,12 +71,12 @@ namespace LightBlue.Hosted
 
         public void FetchAttributes()
         {
-            _properties = _cloudBlockBlob.GetProperties().Value;
+            _properties = new HostedAzureBlobProperties(_cloudBlockBlob.GetProperties().Value);
         }
 
         public async Task FetchAttributesAsync()
         {
-            _properties = await _cloudBlockBlob.GetPropertiesAsync().ConfigureAwait(false);
+            _properties = new HostedAzureBlobProperties(await _cloudBlockBlob.GetPropertiesAsync().ConfigureAwait(false));
         }
 
         public Stream OpenRead()
@@ -143,12 +116,14 @@ namespace LightBlue.Hosted
 
         public void DownloadToStream(Stream target, CancellationToken cancellationToken = default)
         {
-            _cloudBlockBlob.DownloadTo(target, new BlobDownloadToOptions(), cancellationToken);
+            var response = _cloudBlockBlob.DownloadTo(target, cancellationToken);
+            _properties = new HostedAzureBlobProperties(response.Headers);
         }
 
-        public Task DownloadToStreamAsync(Stream target, CancellationToken cancellationToken = default)
+        public async Task DownloadToStreamAsync(Stream target, CancellationToken cancellationToken = default)
         {
-            return _cloudBlockBlob.DownloadToAsync(target, new BlobDownloadToOptions(), cancellationToken);
+            var response = await _cloudBlockBlob.DownloadToAsync(target, cancellationToken);
+            _properties = new HostedAzureBlobProperties(response.Headers);
         }
 
         public Task UploadFromStreamAsync(Stream source)
