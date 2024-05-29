@@ -249,6 +249,9 @@ namespace LightBlue.Standalone
                         target.Write(buffer, 0, bytesRead);
                     } while (bytesRead == BufferSize);
                 }
+
+                //Replicate Hosted Beahviour or Attribute Fetch on Download
+                FetchAttributes();
             }
             catch (FileNotFoundException ex)
             {
@@ -281,6 +284,9 @@ namespace LightBlue.Standalone
                         await target.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
                     } while (bytesRead == BufferSize);
                 }
+
+                //Replicate Hosted Beahviour or Attribute Fetch on Download
+                await FetchAttributesAsync();
             }
             catch (FileNotFoundException ex)
             {
