@@ -122,7 +122,7 @@ namespace LightBlue.Hosted
 
         public async Task DownloadToStreamAsync(Stream target, CancellationToken cancellationToken = default)
         {
-            var response = await _cloudBlockBlob.DownloadToAsync(target, cancellationToken);
+            var response = await _cloudBlockBlob.DownloadToAsync(target, cancellationToken).ConfigureAwait(false);
             _properties = new HostedAzureBlobProperties(response.Headers);
         }
 
