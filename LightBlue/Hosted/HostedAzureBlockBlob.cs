@@ -81,7 +81,9 @@ namespace LightBlue.Hosted
 
         public Stream OpenRead()
         {
-            return _cloudBlockBlob.OpenRead();
+            var download = _cloudBlockBlob.DownloadStreaming().Value;
+            _properties = new HostedAzureBlobProperties(download.Details);
+            return download.Content;
         }
 
         public void SetMetadata()

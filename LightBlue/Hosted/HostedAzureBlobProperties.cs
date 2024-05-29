@@ -45,6 +45,18 @@ namespace LightBlue.Hosted
                 : null;
         }
 
+        public HostedAzureBlobProperties(BlobDownloadDetails details)
+        {
+            Length = details.ContentLength;
+            ContentType = details.ContentType;
+
+            Metadata = details.Metadata;
+
+            CopyState = details.CopyId != null
+                ? new HostedAzureCopyState((LightBlueBlobCopyStatus)details.CopyStatus, details.CopyStatusDescription)
+                : null;
+        }
+
         public long Length { get; private set; }
 
         public string ContentType { get; private set; }
