@@ -83,7 +83,8 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             sourceBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).Wait();
             sourceBlob.Metadata["thing"] = "something";
             sourceBlob.SetMetadata();
-            await sourceBlob.SetContentTypeAsync("whatever");
+            sourceBlob.Properties.ContentType = "whatever";
+            await sourceBlob.SetPropertiesAsync();
 
             var destinationBlob = new StandaloneAzureBlockBlob(BasePath, destination);
             destinationBlob.StartCopyFromBlob(sourceBlob.Uri);

@@ -59,7 +59,7 @@ namespace LightBlue.Hosted
 
         public long Length { get; private set; }
 
-        public string ContentType { get; private set; }
+        public string ContentType { get; set; }
 
         internal IDictionary<string, string> Metadata { get; private set; }
 

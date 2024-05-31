@@ -96,9 +96,9 @@ namespace LightBlue.Hosted
             return _cloudBlockBlob.SetMetadataAsync(_properties.Metadata);
         }
 
-        public Task SetContentTypeAsync(string contentType)
+        public async Task SetPropertiesAsync()
         {
-            return _cloudBlockBlob.SetHttpHeadersAsync(new BlobHttpHeaders { ContentType = contentType });
+            await _cloudBlockBlob.SetHttpHeadersAsync(new BlobHttpHeaders { ContentType = _properties.ContentType });
         }
 
         public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)

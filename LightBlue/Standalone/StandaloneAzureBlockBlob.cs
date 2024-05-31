@@ -185,10 +185,9 @@ namespace LightBlue.Standalone
             }
         }
 
-        public Task SetContentTypeAsync(string contentType)
+        public Task SetPropertiesAsync()
         {
             EnsureBlobFileExists();
-            _properties.ContentType = contentType;
             EnsureMetadataDirectoryExists();
 
             FileLockExtensions.WaitAndRetryOnFileLock(

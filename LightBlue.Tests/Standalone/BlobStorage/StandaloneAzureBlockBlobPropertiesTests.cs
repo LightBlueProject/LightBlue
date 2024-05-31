@@ -22,7 +22,9 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            await Assert.ThrowsAsync<RequestFailedException>(() => blob.SetContentTypeAsync("something"));
+            blob.Properties.ContentType = "something";
+
+            await Assert.ThrowsAsync<RequestFailedException>(() => blob.SetPropertiesAsync());
         }
 
         [Theory]
@@ -32,7 +34,8 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            await sourceBlob.SetContentTypeAsync("something");
+            sourceBlob.Properties.ContentType = "something";
+            await sourceBlob.SetPropertiesAsync();
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
@@ -72,8 +75,8 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
-
-            await sourceBlob.SetContentTypeAsync("something");
+            sourceBlob.Properties.ContentType = "something";
+            await sourceBlob.SetPropertiesAsync();
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             await loadedBlob.FetchAttributesAsync();
@@ -113,8 +116,8 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
-
-            sourceBlob.SetContentTypeAsync("something").Wait();
+            sourceBlob.Properties.ContentType = "something";
+            sourceBlob.SetPropertiesAsync().Wait();
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
@@ -136,8 +139,10 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            sourceBlob.SetContentTypeAsync("something").Wait();
-            sourceBlob.SetContentTypeAsync("something else").Wait();
+            sourceBlob.Properties.ContentType = "something";
+            sourceBlob.SetPropertiesAsync().Wait();
+            sourceBlob.Properties.ContentType = "something else";
+            sourceBlob.SetPropertiesAsync().Wait();
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
@@ -160,14 +165,16 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             CreateBlobContent(sourceBlob);
 
-            await sourceBlob.SetContentTypeAsync("thing");
+            sourceBlob.Properties.ContentType = "thing";
+            await sourceBlob.SetPropertiesAsync();
 
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
 
             using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-                await Assert.ThrowsAsync<RequestFailedException>(() => loadedBlob.SetContentTypeAsync("otherthing"));
+                loadedBlob.Properties.ContentType = "otherthing";
+                await Assert.ThrowsAsync<RequestFailedException>(() => loadedBlob.SetPropertiesAsync());
             }
         }
     }

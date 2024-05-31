@@ -22,7 +22,7 @@ namespace LightBlue
         Stream OpenRead();
         void SetMetadata();
         Task SetMetadataAsync();
-        Task SetContentTypeAsync(string contentType);
+        Task SetPropertiesAsync();
         string GetSharedAccessReadSignature(DateTimeOffset expiresOn);
         string GetSharedAccessWriteSignature(DateTimeOffset expiresOn);
         string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn);
