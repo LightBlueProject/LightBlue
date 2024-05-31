@@ -123,6 +123,7 @@ namespace LightBlue.Standalone
 
         public Stream OpenRead()
         {
+            FetchAttributes();
             return new FileStream(_blobPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, BufferSize, true);
         }
 
@@ -352,6 +353,11 @@ namespace LightBlue.Standalone
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 await fileStream.WriteAsync(buffer, index, count).ConfigureAwait(false);
+            }
+
+            if (_properties.ContentType != null)
+            {
+                await SetPropertiesAsync();
             }
         }
 

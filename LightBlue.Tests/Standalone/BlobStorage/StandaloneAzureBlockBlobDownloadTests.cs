@@ -17,7 +17,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
         [Theory]
         [MemberData(nameof(BlobNames))]
-        public async Task CanDownloadBlboToStream(string blobName)
+        public async Task CanDownloadBlobToStream(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
             await blob.UploadFromByteArrayAsync(Encoding.UTF8.GetBytes("Streamable content"));
@@ -36,7 +36,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
 
         [Theory]
         [MemberData(nameof(BlobNames))]
-        public async Task CanDownloadBlboToStreamAsync(string blobName)
+        public async Task CanDownloadBlobToStreamAsync(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
             await blob.UploadFromByteArrayAsync(Encoding.UTF8.GetBytes("Streamable content"));
@@ -50,6 +50,27 @@ namespace LightBlue.Tests.Standalone.BlobStorage
                 {
                     Assert.Equal("Streamable content", streamReader.ReadToEnd());
                 }
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(BlobNames))]
+        public async Task CanOpenBlobStream(string blobName)
+        {
+            var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            blob.Properties.ContentType = "customcontenttype";
+            await blob.UploadFromByteArrayAsync(Encoding.UTF8.GetBytes("Streamable content"));
+
+            var readBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+
+            using (var stream = readBlob.OpenRead())
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                    Assert.Equal("Streamable content", streamReader.ReadToEnd());
+                }
+                
+                Assert.Equal("customcontenttype", readBlob.Properties.ContentType);
             }
         }
     }
