@@ -143,7 +143,7 @@ namespace LightBlue.Standalone
                     var queueMessage = new LightBlueQueueMessage
                     {
                         MessageId = messageId,
-                        Body = new BinaryData(Convert.ToBase64String(buffer)),
+                        Body = new BinaryData(buffer),
                         PopReceipt = string.Empty
                     };
 

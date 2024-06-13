@@ -23,7 +23,7 @@ namespace LightBlue.Tests.Standalone.QueueStorage
 
             var message = await _queue.GetMessageAsync();
 
-            Assert.Equal("Test message", message.FromBase64Body());
+            Assert.Equal("Test message", message.AsString);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace LightBlue.Tests.Standalone.QueueStorage
 
             var message = await _queue.GetMessageAsync();
 
-            Assert.Equal("First test message", message.FromBase64Body());
+            Assert.Equal("First test message", message.AsString);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace LightBlue.Tests.Standalone.QueueStorage
             await _queue.GetMessageAsync();
             var message = await _queue.GetMessageAsync();
 
-            Assert.Equal("Second test message", message.FromBase64Body());
+            Assert.Equal("Second test message", message.AsString);
         }
 
         [Fact]
