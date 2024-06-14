@@ -48,10 +48,10 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NDesk.Options" Version="0.2.1" />
+    <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs" Link="ExceptionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LightBlue\Infrastructure\ExceptionExtensions.cs" Link="ExceptionExtensions.cs" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LightBlue.Host.Stub\LightBlue.Host.Stub.csproj" />

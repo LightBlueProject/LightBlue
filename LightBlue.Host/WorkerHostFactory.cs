@@ -4,18 +4,18 @@ using LightBlue.Host.Stub;
 
 namespace LightBlue.Host
 {
-    public static class WorkerHostFactory
+    internal static class WorkerHostFactory
     {
-        public static HostStub Create(HostArgs hostArgs)
+        public static HostStub Create(HostAssemblyCommand.Settings settings)
         {
             var appDomainSetup = new AppDomainSetup
             {
-                ApplicationBase = hostArgs.ApplicationBase
+                ApplicationBase = settings.ApplicationBase
             };
 
-            appDomainSetup.ConfigurationFile = hostArgs.RoleConfigurationFile;
+            appDomainSetup.ConfigurationFile = settings.RoleConfigurationFile;
 
-            StubManagement.CopyStubAssemblyToRoleDirectory(hostArgs.ApplicationBase);
+            StubManagement.CopyStubAssemblyToRoleDirectory(settings.ApplicationBase);
 
             var appDomain = AppDomain.CreateDomain(
                 "LightBlue",
@@ -30,7 +30,7 @@ namespace LightBlue.Host
 
             stub.ConfigureTracing(new ConsoleTraceShipper());
 
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionBehaviour.UnhandledExceptionHandler(hostArgs.Title);
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionBehaviour.UnhandledExceptionHandler(settings.WindowTitle);
 
             return stub;
         }
