@@ -1,11 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage.Queue;
-
 using Xunit;
 
 namespace LightBlue.Tests.Standalone.QueueStorage
@@ -23,9 +19,7 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         [Fact]
         public async Task WillWriteMessageFileToQueueDirectory()
         {
-            var message = new CloudQueueMessage("Test message");
-
-            await _queue.AddMessageAsync(message);
+            await _queue.AddMessageAsync("Test message");
 
             var file = Directory.GetFiles(BasePath).FirstOrDefault();
 
@@ -35,9 +29,7 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         [Fact]
         public async Task WillWriteMessageContentToQueueFile()
         {
-            var message = new CloudQueueMessage("Test message");
-
-            await _queue.AddMessageAsync(message);
+            await _queue.AddMessageAsync("Test message");
 
             var file = Directory.GetFiles(BasePath).First();
 

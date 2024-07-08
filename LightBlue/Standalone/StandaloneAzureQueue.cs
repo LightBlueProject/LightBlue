@@ -4,19 +4,17 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Storage.Sas;
 
-using LightBlue.Infrastructure;
-
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureQueue : IAzureQueue
     {
-        private static readonly Action<CloudQueueMessage, string> _idAssigner = CloudQueueMessageAccessorFactory.BuildIdAssigner();
         private static readonly ConcurrentDictionary<string, FileStream> _fileLocks = new ConcurrentDictionary<string, FileStream>();
         private static readonly int _processId = Process.GetCurrentProcess().Id;
 
@@ -40,7 +38,7 @@ namespace LightBlue.Standalone
 
         public StandaloneAzureQueue(Uri queueUri)
         {
-            _queueDirectory = queueUri.GetLocalPathWithoutToken(); ;
+            _queueDirectory = queueUri.GetLocalPathWithoutToken();
             _queueName = Path.GetFileName(_queueDirectory);
         }
 
@@ -70,11 +68,8 @@ namespace LightBlue.Standalone
             }
             catch (DirectoryNotFoundException ex)
             {
-                throw new StorageException(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "The queue '{0}' cannot be deleted as it does not exist",
-                        Name),
+                throw new RequestFailedException(
+                    $"The queue '{Name}' cannot be deleted as it does not exist",
                     ex);
             }
         }
@@ -86,11 +81,13 @@ namespace LightBlue.Standalone
                 Directory.Delete(_queueDirectory, true);
             }
             catch (DirectoryNotFoundException)
-            {}
+            {
+                // it's already gone
+            }
             return Task.FromResult(new object());
         }
 
-        public async Task AddMessageAsync(CloudQueueMessage message)
+        public async Task AddMessageAsync(string message)
         {
             var tries = 0;
             while (true)
@@ -101,7 +98,7 @@ namespace LightBlue.Standalone
                 {
                     using (var file = File.Open(fileName, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                     {
-                        var buffer = message.AsBytes;
+                        var buffer = Encoding.UTF8.GetBytes(message);
                         await file.WriteAsync(buffer, 0, buffer.Length);
                         return;
                     }
@@ -118,7 +115,7 @@ namespace LightBlue.Standalone
             }
         }
 
-        public async Task<CloudQueueMessage> GetMessageAsync()
+        public async Task<LightBlueQueueMessage> GetMessageAsync()
         {
             var files = Directory.GetFiles(_queueDirectory).OrderBy(f => f);
 
@@ -139,34 +136,28 @@ namespace LightBlue.Standalone
 
                     fileStream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Delete);
 
-                    var messageLength = (int) fileStream.Length;
-
+                    var messageLength = (int)fileStream.Length;
                     var buffer = new byte[messageLength];
-                    
                     await fileStream.ReadAsync(buffer, 0, messageLength);
 
-                    var cloudQueueMessage = new CloudQueueMessage(buffer);
-
-                    _idAssigner(cloudQueueMessage, messageId);
+                    var queueMessage = new LightBlueQueueMessage
+                    {
+                        MessageId = messageId,
+                        Body = new BinaryData(buffer),
+                        PopReceipt = string.Empty
+                    };
 
                     _fileLocks.AddOrUpdate(messageId, fileStream, (s, stream) => fileStream);
 
-                    return cloudQueueMessage;
+                    return queueMessage;
                 }
                 catch (IOException)
                 {
-                    if (fileStream != null)
-                    {
-                        fileStream.Dispose();
-                    }
+                    fileStream?.Dispose();
                 }
                 catch (Exception)
                 {
-                    if (fileStream != null)
-                    {
-                        fileStream.Dispose();
-                    }
-
+                    fileStream?.Dispose();
                     throw;
                 }
             }
@@ -174,9 +165,9 @@ namespace LightBlue.Standalone
             return null;
         }
 
-        public Task DeleteMessageAsync(CloudQueueMessage message)
+        public Task DeleteMessageAsync(string messageId, string popReceipt)
         {
-            var filePath = Path.Combine(_queueDirectory, message.Id);
+            var filePath = Path.Combine(_queueDirectory, messageId);
 
             try
             {
@@ -185,7 +176,7 @@ namespace LightBlue.Standalone
             finally
             {
                 FileStream fileStream;
-                if (_fileLocks.TryRemove(message.Id, out fileStream))
+                if (_fileLocks.TryRemove(messageId, out fileStream))
                 {
                     fileStream.Dispose();
                 }
@@ -194,18 +185,18 @@ namespace LightBlue.Standalone
             return Task.FromResult(new object());
         }
 
-        public string GetSharedAccessSignature(SharedAccessQueuePolicy policy)
+        public string GetSharedAccessSignature(QueueSasPermissions permissions, DateTimeOffset expiresOn)
         {
-            if (policy == null)
-            {
-                throw new ArgumentNullException("policy");
-            }
-
             return string.Format(
                 CultureInfo.InvariantCulture,
                 "?sv={0:yyyy-MM-dd}&sr=c&sig=s&sp={1}",
                 DateTime.Today,
-                policy.Permissions.DeterminePermissionsString());
+                permissions.DeterminePermissionsString());
+        }
+
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
+        {
+            return GetSharedAccessSignature(QueueSasPermissions.Read, expiresOn);
         }
 
         private string DetermineFileName()
@@ -219,5 +210,7 @@ namespace LightBlue.Standalone
                     Interlocked.Increment(ref _messageIncrement),
                     _processId));
         }
+
+
     }
 }

@@ -91,9 +91,13 @@ namespace LightBlue.Tests.Standalone
                     return;
                 }
                 catch (IOException)
-                {}
+                {
+                    // retry
+                }
                 catch (UnauthorizedAccessException)
-                {}
+                {
+                    // retry
+                }
         }
 
         protected static void CreateBlobContent(StandaloneAzureBlockBlob blob)

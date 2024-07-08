@@ -1,51 +1,40 @@
 using System.Collections.Generic;
 using System.IO;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace LightBlue.Standalone
 {
     internal class StandaloneMetadataStore
     {
-        private JObject _existingJObject;
         public string ContentType { get; set; }
         public Dictionary<string, string> Metadata { get; set; }
 
         public void WriteToStreamAndClose(FileStream fileStream)
         {
-            var @object = GetUpdatedJObject();
-            using (var writer = new JsonTextWriter(new StreamWriter(fileStream)))
+            using (fileStream)
             {
-                new JsonSerializer().Serialize(writer, @object);
+                var serialized = JsonSerializer.SerializeToUtf8Bytes(this);
+                fileStream.Write(serialized, 0, serialized.Length);
             }
         }
 
         public static StandaloneMetadataStore ReadFromStream(FileStream fileStream)
         {
-            var reader = new JsonTextReader(new StreamReader(fileStream));
-            return FromJsonObject(JObject.Load(reader));
-        }
-        
-        private static StandaloneMetadataStore FromJsonObject(JObject jObject)
-        {
-            return new StandaloneMetadataStore
+            using (var reader = new StreamReader(fileStream, System.Text.Encoding.UTF8, true, StandaloneAzureBlockBlob.BufferSize, true))
             {
-                ContentType = jObject["ContentType"].Value<string>(),
-                Metadata = jObject["Metadata"].ToObject<Dictionary<string, string>>(),
-                _existingJObject = jObject
-            };
+                var content = reader.ReadToEnd();
+                return JsonSerializer.Deserialize<StandaloneMetadataStore>(content);
+            }
         }
 
-        private JObject GetUpdatedJObject()
+        public static async Task<StandaloneMetadataStore> ReadFromStreamAsync(FileStream fileStream)
         {
-            var updatedJObject = JObject.FromObject(this);
-            if (_existingJObject == null)
+            using (var reader = new StreamReader(fileStream, System.Text.Encoding.UTF8, true, StandaloneAzureBlockBlob.BufferSize, true))
             {
-                return updatedJObject;
+                var content = await reader.ReadToEndAsync();
+                return JsonSerializer.Deserialize<StandaloneMetadataStore>(content);
             }
-            _existingJObject.Merge(updatedJObject);
-            return _existingJObject;
         }
     }
 }

@@ -4,7 +4,7 @@
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         Title = "{Binding Version, StringFormat=LightBlue {0}}" Height="720" Width="1280"
-        GlowBrush="{DynamicResource AccentColorBrush}"
+        GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
         Icon="{Binding MainIcon}">
 
     <Window.Resources>

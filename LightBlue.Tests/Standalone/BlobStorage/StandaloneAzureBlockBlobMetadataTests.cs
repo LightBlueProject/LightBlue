@@ -2,20 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 using AssertExLib;
-
+using Azure;
 using ExpectedObjects;
-
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.BlobStorage
 {
@@ -29,34 +22,34 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void WillThrowOnFetchOfAttributesIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            Assert.Throws<StorageException>(() => blob.FetchAttributes());
+            Assert.Throws<RequestFailedException>(() => blob.FetchAttributes());
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void WillThrowOnSaveOfMetadataIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            Assert.Throws<StorageException>(() => blob.SetMetadata());
+            Assert.Throws<RequestFailedException>(() => blob.SetMetadata());
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void WillThrowOnAsyncSaveOfMetadataIfBlobDoesNotExist(string blobName)
         {
             var blob = new StandaloneAzureBlockBlob(BasePath, blobName);
 
-            AssertEx.Throws<StorageException>(() => blob.SetMetadataAsync());
+            AssertEx.Throws<RequestFailedException>(() => blob.SetMetadataAsync());
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void DefaultsToEmptyMetadataOnFetchWithNoSavedMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -71,7 +64,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanPersistAndRetrieveMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -93,7 +86,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public async Task CanPersistAndRetrieveMetadataAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -115,7 +108,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanAppendToExistingPersistedMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -141,7 +134,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void CanPersistMetadataAsync(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -163,7 +156,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void MetadataNotPersistedUntilSet(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -181,7 +174,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void FetchingPropertiesOverwritesAnyUnsavedMetadataValues(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -205,7 +198,7 @@ namespace LightBlue.Tests.Standalone.BlobStorage
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         [Trait("Category", "Slow")]
         public void WillThrowOnSaveOfMetadataWhenFileWriteRetriesExhausted(string blobName)
         {
@@ -219,15 +212,15 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
             loadedBlob.Metadata["other thing"] = "whatever";
-            
+
             using (File.Open(metadataPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-                Assert.Throws<StorageException>(() => loadedBlob.SetMetadata());
+                Assert.Throws<RequestFailedException>(() => loadedBlob.SetMetadata());
             }
         }
 
         [Theory]
-        [PropertyData("BlobNames")]
+        [MemberData(nameof(BlobNames))]
         public void SavingPreservesUnknownMetadata(string blobName)
         {
             var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
@@ -236,12 +229,6 @@ namespace LightBlue.Tests.Standalone.BlobStorage
             sourceBlob.SetMetadata();
 
             var metadataPath = Path.Combine(BasePath, ".meta", blobName);
-            var expectedProperties = new Dictionary<string, string>
-            {
-                {"foo", "bar"}, {"couci-couça","svo-svo"}
-            };
-            WriteJsonPropertiesToFile(metadataPath, expectedProperties);
-
             var loadedBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
             loadedBlob.FetchAttributes();
             loadedBlob.Metadata["another thing"] = "whatever else";
@@ -253,26 +240,23 @@ namespace LightBlue.Tests.Standalone.BlobStorage
                 var actualMetadata = loaded["Metadata"];
                 Assert.Equal("something", actualMetadata["thing"]);
                 Assert.Equal("whatever else", actualMetadata["another thing"]);
-                expectedProperties.ToList().ForEach(kvp =>
-                    Assert.Equal(kvp.Value, loaded[kvp.Key])
-                );
             }
         }
-        
-        private static void WriteJsonPropertiesToFile(string metadataPath, IEnumerable<KeyValuePair<string, string>> properties)
+
+        [Theory]
+        [MemberData(nameof(BlobNames))]
+        public void CanUploadEmptyBlob(string blobName)
         {
-            JObject jObject;
-            using (var reader = new StreamReader(metadataPath))
+            var sourceBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+
+            sourceBlob.UploadFromByteArrayAsync(new byte[0]).Wait();
+
+            var checkBlob = new StandaloneAzureBlockBlob(BasePath, blobName);
+            Assert.True(checkBlob.Exists());
+            using (var ms = new MemoryStream())
             {
-                jObject = JObject.Load(new JsonTextReader(reader));
-                foreach (var pair in properties)
-                {
-                    jObject[pair.Key] = pair.Value;
-                }
-            }
-            using (var writer = new JsonTextWriter(new StreamWriter(metadataPath)))
-            {
-                new JsonSerializer().Serialize(writer, jObject);
+                sourceBlob.DownloadToStream(ms);
+                Assert.Empty(ms.ToArray());
             }
         }
     }

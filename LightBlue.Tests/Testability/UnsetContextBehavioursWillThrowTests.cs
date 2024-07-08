@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Azure;
+using Azure.Storage;
 using LightBlue.Testability;
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Testability
 {
@@ -11,7 +12,7 @@ namespace LightBlue.Tests.Testability
         private static readonly FakeLightBlueContext Context = new FakeLightBlueContext();
 
         [Theory]
-        [PropertyData("ContextActions")]
+        [MemberData(nameof(ContextActions))]
         public void TheoryMethodName(Action failingAction)
         {
             try
@@ -20,7 +21,7 @@ namespace LightBlue.Tests.Testability
             }
             catch (NotSupportedException ex)
             {
-                Assert.True(ex.Message.Contains("not set, if you want to use this, set the property first"));
+                Assert.Contains("not set, if you want to use this, set the property first", ex.Message);
             }
         }
 
@@ -34,7 +35,8 @@ namespace LightBlue.Tests.Testability
                     new object[] { new Action(() => Context.GetBlobContainer(null)) },
                     new object[] { new Action(() => Context.GetBlobContainer(null, null)) },
                     new object[] { new Action(() => Context.GetBlockBlob(null)) },
-                    new object[] { new Action(() => Context.GetBlockBlob(null, null)) },
+                    new object[] { new Action(() => Context.GetBlockBlob(null, (AzureSasCredential)null)) },
+                    new object[] { new Action(() => Context.GetBlockBlob(null, (StorageSharedKeyCredential)null)) },
                     new object[] { new Action(() => Context.GetQueue(null)) }
                 };
             }

@@ -29,7 +29,7 @@ namespace LightBlue.Tests.Standalone
         [Fact]
         public void WillReturnNullOnUnknownKey()
         {
-            Assert.Equal(null, _settings["Unknown"]);
+            Assert.Null(_settings["Unknown"]);
         }
     }
 }

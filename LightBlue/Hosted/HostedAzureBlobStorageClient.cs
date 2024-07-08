@@ -1,14 +1,13 @@
-﻿using LightBlue.Infrastructure;
-
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Azure.Storage.Blobs;
+using LightBlue.Infrastructure;
 
 namespace LightBlue.Hosted
 {
     public class HostedAzureBlobStorageClient : IAzureBlobStorageClient
     {
-        private readonly CloudBlobClient _cloudBlobClient;
+        private readonly BlobServiceClient _cloudBlobClient;
 
-        public HostedAzureBlobStorageClient(CloudBlobClient cloudBlobClient)
+        public HostedAzureBlobStorageClient(BlobServiceClient cloudBlobClient)
         {
             _cloudBlobClient = cloudBlobClient;
         }
@@ -17,7 +16,7 @@ namespace LightBlue.Hosted
         {
             NameValidation.Container(containerName, "containerName");
 
-            return new HostedAzureBlobContainer(_cloudBlobClient.GetContainerReference(containerName));
+            return new HostedAzureBlobContainer(_cloudBlobClient.GetBlobContainerClient(containerName));
         }
     }
 }

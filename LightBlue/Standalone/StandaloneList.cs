@@ -1,37 +1,26 @@
+using Azure.Storage.Blobs.Models;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Standalone
 {
     internal static class StandaloneList
     {
-        public static IAzureBlobResultSegment ListBlobsSegmentedAsync(
+        public static List<StandaloneAzureBlockBlob> ListBlobsSegmentedAsync(
             string containerDirectory,
-            string searchDirectory,
             string prefix,
-            BlobListing blobListing,
-            BlobListingDetails blobListingDetails,
-            int? maxResults,
-            BlobContinuationToken currentToken)
+            BlobTraits blobTraits,
+            int maxResults)
         {
-            if (blobListing == BlobListing.Hierarchical && (blobListingDetails & BlobListingDetails.Snapshots) == BlobListingDetails.Snapshots)
+            var resultSegment = FindFilesFlattened(containerDirectory, prefix, maxResults);
+
+            if ((blobTraits & BlobTraits.Metadata) == BlobTraits.Metadata)
             {
-                throw new ArgumentException("Listing snapshots is only supported in flat mode.");
-            }
-
-            var numberToSkip = DetermineNumberToSkip(currentToken);
-
-            var resultSegment = blobListing == BlobListing.Flat
-                ? FindFilesFlattened(containerDirectory, searchDirectory, prefix, maxResults, numberToSkip)
-                : FindFilesHierarchical(containerDirectory, searchDirectory, prefix, maxResults, numberToSkip);
-
-            if ((blobListingDetails & BlobListingDetails.Metadata) == BlobListingDetails.Metadata)
-            {
-                foreach (var blob in resultSegment.Results.OfType<StandaloneAzureBlockBlob>())
+                foreach (var blob in resultSegment.OfType<StandaloneAzureBlockBlob>())
                 {
                     blob.FetchAttributes();
                 }
@@ -40,81 +29,19 @@ namespace LightBlue.Standalone
             return resultSegment;
         }
 
-        private static StandaloneAzureBlobResultSegment FindFilesFlattened(
+        private static List<StandaloneAzureBlockBlob> FindFilesFlattened(
             string containerDirectory,
-            string searchDirectory,
             string prefix,
-            int? maxResults,
-            int numberToSkip)
+            int maxResults)
         {
-            var files = new DirectoryInfo(searchDirectory ?? containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.AllDirectories)
+            return new DirectoryInfo(containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.AllDirectories)
                 .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
-                .Skip(numberToSkip)
-                .Take(maxResults.HasValue ? maxResults.Value : Int32.MaxValue)
+                .Take(maxResults)
                 .Select(f =>
                     new StandaloneAzureBlockBlob(
                         containerDirectory,
                         f.FullName.Substring(containerDirectory.Length + 1)))
                 .ToList();
-
-            var resultSegment = new StandaloneAzureBlobResultSegment(
-                files,
-                files.Any() 
-                    ? new BlobContinuationToken
-                    {
-                        NextMarker = DetermineNextMarker(numberToSkip, files.Count)
-                    }
-                    : null);
-            return resultSegment;
-        }
-
-        private static StandaloneAzureBlobResultSegment FindFilesHierarchical(
-            string containerDirectory,
-            string searchDirectory,
-            string prefix,
-            int? maxResults,
-            int numberToSkip)
-        {
-            var directories = new DirectoryInfo(searchDirectory ?? containerDirectory).EnumerateDirectories((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
-                .Where(f => !f.Name.EndsWith(".meta"))
-                .Select(f => (IAzureListBlobItem)new StandaloneAzureBlobDirectory(containerDirectory, f.FullName.Substring(containerDirectory.Length + 1)));
-            var files = new DirectoryInfo(searchDirectory ?? containerDirectory).EnumerateFiles((prefix ?? "") + "*", SearchOption.TopDirectoryOnly)
-                .Where(f => !(f.DirectoryName ?? "").EndsWith(".meta"))
-                .Select(f =>
-                    (IAzureListBlobItem)new StandaloneAzureBlockBlob(
-                        containerDirectory,
-                        f.FullName.Substring(containerDirectory.Length + 1)));
-
-            var combined = directories.Concat(files)
-                .Skip(numberToSkip)
-                .Take(maxResults.HasValue ? maxResults.Value : Int32.MaxValue)
-                .ToList();
-
-            var resultSegment = new StandaloneAzureBlobResultSegment(
-                combined,
-                combined.Any()
-                    ? new BlobContinuationToken
-                    {
-                        NextMarker = DetermineNextMarker(numberToSkip, combined.Count)
-                    }
-                    : null);
-            return resultSegment;
-        }
-
-        private static string DetermineNextMarker(int numberToSkip, int count)
-        {
-            return (numberToSkip + count).ToString(CultureInfo.InvariantCulture);
-        }
-
-        private static int DetermineNumberToSkip(BlobContinuationToken currentToken)
-        {
-            if (currentToken == null)
-            {
-                return 0;
-            }
-
-            int numberToSkip;
-            return Int32.TryParse(currentToken.NextMarker, out numberToSkip) ? numberToSkip : 0;
         }
     }
 }

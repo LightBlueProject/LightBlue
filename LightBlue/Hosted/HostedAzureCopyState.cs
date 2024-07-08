@@ -1,24 +1,15 @@
-﻿using Microsoft.WindowsAzure.Storage.Blob;
-
-namespace LightBlue.Hosted
+﻿namespace LightBlue.Hosted
 {
     public class HostedAzureCopyState : IAzureCopyState
     {
-        private readonly CopyState _copyState;
-
-        public HostedAzureCopyState(CopyState copyState)
+        public HostedAzureCopyState(LightBlueBlobCopyStatus? copyStatus, string copyStatusDescription)
         {
-            _copyState = copyState;
+            Status = copyStatus.Value;
+            StatusDescription = copyStatusDescription;
         }
 
-        public CopyStatus Status
-        {
-            get { return _copyState.Status; }
-        }
+        public LightBlueBlobCopyStatus Status { get; private set; }
 
-        public string StatusDescription
-        {
-            get { return _copyState.StatusDescription; }
-        }
+        public string StatusDescription { get; private set; }
     }
 }

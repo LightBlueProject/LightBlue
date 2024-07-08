@@ -4,17 +4,15 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Azure;
+using Azure.Storage.Sas;
 using LightBlue.Infrastructure;
-
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace LightBlue.Standalone
 {
     public class StandaloneAzureBlockBlob : IAzureBlockBlob
     {
-        private const int BufferSize = 4096;
+        internal const int BufferSize = 4096;
         private const int MaxFileLockRetryAttempts = 5;
         private const string DefaultContentType = "application/octet-stream";
 
@@ -114,14 +112,18 @@ namespace LightBlue.Standalone
             _metadata = metadataStore.Metadata;
         }
 
-        public Task FetchAttributesAsync()
+        public async Task FetchAttributesAsync()
         {
-            FetchAttributes();
-            return Task.FromResult(new object());
+            var fileInfo = EnsureBlobFileExists();
+            var metadataStore = await LoadMetadataStoreAsync();
+            _properties.ContentType = metadataStore.ContentType;
+            _properties.Length = fileInfo.Length;
+            _metadata = metadataStore.Metadata;
         }
 
         public Stream OpenRead()
         {
+            FetchAttributes();
             return new FileStream(_blobPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, BufferSize, true);
         }
 
@@ -153,7 +155,7 @@ namespace LightBlue.Standalone
 
                 foreach (var key in _metadata.Keys)
                 {
-                   metadataStore.Metadata[key] = _metadata[key];
+                    metadataStore.Metadata[key] = _metadata[key];
                 }
 
                 fileStream.SetLength(0);
@@ -165,25 +167,8 @@ namespace LightBlue.Standalone
         {
             if (retriesRemaining <= 0)
             {
-                throw new StorageException(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Tried {0} times to write to locked metadata file '{1}'",
-                        MaxFileLockRetryAttempts,
-                        _metadataPath));
+                throw new RequestFailedException($"Tried {MaxFileLockRetryAttempts} times to write to locked metadata file '{_metadataPath}'");
             }
-        }
-
-        public void SetProperties()
-        {
-            EnsureBlobFileExists();
-            EnsureMetadataDirectoryExists();
-
-            FileLockExtensions.WaitAndRetryOnFileLock(
-                SetPropertiesImplementation,
-                _waitTimeBetweenRetries,
-                MaxFileLockRetryAttempts,
-                WhenSetMetadataFileHasSharingViolation);
         }
 
         private void SetPropertiesImplementation()
@@ -203,29 +188,52 @@ namespace LightBlue.Standalone
 
         public Task SetPropertiesAsync()
         {
-            SetProperties();
+            EnsureBlobFileExists();
+            EnsureMetadataDirectoryExists();
+
+            FileLockExtensions.WaitAndRetryOnFileLock(
+                SetPropertiesImplementation,
+                _waitTimeBetweenRetries,
+                MaxFileLockRetryAttempts,
+                WhenSetMetadataFileHasSharingViolation);
             return Task.FromResult(new object());
         }
 
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
+        public string GetSharedAccessReadSignature(DateTimeOffset expiresOn)
         {
-            if (policy == null)
-            {
-                throw new ArgumentNullException("policy");
-            }
-
+            var permissions = BlobSasPermissions.Read;
             return string.Format(
                 CultureInfo.InvariantCulture,
                 "?sv={0:yyyy-MM-dd}&sr=b&sig=s&sp={1}",
                 DateTime.Today,
-                policy.Permissions.DeterminePermissionsString());
+                permissions.DeterminePermissionsString());
         }
 
-        public void DownloadToStream(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public string GetSharedAccessWriteSignature(DateTimeOffset expiresOn)
+        {
+            var permissions = BlobSasPermissions.Write;
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "?sv={0:yyyy-MM-dd}&sr=b&sig=s&sp={1}",
+                DateTime.Today,
+                permissions.DeterminePermissionsString());
+        }
+
+        public string GetSharedAccessReadWriteSignature(DateTimeOffset expiresOn)
+        {
+            var permissions = BlobSasPermissions.Read | BlobSasPermissions.Write;
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "?sv={0:yyyy-MM-dd}&sr=b&sig=s&sp={1}",
+                DateTime.Today,
+                permissions.DeterminePermissionsString());
+        }
+
+        public void DownloadToStream(Stream target, CancellationToken cancellationToken = default)
         {
             if (target == null)
             {
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             }
 
             try
@@ -241,25 +249,28 @@ namespace LightBlue.Standalone
                         target.Write(buffer, 0, bytesRead);
                     } while (bytesRead == BufferSize);
                 }
+
+                //Replicate Hosted Beahviour or Attribute Fetch on Download
+                FetchAttributes();
             }
             catch (FileNotFoundException ex)
             {
-                throw new StorageException(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "The blob file was not found. Expected location '{0}'.",
-                        _blobPath),
+                throw new RequestFailedException(
+                    $"The blob file was not found. Expected location '{_blobPath}'.",
                     ex);
             }
         }
 
-        public async Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public Task DownloadToStreamAsync(Stream target, CancellationToken cancellationToken = default)
         {
             if (target == null)
-            {
-                throw new ArgumentNullException("target");
-            }
+                throw new ArgumentNullException(nameof(target));
 
+            return DownloadToStreamInternalAsync(target);
+        }
+
+        private async Task DownloadToStreamInternalAsync(Stream target)
+        {
             try
             {
                 using (var fileStream = new FileStream(_blobPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, BufferSize, true))
@@ -273,27 +284,29 @@ namespace LightBlue.Standalone
                         await target.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
                     } while (bytesRead == BufferSize);
                 }
+
+                //Replicate Hosted Beahviour or Attribute Fetch on Download
+                await FetchAttributesAsync();
             }
             catch (FileNotFoundException ex)
             {
-                throw new StorageException(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "The blob file was not found. Expected location '{0}'.",
-                        _blobPath),
+                throw new RequestFailedException(
+                    $"The blob file was not found. Expected location '{_blobPath}'.",
                     ex);
             }
         }
 
-        public async Task UploadFromStreamAsync(Stream source)
+        public Task UploadFromStreamAsync(Stream source)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+                throw new ArgumentNullException(nameof(source));
 
             EnsureBlobDirectoryExists();
+            return UploadFromStreamInternalAsync(source);
+        }
 
+        private async Task UploadFromStreamInternalAsync(Stream source)
+        {
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 var buffer = new byte[BufferSize];
@@ -310,7 +323,6 @@ namespace LightBlue.Standalone
         public Task UploadFromFileAsync(string path)
         {
             EnsureBlobDirectoryExists();
-
             File.Copy(path, _blobPath, true);
 
             return Task.FromResult(new object());
@@ -321,25 +333,37 @@ namespace LightBlue.Standalone
             return UploadFromByteArrayAsync(buffer, 0, buffer.Length);
         }
 
-        public async Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
+        public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
         {
             if (buffer == null)
-            {
-                throw new ArgumentNullException("buffer");
-            }
+                throw new ArgumentNullException(nameof(buffer));
+
+            if (index < 0 || (buffer.Length > 0 && index >= buffer.Length))
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (count < 0 || index + count > buffer.Length)
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             EnsureBlobDirectoryExists();
+            return UploadFromByteArrayInternalAsync(buffer, index, count);
+        }
 
+        private async Task UploadFromByteArrayInternalAsync(byte[] buffer, int index, int count)
+        {
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 await fileStream.WriteAsync(buffer, index, count).ConfigureAwait(false);
+            }
+
+            if (_properties.ContentType != null)
+            {
+                await SetPropertiesAsync();
             }
         }
 
         public string StartCopyFromBlob(IAzureBlockBlob source)
         {
-            var standaloneAzureBlockBlob = source as StandaloneAzureBlockBlob;
-            if (standaloneAzureBlockBlob == null)
+            if (!(source is StandaloneAzureBlockBlob standaloneAzureBlockBlob))
             {
                 throw new ArgumentException("Can only copy between blobs in the same hosting environment");
             }
@@ -359,11 +383,11 @@ namespace LightBlue.Standalone
                     RetryFileOperation(() => File.Delete(_metadataPath));
                 }
 
-                CopyState = new StandaloneAzureCopyState(CopyStatus.Success, null);
+                CopyState = new StandaloneAzureCopyState(LightBlueBlobCopyStatus.Success, null);
             }
             catch (IOException ex)
             {
-                CopyState = new StandaloneAzureCopyState(CopyStatus.Failed, ex.ToTraceMessage());
+                CopyState = new StandaloneAzureCopyState(LightBlueBlobCopyStatus.Failed, ex.ToTraceMessage());
             }
             return Guid.NewGuid().ToString();
         }
@@ -380,7 +404,7 @@ namespace LightBlue.Standalone
             var fileInfo = new FileInfo(_blobPath);
             if (!fileInfo.Exists)
             {
-                throw new StorageException("The specified blob does not exist");
+                throw new RequestFailedException("The specified blob does not exist");
             }
             return fileInfo;
         }
@@ -415,9 +439,23 @@ namespace LightBlue.Standalone
             }
 
             using (var fileStream = new FileStream(_metadataPath, FileMode.Open, FileAccess.Read,
-                    FileShare.None, BufferSize, true))
+                    FileShare.Read, BufferSize, true))
             {
                 return StandaloneMetadataStore.ReadFromStream(fileStream);
+            }
+        }
+
+        private async Task<StandaloneMetadataStore> LoadMetadataStoreAsync()
+        {
+            if (!File.Exists(_metadataPath))
+            {
+                return CreateStandaloneMetadataStore();
+            }
+
+            using (var fileStream = new FileStream(_metadataPath, FileMode.Open, FileAccess.Read,
+                    FileShare.Read, BufferSize, true))
+            {
+                return await StandaloneMetadataStore.ReadFromStreamAsync(fileStream);
             }
         }
 

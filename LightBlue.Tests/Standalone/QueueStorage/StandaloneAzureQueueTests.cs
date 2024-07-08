@@ -1,15 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-
+using Azure;
+using Azure.Storage.Sas;
 using LightBlue.Standalone;
-
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage.Queue;
-
 using Xunit;
-using Xunit.Extensions;
 
 namespace LightBlue.Tests.Standalone.QueueStorage
 {
@@ -135,11 +130,11 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillThrowIfDeletingQueueThatDoesNotExist()
+        public async Task WillThrowIfDeletingQueueThatDoesNotExist()
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.Throws<StorageException>(() => queue.DeleteAsync());
+            await Assert.ThrowsAsync<RequestFailedException>(() => queue.DeleteAsync());
         }
 
         [Fact]
@@ -154,29 +149,27 @@ namespace LightBlue.Tests.Standalone.QueueStorage
         }
 
         [Fact]
-        public void WillNotThrowIfConditionallyDeletingNonExistantQueue()
+        public async Task WillNotThrowIfConditionallyDeletingNonExistantQueue()
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.DoesNotThrow(() => queue.DeleteIfExistsAsync());
+            var exception = await Record.ExceptionAsync(() => queue.DeleteIfExistsAsync());
+            Assert.Null(exception);
         }
 
         [Theory]
-        [InlineData(SharedAccessQueuePermissions.Read, "sp=r")]
-        [InlineData(SharedAccessQueuePermissions.Add, "sp=a")]
-        [InlineData(SharedAccessQueuePermissions.Update, "sp=u")]
-        [InlineData(SharedAccessQueuePermissions.ProcessMessages, "sp=p")]
-        [InlineData(SharedAccessQueuePermissions.Read | SharedAccessQueuePermissions.Add, "sp=ra")]
+        [InlineData(QueueSasPermissions.Read, "sp=r")]
+        [InlineData(QueueSasPermissions.Add, "sp=a")]
+        [InlineData(QueueSasPermissions.Update, "sp=u")]
+        [InlineData(QueueSasPermissions.Process, "sp=p")]
+        [InlineData(QueueSasPermissions.Read | QueueSasPermissions.Add, "sp=ra")]
         public void WillReturnParseableSharedAccessSignature(
-            SharedAccessQueuePermissions permissions,
+            QueueSasPermissions permissions,
             string expectedPermissions)
         {
             var queue = new StandaloneAzureQueue(BasePath, QueueName);
 
-            Assert.Contains(expectedPermissions, queue.GetSharedAccessSignature(new SharedAccessQueuePolicy
-            {
-                Permissions = permissions
-            }));
+            Assert.Contains(expectedPermissions, queue.GetSharedAccessSignature(permissions, DateTimeOffset.Now));
         }
 
     }
