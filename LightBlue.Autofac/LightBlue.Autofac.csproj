@@ -25,7 +25,7 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="8.0.0" />
+    <PackageReference Include="Autofac" Version="8.1.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LightBlue\LightBlue.csproj" />
