@@ -30,7 +30,7 @@ namespace LightBlue.MultiHost.Runners
             _parent = new Process
             {
                 EnableRaisingEvents = true,
-                StartInfo = new ProcessStartInfo("dotnet", "run")
+                StartInfo = new ProcessStartInfo("dotnet", "run --no-build --no-restore")
                 {
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
