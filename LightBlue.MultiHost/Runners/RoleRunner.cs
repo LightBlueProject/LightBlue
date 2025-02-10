@@ -70,6 +70,14 @@ namespace LightBlue.MultiHost.Runners
                 return;
             }
 
+            if (_role.RoleName == "AzureFunction")
+            {
+                var role = RunnerFactory.CreateAzureFunctionRunner(_role);
+                _resources.Add(role);
+                role.Start();
+                return;
+            }
+
             if (_role.IsIisExpress)
             {
                 var website = RunnerFactory.CreateForWebSite(_role);
