@@ -94,5 +94,10 @@ namespace LightBlue.MultiHost.Runners
         {
             return new NpmRunner(role);
         }
+
+        public static IRunner CreateAzureFunctionRunner(Role role)
+        {
+            return new AzureFunctionRunner(role);
+        }
     }
 }

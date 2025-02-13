@@ -63,6 +63,8 @@ namespace LightBlue.MultiHost.ViewModel
                         return @"Resources\domainservice.ico";
                     case "ProcessManager":
                         return @"Resources\processmanager.ico";
+                    case "AzureFunction":
+                    case "Npm":
                     case "WebRole":
                         return Config.Title.Contains("Hub")
                             ? @"Resources\messagehub.ico"
