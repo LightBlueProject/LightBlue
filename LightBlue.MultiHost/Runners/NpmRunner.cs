@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using LightBlue.MultiHost.ViewModel;
 
@@ -28,9 +29,7 @@ namespace LightBlue.MultiHost.Runners
 
         public void Start()
         {
-            const string path = @"C:\Program Files\nodejs\npm.cmd";
-            if (!File.Exists(path))
-                throw new InvalidOperationException($"NodeJS must be installed at {path}");
+            var path = GetNpmPath();
 
             _parent = new Process
             {
@@ -85,6 +84,23 @@ namespace LightBlue.MultiHost.Runners
                 _role.TraceWriteLine(Identifier, $"Kill parent process {_parent.Id} {_parent.ProcessName} {_parent.StartInfo.Arguments} {_parent.StartInfo.WorkingDirectory}");
                 _parent.Kill();
             }
+        }
+
+        private static string GetNpmPath()
+        {
+            // Depending on the installation, npm can be in different locations
+            var paths = new[]
+            {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "npm", "npm.cmd"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "nodejs", "npm.cmd")
+            };
+
+            var npmPath = paths.FirstOrDefault(File.Exists);
+
+            if (npmPath == default)
+                throw new InvalidOperationException($"NodeJS must be installed. Checked paths:{Environment.NewLine}{string.Join(Environment.NewLine, paths)}");
+
+            return npmPath;
         }
     }
 }
