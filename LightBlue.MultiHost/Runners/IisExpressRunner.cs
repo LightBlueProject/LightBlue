@@ -1,8 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using LightBlue.MultiHost.IISExpress;
 using LightBlue.MultiHost.ViewModel;
@@ -56,7 +54,7 @@ namespace LightBlue.MultiHost.Runners
                 _completed.SetResult(new object());
             }
             _started.SetResult(new object());
-		}
+        }
 
         public bool Debug()
         {

@@ -31,18 +31,8 @@ namespace LightBlue.MultiHost.Runners
         {
             var path = GetNpmPath();
 
-            _parent = new Process
-            {
-                EnableRaisingEvents = true,
-                StartInfo = new ProcessStartInfo(path, "start")
-                {
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WorkingDirectory = Path.GetDirectoryName(_role.Config.ConfigurationPath)
-                }
-            };
+            _parent = _role.NewDefaultProcess(path, "start");
+
             _parent.OutputDataReceived += (_, args) =>
             {
                 if (!string.IsNullOrWhiteSpace(args.Data))
