@@ -56,7 +56,7 @@ namespace LightBlue.MultiHost.IISExpress
 
             return processStartInfo;
         }
-        
+
         public static void GenerateIisExpressConfigurationFile(WebHostArgs webHostArgs, string configurationFilePath)
         {
             var template = ObtainIisExpressConfigurationTemplate(webHostArgs);

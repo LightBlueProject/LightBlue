@@ -32,18 +32,8 @@ namespace LightBlue.MultiHost.Runners
             if (!File.Exists(path))
                 throw new InvalidOperationException($"Azure Functions Core Tools must be installed at {path}");
 
-            _parent = new Process
-            {
-                EnableRaisingEvents = true,
-                StartInfo = new ProcessStartInfo(path, $"start --port {_role.Config.Port}")
-                {
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WorkingDirectory = Path.GetDirectoryName(_role.Config.ConfigurationPath)
-                }
-            };
+            _parent = _role.NewDefaultProcess(path, $"start --port {_role.Config.Port}");
+
             _parent.OutputDataReceived += (_, args) =>
             {
                 if (!string.IsNullOrWhiteSpace(args.Data))

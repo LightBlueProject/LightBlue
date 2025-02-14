@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using LightBlue.MultiHost.ViewModel;
 
@@ -27,18 +26,8 @@ namespace LightBlue.MultiHost.Runners
 
         public void Start()
         {
-            _parent = new Process
-            {
-                EnableRaisingEvents = true,
-                StartInfo = new ProcessStartInfo("dotnet", "run --no-build --no-restore")
-                {
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WorkingDirectory = Path.GetDirectoryName(_role.Config.ConfigurationPath)
-                }
-            };
+            _parent = _role.NewDefaultProcess("dotnet", "run --no-build --no-restore");
+
             _parent.OutputDataReceived += (_, args) =>
             {
                 if (!string.IsNullOrWhiteSpace(args.Data))
