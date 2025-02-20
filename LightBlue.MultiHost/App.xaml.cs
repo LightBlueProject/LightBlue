@@ -93,7 +93,7 @@ namespace LightBlue.MultiHost
 
                     var assemblyLocations = query.ToArray();
 
-                    ThreadRunnerAssemblyCache.Initialise(assemblyLocations);
+                    ThreadRunnerAssemblyCache.Initialise(assemblyLocations, Configuration.SystemName);
                     IisExpressHelper.KillIisExpressProcesses();
                     LightBlueConfiguration.SetAsMultiHost();
                 }

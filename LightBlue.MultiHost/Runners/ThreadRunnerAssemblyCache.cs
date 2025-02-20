@@ -8,10 +8,13 @@ namespace LightBlue.MultiHost.Runners
 {
     static class ThreadRunnerAssemblyCache
     {
-        public static readonly string AssemblyCacheFolder = Path.Combine(Path.GetTempPath(), "LightBlue.MultiHost.AssemblyCache");
+        public static string AssemblyCacheFolder = Path.Combine(Path.GetTempPath(), "LightBlue.MultiHost.AssemblyCache");
 
-        public static void Initialise(IEnumerable<string> assemblyLocations)
+        public static void Initialise(IEnumerable<string> assemblyLocations, string systemName)
         {
+            var systemCacheFolder = Path.Combine(AssemblyCacheFolder, systemName);
+            AssemblyCacheFolder = systemCacheFolder;
+
             if (Directory.Exists(AssemblyCacheFolder))
             {
                 foreach (var f in Directory.EnumerateFiles(AssemblyCacheFolder))
