@@ -26,7 +26,7 @@ namespace LightBlue.MultiHost.Runners
 
         public void Start()
         {
-            _parent = _role.NewDefaultProcess("dotnet", "run --no-build --no-restore");
+            _parent = CreateProcessFrom(_role);
 
             _parent.OutputDataReceived += (_, args) =>
             {
@@ -47,10 +47,31 @@ namespace LightBlue.MultiHost.Runners
             _parent.Start();
             _parent.BeginOutputReadLine();
             _parent.BeginErrorReadLine();
+            _parent.SetPriority(_role);
+            _parent.AllocateToMultiHostProcess();
 
             _started.SetResult(new object());
 
             _role.TraceWriteLine(Identifier, $"Process {_parent.Id} {_parent.ProcessName} {_parent.StartInfo.Arguments} {_parent.StartInfo.WorkingDirectory} started");
+        }
+
+        private static Process CreateProcessFrom(Role role)
+        {
+            if (role.Config.Assembly.EndsWith(".exe"))
+            {
+                // Run the output .exe directly
+                return role.NewDefaultProcess(role.Config.Assembly, "");
+            }
+            else if (role.Config.Assembly.EndsWith(".dll"))
+            {
+                // Run the output .dll directly
+                return role.NewDefaultProcess("dotnet", role.Config.Assembly);
+            }
+            else
+            {
+                // Run the project with dotnet run
+                return role.NewDefaultProcess("dotnet", "run --no-build --no-restore");
+            }
         }
 
         public void Dispose()

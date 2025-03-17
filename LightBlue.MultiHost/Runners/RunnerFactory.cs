@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LightBlue.MultiHost.IISExpress;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost.Runners
@@ -75,6 +74,8 @@ namespace LightBlue.MultiHost.Runners
                         ConfigurationFile = config.Assembly + ".config",
                     };
                     return new AppDomainRunner(role, setup, assemblyFilePath, ConfigurationLocator.LocateConfigurationFile(config.ConfigurationPath), role.RoleName);
+                case RoleIsolationMode.Process:
+                    return new DotNetFrameworkRunner(role);
                 default:
                     throw new NotSupportedException();
             }
