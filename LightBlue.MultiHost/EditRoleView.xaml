@@ -62,8 +62,8 @@
                           SelectedValuePath="Value"/>
             </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="BtnOk" Margin="3" Content="Save" Width="100" Height="30" Style="{StaticResource AccentedSquareButtonStyle}" Click="OkButton_Click" HorizontalAlignment="Right"/>
-                <Button x:Name="BtnCancel" Margin="3" Content="Cancel" Width="100" Height="30" Style="{StaticResource AccentedSquareButtonStyle}" Click="CancelButton_Click" HorizontalAlignment="Right" />
+                <Button x:Name="BtnOk" Margin="3" Content="Save" Width="100" Height="30" Style="{StaticResource MahApps.Styles.Button.Square.Accent}" Click="OkButton_Click" HorizontalAlignment="Right"/>
+                <Button x:Name="BtnCancel" Margin="3" Content="Cancel" Width="100" Height="30" Style="{StaticResource MahApps.Styles.Button.Square.Accent}" Click="CancelButton_Click" HorizontalAlignment="Right" />
             </StackPanel>
         </StackPanel>
     </Grid>
