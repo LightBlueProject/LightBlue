@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -20,6 +19,9 @@ namespace LightBlue.MultiHost.Configuration
             // This model ensures that we don't persist web related configuration into standard (worker) roles
             var persistanceModel = new
             {
+                multiHostConfiguration.ThreadDelayMs,
+                multiHostConfiguration.AppDomainDelayMs,
+                multiHostConfiguration.ProcessDelayMs,
                 Roles = from x in multiHostConfiguration.Roles
                         let isWorker = string.IsNullOrWhiteSpace(x.Port)
                         select isWorker
@@ -32,6 +34,7 @@ namespace LightBlue.MultiHost.Configuration
                                 x.ConfigurationPath,
                                 
                                 x.RoleIsolationMode,
+                                x.ProcessPriority,
                             }
                             : (dynamic)new
                             {
@@ -46,13 +49,14 @@ namespace LightBlue.MultiHost.Configuration
                                 x.Hostname,
 
                                 x.RoleIsolationMode,
+                                x.ProcessPriority,
                             }
             };
 
             using (var fs = new FileStream(path, FileMode.Truncate, FileAccess.Write))
             using (var sw = new StreamWriter(fs))
             {
-                sw.WriteLine(JsonSerializer.Serialize(persistanceModel, new JsonSerializerOptions { WriteIndented = true }));
+                sw.WriteLine(JsonSerializer.Serialize(persistanceModel, new JsonSerializerOptions { WriteIndented = true, IgnoreNullValues = true }));
             }
         }
     }

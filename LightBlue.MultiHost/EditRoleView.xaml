@@ -36,6 +36,7 @@
                 <Label Grid.Row="6" Grid.Column="0" Content="UseSsl:"/>
                 <Label Grid.Row="7" Grid.Column="0" Content="Hostname:"/>
                 <Label Grid.Row="8" Grid.Column="0" Content="RoleIsolationMode:"/>
+                <Label Grid.Row="9" Grid.Column="0" Content="ProcessPriority:"/>
 
                 <CheckBox Grid.Row="0" Grid.Column="1" Margin="3"  IsChecked="{Binding RoleConfiguration.EnabledOnStartup}"/>
 
@@ -57,13 +58,19 @@
 
                 <ComboBox Grid.Row="8" Grid.Column="1" Margin="3" 
                           DisplayMemberPath="DisplayName" 
-                          ItemsSource="{multiHost:EnumToItemsSource {x:Type enums: RoleIsolationMode}}"
+                          ItemsSource="{multiHost:EnumToItemsSource {x:Type enums:RoleIsolationMode}}"
                           SelectedValue="{Binding Path=RoleConfiguration.RoleIsolationMode, Mode=TwoWay}"
+                          SelectedValuePath="Value"/>
+
+                <ComboBox Grid.Row="9" Grid.Column="1" Margin="3" 
+                          DisplayMemberPath="DisplayName" 
+                          ItemsSource="{multiHost:EnumToItemsSource {x:Type enums:ProcessPriority}}"
+                          SelectedValue="{Binding Path=RoleConfiguration.ProcessPriority, Mode=TwoWay}"
                           SelectedValuePath="Value"/>
             </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="BtnOk" Margin="3" Content="Save" Width="100" Height="30" Style="{StaticResource AccentedSquareButtonStyle}" Click="OkButton_Click" HorizontalAlignment="Right"/>
-                <Button x:Name="BtnCancel" Margin="3" Content="Cancel" Width="100" Height="30" Style="{StaticResource AccentedSquareButtonStyle}" Click="CancelButton_Click" HorizontalAlignment="Right" />
+                <Button x:Name="BtnOk" Margin="3" Content="Save" Width="100" Height="30" Style="{StaticResource MahApps.Styles.Button.Square.Accent}" Click="OkButton_Click" HorizontalAlignment="Right"/>
+                <Button x:Name="BtnCancel" Margin="3" Content="Cancel" Width="100" Height="30" Style="{StaticResource MahApps.Styles.Button.Square.Accent}" Click="CancelButton_Click" HorizontalAlignment="Right" />
             </StackPanel>
         </StackPanel>
     </Grid>

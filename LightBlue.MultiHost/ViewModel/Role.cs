@@ -50,6 +50,16 @@ namespace LightBlue.MultiHost.ViewModel
             }
         }
 
+        public ProcessPriority ProcessPriority
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(Config.ProcessPriority)
+                    ? ProcessPriority.BelowNormal
+                    : (ProcessPriority)Enum.Parse(typeof(ProcessPriority), Config.ProcessPriority);
+            }
+        }
+
         public string ImageSource
         {
             get

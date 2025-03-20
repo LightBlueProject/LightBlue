@@ -40,6 +40,8 @@ namespace LightBlue.MultiHost.Runners
                 if (_process.Start())
                 {
                     _role.TraceWriteLine(Identifier, "Website started in new IISExpress process: " + _process.Id);
+                    _process.SetPriority(_role);
+                    _process.AllocateToMultiHostProcess();
                 }
                 else
                 {
@@ -61,7 +63,8 @@ namespace LightBlue.MultiHost.Runners
             if (File.Exists(@"c:\\windows\\system32\\vsjitdebugger.exe"))
             {
                 var psi = new ProcessStartInfo(@"c:\\windows\\system32\\vsjitdebugger.exe", "-p " + _process.Id);
-                Process.Start(psi);
+                var process = Process.Start(psi);
+                MultiHostProcess.Job.AddProcess(process);
                 return true;
             }
             return false;

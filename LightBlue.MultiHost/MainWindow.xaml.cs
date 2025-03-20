@@ -2,18 +2,17 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.Controls;
+using LightBlue.MultiHost.Runners;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost
@@ -109,7 +108,9 @@ namespace LightBlue.MultiHost
             DataContext = this;
 
             var autos = Services.Where(x => x.Status == RoleStatus.Sequenced).ToArray();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             BeginAutoStart(autos);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             Loaded += (s, a) =>
             {
@@ -144,10 +145,39 @@ namespace LightBlue.MultiHost
             }
         }
 
-        async void BeginAutoStart(Role[] roles)
+        private async Task BeginAutoStart(Role[] roles)
         {
-            await Task.Delay(TimeSpan.FromSeconds(0.2));
-            foreach (var r in roles) r.StartAutomatically();
+            var rolesByIsolationMode = roles.GroupBy(x => x.IsolationMode).ToDictionary(x => x.Key, x => x);
+
+            if (rolesByIsolationMode.ContainsKey(RoleIsolationMode.Thread))
+            {
+                await AutoStartRoleBatch(
+                    roles: rolesByIsolationMode[RoleIsolationMode.Thread],
+                    perRoleDelay: TimeSpan.FromMilliseconds(App.Configuration.ThreadDelayMs));
+            }
+
+            if (rolesByIsolationMode.ContainsKey(RoleIsolationMode.AppDomain))
+            {
+                await AutoStartRoleBatch(
+                    roles: rolesByIsolationMode[RoleIsolationMode.AppDomain],
+                    perRoleDelay: TimeSpan.FromMilliseconds(App.Configuration.AppDomainDelayMs));
+            }
+
+            if (rolesByIsolationMode.ContainsKey(RoleIsolationMode.Process))
+            {
+                await AutoStartRoleBatch(
+                    roles: rolesByIsolationMode[RoleIsolationMode.Process],
+                    perRoleDelay: TimeSpan.FromMilliseconds(App.Configuration.ProcessDelayMs));
+            }
+        }
+
+        private async Task AutoStartRoleBatch(IGrouping<RoleIsolationMode, Role> roles, TimeSpan perRoleDelay)
+        {
+            foreach (var role in roles)
+            {
+                await Task.Delay(perRoleDelay);
+                role.StartAutomatically();
+            }
         }
 
         bool CollectionViewSource_Filter(object item)
@@ -157,7 +187,7 @@ namespace LightBlue.MultiHost
             var r = (Role) item;
             var filter = r.Title.ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
                          || r.Status.ToString().ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
-                         || r.RoleName.ToLowerInvariant().Contains(_searchText.ToLowerInvariant());
+                         || (r.RoleName?.ToLowerInvariant().Contains(_searchText.ToLowerInvariant()) ?? false);
             return filter;
         }
 

@@ -17,6 +17,7 @@ namespace LightBlue.MultiHost
                 WorkingDirectory = Path.GetDirectoryName(role.Config.ConfigurationPath)
             };
 
+            psi.EnvironmentVariables.Add("LightBlueRunMode", "process");
             psi.EnvironmentVariables.Add("LightBlueHost", "true");
             psi.EnvironmentVariables.Add("LightBlueConfigurationPath", role.Config.ConfigurationPath);
             psi.EnvironmentVariables.Add("LightBlueRoleName", role.Config.RoleName);

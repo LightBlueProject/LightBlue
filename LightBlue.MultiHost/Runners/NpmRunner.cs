@@ -52,6 +52,8 @@ namespace LightBlue.MultiHost.Runners
             _parent.Start();
             _parent.BeginOutputReadLine();
             _parent.BeginErrorReadLine();
+            _parent.SetPriority(_role);
+            _parent.AllocateToMultiHostProcess();
 
             _started.SetResult(new object());
 

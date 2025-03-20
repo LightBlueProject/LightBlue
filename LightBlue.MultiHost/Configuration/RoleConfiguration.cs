@@ -16,5 +16,6 @@
 
         // optional for all roles
         public string RoleIsolationMode { get; set; }
+        public string ProcessPriority { get; set; }
     }
 }
