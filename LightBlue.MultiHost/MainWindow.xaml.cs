@@ -157,7 +157,7 @@ namespace LightBlue.MultiHost
             var r = (Role) item;
             var filter = r.Title.ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
                          || r.Status.ToString().ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
-                         || r.RoleName.ToLowerInvariant().Contains(_searchText.ToLowerInvariant());
+                         || (r.RoleName?.ToLowerInvariant().Contains(_searchText.ToLowerInvariant()) ?? false);
             return filter;
         }
 
