@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost.Runners
@@ -99,6 +100,11 @@ namespace LightBlue.MultiHost.Runners
         public static IRunner CreateAzureFunctionRunner(Role role)
         {
             return new AzureFunctionRunner(role);
+        }
+
+        public static IRunner CreateCustomRunner(CustomRunnerConfiguration customRunner, Role role)
+        {
+            return new CustomRunner(customRunner, role);
         }
     }
 }
