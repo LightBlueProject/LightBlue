@@ -19,6 +19,8 @@ namespace LightBlue.MultiHost.Configuration
             // This model ensures that we don't persist web related configuration into standard (worker) roles
             var persistanceModel = new
             {
+                multiHostConfiguration.CustomRunners,
+                multiHostConfiguration.AssemblyCacheId,
                 multiHostConfiguration.ThreadDelayMs,
                 multiHostConfiguration.AppDomainDelayMs,
                 multiHostConfiguration.ProcessDelayMs,

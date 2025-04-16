@@ -64,24 +64,11 @@ namespace LightBlue.MultiHost.ViewModel
         {
             get
             {
-                // TODO: drive this from configuration
-                switch (Config.RoleName)
-                {
-                    case "ReadModelPopulator":
-                        return @"Resources\readmodelpopulator.ico";
-                    case "CommandProcessor":
-                        return @"Resources\domainservice.ico";
-                    case "ProcessManager":
-                        return @"Resources\processmanager.ico";
-                    case "AzureFunction":
-                    case "Npm":
-                    case "WebRole":
-                        return Config.Title.Contains("Hub")
-                            ? @"Resources\messagehub.ico"
-                            : @"Resources\website.ico";
-                    default:
-                        return @"Resources\worker.ico";
-                }
+                var iconOption = App.Configuration.CustomRunners.FirstOrDefault(x => x.Name == Config.RoleName) is CustomRunnerConfiguration customRunner
+                    ? customRunner.Icon
+                    : IconHelper.RoleToIconOption(Config);
+
+                return IconHelper.IconPaths[iconOption];
             }
         }
 

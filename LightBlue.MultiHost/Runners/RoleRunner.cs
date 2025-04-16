@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost.Runners
@@ -46,6 +47,14 @@ namespace LightBlue.MultiHost.Runners
 
         public void Start()
         {
+            if (App.Configuration.CustomRunners.FirstOrDefault(x => x.Name == _role.RoleName) is CustomRunnerConfiguration customRunner)
+            {
+                var role = RunnerFactory.CreateCustomRunner(customRunner, _role);
+                _resources.Add(role);
+                role.Start();
+                return;
+            }
+
             if (_role.RoleName == "DotNetCore")
             {
                 var role = RunnerFactory.CreateDotNetCoreRunner(_role);
