@@ -4,7 +4,7 @@ namespace LightBlue.MultiHost.Configuration
 {
     public static class IconHelper
     {
-        public static readonly Dictionary<IconOption, string> IconPaths = new Dictionary<IconOption, string>()
+        public static readonly IReadOnlyDictionary<IconOption, string> IconPaths = new Dictionary<IconOption, string>()
         {
             [IconOption.Website] = @"Resources\website.ico",
             [IconOption.ReadModelPopulator] = @"Resources\readmodelpopulator.ico",
