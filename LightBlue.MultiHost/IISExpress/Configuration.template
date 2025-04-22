@@ -163,7 +163,7 @@
                 </bindings>
             </site>
             <siteDefaults>
-                <logFile logFormat="W3C" directory="%IIS_USER_HOME%\Logs" />
+                <logFile logFormat="W3C" directory="%IIS_USER_HOME%\Logs\__HOSTNAME__"/>
                 <traceFailedRequestsLogging directory="%IIS_USER_HOME%\TraceLogFiles" enabled="false" maxLogFileSizeKB="1024" />
             </siteDefaults>
             <applicationDefaults applicationPool="IISExpressAppPool" />
