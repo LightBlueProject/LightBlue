@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +19,7 @@ namespace LightBlue.MultiHost
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow :  INotifyPropertyChanged
+    public partial class MainWindow : INotifyPropertyChanged
     {
         private Role _selectedItem;
         private string _searchText;
@@ -97,10 +96,6 @@ namespace LightBlue.MultiHost
                 var r = new Role(h);
                 Services.Add(r);
                 r.RolePanic += OnRolePanicking;
-                r.PropertyChanged += (s, e) =>
-                {
-                    if (e.PropertyName == "Status") CollectionViewSource.Refresh();
-                };
             }
 
             CollectionViewSource.Filter += CollectionViewSource_Filter;
@@ -183,8 +178,8 @@ namespace LightBlue.MultiHost
         bool CollectionViewSource_Filter(object item)
         {
             if (string.IsNullOrWhiteSpace(_searchText)) return true;
-            
-            var r = (Role) item;
+
+            var r = (Role)item;
             var filter = r.Title.ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
                          || r.Status.ToString().ToLowerInvariant().Contains(_searchText.ToLowerInvariant())
                          || (r.RoleName?.ToLowerInvariant().Contains(_searchText.ToLowerInvariant()) ?? false);
@@ -270,7 +265,7 @@ namespace LightBlue.MultiHost
                         changed.Assembly = Path.GetFullPath(Path.Combine(configDir, changed.Assembly));
 
                         var newRole = new Role(changed);
-                        
+
                         var index = listView.SelectedIndex;
                         Services.RemoveAt(index);
                         Services.Insert(index, newRole);
