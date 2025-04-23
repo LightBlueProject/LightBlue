@@ -37,9 +37,26 @@ namespace LightBlue.MultiHost.Runners
                 _process.Exited += (s, e) => _completed.SetResult(new object());
                 _process.EnableRaisingEvents = true;
                 _process.StartInfo = IisExpressHelper.BuildProcessStartInfo(_args, iisExpressConfigurationFilePath);
+
+                _process.OutputDataReceived += (s, e) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(e.Data))
+                    {
+                        _role.TraceWriteLine(Identifier, e.Data);
+                    }
+                };
+                _process.ErrorDataReceived += (s, e) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(e.Data))
+                    {
+                        _role.TraceWriteLine(Identifier, e.Data);
+                    }
+                };
+
                 if (_process.Start())
                 {
                     _role.TraceWriteLine(Identifier, "Website started in new IISExpress process: " + _process.Id);
+                    _process.BeginOutputReadLine();
                     _process.SetPriority(_role);
                     _process.AllocateToMultiHostProcess();
                 }
@@ -47,8 +64,6 @@ namespace LightBlue.MultiHost.Runners
                 {
                     throw new NotSupportedException("James: I've not yet found a scenario where this can happen.");
                 }
-                BeginAsyncInfoLoop(_process);
-                BeginAsyncErrorLoop(_process);
             }
             catch (Exception ex)
             {
@@ -68,32 +83,6 @@ namespace LightBlue.MultiHost.Runners
                 return true;
             }
             return false;
-        }
-
-        private async void BeginAsyncInfoLoop(Process process)
-        {
-            while (!Completed.IsCompleted)
-            {
-                var trace = process.StandardOutput.ReadLineAsync().ConfigureAwait(false);
-                var s = await trace;
-                if (!string.IsNullOrWhiteSpace(s))
-                {
-                    _role.TraceWriteLine(Identifier, s);
-                }
-            }
-        }
-
-        private async void BeginAsyncErrorLoop(Process process)
-        {
-            while (!Completed.IsCompleted)
-            {
-                var trace = process.StandardError.ReadLineAsync().ConfigureAwait(false);
-                var s = await trace;
-                if (!string.IsNullOrWhiteSpace(s))
-                {
-                    _role.TraceWriteLine(Identifier, s);
-                }
-            }
         }
 
         public void Dispose()
