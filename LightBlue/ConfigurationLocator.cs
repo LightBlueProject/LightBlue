@@ -25,7 +25,7 @@ namespace LightBlue
             if (!File.Exists(configurationFile))
             {
                 throw new ArgumentException(
-                    "ServiceConfiguration.Local.cscfg cannot be located in the configuration path.");
+                    $"ServiceConfiguration.Local.cscfg cannot be located in the configuration path. {configurationFile}");
             }
 
             return configurationFile;

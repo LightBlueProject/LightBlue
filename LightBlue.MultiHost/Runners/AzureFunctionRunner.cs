@@ -21,7 +21,7 @@ namespace LightBlue.MultiHost.Runners
 
         public AzureFunctionRunner(Role role)
         {
-            Identifier = role.RoleName;
+            Identifier = "AzureFunction: " + role.RoleName;
 
             _role = role;
         }

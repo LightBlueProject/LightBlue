@@ -1,5 +1,5 @@
 ﻿using System.Windows.Media;
-using LightBlue.MultiHost.Runners;
+using LightBlue.MultiHost.Configuration;
 
 namespace LightBlue.MultiHost.ViewModel
 {
@@ -11,16 +11,16 @@ namespace LightBlue.MultiHost.ViewModel
         public static SolidColorBrush Blue = Brushes.SteelBlue;
         public static SolidColorBrush Main = Brushes.DodgerBlue;
 
-        public static SolidColorBrush GetStatusColour(RoleStatus status, RoleIsolationMode isolationMode)
+        public static SolidColorBrush GetStatusColour(RoleStatus status, RunnerType runnerType)
         {
             switch (status)
             {
                 case RoleStatus.Starting:
-                    return isolationMode == RoleIsolationMode.Thread
+                    return runnerType == RunnerType.Thread
                         ? Green
                         : Blue;
                 case RoleStatus.Running:
-                    return isolationMode == RoleIsolationMode.Thread
+                    return runnerType == RunnerType.Thread
                         ? Green
                         : Blue;
                 case RoleStatus.Stopping:

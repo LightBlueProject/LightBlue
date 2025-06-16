@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.ViewModel;
 
 namespace LightBlue.MultiHost.Runners
@@ -51,35 +50,19 @@ namespace LightBlue.MultiHost.Runners
             return new IisExpressRunner(role);
         }
 
-        public static IRunner CreateForWorkerRole(Role role, RoleIsolationMode isolation)
+        public static IRunner CreateThreadRunner(Role role)
         {
-            var config = role.Config;
+            return new ThreadRunner(role, role.Config.Assembly, ConfigurationLocator.LocateConfigurationFile(role.Config.ConfigurationPath), role.RoleName);
+        }
 
-            var assemblyFilePath = config.Assembly;
-            var assemblyPath = Path.GetDirectoryName(assemblyFilePath);
-
-            if (HasBeenReBuilt(assemblyPath) && isolation == RoleIsolationMode.Thread)
+        public static IRunner CreateAppDomainRunner(Role role)
+        {
+            var setup = new AppDomainSetup
             {
-                isolation = RoleIsolationMode.AppDomain;
-                role.IsolationMode = isolation;
-            }
-
-            switch (isolation)
-            {
-                case RoleIsolationMode.Thread:
-                    return new ThreadRunner(role, assemblyFilePath, ConfigurationLocator.LocateConfigurationFile(config.ConfigurationPath), role.RoleName);
-                case RoleIsolationMode.AppDomain:
-                    var setup = new AppDomainSetup
-                    {
-                        ApplicationBase = assemblyPath,
-                        ConfigurationFile = config.Assembly + ".config",
-                    };
-                    return new AppDomainRunner(role, setup, assemblyFilePath, ConfigurationLocator.LocateConfigurationFile(config.ConfigurationPath), role.RoleName);
-                case RoleIsolationMode.Process:
-                    return new DotNetFrameworkRunner(role);
-                default:
-                    throw new NotSupportedException();
-            }
+                ApplicationBase = Path.GetDirectoryName(role.Config.Assembly),
+                ConfigurationFile = role.Config.Assembly + ".config",
+            };
+            return new AppDomainRunner(role, setup, role.Config.Assembly, ConfigurationLocator.LocateConfigurationFile(role.Config.ConfigurationPath), role.RoleName);
         }
 
         public static IRunner CreateDotNetCoreRunner(Role role)
@@ -102,9 +85,9 @@ namespace LightBlue.MultiHost.Runners
             return new AzureFunctionRunner(role);
         }
 
-        public static IRunner CreateCustomRunner(CustomRunnerConfiguration customRunner, Role role)
+        public static IRunner CreateCustomRunner(Role role)
         {
-            return new CustomRunner(customRunner, role);
+            return new CustomRunner(role);
         }
     }
 }

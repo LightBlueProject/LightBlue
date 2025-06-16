@@ -4,7 +4,7 @@ namespace LightBlue.MultiHost.Configuration
 {
     public class RoleConfigurationService : IRoleConfiguationService
     {
-        public RoleConfiguration Edit(string serviceTitle, string multiHostConfigurationFilePath)
+        public ServiceConfiguration Edit(string serviceTitle, string multiHostConfigurationFilePath)
         {
             var service = new MultiHostConfigurationService();
             var configuration = service.Load(multiHostConfigurationFilePath);

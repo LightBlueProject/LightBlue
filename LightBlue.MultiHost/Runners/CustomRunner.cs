@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.ViewModel;
@@ -23,12 +20,12 @@ namespace LightBlue.MultiHost.Runners
 
         private readonly CustomRunnerConfiguration _config;
 
-        public CustomRunner(CustomRunnerConfiguration config, Role role)
+        public CustomRunner(Role role)
         {
-            Identifier = role.RoleName;
+            Identifier = $"{role.CustomRunnerConfiguration.RunnerName}: {role.RoleName}";
 
             _role = role;
-            _config = config;
+            _config = role.CustomRunnerConfiguration;
         }
 
         public void Start()

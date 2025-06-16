@@ -8,9 +8,7 @@ namespace LightBlue.MultiHost.Runners
     {
         private readonly Role _role;
         private Process _parent;
-
         public string Identifier { get; }
-
         public Task Started => _started.Task;
         public Task Completed => _completed.Task;
 
@@ -19,7 +17,7 @@ namespace LightBlue.MultiHost.Runners
 
         public DotNetCoreRunner(Role role)
         {
-            Identifier = role.RoleName;
+            Identifier = "Dotnet: " + role.RoleName;
 
             _role = role;
         }
