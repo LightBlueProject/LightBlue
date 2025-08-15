@@ -19,7 +19,7 @@ namespace LightBlue.MultiHost.Runners
 
         public DotNetFrameworkRunner(Role role)
         {
-            Identifier = role.RoleName;
+            Identifier = ".NET Framework: " + role.RoleName;
 
             _role = role;
         }

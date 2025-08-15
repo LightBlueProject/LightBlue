@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:multiHost="clr-namespace:LightBlue.MultiHost"
-        xmlns:enums="clr-namespace:LightBlue.MultiHost.Runners"
+        xmlns:config="clr-namespace:LightBlue.MultiHost.Configuration"
+        xmlns:runners="clr-namespace:LightBlue.MultiHost.Runners"
         Title="Role Configuration" Height="400" Width="800"
         Icon="{Binding MainIcon}">
     <Grid>
@@ -35,7 +36,7 @@
                 <Label Grid.Row="5" Grid.Column="0" Content="Port:"/>
                 <Label Grid.Row="6" Grid.Column="0" Content="UseSsl:"/>
                 <Label Grid.Row="7" Grid.Column="0" Content="Hostname:"/>
-                <Label Grid.Row="8" Grid.Column="0" Content="RoleIsolationMode:"/>
+                <Label Grid.Row="8" Grid.Column="0" Content="Runner Type:"/>
                 <Label Grid.Row="9" Grid.Column="0" Content="ProcessPriority:"/>
 
                 <CheckBox Grid.Row="0" Grid.Column="1" Margin="3"  IsChecked="{Binding RoleConfiguration.EnabledOnStartup}"/>
@@ -58,13 +59,13 @@
 
                 <ComboBox Grid.Row="8" Grid.Column="1" Margin="3" 
                           DisplayMemberPath="DisplayName" 
-                          ItemsSource="{multiHost:EnumToItemsSource {x:Type enums:RoleIsolationMode}}"
-                          SelectedValue="{Binding Path=RoleConfiguration.RoleIsolationMode, Mode=TwoWay}"
+                          ItemsSource="{multiHost:EnumToItemsSource {x:Type config:RunnerType}}"
+                          SelectedValue="{Binding Path=RoleConfiguration.RunnerType, Mode=TwoWay}"
                           SelectedValuePath="Value"/>
 
                 <ComboBox Grid.Row="9" Grid.Column="1" Margin="3" 
                           DisplayMemberPath="DisplayName" 
-                          ItemsSource="{multiHost:EnumToItemsSource {x:Type enums:ProcessPriority}}"
+                          ItemsSource="{multiHost:EnumToItemsSource {x:Type runners:ProcessPriority}}"
                           SelectedValue="{Binding Path=RoleConfiguration.ProcessPriority, Mode=TwoWay}"
                           SelectedValuePath="Value"/>
             </Grid>

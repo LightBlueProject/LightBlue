@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.ViewModel;
@@ -43,62 +41,53 @@ namespace LightBlue.MultiHost.Runners
             _role = role;
         }
 
-        public IEnumerable<string> RunnerIdentifiers { get { return _resources.Select(r => r.Identifier); }}
+        public IEnumerable<string> RunnerIdentifiers { get { return _resources.Select(r => r.Identifier); } }
 
         public void Start()
         {
-            if (App.Configuration.CustomRunners.FirstOrDefault(x => x.Name == _role.RoleName) is CustomRunnerConfiguration customRunner)
+            IRunner role;
+            switch (_role.RunnerType)
             {
-                var role = RunnerFactory.CreateCustomRunner(customRunner, _role);
-                _resources.Add(role);
-                role.Start();
-                return;
+                case RunnerType.DotNetFramework:
+                    role = RunnerFactory.CreateDotNetFrameworkRunner(_role);
+                    break;
+                case RunnerType.DotNetCore:
+                    role = RunnerFactory.CreateDotNetCoreRunner(_role);
+                    break;
+                case RunnerType.Node:
+                    role = RunnerFactory.CreateNpmRunner(_role);
+                    break;
+                case RunnerType.AzureFunction:
+                    role = RunnerFactory.CreateAzureFunctionRunner(_role);
+                    break;
+                case RunnerType.IisExpress:
+                    role = RunnerFactory.CreateForWebSite(_role);
+                    break;
+                case RunnerType.Thread: //if rebuilt escalate to AppDomain
+                    role = RunnerFactory.HasBeenReBuilt(Path.GetDirectoryName(_role.Config.Assembly)) ?
+                        RunnerFactory.CreateAppDomainRunner(_role) :
+                        RunnerFactory.CreateThreadRunner(_role);
+                    break;
+                case RunnerType.AppDomain:
+                    role = RunnerFactory.CreateAppDomainRunner(_role);
+                    break;
+                case RunnerType.Custom:
+                    role = RunnerFactory.CreateCustomRunner(_role);
+                    break;
+                //Our Config Validation should stop us ending here
+                //but provide this backup anyway, not really a supported expectation
+                case RunnerType.Unknown:
+                default:
+                    role = _role.IsIisExpress ?
+                                RunnerFactory.CreateForWebSite(_role) :
+                                RunnerFactory.HasBeenReBuilt(Path.GetDirectoryName(_role.Config.Assembly)) ?
+                                    RunnerFactory.CreateAppDomainRunner(_role) :
+                                    RunnerFactory.CreateThreadRunner(_role);
+                    break;
             }
 
-            if (_role.RoleName == "DotNetCore")
-            {
-                var role = RunnerFactory.CreateDotNetCoreRunner(_role);
-                _resources.Add(role);
-                role.Start();
-                return;
-            }
-
-            if (_role.RoleName == "DotNetFramework")
-            {
-                var role = RunnerFactory.CreateDotNetFrameworkRunner(_role);
-                _resources.Add(role);
-                role.Start();
-                return;
-            }
-
-            if (_role.RoleName == "Npm")
-            {
-                var role = RunnerFactory.CreateNpmRunner(_role);
-                _resources.Add(role);
-                role.Start();
-                return;
-            }
-
-            if (_role.RoleName == "AzureFunction")
-            {
-                var role = RunnerFactory.CreateAzureFunctionRunner(_role);
-                _resources.Add(role);
-                role.Start();
-                return;
-            }
-
-            if (_role.IsIisExpress)
-            {
-                var website = RunnerFactory.CreateForWebSite(_role);
-                _resources.Add(website);
-                website.Start();
-            }
-            else
-            {
-                var role = RunnerFactory.CreateForWorkerRole(_role, _role.IsolationMode);
-                _resources.Add(role);
-                role.Start();
-            }
+            _resources.Add(role);
+            role.Start();
         }
 
         public void Dispose()
@@ -115,7 +104,6 @@ namespace LightBlue.MultiHost.Runners
             if (iisExpressRunner != null)
             {
                 iisExpressRunner.Debug();
-                
             }
             else
             {

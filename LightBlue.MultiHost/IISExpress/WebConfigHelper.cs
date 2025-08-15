@@ -6,7 +6,7 @@ namespace LightBlue.MultiHost.IISExpress
 {
     static class WebConfigHelper
     {
-        public static WebHostArgs Create(RoleConfiguration config)
+        public static WebHostArgs Create(ServiceConfiguration config)
         {
             var assembly = config.Assembly;
             var args = new WebHostArgs

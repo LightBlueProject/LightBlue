@@ -10,7 +10,7 @@ namespace LightBlue.MultiHost.ViewModel
         private readonly string _serviceTitle;
         private readonly MultiHostConfiguration _multiHostConfiguration;
         private readonly string _multiHostConfigurationFilePath;
-        private RoleConfiguration _roleConfiguration;
+        private ServiceConfiguration _roleConfiguration;
 
         public EditRole(string serviceTitle, MultiHostConfiguration multiHostConfiguration, string multiHostConfigurationFilePath)
         {
@@ -18,12 +18,12 @@ namespace LightBlue.MultiHost.ViewModel
             _multiHostConfiguration = multiHostConfiguration;
             _multiHostConfigurationFilePath = multiHostConfigurationFilePath;
 
-            RoleConfiguration = _multiHostConfiguration.Roles.Single(x => x.Title == _serviceTitle);
+            RoleConfiguration = _multiHostConfiguration.Services.Single(x => x.Title == _serviceTitle);
         }
 
         public ImageSource MainIcon { get { return ImageUtil.ColourImage(@"Resources\debug.ico", CustomBrushes.Main); } }
 
-        public RoleConfiguration RoleConfiguration
+        public ServiceConfiguration RoleConfiguration
         {
             get { return _roleConfiguration; }
             set

@@ -1,13 +1,14 @@
-using System.Text.Json.Serialization;
-
 namespace LightBlue.MultiHost.Configuration
 {
+    /// <summary>
+    /// Allows users to BYO runner, string matches
+    /// the name of the configured Runner against the 
+    /// Runner specified in the Service
+    /// </summary>
     public class CustomRunnerConfiguration
     {
-        public string Name { get; set; }
+        public string RunnerName { get; set; }
         public string Command { get; set; }
         public string Arguments { get; set; } = string.Empty;
-        [JsonConverter(typeof(IconOptionConverter))]
-        public IconOption Icon { get; set; } = IconOption.Worker;
     }
 }

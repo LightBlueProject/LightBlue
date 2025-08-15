@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 using System.Windows;
-
 using LightBlue.Infrastructure;
 using LightBlue.MultiHost.Configuration;
 using LightBlue.MultiHost.IISExpress;
@@ -52,21 +49,19 @@ namespace LightBlue.MultiHost
                 {
                     Configuration = new MultiHostConfiguration
                     {
-                        Roles = new[]
+                        Services = new[]
                         {
-                            new RoleConfiguration {Title = "Demo Web Site", RoleName = "WebRole"},
-                            new RoleConfiguration
+                            new ServiceConfiguration {Title = "Demo Web Site", RoleName = "WebRole"},
+                            new ServiceConfiguration
                             {
                                 Title = "Demo Web Site 2",
                                 RoleName = "WebRole",
-                                RoleIsolationMode = "AppDomain"
                             },
-                            new RoleConfiguration {Title = "Demo Domain", RoleName = "CommandProcessor"},
-                            new RoleConfiguration
+                            new ServiceConfiguration {Title = "Demo Domain", RoleName = "CommandProcessor"},
+                            new ServiceConfiguration
                             {
                                 Title = "Demo Domain 2",
                                 RoleName = "ReadModelPopulator",
-                                RoleIsolationMode = "AppDomain"
                             }
                         },
                     };
@@ -75,16 +70,22 @@ namespace LightBlue.MultiHost
                 {
                     var configDir = Path.GetDirectoryName(MultiHostConfigurationFilePath);
                     var json = File.ReadAllText(MultiHostConfigurationFilePath);
-                    Configuration = JsonSerializer.Deserialize<MultiHostConfiguration>(json);
+                    Configuration = JsonSerializer.Deserialize<MultiHostConfiguration>(json, new JsonSerializerOptions()
+                    {
+                        AllowTrailingCommas = true,
+                        ReadCommentHandling = JsonCommentHandling.Skip
+                    });
 
-                    foreach (var c in Configuration.Roles)
+                    Configuration.Validate();
+
+                    foreach (var c in Configuration.Services)
                     {
                         c.ConfigurationPath = Path.GetFullPath(Path.Combine(configDir, c.ConfigurationPath));
                         c.Assembly = Path.GetFullPath(Path.Combine(configDir, c.Assembly));
                     }
 
                     var query =
-                        from c in Configuration.Roles
+                        from c in Configuration.Services
                         let relativePath = c.Assembly.ToLowerInvariant().EndsWith(".dll")
                                         || c.Assembly.ToLowerInvariant().EndsWith(".exe")
                             ? Path.GetDirectoryName(c.Assembly)
@@ -103,6 +104,7 @@ namespace LightBlue.MultiHost
             catch (Exception ex)
             {
                 MessageBox.Show("Could not start multi-host: " + ex.ToTraceMessage());
+                Environment.Exit(1);
             }
         }
 
@@ -125,5 +127,5 @@ namespace LightBlue.MultiHost
                 }
             }
         }
-    }    
+    }
 }

@@ -15,7 +15,7 @@ namespace LightBlue.MultiHost.Configuration
             [IconOption.Worker] = @"Resources\worker.ico"
         };
 
-        public static IconOption RoleToIconOption(RoleConfiguration config)
+        public static IconOption RoleToIconOption(ServiceConfiguration config)
         {
             switch (config.RoleName)
             {

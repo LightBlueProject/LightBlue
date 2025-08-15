@@ -22,7 +22,7 @@ namespace LightBlue.MultiHost.Runners
 
         public NpmRunner(Role role)
         {
-            Identifier = role.RoleName;
+            Identifier = "Node: " + role.RoleName;
 
             _role = role;
         }

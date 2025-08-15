@@ -24,31 +24,17 @@ namespace LightBlue.MultiHost.ViewModel
 
         public Brush StatusColor
         {
-            get { return CustomBrushes.GetStatusColour(Status, IsolationMode); }
+            get { return CustomBrushes.GetStatusColour(Status, RunnerType); }
         }
 
         public string Title { get { return Config.Title; } }
         public string RoleName { get { return Config.RoleName; } }
         public bool IsIisExpress { get { return !string.IsNullOrWhiteSpace(Config.Hostname); } }
 
-        private RoleIsolationMode? _isolationOverride;
-        public RoleIsolationMode IsolationMode
-        {
-            get
-            {
-                if (_isolationOverride.HasValue)
-                    return _isolationOverride.Value;
+        public RunnerType RunnerType => Config.RunnerType;
 
-                return string.IsNullOrWhiteSpace(Config.RoleIsolationMode)
-                    ? RoleIsolationMode.Thread
-                    : (RoleIsolationMode)Enum.Parse(typeof(RoleIsolationMode), Config.RoleIsolationMode);
-            }
-            set
-            {
-                _isolationOverride = value;
-                OnPropertyChanged("IsolationMode");
-            }
-        }
+        public CustomRunnerConfiguration CustomRunnerConfiguration =>
+            App.Configuration.CustomRunners.Single(x => x.RunnerName.Equals(Config.RunnerName, StringComparison.OrdinalIgnoreCase));
 
         public ProcessPriority ProcessPriority
         {
@@ -64,11 +50,13 @@ namespace LightBlue.MultiHost.ViewModel
         {
             get
             {
-                var iconOption = App.Configuration.CustomRunners.FirstOrDefault(x => x.Name == Config.RoleName) is CustomRunnerConfiguration customRunner
-                    ? customRunner.Icon
-                    : IconHelper.RoleToIconOption(Config);
+                //Attempt to load user defined icon from config
+                var role = App.Configuration.RoleConfiguration.FirstOrDefault(x => x.RoleName.Equals(Config.RoleName, StringComparison.OrdinalIgnoreCase));
 
-                return IconHelper.IconPaths[iconOption];
+                //Back up to convention when no role defined.
+                var icon = role?.Icon ?? IconHelper.RoleToIconOption(Config);
+
+                return IconHelper.IconPaths[icon];
             }
         }
 
@@ -76,7 +64,7 @@ namespace LightBlue.MultiHost.ViewModel
         {
             get
             {
-                var brush = CustomBrushes.GetStatusColour(Status, IsolationMode);
+                var brush = CustomBrushes.GetStatusColour(Status, RunnerType);
                 return ImageCache.GetOrAdd(Tuple.Create(ImageSource, brush), t => ImageUtil.ColourImage(t.Item1, t.Item2));
             }
         }
@@ -88,7 +76,7 @@ namespace LightBlue.MultiHost.ViewModel
             get { return _logs; }
         }
 
-        internal readonly RoleConfiguration Config;
+        internal readonly ServiceConfiguration Config;
         private readonly Dispatcher _dispatcher;
         private IState _state;
         private RoleRunner _current;
@@ -106,7 +94,7 @@ namespace LightBlue.MultiHost.ViewModel
             }
         }
 
-        public Role(RoleConfiguration role)
+        public Role(ServiceConfiguration role)
         {
             Config = role;
             State = Config.EnabledOnStartup ? new AutoStarting(this) : (IState)new Stopped(this);
