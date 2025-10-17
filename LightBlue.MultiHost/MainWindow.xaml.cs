@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -102,7 +103,7 @@ namespace LightBlue.MultiHost
             DataContext = this;
 
             var autos = Services.Where(x => x.Status == RoleStatus.Sequenced).ToArray();
-            Task.Run(() => BeginAutoStart(autos));
+            _ = Task.Run(() => BeginAutoStart(autos));
 
             Loaded += (s, a) =>
             {
@@ -137,11 +138,13 @@ namespace LightBlue.MultiHost
             }
         }
 
-        private async Task BeginAutoStart(Role[] roles)
+        private void BeginAutoStart(Role[] roles)
         {
             foreach (var role in roles)
             {
-                await Task.Delay(App.Configuration.ServiceBootRateLimitMs);
+                // This is run on a background thread and we want to
+                // stagger startups so we can happily block here.
+                Thread.Sleep(App.Configuration.ServiceBootRateLimitMs);
                 role.StartAutomatically();
             }
         }

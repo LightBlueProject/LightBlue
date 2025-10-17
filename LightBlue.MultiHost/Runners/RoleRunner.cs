@@ -25,16 +25,14 @@ namespace LightBlue.MultiHost.Runners
 
         public Task Completed // == Crashed
         {
-            get { return CreateFriendlyTask(); }
+            get 
+            {
+                var tasks = _resources.Select(x => x.Completed).ToArray();
+                return Task.WhenAll(tasks);
+            }
         }
 
         public string Identifier { get { return "Role Runner: " + _role.Config.Title; } }
-
-        private async Task CreateFriendlyTask()
-        {
-            var tasks = _resources.Select(x => x.Completed).ToArray();
-            await await Task.WhenAny(tasks);
-        }
 
         public RoleRunner(Role role)
         {

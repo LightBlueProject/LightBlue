@@ -149,14 +149,17 @@ namespace LightBlue.MultiHost.ViewModel
             if (d != null) d(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        internal async void StartInternal()
+        internal void StartInternal()
         {
             if (_current != null) throw new InvalidOperationException();
             TraceClear();
             _current = new RoleRunner(this);
             _current.Start();
             var original = _state;
-            await _current.Started;
+
+            // We are happy to spawn new roles/runners sequentially, so no need to await here.
+            _current.Started.Wait();
+
             if (original == _state) Started();
         }
 
