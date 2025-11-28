@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LightBlue.MultiHost.Configuration
 {
@@ -24,7 +25,7 @@ namespace LightBlue.MultiHost.Configuration
             using (var fs = new FileStream(path, FileMode.Truncate, FileAccess.Write))
             using (var sw = new StreamWriter(fs))
             {
-                sw.WriteLine(JsonSerializer.Serialize(multiHostConfiguration, new JsonSerializerOptions { WriteIndented = true, IgnoreNullValues = true }));
+                sw.WriteLine(JsonSerializer.Serialize(multiHostConfiguration, new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull }));
             }
         }
     }
