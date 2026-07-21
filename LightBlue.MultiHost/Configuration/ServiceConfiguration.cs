@@ -52,8 +52,10 @@ namespace LightBlue.MultiHost.Configuration
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(Port))
-                    errors.Add("Port can only be used with IISRunner");
+                if (!string.IsNullOrWhiteSpace(Port)
+                    && RunnerType != RunnerType.AzureFunction
+                    && RunnerType != RunnerType.Custom)
+                    errors.Add("Port can only be used with IISRunner, AzureFunction or Custom runners");
                 if (!string.IsNullOrWhiteSpace(UseSsl))
                     errors.Add("UseSsl can only be used with IISRunner");
                 if (!string.IsNullOrWhiteSpace(Hostname))
@@ -71,6 +73,13 @@ namespace LightBlue.MultiHost.Configuration
                 if (!string.IsNullOrWhiteSpace(RunnerName))
                     errors.Add("RunnerName can only be used with CustomRunner");
             }
+
+            // AzureFunction always launches `func start --port <Port>`, so a Port
+            // is mandatory - without it the runner would emit `func start --port `.
+            // (Custom runners that consume {port} are validated in
+            //  MultiHostConfiguration.Validate(), where the runner's Arguments are known.)
+            if (RunnerType == RunnerType.AzureFunction && string.IsNullOrWhiteSpace(Port))
+                errors.Add("Port is missing for AzureFunction runner");
 
             return errors;
         }

@@ -51,9 +51,20 @@ namespace LightBlue.MultiHost.Configuration
                 //All services with custom RunnerType need a matching runner config
                 if (service.RunnerType == RunnerType.Custom)
                 {
-                    if (CustomRunners == null || !CustomRunners.Any(x => x.RunnerName.Equals(service.RunnerName, StringComparison.OrdinalIgnoreCase)))
+                    var runnerConfig = CustomRunners?.FirstOrDefault(x =>
+                        string.Equals(x.RunnerName, service.RunnerName, StringComparison.OrdinalIgnoreCase));
+                    if (runnerConfig == null)
                     {
                         errors.Add($"Service {service.Title}, Runner {service.RunnerName}, Runner Configuration is Missing");
+                    }
+                    // A custom runner whose arguments use the {port} placeholder needs a
+                    // Port on the service - otherwise CustomRunner would throw at launch
+                    // substituting a null Port.
+                    else if (!string.IsNullOrWhiteSpace(runnerConfig.Arguments)
+                             && runnerConfig.Arguments.Contains("{port}")
+                             && string.IsNullOrWhiteSpace(service.Port))
+                    {
+                        errors.Add($"Service {service.Title}, Runner {service.RunnerName}, requires a Port because its runner arguments use the {{port}} placeholder");
                     }
                 }
                 //All Roles in all services need a matching Role Configuration
