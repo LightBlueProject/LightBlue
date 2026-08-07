@@ -14,10 +14,11 @@ namespace LightBlue.Standalone
         {
             using (fileStream)
             {
-                var serialized = JsonSerializer.SerializeToUtf8Bytes(this);
-                fileStream.Write(serialized, 0, serialized.Length);
+                WriteToStreamInternal(fileStream);
             }
         }
+
+        public void WriteToStream(FileStream fileStream) => WriteToStreamInternal(fileStream);
 
         public static StandaloneMetadataStore ReadFromStream(FileStream fileStream)
         {
@@ -35,6 +36,12 @@ namespace LightBlue.Standalone
                 var content = await reader.ReadToEndAsync();
                 return JsonSerializer.Deserialize<StandaloneMetadataStore>(content);
             }
+        }
+
+        private void WriteToStreamInternal(FileStream fileStream)
+        {
+            var serialized = JsonSerializer.SerializeToUtf8Bytes(this);
+            fileStream.Write(serialized, 0, serialized.Length);
         }
     }
 }

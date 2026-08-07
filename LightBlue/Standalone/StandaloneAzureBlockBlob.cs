@@ -20,7 +20,7 @@ namespace LightBlue.Standalone
         private readonly string _blobPath;
         private readonly string _metadataPath;
         private readonly StandaloneAzureBlobProperties _properties;
-        private Dictionary<string, string> _metadata;
+        private Dictionary<string, string> _metadata = new Dictionary<string, string>();
         private readonly TimeSpan _waitTimeBetweenRetries = TimeSpan.FromSeconds(5);
         private string _blobDirectory;
         private string _metadataDirectory;
@@ -345,19 +345,23 @@ namespace LightBlue.Standalone
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             EnsureBlobDirectoryExists();
+            EnsureMetadataDirectoryExists();
             return UploadFromByteArrayInternalAsync(buffer, index, count);
         }
 
         private async Task UploadFromByteArrayInternalAsync(byte[] buffer, int index, int count)
         {
             using (var fileStream = new FileStream(_blobPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
+            using (var metadataFileStream = new FileStream(_metadataPath, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, true))
             {
                 await fileStream.WriteAsync(buffer, index, count).ConfigureAwait(false);
-            }
 
-            if (_properties.ContentType != null)
-            {
-                await SetPropertiesAsync();
+                var metadataStore = new StandaloneMetadataStore
+                {
+                    ContentType = _properties?.ContentType ?? DefaultContentType,
+                    Metadata = _metadata
+                };
+                metadataStore.WriteToStream(metadataFileStream);
             }
         }
 
